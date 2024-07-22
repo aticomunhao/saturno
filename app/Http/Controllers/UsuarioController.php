@@ -299,7 +299,7 @@ class UsuarioController extends Controller
         }
 
     public function inserirPerfilUsuario($perfil, $idPessoa)
-    { 
+    {
         try{
         $idUsuario = DB::select('select id from usuario where id_pessoa =' . $idPessoa);
         $resultPerfil = DB::table('perfil')->get();
@@ -314,10 +314,10 @@ class UsuarioController extends Controller
                         'id_perfil' => $resultPerfils->id,
                     ]);
                 }
-                
+
             }
         }
-        
+
     }
     catch(\Exception $e){
 
@@ -437,7 +437,7 @@ class UsuarioController extends Controller
 
     public function gerarSenha($id_pessoa)
     {
-        
+
         $senha = $this->gerarSenhaInicial($id_pessoa);
 
         DB::table('usuario')

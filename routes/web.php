@@ -12,33 +12,33 @@ use App\Http\Controllers\SitDoacaoController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RecuperaSenhaController;
 use App\Http\Controllers\UnidadeMedidaController;
- use App\Http\Controllers\PessoaController; 
- use App\Http\Controllers\EntidadeController; 
- use App\Http\Controllers\UsuarioController; 
+ use App\Http\Controllers\PessoaController;
+ use App\Http\Controllers\EntidadeController;
+ use App\Http\Controllers\UsuarioController;
  use App\Http\Controllers\ItemCatalogoController;
- use App\Http\Controllers\ComposicaoItemController; 
- use App\Http\Controllers\MarcaController; 
- use App\Http\Controllers\TamanhoController; 
- use App\Http\Controllers\CorController; 
+ use App\Http\Controllers\ComposicaoItemController;
+ use App\Http\Controllers\MarcaController;
+ use App\Http\Controllers\TamanhoController;
+ use App\Http\Controllers\CorController;
  use App\Http\Controllers\CatMaterialController;
- use App\Http\Controllers\EmbalagemController; 
- use App\Http\Controllers\SexoController; 
- use App\Http\Controllers\TipoMaterialController; 
- use App\Http\Controllers\LocalizadorController; 
- use App\Http\Controllers\FaseEtariaController; 
- use App\Http\Controllers\DepositoController; 
- use App\Http\Controllers\CadastroInicialController; 
- use App\Http\Controllers\BarcodeController; 
- use App\Http\Controllers\GerenciarvendasController; 
- use App\Http\Controllers\SituacaovendaController; 
- use App\Http\Controllers\RegistrarVendaController; 
- use App\Http\Controllers\GerenciarDevolucoesController; 
- use App\Http\Controllers\GerenciarpagamentoController; 
- use App\Http\Controllers\TipoPagamentoController; 
- use App\Http\Controllers\GerenciardemonstrativoController; 
- use App\Http\Controllers\RelatoriosController; 
- use App\Http\Controllers\RegistrarAvariaController; 
- use App\Http\Controllers\DescontoController; 
+ use App\Http\Controllers\EmbalagemController;
+ use App\Http\Controllers\SexoController;
+ use App\Http\Controllers\TipoMaterialController;
+ use App\Http\Controllers\LocalizadorController;
+ use App\Http\Controllers\FaseEtariaController;
+ use App\Http\Controllers\DepositoController;
+ use App\Http\Controllers\CadastroInicialController;
+ use App\Http\Controllers\BarcodeController;
+ use App\Http\Controllers\GerenciarvendasController;
+ use App\Http\Controllers\SituacaovendaController;
+ use App\Http\Controllers\RegistrarVendaController;
+ use App\Http\Controllers\GerenciarDevolucoesController;
+ use App\Http\Controllers\GerenciarpagamentoController;
+ use App\Http\Controllers\TipoPagamentoController;
+ use App\Http\Controllers\GerenciardemonstrativoController;
+ use App\Http\Controllers\RelatoriosController;
+ use App\Http\Controllers\RegistrarAvariaController;
+ use App\Http\Controllers\DescontoController;
  use App\Http\Controllers\CalculadoraController;
  use App\Http\Controllers\GerenciarInventariosController;
 
@@ -119,7 +119,7 @@ Route::name('usuario')->middleware('validaUsuario')->group(function () {
   Route::get('/usuario/alterar/{id}',[UsuarioController::class,'edit']);
   Route::put('usuario-atualizar/{id}',[UsuarioController::class,'update']);
   Route::get('/usuario/gerar-Senha/{id}',[UsuarioController::class,'gerarSenha']);
-  
+
 });
 Route::post('/usuario/gravaSenha',[UsuarioController::class,'gravaSenha']);
 Route::get('/usuario/alterar-senha',[UsuarioController::class,'alteraSenha']);
@@ -234,7 +234,7 @@ Route::name('vendas')->middleware('validaUsuario')->group(function () {
   Route::get('/gerenciar-vendas/finalizar/{id}',[GerenciarvendasController::class,'finalizar'])->name('finalizarvenda.update');
   Route::get('/gerenciar-vendas/demonstrativo/{id}',[GerenciarvendasController::class,'update']);
   Route::get('/gerenciar-vendas/demonstrativo/{id}',[GerenciarvendasController::class,'imprimir']);
-  
+
   Route::get('/cad-sit-venda',[SituacaovendaController::class,'index']);
 });
 
@@ -256,7 +256,7 @@ Route::name('vendas')->middleware('validaUsuario')->group(function () {
   Route::any('/incluir-devolucao/{id_p}/{id_venda}/{data}/{id_mat}',[GerenciarDevolucoesController::class,'create']);
   Route::get('/gerenciar-substitutos/{id}',[GerenciarDevolucoesController::class,'vincular']);
   Route::get('/substituicao/buscaritem',[GerenciarDevolucoesController::class,'buscaritem']);
-  
+
 
 
 
@@ -310,7 +310,6 @@ Route::name('descontos')->middleware('validaUsuario')->group(function () {
 
 });
 
-Route::get('/calculos/Calculadora/{id}',[CalculadoraController::class,'calcular']);
-Auth::routes();
+//Route::get('/calculos/Calculadora/{id}',[CalculadoraController::class,'calcular']);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

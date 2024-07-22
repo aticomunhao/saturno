@@ -6,7 +6,7 @@ $setor = session()->get('usuario.setor');
     <nav class="navbar navbar-expand-lg navbar-light shadow-sm"
         style="background-color:#87CEFA; font-family:tahoma; font-weight:bold;">
         <div class="container">
-            <a class="navbar-brand" style="color: #fff;" href="{{ url('/login/valida') }}">Vênus</a>
+            <a class="navbar-brand" style="color: #fff;" href="{{ url('/login/valida') }}">Saturno</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown"
                 aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation"
                 style="border:none">

@@ -14,18 +14,14 @@ class LoginController extends Controller
 {
     public function index()
     {
-        try {
-            return view('login/login');
-        } catch (\Exception $e) {
 
-            $code = $e->getCode();
-            return view('login/login erro.erro-inesperado', compact('code'));
-        }
+            return view('login/login');
+
     }
 
     public function valida(Request $request)
     {
-        try {
+
             $cpf = $request->input('cpf');
             $senha = $request->input('senha');
 
@@ -89,15 +85,11 @@ class LoginController extends Controller
             }
             app('flasher')->addError('Credenciais inválidas');
             return view('login/login');
-        } catch (\Exception $e) {
 
-            $code = $e->getCode();
-            return view('tratamento-erro.erro-inesperado', compact('code'));
-        }
     }
     public function validaUserLogado()
     {
-       // try {
+
             $cpf = session()->get('usuario.cpf');
 
             $result = DB::select("
@@ -151,11 +143,7 @@ class LoginController extends Controller
                 app('flasher')->addError('É necessário realizar o login para acessar!');
                 return view('login/login');
             }
-        // } catch (\Exception $e) {
-
-        //     $code = $e->getCode();
-        //     return view('tratamento-erro.erro-inesperado', compact('code'));
-        // }
+       
     }
     public function create()
     {

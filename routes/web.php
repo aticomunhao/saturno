@@ -58,13 +58,31 @@ use App\Http\Controllers\UnidadeMedidaController;
 Auth::routes();
 
   Route::get('/logout',[LexaAdmin::class,'logout']);
-  Route::get('/', [LoginController::class,'index']);
+  Route::get('/', [LoginController::class,'index'])->name('login');
   Route::any('/login/home',[LoginController::class,'valida']);
   Route::any('/login/valida',[LoginController::class,'validaUserLogado'])->name('home.post');
+
   Route::get('/email/remessa-email',[RecuperaSenhaController::class,'index']);
   Route::post('/email/remessa-email',[RecuperaSenhaController::class,'validar']);
 
+  Route::get('/usuario/alterar-senha', [UsuarioController::class, 'alteraSenha']);
+Route::post('/usuario/gravaSenha', [UsuarioController::class, 'gravaSenha']);
 
+//Gerenciar usuários
+Route::middleware('rotas:1')->group(function () {
+    Route::post('/cad-usuario/inserir', [UsuarioController::class, 'store']);
+    Route::get('/cadastrar-usuarios/configurar/{id}', [UsuarioController::class, 'configurarUsuario']);
+    Route::get('/gerenciar-usuario', [UsuarioController::class, 'index']);
+    Route::get('/usuario/alterar/{id}', [UsuarioController::class, 'edit']);
+    Route::any('/usuario/gerar-Senha/{id}', [UsuarioController::class, 'gerarSenha']);
+    Route::any('usuario-atualizar/{id}', [UsuarioController::class, 'update']);
+    Route::get('/usuario/excluir/{id}', [UsuarioController::class, 'destroy']);
+    Route::get('/usuario-incluir', [UsuarioController::class, 'create']);
+});
+
+Route::name('usuario')->middleware('validaUsuario')->group(function () {
+
+  });
 
 //Route::view('/dashboard/index' , 'dashboard/index'])->middleware('validaUsuario');
 
@@ -110,19 +128,7 @@ Route::name('entidade')->middleware('validaUsuario')->group(function () {
   Route::get('/entidade/excluir/{id}',[EntidadeController::class,'destroy']);
 });
 
-Route::name('usuario')->middleware('validaUsuario')->group(function () {
-  Route::get('gerenciar-usuario',[UsuarioController::class,'index']);
-  Route::get('usuario-incluir',[UsuarioController::class,'create']);
-  Route::get('cadastrar-usuarios/configurar/{id}',[UsuarioController::class,'configurarUsuario']);
-  Route::post('/cad-usuario/inserir',[UsuarioController::class,'store']);
-  Route::get('/usuario/excluir/{id}',[UsuarioController::class,'destroy']);
-  Route::get('/usuario/alterar/{id}',[UsuarioController::class,'edit']);
-  Route::put('usuario-atualizar/{id}',[UsuarioController::class,'update']);
-  Route::get('/usuario/gerar-Senha/{id}',[UsuarioController::class,'gerarSenha']);
 
-});
-Route::post('/usuario/gravaSenha',[UsuarioController::class,'gravaSenha']);
-Route::get('/usuario/alterar-senha',[UsuarioController::class,'alteraSenha']);
 
 
 Route::get('gerenciar-item-catalogo',[ItemCatalogoController::class,'index'])->middleware('validaUsuario');

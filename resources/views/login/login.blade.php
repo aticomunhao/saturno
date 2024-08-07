@@ -10,7 +10,7 @@
                     <div class="card overflow-hidden">
                         <div class="card-body pt-0">
                             <h3 class="text-center mt-4">
-                                <a href="/" class="logo logo-admin"><img src="{{URL::asset('/images/logo150px.png')}}" height="100" alt="logo"></a>
+                                <a href="/" class="logo logo-admin"><img src="{{URL::asset('/images/logo150px.ico')}}" height="100" alt="logo"></a>
                             </h3>
                             <div class="p-3">
                                 <!-- <h4 class="text-muted font-size-18 mb-1 text-center">Welcome Back !</h4> -->
@@ -36,14 +36,15 @@
                                         <br>
 
                                     </div>
-                                    <div class="form-group">
-                                        <label for="userpassword">Senha</label>
+                                    <label for="userpassword">Senha</label>
+                                    <div class="input-group">
                                         <input id="senha" type="password" class="form-control @error('password') is-invalid @enderror" name="senha" required autocomplete="current-password" placeholder="">
                                         @error('password')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                         @enderror
+                                        <button class="btn btn-primary bi bi-eye" type="button" id="buttonEye"></button>
                                     </div>
                                     <div class="form-group row mt-4">
                                         <div class="col-6">
@@ -52,7 +53,7 @@
                                         <label class="custom-control-label" for="customControlInline">{{ __('Remember Me') }}</label>
                                             </div> --}}
                                         </div>
-                                        <div class="col-12">
+                                        <div class="col-12 d-grid gap-2" style="text-align:center;">
                                             <button class="btn btn-primary w-md waves-effect waves-light btn-block" type="submit">Entrar</button>
                                         </div>
                                         {{--<div class="form-group mb-0 row">
@@ -71,6 +72,22 @@
                         <!-- <p>© {{  date('Y', strtotime('-2 year')) }} - {{  date('Y') }} Comunhão Espírita de Brasília <i class="mdi mdi-heart text-danger"></i></p> -->
                         <p>© Comunhão Espírita de Brasília <i class="mdi mdi-heart text-danger"></i></p>
                     </div>
+                    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+                    <script>
+                        $("#buttonEye").click(function(){
+
+                            $("#buttonEye").toggleClass("bi-eye");
+                            $("#buttonEye").toggleClass("bi-eye-slash");
+
+                            if($('#senha').attr('type') == "password"){
+                                $("#senha").attr("type", "text");
+                            }else{
+                                $("#senha").attr("type", "password");
+                            }
+
+                        })
+
+                    </script>
                 </div>
             </div>
         </div>

@@ -15,17 +15,16 @@ class LoginController extends Controller
     public function index()
     {
 
-            return view('login/login');
-
+        return view('login/login');
     }
 
     public function valida(Request $request)
     {
 
-            $cpf = $request->input('cpf');
-            $senha = $request->input('senha');
+        $cpf = $request->input('cpf');
+        $senha = $request->input('senha');
 
-            $result = DB::select("
+        $result = DB::connection('pgsql2')->select("
                         select
                         u.id id_usuario,
                         p.id id_pessoa,
@@ -47,7 +46,8 @@ class LoginController extends Controller
                         group by u.id, p.id, a.id
                         ");
 
-                        if (count($result) > 0) {
+
+        if (count($result) > 0) {
             $perfis = explode(',', $result[0]->perfis);
             $setores = explode(',', $result[0]->setor);
             $array_setores = $setores;
@@ -60,45 +60,44 @@ class LoginController extends Controller
 
             $rotasAutorizadas = array_intersect($perfis, $setores);
 
-                $hash_senha = $result[0]->hash_senha;
+            $hash_senha = $result[0]->hash_senha;
 
-                if (Hash::check($senha, $hash_senha)) {
-                    session()->put('usuario', [
-                        'id_usuario' => $result[0]->id_usuario,
-                        'id_pessoa' => $result[0]->id_pessoa,
-                        'id_associado' => $result[0]->id_associado,
-                        'nome' => $result[0]->nome_completo,
-                        'cpf' => $result[0]->cpf,
-                        'sexo' => $result[0]->sexo,
-                        'setor' => $array_setores,
-                        'acesso' => $rotasAutorizadas,
-                        'administrador' => in_array(1, $perfis) ? true : false,
-                    ]);
+            if (Hash::check($senha, $hash_senha)) {
+                session()->put('usuario', [
+                    'id_usuario' => $result[0]->id_usuario,
+                    'id_pessoa' => $result[0]->id_pessoa,
+                    'id_associado' => $result[0]->id_associado,
+                    'nome' => $result[0]->nome_completo,
+                    'cpf' => $result[0]->cpf,
+                    'sexo' => $result[0]->sexo,
+                    'setor' => $array_setores,
+                    'acesso' => $rotasAutorizadas,
+                    'administrador' => in_array(1, $perfis) ? true : false,
+                ]);
 
-                    app('flasher')->addSuccess('Acesso autorizado');
+                app('flasher')->addSuccess('Acesso autorizado');
 
-                    if($cpf == $senha){
-                        return view('/usuario/alterar-senha');
-                    }
-                    return view('login/home');
-                }
+                // if ($cpf == $senha) {
+                //     return view('/usuario/alterar-senha');
+                // }
+                return view('login/home');
             }
-            app('flasher')->addError('Credenciais inválidas');
-            return view('login/login');
-
+        }
+        app('flasher')->addError('Credenciais inválidas');
+        return view('login/login');
     }
     public function validaUserLogado()
     {
 
-            $cpf = session()->get('usuario.cpf');
+        $cpf = session()->get('usuario.cpf');
 
-            $result = DB::select("
+        $result = DB::connection('pgsql2')->select("
             select
             u.id id_usuario,
             p.id id_pessoa,
             a.id id_associado,
             p.cpf,
-            p.sexo,
+            p.sexo, 
             p.nome_completo,
             u.hash_senha,
             string_agg(distinct u_p.id_perfil::text, ',') perfis,
@@ -114,7 +113,7 @@ class LoginController extends Controller
             group by u.id, p.id, a.id
             ");
 
-            if ($cpf = session()->get('usuario.cpf')) {
+        if ($cpf = session()->get('usuario.cpf')) {
             $perfis = explode(',', $result[0]->perfis);
             $setores = explode(',', $result[0]->setor);
             $array_setores = $setores;
@@ -127,23 +126,22 @@ class LoginController extends Controller
 
             $rotasAutorizadas = array_intersect($perfis, $setores);
 
-                session()->put('usuario', [
-                    'id_usuario' => $result[0]->id_usuario,
-                    'id_pessoa' => $result[0]->id_pessoa,
-                    'id_associado' => $result[0]->id_associado,
-                    'nome' => $result[0]->nome_completo,
-                    'cpf' => $result[0]->cpf,
-                    'sexo' => $result[0]->sexo,
-                    'setor' => $array_setores,
-                    'acesso' => $rotasAutorizadas,
-                    'perfis' => $perfis,
-                ]);
-                return view('/login/home');
-            } else {
-                app('flasher')->addError('É necessário realizar o login para acessar!');
-                return view('login/login');
-            }
-       
+            session()->put('usuario', [
+                'id_usuario' => $result[0]->id_usuario,
+                'id_pessoa' => $result[0]->id_pessoa,
+                'id_associado' => $result[0]->id_associado,
+                'nome' => $result[0]->nome_completo,
+                'cpf' => $result[0]->cpf,
+                'sexo' => $result[0]->sexo,
+                'setor' => $array_setores,
+                'acesso' => $rotasAutorizadas,
+                'perfis' => $perfis,
+            ]);
+            return view('/login/home');
+        } else {
+            app('flasher')->addError('É necessário realizar o login para acessar!');
+            return view('login/login');
+        }
     }
     public function create()
     {
@@ -176,4 +174,3 @@ class LoginController extends Controller
     }
     //*/
 }
-

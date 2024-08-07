@@ -4,7 +4,7 @@ $setor = session()->get('usuario.setor');
 
 <div id="app" class="row">
     <nav class="navbar navbar-expand-lg navbar-light shadow-sm"
-        style="background-color:#87CEFA; font-family:tahoma; font-weight:bold;">
+        style="background-color:#3891e4; font-family:tahoma; font-weight:bold;">
         <div class="container">
             <a class="navbar-brand" style="color: #fff;" href="{{ url('/login/valida') }}">Saturno</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown"
@@ -17,7 +17,7 @@ $setor = session()->get('usuario.setor');
                     <ul class="navbar-nav" id="AME">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="1" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">Gerenciamento AME</a>
+                                data-bs-toggle="dropdown" aria-expanded="false">Teste 1</a>
                             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
 
 
@@ -64,7 +64,7 @@ $setor = session()->get('usuario.setor');
                     <ul class="navbar-nav" id="DAO">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="2" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">Gerenciamento DAO</a>
+                                data-bs-toggle="dropdown" aria-expanded="false">Teste 2</a>
                             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
 
                                 @if (in_array(13, $acesso) or in_array(14, $acesso))
@@ -124,7 +124,7 @@ $setor = session()->get('usuario.setor');
                     <ul class="navbar-nav" id="DAE">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="2" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">Gerenciamento DAE</a>
+                                data-bs-toggle="dropdown" aria-expanded="false">Teste 3</a>
                             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
                                 @if (in_array(13, $acesso) or in_array(14, $acesso))
                                     <li><a class="dropdown-item" href="/gerenciar-grupos-membro">Administrar Grupos</a>
@@ -207,7 +207,7 @@ $setor = session()->get('usuario.setor');
                                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
                                             class="mdi mdi-power font-size-17 text-muted align-middle mr-1 text-danger"></i>
                                         {{ __('Sair') }}</a></li>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                <form id="logout-form" action="{{ route('login') }}" method="any"
                                     style="display: none;">
                                     @csrf
                                 </form>
@@ -215,7 +215,6 @@ $setor = session()->get('usuario.setor');
                         </li>
                     </ul>
                 </div>
-                    <div class=" fst-italic align-middle d-flex d-none d-lg-block justify-d-content-end" style="color:white">{{ DB::table('versoes_venus')->where('dt_fim', NULL)->first()->versao }}</div>
             </div>
         </div>
     </nav>

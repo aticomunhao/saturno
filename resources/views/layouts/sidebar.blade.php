@@ -7,192 +7,82 @@ $setor = session()->get('usuario.setor');
         style="background-color:#3891e4; font-family:tahoma; font-weight:bold;">
         <div class="container">
             <a class="navbar-brand" style="color: #fff;" href="{{ url('/login/valida') }}">Saturno</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDarkDropdown"
-                aria-controls="navbarNavDarkDropdown" aria-expanded="false" aria-label="Toggle navigation"
-                style="border:none">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false"
+                aria-label="Toggle navigation" style="border:none">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
-                @if (in_array(38, $setor) or in_array(25, $setor))
-                    <ul class="navbar-nav" id="AME">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="1" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">Teste 1</a>
-                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                {{-- @if (in_array(38, $setor) or in_array(25, $setor)) --}}
+                <ul class="navbar-nav" id="AME">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="1" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">Aquisição</a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
 
 
-                                @if (in_array(13, $acesso) or in_array(14, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-grupos-membro">Administrar Grupos</a>
-                                    </li>
-                                @endif
+                            {{-- @if (in_array(13, $acesso) or in_array(14, $acesso)) --}}
+                            <li><a class="dropdown-item" href="/gerenciar-aquisicao-serviços">Serviços</a>
+                            </li>
+                            {{-- @endif --}}
+                            <li><a class="dropdown-item" href="/gerenciar-aquisicao-material">Material</a>
+                            </li>
 
-                                @if (in_array(7, $acesso))
-                                    <li><a class="dropdown-item" href="/atendendo-afe">Atendimento Fraterno
-                                            Especifico</a>
-                                    </li>
-                                @endif
-                                @if (in_array(23, $acesso))
-                                    <li><a class="dropdown-item"
-                                            href="/gerenciar-encaminhamentos-integral">Encaminhamentos
-                                            Integral</a></li>
-                                @endif
+                        </ul>
+                    </li>
+                </ul>
+                {{-- @endif
+                @if (in_array(7, $setor) or in_array(25, $setor)) --}}
+                <ul class="navbar-nav" id="DAO">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="2" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">Teste 2</a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
 
-                                @if (in_array(9, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-entrevistas">Gerenciar Entrevistas</a>
-                                    </li>
-                                @endif
+                            {{-- @if (in_array(13, $acesso) or in_array(14, $acesso)) --}}
+                            <li><a class="dropdown-item" href="">Teste</a>
+                            </li>
+                            {{-- @endif --}}
+                        </ul>
+                    </li>
+                </ul>
+                {{-- @endif --}}
+                {{-- @if (in_array(6, $setor) or in_array(25, $setor)) --}}
+                <ul class="navbar-nav" id="DAE">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="2" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">Teste 3</a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                            {{-- @if (in_array(13, $acesso) or in_array(14, $acesso)) --}}
+                            <li><a class="dropdown-item" href="/gerenciar-grupos-membro">Teste</a>
+                            </li>
+                            {{-- @endif --}}
+                        </ul>
+                    </li>
+                </ul>
+                {{-- @endif --}}
 
-                                @if (in_array(2, $acesso) or in_array(3, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-pessoas">Gerenciar Pessoas</a></li>
-                                @endif
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="3" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">Administrar sistema</a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                            {{-- @if (in_array(2, $acesso)) --}}
+                            <li><a class="dropdown-item" href="/gerenciar-fatos">Gerenciar Fatos</a></li>
+                            {{-- @endif --}}
+                            {{-- @if (in_array(1, $acesso)) --}}
+                            <li><a class="dropdown-item" href="/gerenciar-perfis">Gerenciar Perfis</a></li>
+                            {{-- @endif
+                                @if (in_array(27, $acesso)) --}}
+                            <li><a class="dropdown-item" href="/gerenciar-usuario">Gerenciar Usuários</a></li>
+                            {{-- @endif
+                                @if (in_array(28, $acesso)) --}}
+                            <li><a class="dropdown-item" href="/gerenciar-versoes">Gerenciar Versões</a></li>
+                            {{-- @endif --}}
 
-                                @if (in_array(19, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-reunioes">Gerenciar Reuniões </a></li>
-                                @endif
-
-                                @if (in_array(25, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-integral">Gerenciar Tratamento
-                                            Integral</a></li>
-                                @endif
-
-
-                            </ul>
-                        </li>
-                    </ul>
-                @endif
-                @if (in_array(7, $setor) or in_array(25, $setor))
-                    <ul class="navbar-nav" id="DAO">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="2" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">Teste 2</a>
-                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-
-                                @if (in_array(13, $acesso) or in_array(14, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-grupos-membro">Administrar Grupos</a>
-                                    </li>
-                                @endif
-                                @if (in_array(6, $acesso))
-                                    <li><a class="dropdown-item" href="/atendendo">Atendimento Fraterno Individual</a>
-                                    </li>
-                                @endif
-                                @if (in_array(20, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-atendentes-apoio">Gerenciar Atendente
-                                            de
-                                            Apoio</a></li>
-                                @endif
-                                @if (in_array(4, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-atendente-dia">Gerenciar Atendentes do
-                                            dia</a>
-                                    </li>
-                                @endif
-                                @if (in_array(5, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-atendimentos">Gerenciar Atendimento
-                                            Fraterno</a></li>
-                                @endif
-                                @if (in_array(16, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-encaminhamentos">Gerenciar
-                                            Encaminhamentos</a>
-                                    </li>
-                                @endif
-                                @if (in_array(9, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-entrevistas">Gerenciar Entrevistas</a>
-                                    </li>
-                                @endif
-                                @if (in_array(10, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-grupos">Gerenciar Grupos</a></li>
-                                @endif
-                                @if (in_array(2, $acesso) or in_array(3, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-pessoas">Gerenciar Pessoas</a></li>
-                                @endif
-                                @if (in_array(8, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-presenca">Gerenciar Presença
-                                            Entrevista</a></li>
-                                @endif
-                                @if (in_array(19, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-reunioes">Gerenciar Reuniões</a></li>
-                                @endif
-                                @if (in_array(18, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-tratamentos">Gerenciar Tratamentos</a>
-                                    </li>
-                                @endif
-
-                            </ul>
-                        </li>
-                    </ul>
-                @endif
-                @if (in_array(6, $setor) or in_array(25, $setor))
-                    <ul class="navbar-nav" id="DAE">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="2" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">Teste 3</a>
-                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                                @if (in_array(13, $acesso) or in_array(14, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-grupos-membro">Administrar Grupos</a>
-                                    </li>
-                                @endif
-                                @if (in_array(22, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-encaminhamentos-pti">Encaminhamentos
-                                            PTI</a>
-                                    </li>
-                                @endif
-                                @if (in_array(24, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-pti">Gerenciar Assistidos PTI</a></li>
-                                @endif
-                                @if (in_array(9, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-entrevistas">Gerenciar Entrevistas</a>
-                                    </li>
-                                @endif
-                                @if (in_array(10, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-grupos">Gerenciar Grupos</a></li>
-                                @endif
-                                @if (in_array(15, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-mediunidades">Gerenciar
-                                            Mediunidades</a></li>
-                                @endif
-                                @if (in_array(2, $acesso) or in_array(3, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-pessoas">Gerenciar Pessoas</a></li>
-                                @endif
-                                @if (in_array(21, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-atendentes-plantonistas">Gerenciar
-                                            Plantonistas</a></li>
-                                @endif
-                                @if (in_array(19, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-reunioes">Gerenciar Reuniões </a>
-                                    </li>
-                                @endif
-
-                            </ul>
-                        </li>
-                    </ul>
-                @endif
-
-                    <ul class="navbar-nav" id="ADM">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="3" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">Administrar sistema</a>
-                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                                @if (in_array(11, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-fatos">Gerenciar Fatos</a></li>
-                                @endif
-                                @if (in_array(12, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-salas">Gerenciar Salas</a></li>
-                                @endif
-                                @if (in_array(1, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-perfis">Gerenciar Perfis</a></li>
-                                @endif
-                                @if (in_array(26, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-setor">Gerenciar Setor</a></li>
-                                @endif
-                                @if (in_array(27, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-usuario">Gerenciar Usuários</a></li>
-                                @endif
-                                @if (in_array(28, $acesso))
-                                    <li><a class="dropdown-item" href="/gerenciar-versoes">Gerenciar Versões</a></li>
-                                @endif
-
-                            </ul>
-                        </li>
-                    </ul>
+                        </ul>
+                    </li>
+                </ul>
 
                 <div class="col">
                     <ul class="navbar-nav">
@@ -221,9 +111,7 @@ $setor = session()->get('usuario.setor');
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap5-toggle@5.0.4/js/bootstrap5-toggle.ecmas.min.js"></script>
 <script>
-
-    if($('#ADM .dropdown-item').length == 0){
+    if ($('#ADM .dropdown-item').length == 0) {
         $('#ADM').hide();
     }
-
 </script>

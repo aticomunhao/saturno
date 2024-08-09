@@ -22,7 +22,7 @@ $setor = session()->get('usuario.setor');
 
 
                             {{-- @if (in_array(13, $acesso) or in_array(14, $acesso)) --}}
-                            <li><a class="dropdown-item" href="/gerenciar-aquisicao-serviços">Serviços</a>
+                            <li><a class="dropdown-item" href="/gerenciar-aquisicao-servicos">Serviços</a>
                             </li>
                             {{-- @endif --}}
                             <li><a class="dropdown-item" href="/gerenciar-aquisicao-material">Material</a>

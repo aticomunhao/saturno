@@ -35,7 +35,7 @@ class UsuarioController extends Controller
     public function getUsuarios()
     {
 
-        $result = DB::table('usuario as u')->select('u.id', 'u.id_pessoa', 'p.cpf', 'p.nome_completo', 'u.ativo', 'u.bloqueado', 'u.data_ativacao')->leftJoin('pessoas as p', 'u.id_pessoa', 'p.id');
+        $result = DB::connection('pgsql2')->table('usuario as u')->select('u.id', 'u.id_pessoa', 'p.cpf', 'p.nome_completo', 'u.ativo', 'u.bloqueado', 'u.data_ativacao')->leftJoin('pessoas as p', 'u.id_pessoa', 'p.id');
 
         return $result;
     }
@@ -358,7 +358,7 @@ class UsuarioController extends Controller
         return redirect()->back()->with('mensagemErro', 'Senha atual incorreta!');
         //return view('login.alterar-senha')->withErrors(['Senha atual incorreta']);
     }
-    
+
 
     public function gerarSenha($id_pessoa)
     {

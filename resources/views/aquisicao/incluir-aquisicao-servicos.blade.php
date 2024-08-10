@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('title')
-    Gerenciar Aquisição de Serviços
+    Incluir Aquisição de Serviços
 @endsection
 @section('content')
-    <form method="GET" action="/gerenciar-aquisicao-servicos">{{-- Formulario de pesquisa --}}
+    <form method="POST" action="/salvar-aquisicao-servicos">{{-- Formulario de Inserção --}}
         @csrf
         <div class="container-fluid"> {{-- Container completo da página  --}}
             <div class="justify-content-center">
@@ -14,12 +14,13 @@
                         <div class="card-header">
                             <div class="ROW">
                                 <h5 class="col-12" style="color: #355089">
-                                    Gerenciar Aquisição de Serviços
+                                    Incluir Aquisição de Serviços
                                 </h5>
                             </div>
                         </div>
                         <br>
                         <div class="card-body">
+                            <h5>Identificação do Serviço</h5>
                             <div class="ROW" style="margin-left:5px">
                                 <div style="display: flex; gap: 20px; align-items: flex-end;">
                                     <div class="col-md-2 col-sm-12">Classe do Serviço
@@ -43,66 +44,48 @@
                                             value="{{ old('servicos') }}" disabled>
                                         </select>
                                     </div>
-                                    <div class="row justify-content-start">
-                                        <div class="col-12">
-                                            <a href="/gerenciar-aquisicao-servicos" type="button" class="btn btn-light btn-sm"
-                                                style="box-shadow: 1px 2px 5px #000000; margin-left: 2px; font-size: 1rem"
-                                                value="">Limpar</a>
-                                            <button class="btn btn-light btn-sm "
-                                                style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin:5px;"{{-- Botao submit do formulario de pesquisa --}}
-                                                type="submit">Pesquisar
-                                            </button>
-                                            <a href="/incluir-aquisicao-servicos" {{-- Botao com rota para incluir cargo --}}
-                                                class="btn btn-success"
-                                                style="font-size: 1rem; box-shadow: 1px 2px 5px #000000;">
-                                                Novo+
-                                            </a>
-                                        </div>
+                                    <div class="col-md-4 col-sm-12">Motivo
+                                        <br>
+                                        <textarea class="form-control" style="border: 1px solid #999999; padding: 5px;" id="idmotivo" rows="4"
+                                            name="motivo" value=""></textarea>
                                     </div>
                                 </div>
                             </div>
                             <br>
                             <hr>
-                            <table {{-- Inicio da tabela de informacoes --}}
-                                class= "table table-sm table-striped table-bordered border-secondary table-hover align-middle">
-                                <thead style="text-align: center; ">{{-- inicio header tabela --}}
-                                    <tr style="background-color: #d6e3ff; font-size:19px; color:#000;" class="align-middle">
-                                        <th></th>
-                                        <th>Número</th>
-                                        <th>Data</th>
-                                        <th>Tipo Serviço</th>
-                                        <th>Proposta</th>
-                                        <th>Setor</th>
-                                        <th>Prioridade</th>
-                                        <th>Status</th>
-                                        <th>Ações</th>
-                                    </tr>
-                                </thead>{{-- Fim do header da tabela --}}
-                                <tbody style="font-size: 15px; color:#000000;">{{-- Inicio body tabela --}}
-                                    @foreach ($aquisicao as $aquisicaos)
-                                            @if ($aquisicaos->idClasse && $aquisicaos->idCatalogo)
-                                        <tr>
-                                            <td></td>
-                                            <td>{{ $aquisicaos->idSolicitacao}}</td>{{-- Adiciona o nome da Pessoa  --}}
-                                            <td>{{ $aquisicaos->dataSolicitacao}}</td>
-                                            <td>{{ $aquisicaos->descricaoCatalogo}}</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>{{ $aquisicaos->statusServico}}</td>
-                                            <td></td>
-                                        </tr>
-                                        @endif
-                                    @endforeach
-                                </tbody>
-                                {{-- Fim body da tabela --}}
-                            </table>
+                            <h5>Propostas Comerciais</h5>
+                            <div class="ROW" style="margin-left:5px">
+                                <div style="display: flex; gap: 20px; align-items: flex-end;">
+                                    <div class="col-md-3">1º Empresa
+                                        <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
+                                            type="text" value="" id="3" name="nomeEmpresa"
+                                            required="required">
+                                    </div>
+                                    <div class="col-md-3">Valor Orçado
+                                        <div class="input-group">
+                                            <span class="input-group-text"
+                                                style="border: 1px solid #999999; padding: 5px;">R$</span>
+                                            <input type="text" class="form-control"
+                                                style="border: 1px solid #999999; padding: 5px;"
+                                                aria-label="Amount (to the nearest dollar)">
+                                        </div>
+                                    </div>
+                                    <div>Arquivo da Proposta
+                                        
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </form>{{-- Final Formulario de pesquisa --}}
+        <div class="botões">
+            <a href="/gerenciar-aquisicao-servicos" type="button" value=""
+                class="btn btn-danger col-md-3 col-2 mt-4 offset-md-2">Cancelar</a>
+            <input type="submit" value="Confirmar" class="btn btn-primary col-md-3 col-1 mt-4 offset-md-2">
+        </div>
+    </form>{{-- Final Formulario de Inserção --}}
     <script>
         $(document).ready(function() {
             $('#servicos, #classeServico').select2({

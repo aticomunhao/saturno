@@ -325,3 +325,5 @@ Route::any('/excluir-perfis/{id}', [GerenciarPerfil::class, 'destroy']);
 //Gerenciar Aquisição de Serviço
 Route::get('/gerenciar-aquisicao-servicos', [AquisicaoServicosController::class, 'index']);
 Route::get('/retorna-nome-servicos/{id}', [AquisicaoServicosController::class, 'retornaNomeServicos']);
+Route::get('/incluir-aquisicao-servicos', [AquisicaoServicosController::class, 'create']);
+Route::get('/salvar-aquisicao-servicos', [AquisicaoServicosController::class, 'store']);

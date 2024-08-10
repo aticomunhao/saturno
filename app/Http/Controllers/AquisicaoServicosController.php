@@ -20,8 +20,8 @@ class AquisicaoServicosController extends Controller
     public function index()
     {
         $aquisicao = DB::table('sol_servico')
-        ->leftJoin('tipo_classe_sv', 'sol_servico.id_classe_sv', 'tipo_classe_sv.id')
-        ->leftJoin('catalogo_servico', 'catalogo_servico.id', 'sol_servico.id_tp_sv')
+            ->leftJoin('tipo_classe_sv', 'sol_servico.id_classe_sv', 'tipo_classe_sv.id')
+            ->leftJoin('catalogo_servico', 'catalogo_servico.id', 'sol_servico.id_tp_sv')
             ->select(
                 'sol_servico.id AS idSolicitacao',
                 'sol_servico.data AS dataSolicitacao',
@@ -60,5 +60,32 @@ class AquisicaoServicosController extends Controller
         // dd($cidadeDadosResidenciais);
 
         return response()->json($nomeServicos);
+    }
+
+    public function create()
+    {
+        $servico = DB::table('sol_servico')
+            ->select(
+                'sol_servico.id AS idSolicitacao',
+                'sol_servico.data AS dataSolicitacao',
+                'sol_servico.id_setor AS idSetor',
+                'sol_servico.id_classe_sv AS idClasseSv',
+                'sol_servico.id_tp_sv AS idNomeSv',
+                'sol_servico.motivo AS motivoServico',
+                'sol_servico.prioridade AS prioridadeServico',
+                'sol_servico.status AS statusServico',
+            );
+
+            $classeAquisicao = DB::table('tipo_classe_sv')
+            ->select(
+                'tipo_classe_sv.id AS idClasse',
+                'tipo_classe_sv.descricao AS descricaoClasse',
+                'tipo_classe_sv.sigla',
+            )
+            ->get();
+
+
+
+            return view('aquisicao.incluir-aquisicao-servicos',  compact('servico', 'classeAquisicao'));
     }
 }

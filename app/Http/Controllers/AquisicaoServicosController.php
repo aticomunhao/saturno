@@ -17,7 +17,7 @@ use Symfony\Component\Console\Helper\Dumper as HelperDumper;
 class AquisicaoServicosController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         $aquisicao = DB::table('sol_servico')
             ->leftJoin('tipo_classe_sv', 'sol_servico.id_classe_sv', 'tipo_classe_sv.id')
@@ -35,6 +35,29 @@ class AquisicaoServicosController extends Controller
                 'tipo_classe_sv.id AS idClasse',
                 'catalogo_servico.descricao AS descricaoCatalogo'
 
+            );
+
+            $status_servico = $request->status_servico;
+            $classe_servico = $request->classe;
+            $tipo_servico = $request->servicos;
+            dd($classe_servico, $tipo_servico);
+
+            if ($request->status_servico) {
+                $aquisicao->where('sol_servico.status', $status_servico);
+            }
+            if ($request->classe) {
+                $aquisicao->where('idClasseSv', $classe_servico);
+            }
+            if ($request->servicos) {
+                $aquisicao->where('idNomeSv', $tipo_servico);
+            }
+
+            $aquisicao = $aquisicao->orderBy('idSolicitacao')->paginate(20);
+
+        $status = DB::table('tipo_status_sol_sv')
+            ->select(
+                'tipo_status_sol_sv.id AS idStatus',
+                'tipo_status_sol_sv.nome AS nomeStatus',
             )
             ->get();
 
@@ -47,7 +70,7 @@ class AquisicaoServicosController extends Controller
             ->get();
 
 
-        return view('aquisicao.gerenciar-aquisicao-servicos',  compact('aquisicao', 'classeAquisicao'));
+        return view('aquisicao.gerenciar-aquisicao-servicos',  compact('aquisicao', 'classeAquisicao', 'status'));
     }
 
     public function retornaNomeServicos($id)
@@ -76,7 +99,7 @@ class AquisicaoServicosController extends Controller
                 'sol_servico.status AS statusServico',
             );
 
-            $classeAquisicao = DB::table('tipo_classe_sv')
+        $classeAquisicao = DB::table('tipo_classe_sv')
             ->select(
                 'tipo_classe_sv.id AS idClasse',
                 'tipo_classe_sv.descricao AS descricaoClasse',
@@ -86,6 +109,14 @@ class AquisicaoServicosController extends Controller
 
 
 
-            return view('aquisicao.incluir-aquisicao-servicos',  compact('servico', 'classeAquisicao'));
+        return view('aquisicao.incluir-aquisicao-servicos',  compact('servico', 'classeAquisicao'));
+    }
+
+    public function store($request)
+    {
+        $solServicos = DB::table('sol_servico')
+            ->include(
+                $request->input
+            );
     }
 }

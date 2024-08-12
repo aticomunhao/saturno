@@ -38,26 +38,49 @@
                                     </div>
                                     <div class="col-md-2 col-sm-12">Tipo de Serviço
                                         <br>
-                                        <select class="js-example-responsive form-select"
-                                            style="border: 1px solid #999999; padding: 5px;" id="servicos" name="servicos"
-                                            value="{{ old('servicos') }}" disabled>
+                                        <select class="js-example-responsive form-select" style="border: 1px solid #999999;"
+                                            id="servicos" name="servicos" value="{{ old('servicos') }}" disabled>
                                         </select>
                                     </div>
-                                    <div class="row justify-content-start">
-                                        <div class="col-12">
-                                            <a href="/gerenciar-aquisicao-servicos" type="button" class="btn btn-light btn-sm"
-                                                style="box-shadow: 1px 2px 5px #000000; margin-left: 2px; font-size: 1rem"
-                                                value="">Limpar</a>
-                                            <button class="btn btn-light btn-sm "
-                                                style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin:5px;"{{-- Botao submit do formulario de pesquisa --}}
-                                                type="submit">Pesquisar
-                                            </button>
-                                            <a href="/incluir-aquisicao-servicos" {{-- Botao com rota para incluir cargo --}}
-                                                class="btn btn-success"
-                                                style="font-size: 1rem; box-shadow: 1px 2px 5px #000000;">
-                                                Novo+
-                                            </a>
-                                        </div>
+                                    <div class="col-md-2 col-sm-12">Status
+                                        <select class="form-select" style="border: 1px solid #999999;"
+                                            name="status_servico" value="">
+                                            <option value="">Todos</option>
+                                            @foreach ($status as $statuss)
+                                            <option value="{{ $statuss->idStatus }}" {{ $statuss->nomeStatus == old('status_servicos') ? 'selected' : '' }}>
+                                                {{ $statuss->nomeStatus }}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <a href="/gerenciar-aquisicao-servicos" type="button" class="btn btn-light btn-sm"
+                                            style="box-shadow: 1px 2px 5px #000000; font-size: 1rem"
+                                            value="">Limpar</a>
+                                        <button class="btn btn-light btn-sm "
+                                            style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-left:5px;"{{-- Botao submit do formulario de pesquisa --}}
+                                            type="submit">Pesquisar
+                                        </button>
+                                        <a href="/incluir-aquisicao-servicos" {{-- Botao com rota para incluir cargo --}} class="btn btn-success"
+                                            style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-left:5px">
+                                            Novo+
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="ROW justify-content-start">
+                                    <div class="col-12" style="margin-top:10px;">
+                                        <a href="/incluir-aquisicao-servicos" {{-- Botao com rota para incluir cargo --}} class="btn btn-primary "
+                                            style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-right:5px">
+                                            Aprovar em Lote
+                                        </a>
+                                        <a href="/incluir-aquisicao-servicos" {{-- Botao com rota para incluir cargo --}} class="btn btn-success "
+                                            style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-right:5px">
+                                            Homologar em Lote
+                                        </a>
+                                        <a href="/incluir-aquisicao-servicos" {{-- Botao com rota para incluir cargo --}} class="btn btn-warning "
+                                            style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-right:5px">
+                                            Confirmar em Lote
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -80,18 +103,18 @@
                                 </thead>{{-- Fim do header da tabela --}}
                                 <tbody style="font-size: 15px; color:#000000;">{{-- Inicio body tabela --}}
                                     @foreach ($aquisicao as $aquisicaos)
-                                            @if ($aquisicaos->idClasse && $aquisicaos->idCatalogo)
-                                        <tr>
-                                            <td></td>
-                                            <td>{{ $aquisicaos->idSolicitacao}}</td>{{-- Adiciona o nome da Pessoa  --}}
-                                            <td>{{ $aquisicaos->dataSolicitacao}}</td>
-                                            <td>{{ $aquisicaos->descricaoCatalogo}}</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>{{ $aquisicaos->statusServico}}</td>
-                                            <td></td>
-                                        </tr>
+                                        @if ($aquisicaos->idClasse && $aquisicaos->idCatalogo)
+                                            <tr>
+                                                <td></td>
+                                                <td>{{ $aquisicaos->idSolicitacao }}</td>{{-- Adiciona o nome da Pessoa  --}}
+                                                <td>{{ $aquisicaos->dataSolicitacao }}</td>
+                                                <td>{{ $aquisicaos->descricaoCatalogo }}</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td>{{ $aquisicaos->statusServico }}</td>
+                                                <td></td>
+                                            </tr>
                                         @endif
                                     @endforeach
                                 </tbody>

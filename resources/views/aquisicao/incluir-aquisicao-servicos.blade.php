@@ -44,11 +44,11 @@
                                             value="{{ old('servicos') }}" disabled>
                                         </select>
                                     </div>
-                                    <div class="col-md-4 col-sm-12">Motivo
-                                        <br>
-                                        <textarea class="form-control" style="border: 1px solid #999999; padding: 5px;" id="idmotivo" rows="4"
-                                            name="motivo" value=""></textarea>
-                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-12">Motivo
+                                    <br>
+                                    <textarea class="form-control" style="border: 1px solid #999999; padding: 5px;" id="idmotivo" rows="4"
+                                        name="motivo" value=""></textarea>
                                 </div>
                             </div>
                             <br>
@@ -67,11 +67,67 @@
                                                 style="border: 1px solid #999999; padding: 5px;">R$</span>
                                             <input type="text" class="form-control"
                                                 style="border: 1px solid #999999; padding: 5px;"
+                                                aria-label="Amount (to the nearest dollar) required="required"">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">Data Limite do Orçamento
+                                        <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
+                                            type="date" value="" id="3" name="dataOrcamento"
+                                            required="required">
+                                    </div>
+                                    <div class="col-md-3">Arquivo da Proposta
+                                        <input type="file" style="border: 1px solid #999999; padding: 5px;"
+                                            class="form-control form-control-sm" name ="ficheiro" id="idficheiro">
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 20px; align-items: flex-end;">
+                                    <div class="col-md-3">2º Empresa
+                                        <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
+                                            type="text" value="" id="3" name="nomeEmpresa"
+                                            required="required">
+                                    </div>
+                                    <div class="col-md-3">Valor Orçado
+                                        <div class="input-group">
+                                            <span class="input-group-text"
+                                                style="border: 1px solid #999999; padding: 5px;">R$</span>
+                                            <input type="text" class="form-control"
+                                                style="border: 1px solid #999999; padding: 5px;"
                                                 aria-label="Amount (to the nearest dollar)">
                                         </div>
                                     </div>
-                                    <div>Arquivo da Proposta
-                                        
+                                    <div class="col-md-2">Data Limite do Orçamento
+                                        <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
+                                            type="date" value="" id="3" name="dataOrcamento"
+                                            required="required">
+                                    </div>
+                                    <div class="col-md-3">Arquivo da Proposta
+                                        <input type="file" style="border: 1px solid #999999; padding: 5px;"
+                                            class="form-control form-control-sm" name ="ficheiro" id="idficheiro">
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 20px; align-items: flex-end;">
+                                    <div class="col-md-3">3º Empresa
+                                        <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
+                                            type="text" value="" id="3" name="nomeEmpresa"
+                                            required="required">
+                                    </div>
+                                    <div class="col-md-3">Valor Orçado
+                                        <div class="input-group">
+                                            <span class="input-group-text"
+                                                style="border: 1px solid #999999; padding: 5px;">R$</span>
+                                            <input type="text" class="form-control"
+                                                style="border: 1px solid #999999; padding: 5px;"
+                                                aria-label="Amount (to the nearest dollar)">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">Data Limite do Orçamento
+                                        <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
+                                            type="date" value="" id="3" name="dataOrcamento"
+                                            required="required">
+                                    </div>
+                                    <div class="col-md-3">Arquivo da Proposta
+                                        <input type="file" style="border: 1px solid #999999; padding: 5px;"
+                                            class="form-control form-control-sm" name ="ficheiro" id="idficheiro">
                                     </div>
                                 </div>
                             </div>

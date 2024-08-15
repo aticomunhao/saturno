@@ -36,11 +36,11 @@ $setor = session()->get('usuario.setor');
                 <ul class="navbar-nav" id="DAO">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="2" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">Teste 2</a>
+                            data-bs-toggle="dropdown" aria-expanded="false">Cadastrar</a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
 
                             {{-- @if (in_array(13, $acesso) or in_array(14, $acesso)) --}}
-                            <li><a class="dropdown-item" href="">Teste</a>
+                            <li><a class="dropdown-item" href="">Documentos</a>
                             </li>
                             {{-- @endif --}}
                         </ul>
@@ -51,10 +51,16 @@ $setor = session()->get('usuario.setor');
                 <ul class="navbar-nav" id="DAE">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="2" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">Teste 3</a>
+                            data-bs-toggle="dropdown" aria-expanded="false">Catálogos</a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
                             {{-- @if (in_array(13, $acesso) or in_array(14, $acesso)) --}}
-                            <li><a class="dropdown-item" href="/gerenciar-grupos-membro">Teste</a>
+                            <li><a class="dropdown-item" href="/gerenciar-grupos-membro">Catálogo de Empresas</a>
+                            </li>
+                            <li><a class="dropdown-item" href="/gerenciar-grupos-membro">Catálogo de Materiais</a>
+                            </li>
+                            <li><a class="dropdown-item" href="/gerenciar-grupos-membro">Catálogo de Serviços</a>
+                            </li>
+                            <li><a class="dropdown-item" href="/gerenciar-grupos-membro">Catálogo de Contas</a>
                             </li>
                             {{-- @endif --}}
                         </ul>

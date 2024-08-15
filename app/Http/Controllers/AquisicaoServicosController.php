@@ -160,4 +160,41 @@ class AquisicaoServicosController extends Controller
 
         return redirect('/gerenciar-aquisicao-servicos');
     }
+
+    public function aprovar($idSolicitacao) {
+
+        $aquisicao = DB::table('sol_servico')
+            ->leftJoin('tipo_classe_sv', 'sol_servico.id_classe_sv', 'tipo_classe_sv.id')
+            ->leftJoin('catalogo_servico', 'catalogo_servico.id', 'sol_servico.id_tp_sv')
+            ->leftJoin('tipo_status_sol_sv', 'sol_servico.status', 'tipo_status_sol_sv.id')
+            ->select(
+                'sol_servico.id AS idSolicitacao',
+                'sol_servico.data AS dataSolicitacao',
+                'sol_servico.id_setor AS idSetor',
+                'sol_servico.id_classe_sv AS idClasseSv',
+                'sol_servico.id_tp_sv AS idNomeSv',
+                'sol_servico.motivo AS motivoServico',
+                'sol_servico.prioridade AS prioridadeServico',
+                'sol_servico.status AS statusServico',
+                'catalogo_servico.id AS idCatalogo',
+                'tipo_classe_sv.id AS idClasse',
+                'catalogo_servico.descricao AS descricaoCatalogo',
+                'tipo_status_sol_sv.nome AS nomeStatus',
+            )
+            ->where('sol_servico.id', $idSolicitacao)
+            ->first();
+
+
+        return view('aquisicao.aprovar-aquisicao-servicos', compact('aquisicao'));
+    }
+
+    public function validaAprovacao(Request $request, $idSolicitacao) {
+
+
+
+
+        return redirect('/gerenciar-aquisicao-servicos');
+    }
+
+
 }

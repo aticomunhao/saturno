@@ -113,7 +113,14 @@
                                                     <td>{{ $vagaDois->nome }}</td>
                                                     <td></td>
                                                     <td>{{ $aquisicaos->nomeStatus }}</td>
-                                                    <td></td>
+                                                    <td>
+                                                        <a href="/aprovar-aquisicao-servicos/{{ $aquisicaos->idSolicitacao }}"
+                                                            class="btn btn-sm btn-outline-primary" data-tt="tooltip"
+                                                            style="font-size: 1rem; color:#303030" data-placement="top"
+                                                            title="Aprovar">
+                                                            <i class="bi bi-check-lg"></i>
+                                                        </a>
+                                                    </td>
                                                 </tr>
                                             @endif
                                         @endforeach

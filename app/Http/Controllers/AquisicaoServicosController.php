@@ -161,7 +161,7 @@ class AquisicaoServicosController extends Controller
         return redirect('/gerenciar-aquisicao-servicos');
     }
 
-    public function aprovar($idSolicitacao) {
+    public function aprovar($idSolicitacao, $idSetor) {
 
         $aquisicao = DB::table('sol_servico')
             ->leftJoin('tipo_classe_sv', 'sol_servico.id_classe_sv', 'tipo_classe_sv.id')
@@ -184,13 +184,32 @@ class AquisicaoServicosController extends Controller
             ->where('sol_servico.id', $idSolicitacao)
             ->first();
 
+        $buscaSetor = DB::connection('pgsql2') //Setor requerido pela aquisição
+        ->table('setor')
+        ->select(
+            'setor.id',
+            'setor.nome AS nomeSetor'
+        )
+        ->where('setor.id', $idSetor)
+        ->first();
 
-        return view('aquisicao.aprovar-aquisicao-servicos', compact('aquisicao'));
+        $numeros = range(1, 100); // Gera um array de 1 a 100
+
+        $todosSetor = DB::connection('pgsql2')->table('setor') //Setor Responsável por acompanhar o serviço
+        ->select('setor.nome')
+        ->orderBy('nome')->get();
+
+        return view('aquisicao.aprovar-aquisicao-servicos', compact('aquisicao', 'buscaSetor', 'numeros', 'todosSetor'));
     }
 
     public function validaAprovacao(Request $request, $idSolicitacao) {
 
-
+        DB::table('sol_servico')
+        ->where('sol_servico.id', $idSolicitacao)
+        ->update([
+            'sol_servico.prioridade' =>$request->input('prioridade'),
+            'sol_servico.id_resp_sv' =>$request->input('')
+        ]);
 
 
         return redirect('/gerenciar-aquisicao-servicos');

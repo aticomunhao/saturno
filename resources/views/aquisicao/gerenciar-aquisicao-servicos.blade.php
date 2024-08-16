@@ -114,7 +114,7 @@
                                                     <td></td>
                                                     <td>{{ $aquisicaos->nomeStatus }}</td>
                                                     <td>
-                                                        <a href="/aprovar-aquisicao-servicos/{{ $aquisicaos->idSolicitacao }}"
+                                                        <a href="/aprovar-aquisicao-servicos/{{ $aquisicaos->idSolicitacao }}/ {{ $aquisicaos->idSetor }}"
                                                             class="btn btn-sm btn-outline-primary" data-tt="tooltip"
                                                             style="font-size: 1rem; color:#303030" data-placement="top"
                                                             title="Aprovar">

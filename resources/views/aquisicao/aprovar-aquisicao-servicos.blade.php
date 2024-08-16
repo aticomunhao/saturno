@@ -29,14 +29,14 @@
                                 <div>
                                     <label>Data da Criação</label>
                                     <br>
-                                    <input class="form-control" style="text-align: center; width: 300px" type="date" format="d-m-Y"
-                                        disabled value="{{ $aquisicao->dataSolicitacao }}">
+                                    <input class="form-control" style="text-align: center; width: 300px" type="date"
+                                        format="d-m-Y" disabled value="{{ $aquisicao->dataSolicitacao }}">
                                 </div>
                                 <div>
                                     <label>Setor</label>
                                     <br>
                                     <input class="form-control" style="text-align: center; width: 300px" type="text"
-                                        disabled value="">
+                                        disabled value="{{ $buscaSetor->nomeSetor }}">
                                 </div>
                             </div>
                             <br>
@@ -58,23 +58,27 @@
                                     <label>Prioridade</label>
                                     <br>
                                     <select id="cargoSelect" class="form-select status select2 pesquisa-select"
-                                        style="width: 300px;" name="prioridade">
-                                        <option value=""></option>
+                                        style="width: 300px;" name="prioridade" required>
+                                        @foreach ($numeros as $number)
+                                            <option value="{{ $number }}">{{ $number }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div>
-                                    <label>Setor Responsável</label>
+                                    <label>Setor Responsável por Acompanhar</label>
                                     <br>
                                     <select id="cargoSelect" class="form-select status select2 pesquisa-select"
-                                        style="width: 300px;" name="setorResponsavel">
-                                        <option value=""></option>
+                                        style="width: 300px;" name="setorResponsavel" required>
+                                        @foreach ($todosSetor as $todosSetores)
+                                            <option value="">{{ $todosSetores->nome }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
                             <div class=" col-12">Motivo
                                 <br>
                                 <textarea class="form-control" style="border: 1px solid #999999; padding: 5px;" id="idmotivo" rows="4"
-                                    name="motivo" value=""></textarea>
+                                     value="" disabled>{{ $aquisicao->motivoServico }}</textarea>
                             </div>
                             <br>
                             <hr>
@@ -83,8 +87,7 @@
                                 <div style="display: flex; gap: 20px; align-items: flex-end;">
                                     <div class="col-md-3">1º Empresa
                                         <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
-                                            type="text" value="" id="3" name="nomeEmpresaUm"
-                                            required="required">
+                                            type="text" value="" id="3" disabled>
                                     </div>
                                     <div class="col-md-3">Valor Orçado
                                         <div class="input-group">
@@ -92,24 +95,31 @@
                                                 style="border: 1px solid #999999; padding: 5px;">R$</span>
                                             <input type="text" class="form-control"
                                                 style="border: 1px solid #999999; padding: 5px;" name="valorUm"
-                                                aria-label="Amount (to the nearest dollar)" required="required">
+                                                aria-label="Amount (to the nearest dollar)" disabled>
                                         </div>
                                     </div>
                                     <div class="col-md-2">Data Limite do Orçamento
                                         <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
                                             type="date" value="" id="3" name="dataOrcamentoUm"
-                                            required="required">
+                                            disabled>
                                     </div>
                                     <div class="col-md-3">Arquivo da Proposta
                                         <input type="file" style="border: 1px solid #999999; padding: 5px;"
                                             class="form-control form-control-sm" name ="arquivoUm" id="idarquivo"
-                                            required='required'>
+                                            disabled>
+                                            {{-- @if ($afastamento->caminho)
+                                            <a href="{{ asset($afastamento->caminho) }}"
+                                                class="btn btn-outline-secondary" target="_blank">
+                                                <i class="bi bi-archive">
+                                                </i>
+                                            </a>
+                                        @endif --}}
                                     </div>
                                 </div>
                                 <div style="display: flex; gap: 20px; align-items: flex-end;">
                                     <div class="col-md-3">2º Empresa
                                         <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
-                                            type="text" value="" id="3" name="nomeEmpresaDois">
+                                            type="text" value="" id="3" disabled>
                                     </div>
                                     <div class="col-md-3">Valor Orçado
                                         <div class="input-group">
@@ -117,40 +127,54 @@
                                                 style="border: 1px solid #999999; padding: 5px;">R$</span>
                                             <input type="text" class="form-control"
                                                 style="border: 1px solid #999999; padding: 5px;"
-                                                aria-label="Amount (to the nearest dollar)" name="valorDois">
+                                                aria-label="Amount (to the nearest dollar)" disabled>
                                         </div>
                                     </div>
                                     <div class="col-md-2">Data Limite do Orçamento
                                         <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
-                                            type="date" value="" id="3" name="dataOrcamentoDois">
+                                            type="date" value="" id="3" disabled>
                                     </div>
                                     <div class="col-md-3">Arquivo da Proposta
                                         <input type="file" style="border: 1px solid #999999; padding: 5px;"
-                                            class="form-control form-control-sm" name ="arquivoDois" id="idarquivo">
+                                            class="form-control form-control-sm" disabled >
+                                            {{-- @if ($afastamento->caminho)
+                                            <a href="{{ asset($afastamento->caminho) }}"
+                                                class="btn btn-outline-secondary" target="_blank">
+                                                <i class="bi bi-archive">
+                                                </i>
+                                            </a>
+                                        @endif --}}
                                     </div>
                                 </div>
                                 <div style="display: flex; gap: 20px; align-items: flex-end;">
                                     <div class="col-md-3">3º Empresa
                                         <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
-                                            type="text" value="" id="3" name="nomeEmpresaTres"
+                                            type="text" value="" id="3" disabled
                                             required="required">
                                     </div>
                                     <div class="col-md-3">Valor Orçado
                                         <div class="input-group">
                                             <span class="input-group-text"
                                                 style="border: 1px solid #999999; padding: 5px;">R$</span>
-                                            <input type="text" class="form-control" name="valorTres"
+                                            <input type="text" class="form-control" disabled
                                                 style="border: 1px solid #999999; padding: 5px;"
                                                 aria-label="Amount (to the nearest dollar)">
                                         </div>
                                     </div>
                                     <div class="col-md-2">Data Limite do Orçamento
                                         <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
-                                            type="date" value="" id="3" name="dataOrcamentoTres">
+                                            type="date" value="" id="3" disabled>
                                     </div>
                                     <div class="col-md-3">Arquivo da Proposta
                                         <input type="file" style="border: 1px solid #999999; padding: 5px;"
-                                            class="form-control form-control-sm" name ="arquivoTres" id="idarquivo">
+                                            class="form-control form-control-sm" disabled>
+                                            {{-- @if ($afastamento->caminho)
+                                            <a href="{{ asset($afastamento->caminho) }}"
+                                                class="btn btn-outline-secondary" target="_blank">
+                                                <i class="bi bi-archive">
+                                                </i>
+                                            </a>
+                                        @endif --}}
                                     </div>
                                 </div>
                             </div>

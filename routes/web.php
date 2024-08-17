@@ -43,6 +43,7 @@ use App\Http\Controllers\CalculadoraController;
 use App\Http\Controllers\GerenciarInventariosController;
 use App\Http\Controllers\GerenciarPerfil;
 use App\Http\Controllers\AquisicaoServicosController;
+use App\Http\Controllers\CatalogoEmpresaController;
 
 
 
@@ -329,3 +330,10 @@ Route::get('/incluir-aquisicao-servicos', [AquisicaoServicosController::class, '
 Route::post('/salvar-aquisicao-servicos', [AquisicaoServicosController::class, 'store']);
 Route::get('/aprovar-aquisicao-servicos/{idSolicitacao}/{idSetor}', [AquisicaoServicosController::class, 'aprovar']);
 Route::post('/validaAprovacao-aquisicao-servicos/{idSolicitacao}', [AquisicaoServicosController::class, 'validaAprovacao']);
+
+
+
+//Catálogoc de Empresas
+Route::get('/catalogo-empresa', [CatalogoEmpresaController::class, 'index']);
+Route::post('/salvar-catalogo-empresa', [CatalogoEmpresaController::class, 'store']);
+

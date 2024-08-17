@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\ElseIf_;
 use Psy\VarDumper\Dumper;
 use Symfony\Component\Console\Helper\Dumper as HelperDumper;
 
+use function Laravel\Prompts\select;
 
 class AquisicaoServicosController extends Controller
 {
@@ -128,7 +129,8 @@ class AquisicaoServicosController extends Controller
                 'sol_servico.motivo AS motivoServico',
                 'sol_servico.prioridade AS prioridadeServico',
                 'sol_servico.status AS statusServico',
-            );
+            )
+            ->get();
 
         $classeAquisicao = DB::table('tipo_classe_sv')
             ->select(
@@ -138,7 +140,23 @@ class AquisicaoServicosController extends Controller
             )
             ->get();
 
-        return view('aquisicao.incluir-aquisicao-servicos',  compact('servico', 'classeAquisicao', 'setor', 'buscaSetor'));
+            $empresas = DB::table('documento AS doc')
+            ->select(
+                'doc.numero',
+                'doc.dt_doc',
+                'doc.id_tp_doc',
+                'doc.valor',
+                'doc.id_empresa',
+                'doc.id_setor',
+                'doc.vencedor',
+                'doc.id_sol_sv',
+                'doc.dt_validade',
+                'doc.end_arquivo'
+            )
+            ->get();
+
+
+        return view('aquisicao.incluir-aquisicao-servicos',  compact('servico', 'classeAquisicao', 'setor', 'buscaSetor', 'empresas'));
     }
 
     public function store(Request $request)
@@ -196,10 +214,25 @@ class AquisicaoServicosController extends Controller
         $numeros = range(1, 100); // Gera um array de 1 a 100
 
         $todosSetor = DB::connection('pgsql2')->table('setor') //Setor Responsável por acompanhar o serviço
-        ->select('setor.nome')
+        ->select('setor.nome', 'setor.id')
         ->orderBy('nome')->get();
 
-        return view('aquisicao.aprovar-aquisicao-servicos', compact('aquisicao', 'buscaSetor', 'numeros', 'todosSetor'));
+        $empresas = DB::table('documento AS doc')
+            ->select(
+                'doc.numero',
+                'doc.dt_doc',
+                'doc.id_tp_doc',
+                'doc.valor',
+                'doc.id_empresa',
+                'doc.id_setor',
+                'doc.vencedor',
+                'doc.id_sol_sv',
+                'doc.dt_validade',
+                'doc.end_arquivo'
+            )
+            ->get();
+
+        return view('aquisicao.aprovar-aquisicao-servicos', compact('aquisicao', 'buscaSetor', 'numeros', 'todosSetor', 'empresas'));
     }
 
     public function validaAprovacao(Request $request, $idSolicitacao) {
@@ -208,7 +241,7 @@ class AquisicaoServicosController extends Controller
         ->where('sol_servico.id', $idSolicitacao)
         ->update([
             'sol_servico.prioridade' =>$request->input('prioridade'),
-            'sol_servico.id_resp_sv' =>$request->input('')
+            'sol_servico.id_resp_sv' =>$request->input('setorResponsavel')
         ]);
 
 

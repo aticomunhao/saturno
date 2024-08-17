@@ -111,7 +111,7 @@
                                                     <td>{{ $aquisicaos->dataSolicitacao }}</td>
                                                     <td>{{ $aquisicaos->descricaoCatalogo }}</td>
                                                     <td>{{ $vagaDois->nome }}</td>
-                                                    <td></td>
+                                                    <td>{{ $aquisicaos->prioridadeServico }}</td>
                                                     <td>{{ $aquisicaos->nomeStatus }}</td>
                                                     <td>
                                                         <a href="/aprovar-aquisicao-servicos/{{ $aquisicaos->idSolicitacao }}/ {{ $aquisicaos->idSetor }}"
@@ -187,6 +187,16 @@
                 // Chama a função para popular os serviços
                 populateServicos(servicosSelect, classeServicoValue);
             });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+
+            //Importa o select2 com tema do Bootstrap para a classe "select2"
+            $('.select2').select2({
+                theme: 'bootstrap-5'
+            });
+
         });
     </script>
 @endsection

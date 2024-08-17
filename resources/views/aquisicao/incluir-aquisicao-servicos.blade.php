@@ -38,15 +38,14 @@
                                     <div class="col-md-2 col-sm-12">Tipo de Serviço
                                         <br>
                                         <select class="js-example-responsive form-select"
-                                            style="border: 1px solid #999999; padding: 5px;" id="servicos" name="tipoServicos"
-                                            value="{{ old('servicos') }}" disabled>
+                                            style="border: 1px solid #999999; padding: 5px;" id="servicos"
+                                            name="tipoServicos" value="{{ old('servicos') }}" disabled>
                                         </select>
                                     </div>
                                     <div class="col-md-2 col-sm-12">Selecione seu Setor
                                         <br>
-                                        <select class="form-select select2"
-                                            style="border: 1px solid #999999; padding: 5px;" id="idSetor" name="idSetor"
-                                            value="">
+                                        <select class="form-select select2" style="border: 1px solid #999999; padding: 5px;"
+                                            id="idSetor" name="idSetor" value="">
                                             <option value=""></option>
                                             @foreach ($buscaSetor as $buscaSetors)
                                                 <option value="{{ $buscaSetors->id }}">
@@ -66,80 +65,33 @@
                             <hr>
                             <h5>Propostas Comerciais</h5>
                             <div class="ROW" style="margin-left:5px">
-                                <div style="display: flex; gap: 20px; align-items: flex-end;">
-                                    <div class="col-md-3">1º Empresa
-                                        <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
-                                            type="text" value="" id="3" name="nomeEmpresaUm"
-                                            required="required">
-                                    </div>
-                                    <div class="col-md-3">Valor Orçado
-                                        <div class="input-group">
-                                            <span class="input-group-text"
-                                                style="border: 1px solid #999999; padding: 5px;">R$</span>
-                                            <input type="text" class="form-control"
-                                                style="border: 1px solid #999999; padding: 5px;" name="valorUm"
-                                                aria-label="Amount (to the nearest dollar)" required="required">
+                                @foreach ($empresas as $index => $empresa)
+                                    <div style="display: flex; gap: 20px; align-items: flex-end;">
+                                        <div class="col-md-3">{{ 0 + 1 }}º Empresa (ID: {{ $empresa->id_empresa }})
+                                            <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
+                                                type="text" name="empresas[{{ $index }}][id_empresa]"
+                                                value="{{ $empresa->id_empresa }}" readonly>
+                                        </div>
+                                        <div class="col-md-3">Valor Orçado
+                                            <div class="input-group">
+                                                <span class="input-group-text"
+                                                    style="border: 1px solid #999999; padding: 5px;">R$</span>
+                                                <input type="text" class="form-control"
+                                                    name="empresas[{{ $index }}][valor]"
+                                                    style="border: 1px solid #999999; padding: 5px;"
+                                                    value="{{ $empresa->valor }}" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">Data Limite do Orçamento
+                                            <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
+                                                type="date" name="empresas[{{ $index }}][dt_validade]"
+                                                value="{{ $empresa->dt_validade }}" readonly>
+                                        </div>
+                                        <div class="col-md-3">Arquivo da Proposta
+                                            <a href="{{ $empresa->end_arquivo }}" target="_blank">Ver Arquivo</a>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">Data Limite do Orçamento
-                                        <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
-                                            type="date" value="" id="3" name="dataOrcamentoUm"
-                                            required="required">
-                                    </div>
-                                    <div class="col-md-3">Arquivo da Proposta
-                                        <input type="file" style="border: 1px solid #999999; padding: 5px;"
-                                            class="form-control form-control-sm" name ="arquivoUm" id="idarquivo" required='required'>
-                                    </div>
-                                </div>
-                                <div style="display: flex; gap: 20px; align-items: flex-end;">
-                                    <div class="col-md-3">2º Empresa
-                                        <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
-                                            type="text" value="" id="3" name="nomeEmpresaDois"
-                                            >
-                                    </div>
-                                    <div class="col-md-3">Valor Orçado
-                                        <div class="input-group">
-                                            <span class="input-group-text"
-                                                style="border: 1px solid #999999; padding: 5px;">R$</span>
-                                            <input type="text" class="form-control"
-                                                style="border: 1px solid #999999; padding: 5px;"
-                                                aria-label="Amount (to the nearest dollar)" name="valorDois">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">Data Limite do Orçamento
-                                        <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
-                                            type="date" value="" id="3" name="dataOrcamentoDois"
-                                            >
-                                    </div>
-                                    <div class="col-md-3">Arquivo da Proposta
-                                        <input type="file" style="border: 1px solid #999999; padding: 5px;"
-                                            class="form-control form-control-sm" name ="arquivoDois" id="idarquivo">
-                                    </div>
-                                </div>
-                                <div style="display: flex; gap: 20px; align-items: flex-end;">
-                                    <div class="col-md-3">3º Empresa
-                                        <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
-                                            type="text" value="" id="3" name="nomeEmpresaTres"
-                                            required="required">
-                                    </div>
-                                    <div class="col-md-3">Valor Orçado
-                                        <div class="input-group">
-                                            <span class="input-group-text"
-                                                style="border: 1px solid #999999; padding: 5px;">R$</span>
-                                            <input type="text" class="form-control" name="valorTres"
-                                                style="border: 1px solid #999999; padding: 5px;"
-                                                aria-label="Amount (to the nearest dollar)">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">Data Limite do Orçamento
-                                        <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
-                                            type="date" value="" id="3" name="dataOrcamentoTres">
-                                    </div>
-                                    <div class="col-md-3">Arquivo da Proposta
-                                        <input type="file" style="border: 1px solid #999999; padding: 5px;"
-                                            class="form-control form-control-sm" name ="arquivoTres" id="idarquivo">
-                                    </div>
-                                </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -205,6 +157,16 @@
                 // Chama a função para popular os serviços
                 populateServicos(servicosSelect, classeServicoValue);
             });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+
+            //Importa o select2 com tema do Bootstrap para a classe "select2"
+            $('.select2').select2({
+                theme: 'bootstrap-5'
+            });
+
         });
     </script>
 @endsection

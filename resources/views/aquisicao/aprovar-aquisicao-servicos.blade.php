@@ -70,7 +70,7 @@
                                     <select id="cargoSelect" class="form-select status select2 pesquisa-select"
                                         style="width: 300px;" name="setorResponsavel" required>
                                         @foreach ($todosSetor as $todosSetores)
-                                            <option value="">{{ $todosSetores->nome }}</option>
+                                            <option value="{{ $todosSetores->id }}">{{ $todosSetores->nome }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -78,110 +78,49 @@
                             <div class=" col-12">Motivo
                                 <br>
                                 <textarea class="form-control" style="border: 1px solid #999999; padding: 5px;" id="idmotivo" rows="4"
-                                     value="" disabled>{{ $aquisicao->motivoServico }}</textarea>
+                                    value="" disabled>{{ $aquisicao->motivoServico }}</textarea>
                             </div>
                             <br>
                             <hr>
                             <h5>Propostas Comerciais</h5>
                             <div class="ROW" style="margin-left:5px">
-                                <div style="display: flex; gap: 20px; align-items: flex-end;">
-                                    <div class="col-md-3">1º Empresa
-                                        <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
-                                            type="text" value="" id="3" disabled>
-                                    </div>
-                                    <div class="col-md-3">Valor Orçado
-                                        <div class="input-group">
-                                            <span class="input-group-text"
-                                                style="border: 1px solid #999999; padding: 5px;">R$</span>
-                                            <input type="text" class="form-control"
-                                                style="border: 1px solid #999999; padding: 5px;" name="valorUm"
-                                                aria-label="Amount (to the nearest dollar)" disabled>
+                                @foreach ($empresas as $index => $empresa)
+                                    <div style="display: flex; gap: 20px; align-items: flex-end;">
+                                        <div class="col-md-3">{{ 0 + 1 }}º Empresa (ID:
+                                            {{ $empresa->id_empresa }})
+                                            <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
+                                                type="text" name="empresas[{{ $index }}][id_empresa]"
+                                                value="{{ $empresa->id_empresa }}" readonly>
+                                        </div>
+                                        <div class="col-md-3">Valor Orçado
+                                            <div class="input-group">
+                                                <span class="input-group-text"
+                                                    style="border: 1px solid #999999; padding: 5px;">R$</span>
+                                                <input type="text" class="form-control"
+                                                    name="empresas[{{ $index }}][valor]"
+                                                    style="border: 1px solid #999999; padding: 5px;"
+                                                    value="{{ $empresa->valor }}" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">Data Limite do Orçamento
+                                            <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
+                                                type="date" name="empresas[{{ $index }}][dt_validade]"
+                                                value="{{ $empresa->dt_validade }}" readonly>
+                                        </div>
+                                        <div class="col-md-3">Arquivo da Proposta
+                                            <a href="{{ $empresa->end_arquivo }}" target="_blank">Ver Arquivo</a>
                                         </div>
                                     </div>
-                                    <div class="col-md-2">Data Limite do Orçamento
-                                        <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
-                                            type="date" value="" id="3" name="dataOrcamentoUm"
-                                            disabled>
-                                    </div>
-                                    <div class="col-md-3">Arquivo da Proposta
-                                        <input type="file" style="border: 1px solid #999999; padding: 5px;"
-                                            class="form-control form-control-sm" name ="arquivoUm" id="idarquivo"
-                                            disabled>
-                                            {{-- @if ($afastamento->caminho)
-                                            <a href="{{ asset($afastamento->caminho) }}"
-                                                class="btn btn-outline-secondary" target="_blank">
-                                                <i class="bi bi-archive">
-                                                </i>
-                                            </a>
-                                        @endif --}}
-                                    </div>
-                                </div>
-                                <div style="display: flex; gap: 20px; align-items: flex-end;">
-                                    <div class="col-md-3">2º Empresa
-                                        <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
-                                            type="text" value="" id="3" disabled>
-                                    </div>
-                                    <div class="col-md-3">Valor Orçado
-                                        <div class="input-group">
-                                            <span class="input-group-text"
-                                                style="border: 1px solid #999999; padding: 5px;">R$</span>
-                                            <input type="text" class="form-control"
-                                                style="border: 1px solid #999999; padding: 5px;"
-                                                aria-label="Amount (to the nearest dollar)" disabled>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">Data Limite do Orçamento
-                                        <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
-                                            type="date" value="" id="3" disabled>
-                                    </div>
-                                    <div class="col-md-3">Arquivo da Proposta
-                                        <input type="file" style="border: 1px solid #999999; padding: 5px;"
-                                            class="form-control form-control-sm" disabled >
-                                            {{-- @if ($afastamento->caminho)
-                                            <a href="{{ asset($afastamento->caminho) }}"
-                                                class="btn btn-outline-secondary" target="_blank">
-                                                <i class="bi bi-archive">
-                                                </i>
-                                            </a>
-                                        @endif --}}
-                                    </div>
-                                </div>
-                                <div style="display: flex; gap: 20px; align-items: flex-end;">
-                                    <div class="col-md-3">3º Empresa
-                                        <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
-                                            type="text" value="" id="3" disabled
-                                            required="required">
-                                    </div>
-                                    <div class="col-md-3">Valor Orçado
-                                        <div class="input-group">
-                                            <span class="input-group-text"
-                                                style="border: 1px solid #999999; padding: 5px;">R$</span>
-                                            <input type="text" class="form-control" disabled
-                                                style="border: 1px solid #999999; padding: 5px;"
-                                                aria-label="Amount (to the nearest dollar)">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">Data Limite do Orçamento
-                                        <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
-                                            type="date" value="" id="3" disabled>
-                                    </div>
-                                    <div class="col-md-3">Arquivo da Proposta
-                                        <input type="file" style="border: 1px solid #999999; padding: 5px;"
-                                            class="form-control form-control-sm" disabled>
-                                            {{-- @if ($afastamento->caminho)
-                                            <a href="{{ asset($afastamento->caminho) }}"
-                                                class="btn btn-outline-secondary" target="_blank">
-                                                <i class="bi bi-archive">
-                                                </i>
-                                            </a>
-                                        @endif --}}
-                                    </div>
-                                </div>
+                                @endforeach
                             </div>
+                            <br>
+                            <hr>
+                            <h5>Descrição</h5>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
         </div>
         <div class="botões">
             <a href="/gerenciar-aquisicao-servicos" type="button" value=""
@@ -189,11 +128,16 @@
             <input type="submit" value="Confirmar" class="btn btn-primary col-md-3 col-1 mt-4 offset-md-2">
         </div>
     </form>{{-- Final Formulario de Inserção --}}
-    <style>
-        .select2-container .select2-selection--multiple {
-            min-width: 300px;
-        }
-    </style>
+    <script>
+        $(document).ready(function() {
+
+            //Importa o select2 com tema do Bootstrap para a classe "select2"
+            $('.select2').select2({
+                theme: 'bootstrap-5'
+            });
+
+        });
+    </script>
     <script>
         $(document).ready(function() {
             $('#servicos, #classeServico').select2({

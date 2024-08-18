@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminMiddleware
+class EnsureTokenIsValid
 {
     /**
      * Handle an incoming request.
@@ -15,15 +15,6 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $perfil = session()->get('usuario.perfis');
-        $perfil = explode(',', $perfil);
-        if(in_array(1, $perfil)){
-            return $next($request);
-        }
-
-
-            app('flasher')->addError("Você não tem autorização para acessar esta página");
-            return redirect('/login/valida');
-
+        return $next($request);
     }
 }

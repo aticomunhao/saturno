@@ -44,7 +44,7 @@
                                     </div>
                                     <div class="col-md-2 col-sm-12">Status
                                         <select class="form-select" style="border: 1px solid #999999;" name="status_servico"
-                                            value="">
+                                            value="" id="statusServico">
                                             <option value="">Todos</option>
                                             @foreach ($status as $statuss)
                                                 <option value="{{ $statuss->idStatus }}"
@@ -120,6 +120,46 @@
                                                             title="Aprovar">
                                                             <i class="bi bi-check-lg"></i>
                                                         </a>
+                                                        <a href="" class="btn btn-sm btn-outline-success"
+                                                            data-tt="tooltip" style="font-size: 1rem; color:#303030"
+                                                            data-placement="top" title="Homologar">
+                                                            <i class="bi bi-clipboard-check"></i>
+                                                        </a>
+                                                        <a href="" class="btn btn-sm btn-outline-warning"
+                                                            data-tt="tooltip" style="font-size: 1rem; color:#303030"
+                                                            data-placement="top" title="Editar">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </a>
+                                                        <a href="" class="btn btn-sm btn-outline-primary"
+                                                            data-tt="tooltip" style="font-size: 1rem; color:#303030"
+                                                            data-placement="top" title="Enviar">
+                                                            <i class="bi bi-cart-check"></i>
+                                                        </a>
+                                                        <a href="" class="btn btn-sm btn-outline-primary"
+                                                            data-tt="tooltip" style="font-size: 1rem; color:#303030"
+                                                            data-placement="top" title="visualizar">
+                                                            <i class="bi bi-search"></i>
+                                                        </a>
+                                                        <a href="" class="btn btn-sm btn-outline-info"
+                                                            data-tt="tooltip" style="font-size: 1rem; color:#303030"
+                                                            data-placement="top" title="Aceite">
+                                                            <i class="bi bi-hand-thumbs-up"></i>
+                                                        </a>
+                                                        <a href="" class="btn btn-sm btn-outline-warning"
+                                                            data-tt="tooltip" style="font-size: 1rem; color:#303030"
+                                                            data-placement="top" title="Confirmar">
+                                                            <i class="bi bi-currency-dollar"></i>
+                                                        </a>
+                                                        <a href="" class="btn btn-sm btn-outline-warning"
+                                                            data-tt="tooltip" style="font-size: 1rem; color:#303030"
+                                                            data-placement="top" title="Editar Compra">
+                                                            <i class="bi bi-pencil-square"></i>
+                                                        </a>
+                                                        <a href="" class="btn btn-sm btn-outline-danger"
+                                                            data-tt="tooltip" style="font-size: 1rem; color:#303030"
+                                                            data-placement="top" title="Excluir">
+                                                            <i class="bi bi-x-circle"></i>
+                                                        </a>
                                                     </td>
                                                 </tr>
                                             @endif
@@ -189,14 +229,5 @@
             });
         });
     </script>
-    <script>
-        $(document).ready(function() {
 
-            //Importa o select2 com tema do Bootstrap para a classe "select2"
-            $('.select2').select2({
-                theme: 'bootstrap-5'
-            });
-
-        });
-    </script>
 @endsection

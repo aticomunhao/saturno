@@ -21,63 +21,148 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <h5>Identificação do Documento</h5>
+                            <h5>Identificação da Empresa</h5>
                             <div class="ROW" style="margin-left:5px">
                                 <div style="display: flex; gap: 20px; align-items: flex-end;">
-                                    <!-- Campo Nome da Empresa -->
+                                    <!-- Campo Nome da Empresa(Razão social) -->
                                     <div class="form-group" style="margin-top:20px; margin-right: 20px">
-                                        <label for="nomeEmpresa" class="form-label">Nome da Empresa</label>
+                                        <label class="form-label">Razão Social</label>
+                                        <input type="text" class="form-control" id="razaoSocialId" name="razaoSocial"
+                                            style="width: 400px; border: 1px solid #999999; padding: 5px;">
+                                    </div>
+                                    <!-- Campo Nome Fantasia -->
+                                    <div class="form-group" style="margin-top:20px; margin-right: 20px">
+                                        <label class="form-label">Nome Fantasia</label>
+                                        <input type="text" class="form-control" id="nomeFantasiaId" name="nomeFantasia"
+                                            style="width: 400px; border: 1px solid #999999; padding: 5px;">
+                                    </div>
+                                    <!-- Campo CNPJ/CPF -->
+                                    <div class="form-group" style="margin-top:20px; margin-right: 20px">
+                                        <label class="form-label">CNPJ - CPF</label>
                                         <input type="text" class="form-control" id="nomeEmpresa" name="nomeEmpresa"
                                             style="width: 400px; border: 1px solid #999999; padding: 5px;">
                                     </div>
-
-                                    <!-- Campo Número da Proposta -->
-                                    <div class="form-group" style="margin-top:20px; margin-right: 40px">
-                                        <label for="numeroProposta" class="form-label">Número da Proposta</label>
-                                        <input type="number" class="form-control" id="numeroProposta" name="numeroProposta"
-                                            style="width: 400px; border: 1px solid #999999; padding: 5px;">
-                                    </div>
-
-                                    <!-- Campo Data de Expedição do Documento -->
+                                    <!-- Campo CNAE -->
                                     <div class="form-group" style="margin-top:20px; margin-right: 20px">
-                                        <label for="dataExpedicao" class="form-label">Data de Expedição do Documento</label>
-                                        <input type="date" class="form-control" id="dataExpedicao" name="dataExpedicao"
-                                            style="width: 400px; border: 1px solid #999999; padding: 5px;">
+                                        <label class="form-label">Inscrição CNAE</label>
+                                        <input type="text" class="form-control" id="inscraicaoCnaeId"
+                                            name="inscricaoCnae"
+                                            style="width: 200px; border: 1px solid #999999; padding: 5px;">
+                                    </div>
+                                     <!-- Campo IE -->
+                                     <div class="form-group" style="margin-top:20px; margin-right: 20px">
+                                        <label class="form-label">Inscrição IE</label>
+                                        <input type="text" class="form-control" id="inscraicaoIeId"
+                                            name="inscricaoIe"
+                                            style="width: 200px; border: 1px solid #999999; padding: 5px;">
                                     </div>
                                 </div>
-
                                 <div style="display: flex; gap: 20px; align-items: flex-end;">
-                                    <!-- Campo Data do Prazo Final -->
+                                    <!-- Campo Inscrição Estadual -->
                                     <div class="form-group" style="margin-top:20px; margin-right: 20px">
-                                        <label for="prazoFinal" class="form-label">Data do Prazo Final do Documento</label>
-                                        <input type="date" class="form-control" id="prazoFinal" name="dataPrazoFinal"
+                                        <label class="form-label">Inscrição Estadual</label>
+                                        <input type="text" class="form-control" id="inscraicaoEstadualId"
+                                            name="inscricaoEstadual"
                                             style="width: 400px; border: 1px solid #999999; padding: 5px;">
                                     </div>
-
-                                    <!-- Campo Valor -->
+                                    <!-- Campo Inscrição Municipal -->
                                     <div class="form-group" style="margin-top:20px; margin-right: 20px">
-                                        <label for="valor" class="form-label">Valor</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text" style="border: 1px solid #999999;">R$</span>
-                                            <input type="text" class="form-control" id="valor" name="valorProposta"
-                                                style="width: 380px; border: 1px solid #999999; padding: 5px;">
-                                        </div>
+                                        <label class="form-label">Inscrição Municipal</label>
+                                        <input type="text" class="form-control" id="inscraicaoMunicipalId"
+                                            name="inscricaoMunicipal"
+                                            style="width: 400px; border: 1px solid #999999; padding: 5px;">
                                     </div>
-
-                                    <!-- Campo Arquivo da Proposta -->
+                                    <!-- Campo DDD -->
                                     <div class="form-group" style="margin-top:20px; margin-right: 20px">
-                                        <label for="arquivoProposta" class="form-label">Arquivo da Proposta</label>
-                                        <input type="file" class="form-control" id="arquivoProposta"
-                                            name="arquivoProposta"
+                                        <label class="form-label">DDD</label>
+                                        <input type="text" class="form-control" id="inscraicaoDddId"
+                                            name="inscricaoDdd"
+                                            style="width: 200px; border: 1px solid #999999; padding: 5px;">
+                                    </div>
+                                    <!-- Campo Telefone -->
+                                    <div class="form-group" style="margin-top:20px; margin-right: 20px">
+                                        <label class="form-label">Telefone</label>
+                                        <input type="text" class="form-control" id="inscraicaoTelefoneId"
+                                            name="inscricaoTelefone"
+                                            style="width: 200px; border: 1px solid #999999; padding: 5px;">
+                                    </div>
+                                    <!-- Campo Email -->
+                                    <div class="form-group" style="margin-top:20px; margin-right: 20px">
+                                        <label class="form-label">Email</label>
+                                        <input type="text" class="form-control" id="inscraicaoEmailId"
+                                            name="inscricaoEmail"
                                             style="width: 400px; border: 1px solid #999999; padding: 5px;">
                                     </div>
                                 </div>
+                                <hr>
+                                <h5>Endereço da Empresa</h5>
+                                <div style="display: flex; gap: 20px; align-items: flex-end;">
+                                    <!-- Campo CEP -->
+                                    <div class="form-group" style="margin-top:20px; margin-right: 20px">
+                                        <label class="form-label">CEP</label>
+                                        <input type="text" class="form-control" id="inscraicaoCepId" name="inscricaoCep"
+                                            style="width: 400px; border: 1px solid #999999; padding: 5px;">
+                                    </div>
+                                    <!-- Campo UF -->
+                                    <div class="form-group" style="margin-top:20px; margin-right: 20px">
+                                        <label class="form-label">UF</label>
+                                        <input type="text" class="form-control" id="inscraicaoUfId" name="inscricaoUf"
+                                            style="width: 400px; border: 1px solid #999999; padding: 5px;">
+                                    </div>
+                                    <!-- Campo Cidade -->
+                                    <div class="form-group" style="margin-top:20px; margin-right: 20px">
+                                        <label class="form-label">Cidade</label>
+                                        <input type="text" class="form-control" id="inscraicaoCidadeId"
+                                            name="inscricaoCidade"
+                                            style="width: 400px; border: 1px solid #999999; padding: 5px;">
+                                    </div>
+                                    <!-- Campo Logradouro -->
+                                    <div class="form-group" style="margin-top:20px; margin-right: 20px">
+                                        <label class="form-label">Logradouro</label>
+                                        <input type="text" class="form-control" id="inscraicaoLogradouroId"
+                                            name="inscricaoLogradouro"
+                                            style="width: 400px; border: 1px solid #999999; padding: 5px;">
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 20px; align-items: flex-end;">
+                                    <!-- Campo Número -->
+                                    <div class="form-group" style="margin-top:20px; margin-right: 20px">
+                                        <label class="form-label">Número</label>
+                                        <input type="text" class="form-control" id="inscraicaoNumeroId"
+                                            name="inscricaoNumero"
+                                            style="width: 400px; border: 1px solid #999999; padding: 5px;">
+                                    </div>
+                                    <!-- Campo Complemento -->
+                                    <div class="form-group" style="margin-top:20px; margin-right: 20px">
+                                        <label class="form-label">Complemento</label>
+                                        <input type="text" class="form-control" id="inscraicaoComplementoId"
+                                            name="inscricaoComplemento"
+                                            style="width: 400px; border: 1px solid #999999; padding: 5px;">
+                                    </div>
+                                    <!-- Campo Bairro -->
+                                    <div class="form-group" style="margin-top:20px; margin-right: 20px">
+                                        <label class="form-label">Bairro</label>
+                                        <input type="text" class="form-control" id="inscraicaoBairroId"
+                                            name="inscricaoBairro"
+                                            style="width: 400px; border: 1px solid #999999; padding: 5px;">
+                                    </div>
+                                    <!-- Campo Código do Município -->
+                                    <div class="form-group" style="margin-top:20px; margin-right: 20px">
+                                        <label class="form-label">Código do Município</label>
+                                        <input type="text" class="form-control" id="inscraicaoCodMunId"
+                                            name="inscricaoCodMun"
+                                            style="width: 400px; border: 1px solid #999999; padding: 5px;">
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 20px; align-items: flex-end;">
 
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
         </div>
         <div class="botões">
             <a href="/gerenciar-aquisicao-servicos" type="button" value=""

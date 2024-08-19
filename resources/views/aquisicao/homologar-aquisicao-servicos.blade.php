@@ -42,14 +42,14 @@
                                             name="tipoServicos" value="{{ old('servicos') }}" disabled>
                                         </select>
                                     </div>
-                                    <div class="col-md-3 col-sm-12">Selecione seu Setor
+                                    <div class="col-md-2 col-sm-12">Selecione seu Setor
                                         <br>
-                                        <select class="form-select" style="border: 1px solid #999999; padding: 5px;"
+                                        <select class="form-select select2" style="border: 1px solid #999999; padding: 5px;"
                                             id="idSetor" name="idSetor" value="">
                                             <option value=""></option>
                                             @foreach ($buscaSetor as $buscaSetors)
                                                 <option value="{{ $buscaSetors->id }}">
-                                                    {{ $buscaSetors->sigla }} - {{ $buscaSetors->nome }}
+                                                    {{ $buscaSetors->nome }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -157,6 +157,16 @@
                 // Chama a função para popular os serviços
                 populateServicos(servicosSelect, classeServicoValue);
             });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+
+            //Importa o select2 com tema do Bootstrap para a classe "select2"
+            $('.select2').select2({
+                theme: 'bootstrap-5'
+            });
+
         });
     </script>
 @endsection

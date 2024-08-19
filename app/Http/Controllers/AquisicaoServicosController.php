@@ -114,10 +114,12 @@ class AquisicaoServicosController extends Controller
         $buscaSetor = DB::connection('pgsql2')->table('setor')
             ->select(
                 'setor.id',
-                'setor.nome'
+                'setor.nome',
+                'setor.sigla',
             )
             ->where('setor.id', $setor)
             ->get();
+            //dd($buscaSetor, $setor);
 
         $servico = DB::table('sol_servico')
             ->select(

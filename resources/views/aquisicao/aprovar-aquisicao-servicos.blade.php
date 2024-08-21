@@ -4,7 +4,7 @@
     Aprovar Aquisição de Serviços
 @endsection
 @section('content')
-    <form method="POST" action="/validaAprovacao-aquisicao-servicos/{{ $aquisicao->idSolicitacao }}">{{-- Formulario de Inserção --}}
+    <form method="POST" action="/validaAprovacao-aquisicao-servicos">{{-- Formulario de Inserção --}}
         @csrf
         <div class="container-fluid"> {{-- Container completo da página  --}}
             <div class="justify-content-center">
@@ -25,19 +25,19 @@
                                     <label>Número da Proposta</label>
                                     <br>
                                     <input class="form-control" style="text-align: center;" type="text" disabled
-                                        value="{{ $aquisicao->idSolicitacao }}">
+                                        value="{{ $aquisicao->id }}">
                                 </div>
                                 <div class="col-md-4">
                                     <label>Data da Criação</label>
                                     <br>
                                     <input class="form-control" style="text-align: center;" type="date" format="d-m-Y"
-                                        disabled value="{{ $aquisicao->dataSolicitacao }}">
+                                        disabled value="{{ $aquisicao->data }}">
                                 </div>
                                 <div class="col-md-4">
                                     <label>Setor</label>
                                     <br>
                                     <input class="form-control" style="text-align: center;" type="text" disabled
-                                        value="{{ $buscaSetor->nomeSetor }}">
+                                        value="{{ $aquisicao->setor->nome }}">
                                 </div>
                             </div>
                             <br>
@@ -45,16 +45,16 @@
                             <h5>Identificação do Serviço</h5>
                             <div class="row">
                                 <div class="col-md-3">
+                                    <label>Classe</label>
+                                    <br>
+                                    <input class="form-control" style="text-align: center;" type="text" disabled
+                                        value="{{ $aquisicao->tipoClasse->descricao}}">
+                                </div>
+                                <div class="col-md-3">
                                     <label>Tipo</label>
                                     <br>
                                     <input class="form-control" style="text-align: center;" type="text" disabled
-                                        value="{{ $aquisicao->descricaoCatalogo }}">
-                                </div>
-                                <div class="col-md-3">
-                                    <label>Data da Criação</label>
-                                    <br>
-                                    <input class="form-control" style="text-align: center;" type="text" disabled
-                                        value="{{ $aquisicao->descricaoCatalogo }}">
+                                        value="{{ $aquisicao->catalogoServico->descricao }}">
                                 </div>
                                 <div class="col-md-2">
                                     <label>Prioridade</label>
@@ -80,7 +80,7 @@
                             <div class=" col-12">Motivo
                                 <br>
                                 <textarea class="form-control" style="border: 1px solid #999999; padding: 5px;" id="idmotivo" rows="4"
-                                    value="" disabled>{{ $aquisicao->motivoServico }}</textarea>
+                                    value="" disabled>{{ $aquisicao->motivo }}</textarea>
                             </div>
                             <br>
                             <hr>
@@ -119,7 +119,7 @@
                             <hr>
                             <h5>Decisão</h5>
 
-                            <input type="hidden" name="solicitacao_id" value="{{ $aquisicao->idSolicitacao }}">
+                            <input type="hidden" name="solicitacao_id" value="{{ $aquisicao->id }}">
 
                             <div class="d-flex gap-5 align-items-end">
                                 <div class="form-check">
@@ -137,7 +137,7 @@
                             </div>
                             <div class=" col-12">Motivo
                                 <br>
-                                <textarea class="form-control" style="border: 1px solid #999999;" id="idMotivo" rows="4" name="motivo"
+                                <textarea class="form-control" style="border: 1px solid #999999;" id="idMotivo" rows="4" name="motivoRejeicao"
                                     value="" required></textarea>
                             </div>
                         </div>

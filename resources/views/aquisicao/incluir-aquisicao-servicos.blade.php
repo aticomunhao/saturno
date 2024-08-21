@@ -29,8 +29,8 @@
                                             name="classeSv">
                                             <option value=""></option>
                                             @foreach ($classeAquisicao as $classeAquisicaos)
-                                                <option value="{{ $classeAquisicaos->idClasse }}">
-                                                    {{ $classeAquisicaos->descricaoClasse }}
+                                                <option value="{{ $classeAquisicaos->id }}">
+                                                    {{ $classeAquisicaos->descricao }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -63,7 +63,15 @@
                             </div>
                             <br>
                             <hr>
-                            <h5>Propostas Comerciais</h5>
+                            <div class="ROW" style="margin-left:5px">
+                                <div style="display: flex; gap: 20px; align-items: flex-end;">
+                                    <h5>Propostas Comerciais</h5>
+                                    <a href="" class="btn btn-sm btn-outline-success" data-tt="tooltip"
+                                        style="font-size: 1rem; color:#303030" data-placement="top" title="criarDocumento">
+                                        <i class="bi bi-clipboard-plus"></i>
+                                    </a>
+                                </div>
+                            </div>
                             <div class="ROW" style="margin-left:5px">
                                 @foreach ($empresas as $index => $empresa)
                                     <div style="display: flex; gap: 20px; align-items: flex-end;">

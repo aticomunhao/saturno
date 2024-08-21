@@ -11,7 +11,17 @@ class SolServico extends Model
 
     protected $table = 'sol_servico';
 
-    public function tipoclasse()
+    protected $fillable = [
+        'id_classe_sv',
+        'id_tp_sv',
+        'motivo',
+        'data',
+        'status',
+        'id_setor',
+        'prioridade',
+    ];
+
+    public function tipoClasse()
     {
         return $this->belongsTo(TipoClasseSv::class, 'id_classe_sv');
     }
@@ -30,4 +40,6 @@ class SolServico extends Model
     {
         return $this->belongsTo(Setor::class, 'id_setor', 'id', 'pgsql2');
     }
+
+    public $timestamps = false;
 }

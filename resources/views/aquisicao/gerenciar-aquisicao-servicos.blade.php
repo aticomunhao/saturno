@@ -28,10 +28,10 @@
                                             style="border: 1px solid #999999; padding: 5px;" id="classeServico"
                                             name="classe">
                                             <option value=""></option>
-                                            @foreach ($classeAquisicao as $classe)
-                                                <option value="{{ $classe->idClasse }}"
-                                                    {{ old('classe') == $classe->idClasse ? 'selected' : '' }}>
-                                                    {{ $classe->descricaoClasse }}
+                                            @foreach ($classeAquisicao as $classeAquisicaos)
+                                                <option value="{{ $classeAquisicaos->id }}"
+                                                    {{ old('classe') }}>
+                                                    {{ $classeAquisicaos->descricao }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -46,10 +46,10 @@
                                         <select class="form-select" style="border: 1px solid #999999;" name="status_servico"
                                             value="" id="statusServico">
                                             <option value="">Todos</option>
-                                            @foreach ($status as $statusOption)
-                                                <option value="{{ $statusOption->idStatus }}"
-                                                    {{ old('status_servicos') == $statusOption->idStatus ? 'selected' : '' }}>
-                                                    {{ $statusOption->nomeStatus }}
+                                            @foreach ($status as $statuss)
+                                                <option value="{{ $statuss->id }}"
+                                                    {{ old('status_servicos') == $statuss->id ? 'selected' : '' }}>
+                                                    {{ $statuss->nome }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -108,11 +108,11 @@
                                             <td>{{ $aquisicaos->id }}</td>
                                             <td>{{ $aquisicaos->data }}</td>
                                             <td>{{ $aquisicaos->CatalogoServico->descricao }}</td>
-                                            <td>{{ $aquisicaos->setor->nome ?? 'N/A' }}</td>
+                                            <td>{{ $aquisicaos->setor->nome }}</td>
                                             <td>{{ $aquisicaos->prioridade }}</td>
-                                            <td></td>
+                                            <td>{{ $aquisicaos->tipoStatus->nome}}</td>
                                             <td>
-                                                <a href="/aprovar-aquisicao-servicos/{{ $aquisicaos->idSolicitacao }}/ {{ $aquisicaos->idSetor }}"
+                                                <a href="/aprovar-aquisicao-servicos/{{ $aquisicaos->id }}"
                                                     class="btn btn-sm btn-outline-primary" data-tt="tooltip"
                                                     style="font-size: 1rem; color:#303030" data-placement="top"
                                                     title="Aprovar">

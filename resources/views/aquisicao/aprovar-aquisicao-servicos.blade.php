@@ -20,55 +20,57 @@
                         </div>
                         <div class="card-body">
                             <h5>Identificação do Solicitante</h5>
-                            <div class="d-flex gap-3 align-items-end">
-                                <div><label>Número da Proposta</label>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>Número da Proposta</label>
                                     <br>
-                                    <input class="form-control" style="text-align: center; width: 300px" type="text"
-                                        disabled value="{{ $aquisicao->idSolicitacao }}">
+                                    <input class="form-control" style="text-align: center;" type="text" disabled
+                                        value="{{ $aquisicao->idSolicitacao }}">
                                 </div>
-                                <div>
+                                <div class="col-md-4">
                                     <label>Data da Criação</label>
                                     <br>
-                                    <input class="form-control" style="text-align: center; width: 300px" type="date"
-                                        format="d-m-Y" disabled value="{{ $aquisicao->dataSolicitacao }}">
+                                    <input class="form-control" style="text-align: center;" type="date" format="d-m-Y"
+                                        disabled value="{{ $aquisicao->dataSolicitacao }}">
                                 </div>
-                                <div>
+                                <div class="col-md-4">
                                     <label>Setor</label>
                                     <br>
-                                    <input class="form-control" style="text-align: center; width: 300px" type="text"
-                                        disabled value="{{ $buscaSetor->nomeSetor }}">
+                                    <input class="form-control" style="text-align: center;" type="text" disabled
+                                        value="{{ $buscaSetor->nomeSetor }}">
                                 </div>
                             </div>
                             <br>
                             <hr>
                             <h5>Identificação do Serviço</h5>
-                            <div class="d-flex gap-3 align-items-end">
-                                <div><label>Tipo</label>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label>Tipo</label>
                                     <br>
-                                    <input class="form-control" style="text-align: center; width: 300px" type="text"
-                                        disabled value="{{ $aquisicao->descricaoCatalogo }}">
+                                    <input class="form-control" style="text-align: center;" type="text" disabled
+                                        value="{{ $aquisicao->descricaoCatalogo }}">
                                 </div>
-                                <div>
+                                <div class="col-md-3">
                                     <label>Data da Criação</label>
                                     <br>
-                                    <input class="form-control" style="text-align: center; width: 300px" type="text"
-                                        disabled value="{{ $aquisicao->descricaoCatalogo }}">
+                                    <input class="form-control" style="text-align: center;" type="text" disabled
+                                        value="{{ $aquisicao->descricaoCatalogo }}">
                                 </div>
-                                <div>
+                                <div class="col-md-2">
                                     <label>Prioridade</label>
                                     <br>
                                     <select id="cargoSelect" class="form-select status select2 pesquisa-select"
-                                        style="width: 300px;" name="prioridade" required>
+                                        style="" name="prioridade" required>
                                         @foreach ($numeros as $number)
                                             <option value="{{ $number }}">{{ $number }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                                <div>
+                                <div class="col-md-4">
                                     <label>Setor Responsável por Acompanhar</label>
                                     <br>
                                     <select id="cargoSelect" class="form-select status select2 pesquisa-select"
-                                        style="width: 300px;" name="setorResponsavel" required>
+                                        style="" name="setorResponsavel" required>
                                         @foreach ($todosSetor as $todosSetores)
                                             <option value="{{ $todosSetores->id }}">{{ $todosSetores->nome }}</option>
                                         @endforeach
@@ -115,12 +117,33 @@
                             </div>
                             <br>
                             <hr>
-                            <h5>Descrição</h5>
+                            <h5>Decisão</h5>
+
+                            <input type="hidden" name="solicitacao_id" value="{{ $aquisicao->idSolicitacao }}">
+
+                            <div class="d-flex gap-5 align-items-end">
+                                <div class="form-check">
+                                    <input type="radio" name="status" id="radioDevolver" value="1">
+                                    <label for="radioDevolver">Devolver</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="radio" name="status" id="radioAprovar" value="3" checked>
+                                    <label for="radioAprovar">Aprovar</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="radio" name="status" id="radioCancelar" value="7">
+                                    <label for="radioCancelar">Cancelar</label>
+                                </div>
+                            </div>
+                            <div class=" col-12">Motivo
+                                <br>
+                                <textarea class="form-control" style="border: 1px solid #999999;" id="idMotivo" rows="4" name="motivo"
+                                    value="" required></textarea>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
         </div>
         <div class="botões">
             <a href="/gerenciar-aquisicao-servicos" type="button" value=""
@@ -136,61 +159,6 @@
                 theme: 'bootstrap-5'
             });
 
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            $('#servicos, #classeServico').select2({
-                theme: 'bootstrap-5',
-                width: '100%',
-            });
-
-            // Função para popular o select de serviços baseado no valor do select de classe de serviço
-            function populateServicos(selectElement, classeServicoValue) {
-                $.ajax({
-                    type: "GET",
-                    url: "/retorna-nome-servicos/" + classeServicoValue,
-                    dataType: "json",
-                    success: function(response) {
-                        // Limpa o select antes de adicionar novas opções
-                        selectElement.empty();
-
-                        // Adiciona um option padrão
-                        selectElement.append('<option value="">Selecione um serviço</option>');
-
-                        // Itera sobre os dados retornados e adiciona as opções ao select
-                        $.each(response, function(index, item) {
-                            selectElement.append('<option value="' + item.id + '">' +
-                                item.descricao + '</option>');
-                        });
-
-                        // Ativa o select caso ele estivesse desabilitado
-                        selectElement.prop('disabled', false);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Ocorreu um erro:", error);
-                        console.log(xhr.responseText); // Detalhes do erro, se necessário
-                    }
-                });
-            }
-
-            // Evento change para detectar a mudança no select de classe de serviço
-            $('#classeServico').change(function() {
-                var classeServicoValue = $(this).val();
-
-                // Selecione o elemento do select de serviços
-                var servicosSelect = $('#servicos');
-
-                // Desabilita o select de serviços se nenhum valor for selecionado na classe de serviço
-                if (!classeServicoValue) {
-                    servicosSelect.empty().append('<option value="">Selecione um serviço</option>');
-                    servicosSelect.prop('disabled', true);
-                    return;
-                }
-
-                // Chama a função para popular os serviços
-                populateServicos(servicosSelect, classeServicoValue);
-            });
         });
     </script>
 @endsection

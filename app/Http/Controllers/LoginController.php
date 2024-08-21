@@ -46,7 +46,7 @@ class LoginController extends Controller
                         group by u.id, p.id, a.id
                         ");
 
-                        dd($result);
+                        //dd($result);
 
         if (count($result) > 0) {
             $perfis = explode(',', $result[0]->perfis);
@@ -98,7 +98,7 @@ class LoginController extends Controller
             p.id id_pessoa,
             a.id id_associado,
             p.cpf,
-            p.sexo, 
+            p.sexo,
             p.nome_completo,
             u.hash_senha,
             string_agg(distinct u_p.id_perfil::text, ',') perfis,

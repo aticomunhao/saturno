@@ -97,13 +97,13 @@ return [
             'sslmode' => 'prefer',
         ],
 
-        
+
         'pgsql2' => [
             'driver' => 'pgsql',
             'url' => env('DB_URL'),
             'host' => env('DB_HOST_SECOUND', '192.168.1.137'),
             'port' => env('DB_PORT_SECOUND', '5432'),
-            'database' => env('DB_DATABASE_SECOUND', 'material'),
+            'database' => env('DB_DATABASE_SECOUND', 'pessoal'),
             'username' => env('DB_USERNAME_SECOUND', 'postgres'),
             'password' => env('DB_PASSWORD_SECOUND', 'scga2298'),
             'charset' => env('DB_CHARSET', 'utf8'),

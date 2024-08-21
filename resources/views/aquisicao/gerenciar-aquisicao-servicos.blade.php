@@ -28,10 +28,10 @@
                                             style="border: 1px solid #999999; padding: 5px;" id="classeServico"
                                             name="classe">
                                             <option value=""></option>
-                                            @foreach ($classeAquisicao as $classeAquisicaos)
-                                                <option @if (old('classe') == $classeAquisicaos->idClasse) {{ 'selected="selected"' }} @endif
-                                                    value="{{ $classeAquisicaos->idClasse }}">
-                                                    {{ $classeAquisicaos->descricaoClasse }}
+                                            @foreach ($classeAquisicao as $classe)
+                                                <option value="{{ $classe->idClasse }}"
+                                                    {{ old('classe') == $classe->idClasse ? 'selected' : '' }}>
+                                                    {{ $classe->descricaoClasse }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -46,10 +46,10 @@
                                         <select class="form-select" style="border: 1px solid #999999;" name="status_servico"
                                             value="" id="statusServico">
                                             <option value="">Todos</option>
-                                            @foreach ($status as $statuss)
-                                                <option value="{{ $statuss->idStatus }}"
-                                                    {{ $statuss->nomeStatus == old('status_servicos') ? 'selected' : '' }}>
-                                                    {{ $statuss->nomeStatus }}
+                                            @foreach ($status as $statusOption)
+                                                <option value="{{ $statusOption->idStatus }}"
+                                                    {{ old('status_servicos') == $statusOption->idStatus ? 'selected' : '' }}>
+                                                    {{ $statusOption->nomeStatus }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -103,67 +103,63 @@
                                 </thead>{{-- Fim do header da tabela --}}
                                 <tbody style="font-size: 15px; color:#000000; text-align: center;">{{-- Inicio body tabela --}}
                                     @foreach ($aquisicao as $aquisicaos)
-                                        @foreach ($aquisicaos->setorTeste as $vagaDois)
-                                            @if ($aquisicaos->idSolicitacao)
-                                                <tr>
-                                                    <td></td>
-                                                    <td>{{ $aquisicaos->idSolicitacao }}</td>
-                                                    <td>{{ $aquisicaos->dataSolicitacao }}</td>
-                                                    <td>{{ $aquisicaos->descricaoCatalogo }}</td>
-                                                    <td>{{ $vagaDois->nome }}</td>
-                                                    <td>{{ $aquisicaos->prioridadeServico }}</td>
-                                                    <td>{{ $aquisicaos->nomeStatus }}</td>
-                                                    <td>
-                                                        <a href="/aprovar-aquisicao-servicos/{{ $aquisicaos->idSolicitacao }}/ {{ $aquisicaos->idSetor }}"
-                                                            class="btn btn-sm btn-outline-primary" data-tt="tooltip"
-                                                            style="font-size: 1rem; color:#303030" data-placement="top"
-                                                            title="Aprovar">
-                                                            <i class="bi bi-check-lg"></i>
-                                                        </a>
-                                                        <a href="" class="btn btn-sm btn-outline-success"
-                                                            data-tt="tooltip" style="font-size: 1rem; color:#303030"
-                                                            data-placement="top" title="Homologar">
-                                                            <i class="bi bi-clipboard-check"></i>
-                                                        </a>
-                                                        <a href="" class="btn btn-sm btn-outline-warning"
-                                                            data-tt="tooltip" style="font-size: 1rem; color:#303030"
-                                                            data-placement="top" title="Editar">
-                                                            <i class="bi bi-pencil"></i>
-                                                        </a>
-                                                        <a href="" class="btn btn-sm btn-outline-primary"
-                                                            data-tt="tooltip" style="font-size: 1rem; color:#303030"
-                                                            data-placement="top" title="Enviar">
-                                                            <i class="bi bi-cart-check"></i>
-                                                        </a>
-                                                        <a href="" class="btn btn-sm btn-outline-primary"
-                                                            data-tt="tooltip" style="font-size: 1rem; color:#303030"
-                                                            data-placement="top" title="visualizar">
-                                                            <i class="bi bi-search"></i>
-                                                        </a>
-                                                        <a href="" class="btn btn-sm btn-outline-info"
-                                                            data-tt="tooltip" style="font-size: 1rem; color:#303030"
-                                                            data-placement="top" title="Aceite">
-                                                            <i class="bi bi-hand-thumbs-up"></i>
-                                                        </a>
-                                                        <a href="" class="btn btn-sm btn-outline-warning"
-                                                            data-tt="tooltip" style="font-size: 1rem; color:#303030"
-                                                            data-placement="top" title="Confirmar">
-                                                            <i class="bi bi-currency-dollar"></i>
-                                                        </a>
-                                                        <a href="" class="btn btn-sm btn-outline-warning"
-                                                            data-tt="tooltip" style="font-size: 1rem; color:#303030"
-                                                            data-placement="top" title="Editar Compra">
-                                                            <i class="bi bi-pencil-square"></i>
-                                                        </a>
-                                                        <a href="" class="btn btn-sm btn-outline-danger"
-                                                            data-tt="tooltip" style="font-size: 1rem; color:#303030"
-                                                            data-placement="top" title="Excluir">
-                                                            <i class="bi bi-x-circle"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            @endif
-                                        @endforeach
+                                        <tr>
+                                            <td></td>
+                                            <td>{{ $aquisicaos->id }}</td>
+                                            <td>{{ $aquisicaos->data }}</td>
+                                            <td>{{ $aquisicaos->CatalogoServico->descricao }}</td>
+                                            <td>{{ $aquisicaos->setor->nome ?? 'N/A' }}</td>
+                                            <td>{{ $aquisicaos->prioridade }}</td>
+                                            <td></td>
+                                            <td>
+                                                <a href="/aprovar-aquisicao-servicos/{{ $aquisicaos->idSolicitacao }}/ {{ $aquisicaos->idSetor }}"
+                                                    class="btn btn-sm btn-outline-primary" data-tt="tooltip"
+                                                    style="font-size: 1rem; color:#303030" data-placement="top"
+                                                    title="Aprovar">
+                                                    <i class="bi bi-check-lg"></i>
+                                                </a>
+                                                <a href="" class="btn btn-sm btn-outline-success" data-tt="tooltip"
+                                                    style="font-size: 1rem; color:#303030" data-placement="top"
+                                                    title="Homologar">
+                                                    <i class="bi bi-clipboard-check"></i>
+                                                </a>
+                                                <a href="" class="btn btn-sm btn-outline-warning" data-tt="tooltip"
+                                                    style="font-size: 1rem; color:#303030" data-placement="top"
+                                                    title="Editar">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                                <a href="" class="btn btn-sm btn-outline-primary" data-tt="tooltip"
+                                                    style="font-size: 1rem; color:#303030" data-placement="top"
+                                                    title="Enviar">
+                                                    <i class="bi bi-cart-check"></i>
+                                                </a>
+                                                <a href="" class="btn btn-sm btn-outline-primary" data-tt="tooltip"
+                                                    style="font-size: 1rem; color:#303030" data-placement="top"
+                                                    title="visualizar">
+                                                    <i class="bi bi-search"></i>
+                                                </a>
+                                                <a href="" class="btn btn-sm btn-outline-info" data-tt="tooltip"
+                                                    style="font-size: 1rem; color:#303030" data-placement="top"
+                                                    title="Aceite">
+                                                    <i class="bi bi-hand-thumbs-up"></i>
+                                                </a>
+                                                <a href="" class="btn btn-sm btn-outline-warning"
+                                                    data-tt="tooltip" style="font-size: 1rem; color:#303030"
+                                                    data-placement="top" title="Confirmar">
+                                                    <i class="bi bi-currency-dollar"></i>
+                                                </a>
+                                                <a href="" class="btn btn-sm btn-outline-warning"
+                                                    data-tt="tooltip" style="font-size: 1rem; color:#303030"
+                                                    data-placement="top" title="Editar Compra">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                </a>
+                                                <a href="" class="btn btn-sm btn-outline-danger" data-tt="tooltip"
+                                                    style="font-size: 1rem; color:#303030" data-placement="top"
+                                                    title="Excluir">
+                                                    <i class="bi bi-x-circle"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
                                     @endforeach
                                 </tbody>
                                 {{-- Fim body da tabela --}}
@@ -229,5 +225,4 @@
             });
         });
     </script>
-
 @endsection

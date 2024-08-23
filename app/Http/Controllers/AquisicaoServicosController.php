@@ -37,8 +37,9 @@ class AquisicaoServicosController extends Controller
         $status = TipoStatusSolSv::all();
         $classeAquisicao = TipoClasseSv::all();
 
-        return view('aquisicao.gerenciar-aquisicao-servicos', compact('aquisicao', 'classeAquisicao', 'status'));
 
+
+        return view('aquisicao.gerenciar-aquisicao-servicos', compact('aquisicao', 'classeAquisicao', 'status'));
     }
 
     public function retornaNomeServicos($idClasse)
@@ -54,7 +55,7 @@ class AquisicaoServicosController extends Controller
         return response()->json($servicos);
     }
 
-    public function create()
+    public function create( Request $request)
     {
 
         $setor = session()->get('usuario.setor', 'cpf');
@@ -75,25 +76,28 @@ class AquisicaoServicosController extends Controller
         $today = Carbon::today()->format('Y-m-d');
 
 
-        SolServico::create([
-                'id_classe_sv' => $request->input('classeSv'),
-                'id_tp_sv' => $request->input('tipoServicos'),
-                'motivo' => $request->input('motivo'),
-                'data' => $today,
-                'status' => '1',
-                'id_setor' => $request->input('idSetor'),
-            ]);
+        $novaSolicitacao = SolServico::create([
+            'id_classe_sv' => $request->input('classeSv'),
+            'id_tp_sv' => $request->input('tipoServicos'),
+            'motivo' => $request->input('motivo'),
+            'data' => $today,
+            'status' => '1',
+            'id_setor' => $request->input('idSetor'),
+        ]);
 
 
-        return redirect('/gerenciar-aquisicao-servicos');
+
+        return response()->json(['solicitacaoId' => $novaSolicitacao->id]);
     }
+
+
 
     public function aprovar($idSolicitacao)
     {
 
         $aquisicao = SolServico::with(['tipoClasse', 'catalogoServico', 'tipoStatus', 'setor'])
-        ->where('id', $idSolicitacao)
-        ->first();
+            ->where('id', $idSolicitacao)
+            ->first();
 
         $numeros = range(1, 100); // Gera um array de 1 a 100
 

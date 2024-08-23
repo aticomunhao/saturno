@@ -10,4 +10,18 @@ class Documento extends Model
     use HasFactory;
 
     protected $table = "documento";
+
+    protected $fillable = [
+        'numero',
+        'dt_doc',
+        'id_tp_doc',
+        'valor',
+        'id_empresa',
+        'id_setor',
+        'vencedor',
+        'id_sol_sv',
+        'is_sol_mat',
+        'dt_validade',
+        'end_arquivo',
+    ];
 }

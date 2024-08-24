@@ -34,6 +34,8 @@ class AquisicaoServicosController extends Controller
 
         $aquisicao = $query->orderBy('id')->paginate(20);
 
+        //dd($aquisicao);
+
         $status = TipoStatusSolSv::all();
         $classeAquisicao = TipoClasseSv::all();
 
@@ -55,7 +57,7 @@ class AquisicaoServicosController extends Controller
         return response()->json($servicos);
     }
 
-    public function create( Request $request)
+    public function create(Request $request)
     {
 
         $setor = session()->get('usuario.setor', 'cpf');
@@ -76,7 +78,7 @@ class AquisicaoServicosController extends Controller
         $today = Carbon::today()->format('Y-m-d');
 
 
-        $novaSolicitacao = SolServico::create([
+        SolServico::create([
             'id_classe_sv' => $request->input('classeSv'),
             'id_tp_sv' => $request->input('tipoServicos'),
             'motivo' => $request->input('motivo'),
@@ -87,7 +89,7 @@ class AquisicaoServicosController extends Controller
 
 
 
-        return response()->json(['solicitacaoId' => $novaSolicitacao->id]);
+        return redirect('/gerenciar-aquisicao-servicos');
     }
 
 
@@ -126,5 +128,17 @@ class AquisicaoServicosController extends Controller
 
             return redirect('/gerenciar-aquisicao-servicos');
         }
+    }
+
+    public function adicionaDocumento(Resquest $request)
+    {
+
+        Documento::create([
+            
+        ]);
+
+
+
+        return redirect('/gerenciar-aquisicao-servicos');
     }
 }

@@ -74,11 +74,11 @@ class AquisicaoServicosController extends Controller
 
     public function store(Request $request)
     {
-
         $today = Carbon::today()->format('Y-m-d');
+        $setor = session()->get('usuario.setor')[0];
 
 
-        SolServico::create([
+        $idSolicitacao = SolServico::create([
             'id_classe_sv' => $request->input('classeSv'),
             'id_tp_sv' => $request->input('tipoServicos'),
             'motivo' => $request->input('motivo'),
@@ -87,12 +87,22 @@ class AquisicaoServicosController extends Controller
             'id_setor' => $request->input('idSetor'),
         ]);
 
+        foreach ($request->numero as $index => $numero) {
+            Documento::create([
+                'numero' => $numero,
+                'dt_doc' => $request->dt_inicial[$index],
+                'id_tp_doc' => '14',
+                'valor' => $request->valor[$index],
+                'id_empresa' => $request->razaoSocial[$index],
+                'id_setor' => $setor,
+                'id_sol_sv' => $idSolicitacao->id,
+                'dt_validade' => $request->dt_final[$index],
+                'end_arquivo' => $request->arquivo[$index],
+            ]);
+        }
 
-
-        return redirect('/gerenciar-aquisicao-servicos');
+        return redirect('/gerenciar-aquisicao-servicos')->with('success', 'Solicitação e documentos salvos com sucesso!');
     }
-
-
 
     public function aprovar($idSolicitacao)
     {
@@ -128,17 +138,5 @@ class AquisicaoServicosController extends Controller
 
             return redirect('/gerenciar-aquisicao-servicos');
         }
-    }
-
-    public function adicionaDocumento(Resquest $request)
-    {
-
-        Documento::create([
-            
-        ]);
-
-
-
-        return redirect('/gerenciar-aquisicao-servicos');
     }
 }

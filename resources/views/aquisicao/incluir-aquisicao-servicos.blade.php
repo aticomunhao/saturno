@@ -61,18 +61,74 @@
                                         name="motivo"></textarea>
                                 </div>
                             </div>
+                            <!-- Container para os formulários de propostas comerciais -->
+                            <div id="form-propostas-comerciais">
+                                <!-- Formulários de propostas comerciais serão adicionados aqui -->
+                            </div>
+                            <!-- Botão para adicionar nova proposta comercial -->
+                            <div class="col-12 text-center mt-4">
+                                <button type="button" id="add-proposta" class="btn btn-success">Adicionar Proposta
+                                    Comercial</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="botões">
-            <a href="/gerenciar-aquisicao-servicos" type="button" value=""
-                class="btn btn-danger col-md-3 col-2 mt-4 offset-md-2">Cancelar</a>
+            <a href="/gerenciar-aquisicao-servicos" class="btn btn-danger col-md-3 col-2 mt-4 offset-md-2">Cancelar</a>
             <input type="submit" value="Confirmar" class="btn btn-primary col-md-3 col-1 mt-4 offset-md-2">
         </div>
     </form>
-    {{-- Final Formulario de Inserção --}}
+
+    <!-- Template de formulário de proposta comercial -->
+    <div id="template-proposta-comercial" style="display: none;">
+        <div class="card proposta-comercial" style="border-color: #355089; margin-top: 20px;">
+            <div class="card-header">
+                <div style="display: flex; gap: 20px; align-items: flex-end;">
+                    <h5 style="color: #355089">Proposta Comercial</h5>
+                    <button type="button" class="btn btn-danger btn-sm float-end remove-proposta">
+                        <i class="bi bi-x"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class=" form-group row" style="margin-left:5px">
+                    <div class="col-md-4 mb-3">
+                        <label for="numero">Número da Proposta</label>
+                        <input type="text" class="form-control" name="numero[]" placeholder="Digite o Número da proposta"
+                            required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="razaoSocial">Razão Social</label>
+                        <input type="text" class="form-control" name="razaoSocial[]"
+                            placeholder="Digite a razão social da empresa proposta" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="valor">Valor</label>
+                        <input type="text" class="form-control" name="valor[]" placeholder="Digite o valor da proposta"
+                            required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="dt_inicial">Data da Proposta</label>
+                        <input type="date" class="form-control" name="dt_inicial[]"
+                            placeholder="Digite a data da proposta" required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="dt_final">Data Limite</label>
+                        <input type="date" class="form-control" name="dt_final[]"
+                            placeholder="Digite a data final do prazo da proposta">
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="arquivo">Arquivo da Proposta</label>
+                        <input type="file" class="form-control" name="arquivo[]"
+                            placeholder="Insira o arquivo da proposta" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <script>
         $(document).ready(function() {
             $('#servicos, #classeServico').select2({
@@ -80,51 +136,47 @@
                 width: '100%',
             });
 
-            // Função para popular o select de serviços baseado no valor do select de classe de serviço
             function populateServicos(selectElement, classeServicoValue) {
                 $.ajax({
                     type: "GET",
                     url: "/retorna-nome-servicos/" + classeServicoValue,
                     dataType: "json",
                     success: function(response) {
-                        // Limpa o select antes de adicionar novas opções
                         selectElement.empty();
-
-                        // Adiciona um option padrão
                         selectElement.append('<option value="">Selecione um serviço</option>');
-
-                        // Itera sobre os dados retornados e adiciona as opções ao select
                         $.each(response, function(index, item) {
-                            selectElement.append('<option value="' + item.id + '">' +
-                                item.descricao + '</option>');
+                            selectElement.append('<option value="' + item.id + '">' + item
+                                .descricao + '</option>');
                         });
-
-                        // Ativa o select caso ele estivesse desabilitado
                         selectElement.prop('disabled', false);
                     },
                     error: function(xhr, status, error) {
                         console.error("Ocorreu um erro:", error);
-                        console.log(xhr.responseText); // Detalhes do erro, se necessário
+                        console.log(xhr.responseText);
                     }
                 });
             }
 
-            // Evento change para detectar a mudança no select de classe de serviço
             $('#classeServico').change(function() {
                 var classeServicoValue = $(this).val();
-
-                // Selecione o elemento do select de serviços
                 var servicosSelect = $('#servicos');
 
-                // Desabilita o select de serviços se nenhum valor for selecionado na classe de serviço
                 if (!classeServicoValue) {
                     servicosSelect.empty().append('<option value="">Selecione um serviço</option>');
                     servicosSelect.prop('disabled', true);
                     return;
                 }
 
-                // Chama a função para popular os serviços
                 populateServicos(servicosSelect, classeServicoValue);
+            });
+
+            $('#add-proposta').click(function() {
+                var newProposta = $('#template-proposta-comercial').html();
+                $('#form-propostas-comerciais').append(newProposta);
+            });
+
+            $(document).on('click', '.remove-proposta', function() {
+                $(this).closest('.proposta-comercial').remove();
             });
         });
     </script>

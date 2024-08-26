@@ -24,4 +24,7 @@ class Documento extends Model
         'dt_validade',
         'end_arquivo',
     ];
+
+    public $timestamps = false;
+
 }

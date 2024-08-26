@@ -61,7 +61,7 @@
                                             style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-left:5px;"{{-- Botao submit do formulario de pesquisa --}}
                                             type="submit">Pesquisar
                                         </button>
-                                        <a href="/incluir-aquisicao-servicos" {{-- Botao com rota para incluir cargo --}} class="btn btn-success"
+                                        <a href="/incluir-aquisicao-servicos"  class="btn btn-success"
                                             style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-left:5px">
                                             Novo+
                                         </a>
@@ -69,15 +69,15 @@
                                 </div>
                                 <div class="ROW justify-content-start">
                                     <div class="col-12" style="margin-top:10px;">
-                                        <a href="/incluir-aquisicao-servicos" {{-- Botao com rota para incluir cargo --}} class="btn btn-primary "
+                                        <a href="/incluir-aquisicao-servicos"  class="btn btn-primary "
                                             style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-right:5px">
                                             Aprovar em Lote
                                         </a>
-                                        <a href="/incluir-aquisicao-servicos" {{-- Botao com rota para incluir cargo --}} class="btn btn-success "
+                                        <a href="/incluir-aquisicao-servicos" class="btn btn-success "
                                             style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-right:5px">
                                             Homologar em Lote
                                         </a>
-                                        <a href="/incluir-aquisicao-servicos" {{-- Botao com rota para incluir cargo --}} class="btn btn-warning "
+                                        <a href="/incluir-aquisicao-servicos"  class="btn btn-warning "
                                             style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-right:5px">
                                             Confirmar em Lote
                                         </a>
@@ -111,12 +111,6 @@
                                             <td>{{ $aquisicaos->prioridade }}</td>
                                             <td>{{ $aquisicaos->tipoStatus->nome }}</td>
                                             <td>
-                                                <button type="button" class="btn btn-sm btn-outline-success"
-                                                    data-bs-placement="top" title="Incluir Propostas" data-bs-toggle="modal"
-                                                    data-bs-target="#IncluirDocumentoModal" href="/aprovar-aquisicao-servicos/{{ $aquisicaos->id }}">
-                                                    <i class="bi bi-clipboard-plus"
-                                                        style="font-size: 1rem; color:#303030;"></i>
-                                                </button>
                                                 <a href="/aprovar-aquisicao-servicos/{{ $aquisicaos->id }}"
                                                     class="btn btn-sm btn-outline-primary" data-tt="tooltip"
                                                     style="font-size: 1rem; color:#303030" data-placement="top"
@@ -231,71 +225,3 @@
         });
     </script>
 @endsection
-
-
-
-
-
-
-<!-- Modal Incluir Documentos -->
-<div class="modal fade" id="IncluirDocumentoModal" tabindex="-1" aria-labelledby="IncluirDocumentoModal"
-    aria-hidden="true">
-    <div class="modal-dialog">
-        <form class="form-horizontal" method="POST" action="/adicionar-documento-servico/"
-            enctype="multipart/form-data">
-            @csrf
-            <div class="modal-content">
-                <div class="modal-header" style="background-color:#3891e4">
-                    <h5 class="modal-title" id="IncluirDocumentoLabel" style="color:rgb(255, 255, 255)">Incluir
-                        Documento</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" style="text-align: center;">
-
-                    <div class="mb-3">
-                        <label for="documentoNumero" class="form-label">Número da
-                            Proposta</label>
-                        <input type="text" class="form-control" id="documentoNumero" name="documentoNumero"
-                            required>
-                    </div>
-                    <div class="row" style="align-items: flex-end;">
-                        <div class="col-6">
-                            <label for="documentoDataInicial" class="form-label">Data
-                                Inicial da Proposta</label>
-                            <input type="date" class="form-control" id="documentoDataInicial"
-                                name="documentoDataInicial" required>
-                        </div>
-                        <div class="col-6">
-                            <label for="documentoDataFinal" class="form-label">Data final do
-                                Prazo da Proposta</label>
-                            <input type="date" class="form-control" id="documentoDataFinal"
-                                name="documentoDataFinal" required>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="documentoNome" class="form-label">Nome do
-                            Documento</label>
-                        <input type="text" class="form-control" id="documentoNome" name="documentoNome" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="documentoValor" class="form-label">Valor da
-                            Proposta</label>
-                        <input type="text" class="form-control" id="documentoValor" name="documentoValor"
-                            required>
-                    </div>
-                    <div class="mb-3"><label for="documentoArquivo" class="form-label">Selecionar Arquivo:</label>
-                        <input type="file" class="form-control" id="documentoArquivo" name="documentoArquivo"
-                            required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Confirmar</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-</div>
-
-</div>

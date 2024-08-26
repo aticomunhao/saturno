@@ -330,7 +330,6 @@ Route::get('/incluir-aquisicao-servicos', [AquisicaoServicosController::class, '
 Route::post('/salvar-aquisicao-servicos', [AquisicaoServicosController::class, 'store']);
 Route::get('/aprovar-aquisicao-servicos/{idSolicitacao}', [AquisicaoServicosController::class, 'aprovar']);
 Route::post('/validaAprovacao-aquisicao-servicos', [AquisicaoServicosController::class, 'validaAprovacao']);
-Route::post('/adicionar-documento-servicos', [AquisicaoServicosController::class, 'adicionaDocumento']);
 
 
 

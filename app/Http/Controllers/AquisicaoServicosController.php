@@ -104,6 +104,28 @@ class AquisicaoServicosController extends Controller
         return redirect('/gerenciar-aquisicao-servicos')->with('success', 'Solicitação e documentos salvos com sucesso!');
     }
 
+    public function edit($idS)
+    {
+
+        $setor = session()->get('usuario.setor', 'cpf');
+
+        $servico = SolServico::with(['tipoClasse', 'catalogoServico', 'tipoStatus', 'setor'])->where('id', $idS)->get();
+        $empresas = Documento::where('id_sol_sv', $idS);
+
+
+    }
+
+    public function update()
+    {
+
+
+
+
+
+
+
+    }
+
     public function aprovar($idSolicitacao)
     {
 

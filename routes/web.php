@@ -328,8 +328,11 @@ Route::get('/gerenciar-aquisicao-servicos', [AquisicaoServicosController::class,
 Route::get('/retorna-nome-servicos/{id}', [AquisicaoServicosController::class, 'retornaNomeServicos']);
 Route::get('/incluir-aquisicao-servicos', [AquisicaoServicosController::class, 'create']);
 Route::post('/salvar-aquisicao-servicos', [AquisicaoServicosController::class, 'store']);
+Route::get('/editar-aquisicao-servicos/{idS}', [AquisicaoServicosController::class, 'edit']);
+Route::post('/atualizar-aquisicao-servicos', [AquisicaoServicosController::class, 'update']);
 Route::get('/aprovar-aquisicao-servicos/{idSolicitacao}', [AquisicaoServicosController::class, 'aprovar']);
 Route::post('/validaAprovacao-aquisicao-servicos', [AquisicaoServicosController::class, 'validaAprovacao']);
+
 
 
 

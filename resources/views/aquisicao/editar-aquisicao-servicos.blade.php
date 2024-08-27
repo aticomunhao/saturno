@@ -4,9 +4,9 @@
     Incluir Aquisição de Serviços
 @endsection
 @section('content')
-    <form method="POST" action="/atualizar-aquisicao-servicos">{{-- Formulario de Inserção --}}
+    <form method="PUT" action="/atualizar-aquisicao-servicos/{{ $solicitacao->id }}" enctype="multipart/form-data">
         @csrf
-        <div class="container-fluid"> {{-- Container completo da página  --}}
+        <div class="container-fluid">
             <div class="justify-content-center">
                 <div class="col-12">
                     <br>
@@ -14,7 +14,7 @@
                         <div class="card-header">
                             <div class="ROW">
                                 <h5 class="col-12" style="color: #355089">
-                                    Incluir Aquisição de Serviços
+                                    Editar Solicitação de Serviços
                                 </h5>
                             </div>
                         </div>
@@ -26,11 +26,12 @@
                                         <br>
                                         <select class="js-example-responsive form-select"
                                             style="border: 1px solid #999999; padding: 5px;" id="classeServico"
-                                            name="classeSv">
-                                            <option value=""></option>
+                                            name="classeSv" required>
+                                            <option></option>
                                             @foreach ($classeAquisicao as $classeAquisicaos)
-                                                <option value="{{ $classeAquisicaos->idClasse }}">
-                                                    {{ $classeAquisicaos->descricaoClasse }}
+                                                <option value="{{ $classeAquisicaos->id }}"
+                                                    {{ $solicitacao->id_classe_sv == $classeAquisicaos->id ? 'selected' : '' }}>
+                                                    {{ $classeAquisicaos->descricao }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -39,56 +40,104 @@
                                         <br>
                                         <select class="js-example-responsive form-select"
                                             style="border: 1px solid #999999; padding: 5px;" id="servicos"
-                                            name="tipoServicos" value="{{ old('servicos') }}" disabled>
+                                            name="tipoServicos" required>
+                                            <option value="">Selecione um serviço</option>
+                                            @foreach ($tiposServico as $tipoServico)
+                                                <option value="{{ $tipoServico->id }}"
+                                                    {{ $solicitacao->id_tp_sv == $tipoServico->id ? 'selected' : '' }}>
+                                                    {{ $tipoServico->descricao }}
+                                                </option>
+                                            @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-md-2 col-sm-12">Selecione seu Setor
+                                    <div class="col-md-3 col-sm-12">Setor
                                         <br>
-                                        <select class="form-select select2" style="border: 1px solid #999999; padding: 5px;"
-                                            id="idSetor" name="idSetor" value="">
-                                            <option value=""></option>
+                                        <select class="form-select" style="border: 1px solid #999999; padding: 5px;"
+                                            id="idSetor" name="idSetor" disabled>
+                                            <option></option>
                                             @foreach ($buscaSetor as $buscaSetors)
-                                                <option value="{{ $buscaSetors->id }}">
-                                                    {{ $buscaSetors->nome }}
+                                                <option value="{{ $buscaSetors->id }}"
+                                                    {{ $solicitacao->id_setor == $buscaSetors->id ? 'selected' : '' }}>
+                                                    {{ $buscaSetors->sigla }} - {{ $buscaSetors->nome }}
                                                 </option>
                                             @endforeach
                                         </select>
                                     </div>
                                 </div>
-                                <div class=" col-12">Motivo
+                                <div class="col-12">Motivo
                                     <br>
                                     <textarea class="form-control" style="border: 1px solid #999999; padding: 5px;" id="idmotivo" rows="4"
-                                        name="motivo" value=""></textarea>
+                                        name="motivo">{{ old('motivo', $solicitacao->motivo) }}</textarea>
                                 </div>
                             </div>
-                            <br>
-                            <hr>
-                            <h5>Propostas Comerciais</h5>
-                            <div class="ROW" style="margin-left:5px">
-                                @foreach ($empresas as $index => $empresa)
-                                    <div style="display: flex; gap: 20px; align-items: flex-end;">
-                                        <div class="col-md-3">{{ 0 + 1 }}º Empresa (ID: {{ $empresa->id_empresa }})
-                                            <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
-                                                type="text" name="empresas[{{ $index }}][id_empresa]"
-                                                value="{{ $empresa->id_empresa }}" readonly>
-                                        </div>
-                                        <div class="col-md-3">Valor Orçado
-                                            <div class="input-group">
-                                                <span class="input-group-text"
-                                                    style="border: 1px solid #999999; padding: 5px;">R$</span>
-                                                <input type="text" class="form-control"
-                                                    name="empresas[{{ $index }}][valor]"
-                                                    style="border: 1px solid #999999; padding: 5px;"
-                                                    value="{{ $empresa->valor }}" readonly>
+                            <div class="col-12 text-center mt-4">
+                                <button type="button" id="add-proposta" class="btn btn-success">Adicionar Proposta
+                                    Comercial</button>
+                            </div>
+
+                            <div id="form-propostas-comerciais">
+                                @foreach ($documentos as $documento)
+                                    <input type="hidden" name="documento_id[]" value="{{ $documento->id }}">
+                                    <div class="card proposta-comercial" style="border-color: #355089; margin-top: 20px;">
+                                        <div class="card-header">
+                                            <div style="display: flex; gap: 20px; align-items: flex-end;">
+                                                <h5 style="color: #355089">Proposta Comercial</h5>
+                                                <button type="button"
+                                                    class="btn btn-danger btn-sm float-end remove-proposta">
+                                                    <i class="bi bi-x"></i>
+                                                </button>
                                             </div>
                                         </div>
-                                        <div class="col-md-2">Data Limite do Orçamento
-                                            <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
-                                                type="date" name="empresas[{{ $index }}][dt_validade]"
-                                                value="{{ $empresa->dt_validade }}" readonly>
-                                        </div>
-                                        <div class="col-md-3">Arquivo da Proposta
-                                            <a href="{{ $empresa->end_arquivo }}" target="_blank">Ver Arquivo</a>
+                                        <div class="card-body">
+                                            <div class=" form-group row" style="margin-left:5px">
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="numero">Número da Proposta</label>
+                                                    <input type="text" class="form-control" name="numeroOld[]"
+                                                        placeholder="Digite o Número da proposta" required
+                                                        value="{{ $documento->numero }}">
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="razaoSocial">Razão Social</label>
+                                                    <input type="text" class="form-control" name="razaoSocialOld[]"
+                                                        placeholder="Digite a razão social da empresa proposta"
+                                                        value="{{ $documento->id_empresa }}" required>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label for="valor">Valor</label>
+                                                    <input type="text" class="form-control" name="valorOld[]"
+                                                        placeholder="Digite o valor da proposta" required
+                                                        value="{{ $documento->valor }}">
+                                                </div>
+                                                <div class="col-md-3 mb-3">
+                                                    <label for="dt_inicial">Data da Proposta</label>
+                                                    <input type="date" class="form-control" name="dt_inicialOld[]"
+                                                        placeholder="Digite a data da proposta"
+                                                        value="{{ $documento->dt_doc }}" required>
+                                                </div>
+                                                <div class="col-md-3 mb-3">
+                                                    <label for="dt_final">Data Limite</label>
+                                                    <input type="date" class="form-control" name="dt_finalOld[]"
+                                                        value="{{ $documento->dt_validade }}"
+                                                        placeholder="Digite a data final do prazo da proposta">
+                                                </div>
+                                                <div class="col-md-3 mb-3">
+                                                    <label for="arquivo">Arquivo da Proposta</label>
+                                                    <input type="file" class="form-control" name="arquivoOld[]"
+                                                        value="{{ $documento->end_arquivo }}"
+                                                        placeholder="Insira o arquivo da proposta">
+                                                </div>
+                                                <div class="col-md-3 mb-3 row">
+                                                    <label for="arquivo">Arquivo da Atual</label>
+                                                    @if ($documento->arquivo_url)
+                                                        <a href="{{ $documento->arquivo_url }}" target="_blank"
+                                                            class="btn btn-primary">
+                                                            Ver Arquivo
+                                                        </a>
+                                                    @else
+                                                        <a class="btn btn-secondary" disabled>Nenhum arquivo disponível.</a>
+                                                    @endif
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 @endforeach
@@ -103,70 +152,116 @@
                 class="btn btn-danger col-md-3 col-2 mt-4 offset-md-2">Cancelar</a>
             <input type="submit" value="Confirmar" class="btn btn-primary col-md-3 col-1 mt-4 offset-md-2">
         </div>
-    </form>{{-- Final Formulario de Inserção --}}
+    </form>
+
     <script>
         $(document).ready(function() {
+            // Inicializar select2
             $('#servicos, #classeServico').select2({
                 theme: 'bootstrap-5',
                 width: '100%',
             });
 
-            // Função para popular o select de serviços baseado no valor do select de classe de serviço
-            function populateServicos(selectElement, classeServicoValue) {
-                $.ajax({
-                    type: "GET",
-                    url: "/retorna-nome-servicos/" + classeServicoValue,
-                    dataType: "json",
-                    success: function(response) {
-                        // Limpa o select antes de adicionar novas opções
-                        selectElement.empty();
+            // Adicionar nova proposta comercial
+            $('#add-proposta').click(function() {
+                var newProposta = $('#template-proposta-comercial').html();
+                $('#form-propostas-comerciais').append(newProposta);
+            });
 
-                        // Adiciona um option padrão
-                        selectElement.append('<option value="">Selecione um serviço</option>');
+            // Adicionar lógica de remoção de proposta
+            $(document).on('click', '.remove-proposta', function() {
+                $(this).closest('.proposta-comercial').remove();
+            });
 
-                        // Itera sobre os dados retornados e adiciona as opções ao select
-                        $.each(response, function(index, item) {
-                            selectElement.append('<option value="' + item.id + '">' +
-                                item.descricao + '</option>');
-                        });
-
-                        // Ativa o select caso ele estivesse desabilitado
-                        selectElement.prop('disabled', false);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Ocorreu um erro:", error);
-                        console.log(xhr.responseText); // Detalhes do erro, se necessário
-                    }
-                });
+            // Inicializar valores do select de serviços com base no valor atual da classe de serviço
+            var classeServicoValue = $('#classeServico').val();
+            if (classeServicoValue) {
+                populateServicos($('#servicos'), classeServicoValue, '{{ $solicitacao->id_tp_sv }}');
             }
 
-            // Evento change para detectar a mudança no select de classe de serviço
+            // Evento change para o select de classe de serviço
             $('#classeServico').change(function() {
                 var classeServicoValue = $(this).val();
-
-                // Selecione o elemento do select de serviços
                 var servicosSelect = $('#servicos');
 
-                // Desabilita o select de serviços se nenhum valor for selecionado na classe de serviço
                 if (!classeServicoValue) {
                     servicosSelect.empty().append('<option value="">Selecione um serviço</option>');
                     servicosSelect.prop('disabled', true);
                     return;
                 }
 
-                // Chama a função para popular os serviços
                 populateServicos(servicosSelect, classeServicoValue);
             });
+
+            // Função para popular o select de serviços
+            function populateServicos(selectElement, classeServicoValue, selectedServiceId = null) {
+                $.ajax({
+                    type: "GET",
+                    url: "/retorna-nome-servicos/" + classeServicoValue,
+                    dataType: "json",
+                    success: function(response) {
+                        selectElement.empty();
+                        selectElement.append('<option value="">Selecione um serviço</option>');
+                        $.each(response, function(index, item) {
+                            selectElement.append('<option value="' + item.id + '"' +
+                                (item.id == selectedServiceId ? ' selected' : '') + '>' +
+                                item.descricao + '</option>');
+                        });
+                        selectElement.prop('disabled', false);
+                    },
+                    error: function(error) {
+                        console.log("Erro ao buscar serviços:", error);
+                    }
+                });
+            }
         });
     </script>
-    <script>
-        $(document).ready(function() {
 
-            //Importa o select2 com tema do Bootstrap para a classe "select2"
-            $('.select2').select2({
-                theme: 'bootstrap-5'
-            });
-
-        });
+    <!-- Template para adicionar nova proposta comercial dinamicamente -->
+    <script type="text/template" id="template-proposta-comercial">
+            <div class="card proposta-comercial" style="border-color: #355089; margin-top: 20px;">
+                <div class="card-header">
+                    <div style="display: flex; gap: 20px; align-items: flex-end;">
+                        <h5 style="color: #355089">Proposta Comercial</h5>
+                        <button type="button" class="btn btn-danger btn-sm float-end remove-proposta">
+                            <i class="bi bi-x"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class=" form-group row" style="margin-left:5px">
+                        <div class="col-md-4 mb-3">
+                            <label for="numero">Número da Proposta</label>
+                            <input type="text" class="form-control" name="numero[]" placeholder="Digite o Número da proposta"
+                                required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="razaoSocial">Razão Social</label>
+                            <input type="text" class="form-control" name="razaoSocial[]"
+                                placeholder="Digite a razão social da empresa proposta" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="valor">Valor</label>
+                            <input type="text" class="form-control" name="valor[]" placeholder="Digite o valor da proposta"
+                                required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="dt_inicial">Data da Proposta</label>
+                            <input type="date" class="form-control" name="dt_inicial[]"
+                                placeholder="Digite a data da proposta" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="dt_final">Data Limite</label>
+                            <input type="date" class="form-control" name="dt_final[]"
+                                placeholder="Digite a data final do prazo da proposta">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="arquivo">Arquivo da Proposta</label>
+                            <input type="file" class="form-control" name="arquivo[]"
+                                placeholder="Insira o arquivo da proposta">
+                        </div>
+                    </div>
+                </div>
+            </div>
     </script>
 @endsection

@@ -20,7 +20,21 @@
                         </div>
                         <div class="card-body">
                             <h5>Identificação do Serviço</h5>
+                            <hr>
+                            <br>
                             <div class="ROW" style="margin-left:5px">
+                                <div style="display: flex; gap: 20px; align-items: flex-end;">
+                                    <div class="col-md-2 col-sm-12">
+                                        <label>Número da Solicitação</label>
+                                        <input class="form-control" type="text" value="{{ $solicitacao->id }}"
+                                            id="iddt_inicio" name="dt_inicio" required="required" disabled>
+                                    </div>
+                                    <div class="col-md-2 col-sm-12">
+                                        <label>Data de Criação da Solicitação</label>
+                                        <input class="form-control" type="text" value="{{ \Carbon\Carbon::parse($solicitacao->data)->format('d/m/Y') }}"
+                                            id="iddt_inicio" name="dt_inicio" required="required" disabled>
+                                    </div>
+                                </div>
                                 <div style="display: flex; gap: 20px; align-items: flex-end;">
                                     <div class="col-md-2 col-sm-12">Classe do Serviço
                                         <br>
@@ -134,7 +148,8 @@
                                                             Ver Arquivo
                                                         </a>
                                                     @else
-                                                        <a class="btn btn-secondary" disabled>Nenhum arquivo disponível.</a>
+                                                        <a class="btn btn-secondary" disabled>Nenhum arquivo
+                                                            disponível.</a>
                                                     @endif
                                                 </div>
                                             </div>

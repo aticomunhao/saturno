@@ -105,7 +105,7 @@
                                         <tr>
                                             <td></td>
                                             <td>{{ $aquisicaos->id }}</td>
-                                            <td>{{ $aquisicaos->data }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($aquisicaos->data)->format('d/m/Y') }}</td>
                                             <td>{{ $aquisicaos->CatalogoServico->descricao }}</td>
                                             <td>{{ $aquisicaos->setor->nome }}</td>
                                             <td>{{ $aquisicaos->prioridade }}</td>

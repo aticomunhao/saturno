@@ -72,6 +72,13 @@ class AquisicaoServicosController extends Controller
         $classeAquisicao = TipoClasseSv::all();
         $empresas = Documento::all();
 
+        // Adiciona a URL completa do arquivo
+        foreach ($empresas as $documento) {
+            if ($documento->end_arquivo) {
+                $documento->arquivo_url = Storage::url($documento->end_arquivo);
+            }
+        }
+
         return view('aquisicao.incluir-aquisicao-servicos',  compact('servico', 'classeAquisicao', 'setor', 'buscaSetor', 'empresas'));
     }
 
@@ -91,6 +98,15 @@ class AquisicaoServicosController extends Controller
         ]);
 
         foreach ($request->numero as $index => $numero) {
+
+            // Verificar se um arquivo foi carregado
+            if ($request->hasFile('arquivo.' . $index)) {
+                $arquivo = $request->file('arquivo.' . $index);
+                $endArquivo = $arquivo->store('documentos', 'public');
+            } else {
+                $endArquivo = null;
+            }
+
             Documento::create([
                 'numero' => $numero,
                 'dt_doc' => $request->dt_inicial[$index],
@@ -100,7 +116,7 @@ class AquisicaoServicosController extends Controller
                 'id_setor' => $setor,
                 'id_sol_sv' => $idSolicitacao->id,
                 'dt_validade' => $request->dt_final[$index],
-                'end_arquivo' => $request->arquivo[$index],
+                'end_arquivo' => $endArquivo,
             ]);
         }
         return redirect('/gerenciar-aquisicao-servicos')->with('success', 'Solicitação e documentos salvos com sucesso!');
@@ -131,10 +147,12 @@ class AquisicaoServicosController extends Controller
         $today = Carbon::today()->format('Y-m-d');
         $setor = session()->get('usuario.setor')[0];
 
+        // Atualizar dados da solicitação
         $solicitacao->update([
             'id_classe_sv' => $request->input('classeSv'),
             'id_tp_sv' => $request->input('tipoServicos'),
             'motivo' => $request->input('motivo'),
+            'id_setor' => $request->input('idSetor'),
             'data' => $today,
             'status' => '1',
         ]);
@@ -154,52 +172,46 @@ class AquisicaoServicosController extends Controller
                         $endArquivo = $documento->end_arquivo; // Manter o caminho antigo se nenhum novo arquivo for carregado
                     }
 
-                    $documento = Documento::find($documentoId);
-                    if ($documento) {
-                        $documento->update([
-                            'numero' => $numeroOld,
-                            'dt_doc' => $request->dt_inicialOld[$index],
-                            'valor' => $request->valorOld[$index],
-                            'id_empresa' => $request->razaoSocialOld[$index],
-                            'dt_validade' => $request->dt_finalOld[$index],
-                            'end_arquivo' => $request->arquivoOld[$index],
-                        ]);
-                    }
-                }
-            }
-
-            // Inserir novos documentos
-            if ($request->has('numero')) {
-                foreach ($request->numero as $index => $numero) {
-
-                    // Verificar se um arquivo foi carregado
-                    if ($request->hasFile('arquivo.' . $index)) {
-                        $arquivo = $request->file('arquivo.' . $index);
-                        $endArquivo = $arquivo->store('documentos', 'public');
-                    } else {
-                        $endArquivo = null;
-                    }
-
-                    Documento::create([
-                        'numero' => $numero,
-                        'dt_doc' => $request->dt_inicial[$index],
-                        'valor' => $request->valor[$index],
-                        'id_empresa' => $request->razaoSocial[$index],
-                        'dt_validade' => $request->dt_final[$index],
-                        'end_arquivo' => $request->arquivo[$index],
-                        'id_tp_doc' => '14',
-                        'id_setor' => $setor,
-                        'id_sol_sv' => $id,
+                    $documento->update([
+                        'numero' => $numeroOld,
+                        'dt_doc' => $request->dt_inicialOld[$index],
+                        'valor' => $request->valorOld[$index],
+                        'id_empresa' => $request->razaoSocialOld[$index],
+                        'dt_validade' => $request->dt_finalOld[$index],
+                        'end_arquivo' => $endArquivo,
                     ]);
                 }
             }
         }
 
-        //dd($request->numero);
+        // Inserir novos documentos
+        if ($request->has('numero')) {
+            foreach ($request->numero as $index => $numero) {
+                // Verificar se um arquivo foi carregado
+                if ($request->hasFile('arquivo.' . $index)) {
+                    $arquivo = $request->file('arquivo.' . $index);
+                    $endArquivo = $arquivo->store('documentos', 'public');
+                } else {
+                    $endArquivo = null;
+                }
 
+                Documento::create([
+                    'numero' => $numero,
+                    'dt_doc' => $request->dt_inicial[$index],
+                    'valor' => $request->valor[$index],
+                    'id_empresa' => $request->razaoSocial[$index],
+                    'dt_validade' => $request->dt_final[$index],
+                    'end_arquivo' => $endArquivo,
+                    'id_tp_doc' => '14',
+                    'id_setor' => $setor,
+                    'id_sol_sv' => $id,
+                ]);
+            }
+        }
 
         return redirect('/gerenciar-aquisicao-servicos');
     }
+
 
 
     public function aprovar($idSolicitacao)

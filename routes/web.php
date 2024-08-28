@@ -339,5 +339,5 @@ Route::post('/validaAprovacao-aquisicao-servicos', [AquisicaoServicosController:
 //Catálogoc de Empresas
 Route::get('/catalogo-empresa', [CatalogoEmpresaController::class, 'index']);
 Route::get('/incluir-empresa', [CatalogoEmpresaController::class, 'create']);
-Route::post('/salvar-catalogo-empresa', [CatalogoEmpresaController::class, 'store']);
+Route::post('/salvar-empresa', [CatalogoEmpresaController::class, 'store']);
 

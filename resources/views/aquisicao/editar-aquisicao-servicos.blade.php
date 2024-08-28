@@ -137,7 +137,7 @@
                                                 <div class="col-md-3 mb-3">
                                                     <label for="arquivo">Arquivo da Proposta</label>
                                                     <input type="file" class="form-control" name="arquivoOld[]"
-                                                        value="{{ $documento->end_arquivo }}"
+                                                        value="{{ $documento->end_arquivo }}" required
                                                         placeholder="Insira o arquivo da proposta">
                                                 </div>
                                                 <div class="col-md-3 mb-3 row">
@@ -273,7 +273,7 @@
                         <div class="col-md-4 mb-3">
                             <label for="arquivo">Arquivo da Proposta</label>
                             <input type="file" class="form-control" name="arquivo[]"
-                                placeholder="Insira o arquivo da proposta">
+                                placeholder="Insira o arquivo da proposta" required>
                         </div>
                     </div>
                 </div>

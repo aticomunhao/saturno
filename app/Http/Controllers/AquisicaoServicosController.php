@@ -142,75 +142,61 @@ class AquisicaoServicosController extends Controller
 
 
     public function update(Request $request, $id)
-    {
-        $solicitacao = SolServico::findOrFail($id);
-        $today = Carbon::today()->format('Y-m-d');
-        $setor = session()->get('usuario.setor')[0];
+{
+    $solicitacao = SolServico::findOrFail($id);
+    $setor = session()->get('usuario.setor')[0];
 
-        // Atualizar dados da solicitação
-        $solicitacao->update([
-            'id_classe_sv' => $request->input('classeSv'),
-            'id_tp_sv' => $request->input('tipoServicos'),
-            'motivo' => $request->input('motivo'),
-            'id_setor' => $request->input('idSetor'),
-            'data' => $today,
-            'status' => '1',
-        ]);
+    // Atualizar dados da solicitação
+    $solicitacao->update([
+        'id_classe_sv' => $request->input('classeSv'),
+        'id_tp_sv' => $request->input('tipoServicos'),
+        'motivo' => $request->input('motivo'),
+    ]);
+    //dd($request->all());
 
-        // Atualizar documentos existentes
-        if ($request->has('numeroOld')) {
-            foreach ($request->numeroOld as $index => $numeroOld) {
-                $documentoId = $request->input('documento_id')[$index];
+    // Verificar se 'arquivoOld' está presente e não é nulo
+    if ($request->hasFile('arquivoOld')) {
+        foreach ($request->file('arquivoOld') as $index => $file) {
+            if ($file) {
+                // Salvar o arquivo e obter o caminho
+                $path = $file->store('propostas', 'public');
 
-                $documento = Documento::find($documentoId);
+                // Atualizar o caminho do arquivo na base de dados
+                $documento = Documento::find($request->input('documento_id')[$index]);
                 if ($documento) {
-                    // Verificar se um novo arquivo foi carregado
-                    if ($request->hasFile('arquivoOld.' . $index)) {
-                        $arquivo = $request->file('arquivoOld.' . $index);
-                        $endArquivo = $arquivo->store('documentos', 'public');
-                    } else {
-                        $endArquivo = $documento->end_arquivo; // Manter o caminho antigo se nenhum novo arquivo for carregado
-                    }
-
-                    $documento->update([
-                        'numero' => $numeroOld,
-                        'dt_doc' => $request->dt_inicialOld[$index],
-                        'valor' => $request->valorOld[$index],
-                        'id_empresa' => $request->razaoSocialOld[$index],
-                        'dt_validade' => $request->dt_finalOld[$index],
-                        'end_arquivo' => $endArquivo,
-                    ]);
+                    $documento->end_arquivo = $path;
+                    $documento->save();
                 }
             }
         }
+    }
 
-        // Inserir novos documentos
-        if ($request->has('numero')) {
-            foreach ($request->numero as $index => $numero) {
-                // Verificar se um arquivo foi carregado
-                if ($request->hasFile('arquivo.' . $index)) {
-                    $arquivo = $request->file('arquivo.' . $index);
-                    $endArquivo = $arquivo->store('documentos', 'public');
-                } else {
-                    $endArquivo = null;
-                }
+    // Verificar se 'arquivo' está presente e não é nulo
+    if ($request->hasFile('arquivo') && is_array($request->file('arquivo'))) {
+        foreach ($request->file('arquivo') as $index => $file) {
+            if ($file) {
+                // Salvar o arquivo e obter o caminho
+                $path = $file->store('propostas', 'public');
 
+                // Criar um novo documento com os dados correspondentes
                 Documento::create([
-                    'numero' => $numero,
-                    'dt_doc' => $request->dt_inicial[$index],
-                    'valor' => $request->valor[$index],
-                    'id_empresa' => $request->razaoSocial[$index],
-                    'dt_validade' => $request->dt_final[$index],
-                    'end_arquivo' => $endArquivo,
+                    'end_arquivo' => $path,
+                    'numero' => $request->input('numero')[$index],
+                    'dt_doc' => $request->input('dt_inicial')[$index],
+                    'valor' => $request->input('valor')[$index],
+                    'id_empresa' => $request->input('razaoSocial')[$index],
+                    'dt_validade' => $request->input('dt_final')[$index],
                     'id_tp_doc' => '14',
                     'id_setor' => $setor,
                     'id_sol_sv' => $id,
                 ]);
             }
         }
-
-        return redirect('/gerenciar-aquisicao-servicos');
     }
+
+    return redirect('/gerenciar-aquisicao-servicos');
+}
+
 
 
 

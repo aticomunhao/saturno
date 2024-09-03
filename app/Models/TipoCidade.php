@@ -17,5 +17,4 @@ class TipoCidade extends Model
     {
         return $this->belongsTo(TipoUf::class, 'id_uf');
     }
-
 }

@@ -189,7 +189,7 @@
     </script>
     <script>
         $(document).ready(function () {
-            $('#cidade2, #setorid').select2({
+            $('#cidade2').select2({
                 theme: 'bootstrap-5',
                 width: '100%',
             });
@@ -210,23 +210,14 @@
                         console.error("An error occurred:", error);
                     }
                 });
-            }
-
-            $('#uf1').change(function (e) {
-                var stateValue = $(this).val();
-                $('#cidade1').removeAttr('disabled');
-                populateCities($('#cidade1'), stateValue);
-            });
+            }           
 
             $('#uf2').change(function (e) {
                 var stateValue = $(this).val();
                 $('#cidade2').removeAttr('disabled');
                 populateCities($('#cidade2'), stateValue);
             });
-
-            $('#idlimpar').click(function (e) {
-                $('#idnome_completo').val("");
-            });
+            
         });
     </script>
 

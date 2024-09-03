@@ -58,7 +58,7 @@ class CatalogoEmpresaController extends Controller
     }
     public function retornaCidadeDadosResidenciais($id)
     {
-        $cidadeDadosResidenciais = TipoCidade::with('TipoUf')->orderby('descricao')->get();
+        $cidadeDadosResidenciais = TipoCidade::with('TipoUf')->where('id_uf', $id)->orderby('descricao')->get();
 
         return response()->json($cidadeDadosResidenciais);
     }

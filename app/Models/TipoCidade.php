@@ -5,16 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TipoUf extends Model
+class TipoCidade extends Model
 {
     use HasFactory;
 
-    protected $table = 'tp_uf';
+    protected $table = 'tp_cidade';
 
     protected $connection = 'pgsql2';
-
-    public function tipoCidades()
+   
+    public function tipoUf()
     {
-        return $this->hasMany(TipoCidade::class, 'id_uf');
+        return $this->belongsTo(TipoUf::class, 'id_uf');
     }
+
 }

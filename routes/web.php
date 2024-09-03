@@ -336,8 +336,9 @@ Route::post('/validaAprovacao-aquisicao-servicos', [AquisicaoServicosController:
 
 
 
-//Catálogoc de Empresas
+//Catálogo de Empresas
 Route::get('/catalogo-empresa', [CatalogoEmpresaController::class, 'index']);
 Route::get('/incluir-empresa', [CatalogoEmpresaController::class, 'create']);
 Route::post('/salvar-empresa', [CatalogoEmpresaController::class, 'store']);
+Route::get('/retorna-cidade-dados-residenciais/{id}', [CatalogoEmpresaController::class, 'retornaCidadeDadosResidenciais']);
 

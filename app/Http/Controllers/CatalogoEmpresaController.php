@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Empresa;
+use App\Models\TipoCidade;
 use App\Models\TipoUf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -34,16 +35,31 @@ class CatalogoEmpresaController extends Controller
     public function create()
     {
 
-        $uf = TipoUf::all();
+        $tp_uf = TipoUf::all();
 
 
-        return view('empresa.incluir-empresa');
+        return view('empresa.incluir-empresa', compact('tp_uf'));
     }
 
     public function store(Request $request)
     {
 
+        $empresa = Empresa::create([
+            'razaosocial' => $request->input('razaoSocial'),
+            'nomefantasia' => $request->input('nomeFantasia'),
+            'cnpj_cpf' => $request->input('cnpj'),
+            'inscestadual' => $request->input('inscricaoEstadual'),
+            'inscricaoMunicipal' => $request->input('municipio_cod'),
+            'cep' => $request->input('inscricaoCep'),
+        ]);
 
 
+        return view('empresa.catalogo-empresa', compact('empresa'));
+    }
+    public function retornaCidadeDadosResidenciais($id)
+    {
+        $cidadeDadosResidenciais = TipoCidade::with('TipoUf')->orderby('descricao')->get();
+
+        return response()->json($cidadeDadosResidenciais);
     }
 }

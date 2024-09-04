@@ -100,9 +100,16 @@
                             required>
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label for="razaoSocial">Razão Social</label>
-                        <input type="text" class="form-control" name="razaoSocial[]"
-                            placeholder="Digite a razão social da empresa proposta" required>
+                        <label for="razaoSocial">Nome Empresa</label>
+                        <select class="form-select" style="border: 1px solid #999999; padding: 5px;" id="idSetor"
+                            name="razaoSocial[]" required>
+                            <option></option>
+                            @foreach ($buscaEmpresa as $buscaEmpresas)
+                                <option value="{{ $buscaEmpresas->id }}">
+                                    {{ $buscaEmpresas->razaosocial }} - {{ $buscaEmpresas->nomefantasia }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="valor">Valor</label>

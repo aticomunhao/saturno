@@ -49,8 +49,17 @@ class CatalogoEmpresaController extends Controller
             'nomefantasia' => $request->input('nomeFantasia'),
             'cnpj_cpf' => $request->input('cnpj'),
             'inscestadual' => $request->input('inscricaoEstadual'),
-            'inscricaoMunicipal' => $request->input('municipio_cod'),
+            'inscmunicipal' => $request->input('inscricaoMunicipal'),
             'cep' => $request->input('inscricaoCep'),
+            'logradouro' => $request->input('inscricaoLogradouro'),
+            'numero' => $request->input('inscricaoNumero'),
+            'complemento' => $request->input('inscricaoComplemento'),
+            'bairro' => $request->input('inscricaoBairro'),
+            'pais_cod' => $request->input('pais'),
+            'uf_cod' => $request->input('tp_uf'),
+            'telefone' => $request->input('inscricaoTelefone'),
+            'email' => $request->input('inscricaoEmail'),
+            'municipio_cod' => $request->input('cidade')
         ]);
 
 

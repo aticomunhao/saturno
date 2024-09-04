@@ -20,155 +20,122 @@
                         </div>
                         <div class="card-body">
                             <h5>Identificação da Empresa</h5>
-                            <div class="ROW" style="margin-left:5px">
-                                <div style="display: flex; gap: 20px; align-items: flex-end;">
-                                    <!-- Campo Nome da Empresa(Razão social) -->
-                                    <div class="form-group" style="margin-top:20px; margin-right: 5px">
-                                        <label class="form-label">Razão Social</label>
-                                        <input type="text" class="form-control" id="razaoSocialId" name="razaoSocial"
-                                            style="width: 400px; border: 1px solid #999999; padding: 5px;" required>
-                                    </div>
-                                    <!-- Campo Nome Fantasia -->
-                                    <div class="form-group" style="margin-top:20px; margin-right: 5px">
-                                        <label class="form-label">Nome Fantasia</label>
-                                        <input type="text" class="form-control" id="nomeFantasiaId" name="nomeFantasia"
-                                            style="width: 400px; border: 1px solid #999999; padding: 5px;" required>
-                                    </div>
-                                    <!-- Campo CNPJ/CPF -->
-                                    <div class="form-group" style="margin-top:20px; margin-right: 5px">
-                                        <label class="form-label">CNPJ - CPF</label>
-                                        <input type="text" class="form-control" id="cnpjId" name="cnpj"
-                                            style="width: 200px; border: 1px solid #999999; padding: 5px;" required>
-                                    </div>
-                                    <!-- Campo CNAE -->
-                                    <div class="form-group" style="margin-top:20px; margin-right: 5px">
-                                        <label class="form-label">Inscrição CNAE</label>
-                                        <input type="text" class="form-control" id="inscraicaoCnaeId"
-                                            name="inscricaoCnae"
-                                            style="width: 250px; border: 1px solid #999999; padding: 5px;">
-                                    </div>  
-                                    <!-- Campo País -->
-                                    <div class="form-group" style="margin-top:20px;">
-                                        <label class="form-label">País</label>
-                                        <input type="text" class="form-control" id="paisId"
-                                            name="pais"
-                                            style="width: 250px; border: 1px solid #999999; padding: 5px;">
-                                    </div>                                  
+                            <div class="row">
+                                <!-- Campo Nome da Empresa(Razão social) -->
+                                <div class="col-md-3 col-sm-12">Razão Social
+                                    <input type="text" class="form-control" id="razaoSocialId" name="razaoSocial"
+                                        style="border: 1px solid #999999; padding: 5px;" required>
                                 </div>
-                                <div style="display: flex; gap: 20px; align-items: flex-end;">
-                                    <!-- Campo Inscrição Estadual -->
-                                    <div class="form-group" style="margin-top:20px; margin-right: 5px">
-                                        <label class="form-label">Inscrição Estadual</label>
-                                        <input type="text" class="form-control" id="inscraicaoEstadualId"
-                                            name="inscricaoEstadual"
-                                            style="width: 300px; border: 1px solid #999999; padding: 5px;" required>
-                                    </div>
-                                    <!-- Campo Inscrição Municipal -->
-                                    <div class="form-group" style="margin-top:20px; margin-right: 5px">
-                                        <label class="form-label">Inscrição Municipal</label>
-                                        <input type="text" class="form-control" id="inscraicaoMunicipalId"
-                                            name="inscricaoMunicipal"
-                                            style="width: 300px; border: 1px solid #999999; padding: 5px;">
-                                    </div>
-                                    <!-- Campo DDD -->
-                                    <div class="form-group" style="margin-top:20px; margin-right: 5px">
-                                        <label class="form-label">DDD</label>
-                                        <input type="text" class="form-control" id="inscraicaoDddId"
-                                            name="inscricaoDdd"
-                                            style="width: 50px; border: 1px solid #999999; padding: 5px;">
-                                    </div>
-                                    <!-- Campo Telefone -->
-                                    <div class="form-group" style="margin-top:20px; margin-right: 5px">
-                                        <label class="form-label">Telefone</label>
-                                        <input type="text" class="form-control" id="inscraicaoTelefoneId"
-                                            name="inscricaoTelefone"
-                                            style="width: 250px; border: 1px solid #999999; padding: 5px;">
-                                    </div>
-                                    <!-- Campo Email -->
-                                    <div class="form-group" style="margin-top:20px;">
-                                        <label class="form-label">Email</label>
-                                        <input type="text" class="form-control" id="inscraicaoEmailId"
-                                            name="inscricaoEmail"
-                                            style="width: 600px; border: 1px solid #999999; padding: 5px;">
-                                    </div>
+                                <!-- Campo Nome Fantasia -->
+                                <div class="col-md-3 col-sm-12">Nome Fantasia
+                                    <input type="text" class="form-control" id="nomeFantasiaId" name="nomeFantasia"
+                                        style="border: 1px solid #999999; padding: 5px;" required>
                                 </div>
-                                <hr>
-                                <h5>Endereço da Empresa</h5>
-                                <div style="display: flex; gap: 20px; align-items: flex-end;">
-                                    <!-- Campo CEP -->
-                                    <div class="form-group" style="margin-top:20px; margin-right: 5px">
-                                        <label class="form-label">CEP</label>
-                                        <input type="text" class="form-control" id="inscraicaoCepId" name="inscricaoCep"
-                                            style="width: 400px; border: 1px solid #999999; padding: 5px;" required>
-                                    </div>
-                                    <!-- Campo UF -->
-                                    <div class="form-group col-md-1" style="margin-top:20px; margin-right: 5px">
-                                        <label class="form-label">UF</label>
-                                        <select class="form-select select2"
-                                            style="border: 1px solid #999999; padding: 5px;" id="uf2" name="tp_uf">
+                                <!-- Campo CNPJ/CPF -->
+                                <div class="col-md-3 col-sm-12">CNPJ - CPF
+                                    <input type="text" class="form-control" id="cnpjId" name="cnpj"
+                                        style="border: 1px solid #999999; padding: 5px;" required>
+                                </div>
+                                <!-- Campo País -->
+                                <div class="col-md-3 col-sm-12">País
+                                    <input type="text" class="form-control" id="paisId" name="pais"
+                                        style="border: 1px solid #999999; padding: 5px;">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <!-- Campo Inscrição Estadual -->
+                                <div class="col-md-3 col-sm-12">Inscrição Estadual
+                                    <input type="text" class="form-control" id="inscraicaoEstadualId"
+                                        name="inscricaoEstadual"
+                                        style="border: 1px solid #999999; padding: 5px;" required>
+                                </div>
+                                <!-- Campo Inscrição Municipal -->
+                                <div class="col-md-3 col-sm-12">Inscrição Municipal
+                                    <input type="text" class="form-control" id="inscraicaoMunicipalId"
+                                        name="inscricaoMunicipal"
+                                        style="border: 1px solid #999999; padding: 5px;">
+                                </div>
+                                <!-- Campo Telefone -->
+                                <div class="col-md-3 col-sm-12">Telefone
+                                    <input type="text" class="form-control" id="inscraicaoTelefoneId"
+                                        name="inscricaoTelefone"
+                                        style="border: 1px solid #999999; padding: 5px;">
+                                </div>
+                                <!-- Campo Email -->
+                                <div class="col-md-3 col-sm-12">Email
+                                    <input type="text" class="form-control" id="inscraicaoEmailId" name="inscricaoEmail"
+                                        style="border: 1px solid #999999; padding: 5px;">
+                                </div>
+                            </div>
+                            <hr>
+                            <h5>Endereço da Empresa</h5>
+                            <div class="row">
+                                <!-- Campo CEP -->
+                                <div class="col-md-3 col-sm-12">CEP
+                                    <input type="text" class="form-control" id="inscraicaoCepId" name="inscricaoCep"
+                                        style="border: 1px solid #999999; padding: 5px;" required>
+                                </div>
+                                <!-- Campo UF -->
+                                <div class="col-md-1 col-sm-12">UF
+                                    <select class="form-select select2" style="border: 1px solid #999999; padding: 5px;"
+                                        id="uf2" name="tp_uf">
                                         <option value=""></option>
                                         @foreach ($tp_uf as $tp_ufs)
-                                            <option @if (old('uf_end') == $tp_ufs->id)
-                                                        {{ 'selected="selected"' }}
-                                                    @endif
-                                                    value="{{ $tp_ufs->id }}">{{ $tp_ufs->sigla }}
+                                            <option @if (old('uf_end') == $tp_ufs->id) {{ 'selected="selected"' }} @endif
+                                                value="{{ $tp_ufs->id }}">{{ $tp_ufs->sigla }}
                                             </option>
                                         @endforeach
                                     </select>
-                                    </div>
-                                    <!-- Campo Cidade -->
-                                    <div class="col-md-4 col-sm-12">Cidade
-                                        <br>
-                                        <select class="js-example-responsive form-select"
-                                                style="border: 1px solid #999999; padding: 5px;" id="cidade2" name="cidade"
-                                                value="{{ old('cidade') }}" disabled>
-                                        </select>
-                                    </div>
-                                    <!-- Campo Logradouro -->
-                                    <div class="form-group" style="margin-top:20px; margin-right: 5px">
-                                        <label class="form-label">Logradouro</label>
-                                        <input type="text" class="form-control" id="inscraicaoLogradouroId"
-                                            name="inscricaoLogradouro"
-                                            style="width: 580px; border: 1px solid #999999; padding: 5px;" required>
-                                    </div>
                                 </div>
-                                <div style="display: flex; gap: 20px; align-items: flex-end;">
-                                    <!-- Campo Número -->
-                                    <div class="form-group" style="margin-top:20px; margin-right: 5px">
-                                        <label class="form-label">Número</label>
-                                        <input type="text" class="form-control" id="inscraicaoNumeroId"
-                                            name="inscricaoNumero"
-                                            style="width: 200px; border: 1px solid #999999; padding: 5px;" required>
-                                    </div>
-                                    <!-- Campo Complemento -->
-                                    <div class="form-group" style="margin-top:20px; margin-right: 5px">
-                                        <label class="form-label">Complemento</label>
-                                        <input type="text" class="form-control" id="inscraicaoComplementoId"
-                                            name="inscricaoComplemento"
-                                            style="width: 530px; border: 1px solid #999999; padding: 5px;" required>
-                                    </div>
-                                    <!-- Campo Bairro -->
-                                    <div class="form-group" style="margin-top:20px; margin-right: 5px">
-                                        <label class="form-label">Bairro</label>
-                                        <input type="text" class="form-control" id="inscraicaoBairroId"
-                                            name="inscricaoBairro"
-                                            style="width: 400px; border: 1px solid #999999; padding: 5px;" required>
-                                    </div>
-                                    <!-- Campo Código do Município -->
-                                    <div class="form-group" style="margin-top:20px; margin-right: 5px">
-                                        <label class="form-label">Código do Município</label>
-                                        <input type="text" class="form-control" id="inscraicaoCodMunId"
-                                            name="inscricaoCodMun"
-                                            style="width: 400px; border: 1px solid #999999; padding: 5px;" required>
-                                    </div>
+                                <!-- Campo Cidade -->
+                                <div class="col-md-4 col-sm-12">Cidade
+                                    <br>
+                                    <select class="js-example-responsive form-select"
+                                        style="border: 1px solid #999999; padding: 5px;" id="cidade2" name="cidade"
+                                        value="{{ old('cidade') }}" disabled>
+                                    </select>
                                 </div>
-                                <div style="display: flex; gap: 20px; align-items: flex-end;">
+                                <!-- Campo Logradouro -->
+                                <div class="col-md-4 col-sm-12">
+                                    <label class="form-label">Logradouro</label>
+                                    <input type="text" class="form-control" id="inscraicaoLogradouroId"
+                                        name="inscricaoLogradouro"
+                                        style="border: 1px solid #999999; padding: 5px;" required>
                                 </div>
+                            </div>
+                            <div class="row">
+                                <!-- Campo Número -->
+                                <div class="col-md-2 col-sm-12">Número
+                                    <input type="text" class="form-control" id="inscraicaoNumeroId"
+                                        name="inscricaoNumero"
+                                        style="border: 1px solid #999999; padding: 5px;" required>
+                                </div>
+                                <!-- Campo Complemento -->
+                                <div class="col-md-4 col-sm-12">Complemento
+                                    <input type="text" class="form-control" id="inscraicaoComplementoId"
+                                        name="inscricaoComplemento"
+                                        style="border: 1px solid #999999; padding: 5px;" required>
+                                </div>
+                                <!-- Campo Bairro -->
+                                <div class="col-md-3 col-sm-12">Bairro
+                                    <input type="text" class="form-control" id="inscraicaoBairroId"
+                                        name="inscricaoBairro"
+                                        style="border: 1px solid #999999; padding: 5px;" required>
+                                </div>
+                                <!-- Campo Código do Município -->
+                                <div class="col-md-3 col-sm-12">Código do Município
+                                    <input type="text" class="form-control" id="inscraicaoCodMunId"
+                                        name="inscricaoCodMun"
+                                        style="border: 1px solid #999999; padding: 5px;" required>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 20px; align-items: flex-end;">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
         </div>
         </div>
         <div class="botões">
@@ -188,7 +155,7 @@
         });
     </script>
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             $('#cidade2').select2({
                 theme: 'bootstrap-5',
                 width: '100%',
@@ -199,26 +166,25 @@
                     type: "get",
                     url: "/retorna-cidade-dados-residenciais/" + stateValue,
                     dataType: "json",
-                    success: function (response) {
+                    success: function(response) {
                         selectElement.empty();
-                        $.each(response, function (indexInArray, item) {
+                        $.each(response, function(indexInArray, item) {
                             selectElement.append('<option value="' + item.id_cidade + '">' +
                                 item.descricao + '</option>');
                         });
                     },
-                    error: function (xhr, status, error) {
+                    error: function(xhr, status, error) {
                         console.error("An error occurred:", error);
                     }
                 });
-            }           
+            }
 
-            $('#uf2').change(function (e) {
+            $('#uf2').change(function(e) {
                 var stateValue = $(this).val();
                 $('#cidade2').removeAttr('disabled');
                 populateCities($('#cidade2'), stateValue);
             });
-            
+
         });
     </script>
-
 @endsection

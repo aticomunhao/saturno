@@ -61,10 +61,10 @@
                                         <tr>
                                             <td>{{ $empresas->razaosocial }}</td>
                                             <td>{{ $empresas->nomefantasia }}</td>
-                                            <td>{{ $emrpesas->cnpj_cpf }}</td>
+                                            <td>{{ $empresas->cnpj_cpf }}</td>
                                             <td>{{ $empresas->TipoUf->extenso }}</td>
                                             <td>
-                                                <a href="/editar-aquisicao-servicos/{{ $aquisicaos->id }}"
+                                                <a href=""
                                                     class="btn btn-sm btn-outline-warning" data-tt="tooltip"
                                                     style="font-size: 1rem; color:#303030" data-placement="top"
                                                     title="Editar">

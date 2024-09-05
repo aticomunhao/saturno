@@ -33,6 +33,6 @@ class Empresa extends Model
 
     public function TipoUf()
     {
-        return $this->belongsTo(tipoUf::class, 'uf_cod', 'num_uf');
+        return $this->belongsTo(tipoUf::class, 'uf_cod');
     }
 }

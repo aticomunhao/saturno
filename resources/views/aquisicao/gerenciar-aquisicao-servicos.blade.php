@@ -61,7 +61,7 @@
                                             style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-left:5px;"{{-- Botao submit do formulario de pesquisa --}}
                                             type="submit">Pesquisar
                                         </button>
-                                        <a href="/incluir-aquisicao-servicos"  class="btn btn-success"
+                                        <a href="/incluir-aquisicao-servicos" class="btn btn-success"
                                             style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-left:5px">
                                             Novo+
                                         </a>
@@ -69,7 +69,7 @@
                                 </div>
                                 <div class="ROW justify-content-start">
                                     <div class="col-12" style="margin-top:10px;">
-                                        <a href="/incluir-aquisicao-servicos"  class="btn btn-primary "
+                                        <a href="/incluir-aquisicao-servicos" class="btn btn-primary "
                                             style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-right:5px">
                                             Aprovar em Lote
                                         </a>
@@ -77,7 +77,7 @@
                                             style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-right:5px">
                                             Homologar em Lote
                                         </a>
-                                        <a href="/incluir-aquisicao-servicos"  class="btn btn-warning "
+                                        <a href="/incluir-aquisicao-servicos" class="btn btn-warning "
                                             style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-right:5px">
                                             Confirmar em Lote
                                         </a>
@@ -122,7 +122,8 @@
                                                     title="Homologar">
                                                     <i class="bi bi-clipboard-check"></i>
                                                 </a>
-                                                <a href="/editar-aquisicao-servicos/{{ $aquisicaos->id }}" class="btn btn-sm btn-outline-warning" data-tt="tooltip"
+                                                <a href="/editar-aquisicao-servicos/{{ $aquisicaos->id }}"
+                                                    class="btn btn-sm btn-outline-warning" data-tt="tooltip"
                                                     style="font-size: 1rem; color:#303030" data-placement="top"
                                                     title="Editar">
                                                     <i class="bi bi-pencil"></i>
@@ -132,9 +133,9 @@
                                                     title="Enviar">
                                                     <i class="bi bi-cart-check"></i>
                                                 </a>
-                                                <a href="" class="btn btn-sm btn-outline-primary"
-                                                    data-tt="tooltip" style="font-size: 1rem; color:#303030"
-                                                    data-placement="top" title="visualizar">
+                                                <a href="" class="btn btn-sm btn-outline-primary" data-tt="tooltip"
+                                                    style="font-size: 1rem; color:#303030" data-placement="top"
+                                                    title="visualizar">
                                                     <i class="bi bi-search"></i>
                                                 </a>
                                                 <a href="" class="btn btn-sm btn-outline-info" data-tt="tooltip"
@@ -172,4 +173,6 @@
             </div>
         </div>
     </form>{{-- Final Formulario de pesquisa --}}
+
+    
 @endsection

@@ -29,6 +29,7 @@ class CatalogoEmpresaController extends Controller
 
         $empresa = $query->orderby('nomefantasia')->paginate(20);
 
+
         return view('empresa.catalogo-empresa', compact('empresa'));
     }
 

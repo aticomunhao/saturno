@@ -72,7 +72,8 @@ class AquisicaoServicosController extends Controller
         $servico = SolServico::all();
         $classeAquisicao = TipoClasseSv::all();
         $empresas = Documento::all();
-        dd($classeAquisicao, $empresas, $servico, $buscaSetor);
+        $buscaEmpresa = Empresa::all();
+        //dd($classeAquisicao, $empresas, $servico, $buscaSetor);
 
         // Adiciona a URL completa do arquivo
         foreach ($empresas as $documento) {
@@ -138,7 +139,7 @@ class AquisicaoServicosController extends Controller
 
     public function edit($idS)
     {
-        $solicitacao = SolServico::with('documentos')->findOrFail($idS);
+        $solicitacao = SolServico::findOrFail($idS);
         $documentos = Documento::where('id_sol_sv', $idS)->get();
         $tiposServico = CatalogoServico::where('id_cl_sv', $solicitacao->id_classe_sv)->get();
         $classeAquisicao = TipoClasseSv::all();

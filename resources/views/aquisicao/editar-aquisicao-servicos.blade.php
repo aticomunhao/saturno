@@ -27,7 +27,7 @@
                                     <div class="col-md-2 col-sm-12">
                                         <label>Número da Solicitação</label>
                                         <input class="form-control" type="text" value="{{ $solicitacao->id }}"
-                                            id="iddt_inicio" name="dt_inicio" required="required" disabled>
+                                            id="iddt_inicio" name="numeorSolicitacao" required="required" disabled>
                                     </div>
                                     <div class="col-md-2 col-sm-12">
                                         <label>Data de Criação da Solicitação</label>

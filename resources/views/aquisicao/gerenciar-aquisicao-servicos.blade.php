@@ -164,64 +164,12 @@
                                 {{-- Fim body da tabela --}}
                             </table>
                         </div>
+                        <div style="margin-right: 10px; margin-left: 10px">
+                            {{ $aquisicao->links('pagination::bootstrap-5') }}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </form>{{-- Final Formulario de pesquisa --}}
-    <script>
-        $(document).ready(function() {
-            $('#servicos, #classeServico').select2({
-                theme: 'bootstrap-5',
-                width: '100%',
-            });
-
-            // Função para popular o select de serviços baseado no valor do select de classe de serviço
-            function populateServicos(selectElement, classeServicoValue) {
-                $.ajax({
-                    type: "GET",
-                    url: "/retorna-nome-servicos/" + classeServicoValue,
-                    dataType: "json",
-                    success: function(response) {
-                        // Limpa o select antes de adicionar novas opções
-                        selectElement.empty();
-
-                        // Adiciona um option padrão
-                        selectElement.append('<option value="">Selecione um serviço</option>');
-
-                        // Itera sobre os dados retornados e adiciona as opções ao select
-                        $.each(response, function(index, item) {
-                            selectElement.append('<option value="' + item.id + '">' +
-                                item.descricao + '</option>');
-                        });
-
-                        // Ativa o select caso ele estivesse desabilitado
-                        selectElement.prop('disabled', false);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Ocorreu um erro:", error);
-                        console.log(xhr.responseText); // Detalhes do erro, se necessário
-                    }
-                });
-            }
-
-            // Evento change para detectar a mudança no select de classe de serviço
-            $('#classeServico').change(function() {
-                var classeServicoValue = $(this).val();
-
-                // Selecione o elemento do select de serviços
-                var servicosSelect = $('#servicos');
-
-                // Desabilita o select de serviços se nenhum valor for selecionado na classe de serviço
-                if (!classeServicoValue) {
-                    servicosSelect.empty().append('<option value="">Selecione um serviço</option>');
-                    servicosSelect.prop('disabled', true);
-                    return;
-                }
-
-                // Chama a função para popular os serviços
-                populateServicos(servicosSelect, classeServicoValue);
-            });
-        });
-    </script>
 @endsection

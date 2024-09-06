@@ -64,7 +64,7 @@ class CatalogoEmpresaController extends Controller
         ]);
 
 
-        return view('empresa.catalogo-empresa', compact('empresa'));
+        return redirect()->route('empresa.index');
     }
     public function retornaCidadeDadosResidenciais($id)
     {

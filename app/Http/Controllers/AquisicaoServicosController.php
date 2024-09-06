@@ -98,7 +98,6 @@ class AquisicaoServicosController extends Controller
     ]);
 
     $today = Carbon::today()->format('Y-m-d');
-    $setor = session()->get('usuario.setor')[0];
 
     DB::beginTransaction();
     try {
@@ -116,15 +115,16 @@ class AquisicaoServicosController extends Controller
                 ? $request->file('arquivo.' . $index)->store('documentos', 'public')
                 : null;
 
-            $solicitacao->documentos()->create([
+            Documento::create([
                 'numero' => $numero,
-                'dt_doc' => $request->dt_inicial[$index],
+                'dt_doc' => $today,
                 'id_tp_doc' => '14',
                 'valor' => $request->valor[$index],
                 'id_empresa' => $request->razaoSocial[$index],
-                'id_setor' => $setor,
+                'id_setor' => $request->input('idSetor'),
                 'dt_validade' => $request->dt_final[$index],
                 'end_arquivo' => $endArquivo,
+                'id_sol_sv' => $solicitacao->id,
             ]);
         }
 
@@ -139,6 +139,7 @@ class AquisicaoServicosController extends Controller
 
     public function edit($idS)
     {
+        $buscaEmpresa = Empresa::all();
         $solicitacao = SolServico::findOrFail($idS);
         $documentos = Documento::where('id_sol_sv', $idS)->get();
         $tiposServico = CatalogoServico::where('id_cl_sv', $solicitacao->id_classe_sv)->get();
@@ -152,7 +153,7 @@ class AquisicaoServicosController extends Controller
             }
         }
 
-        return view('aquisicao.editar-aquisicao-servicos', compact('solicitacao', 'documentos', 'classeAquisicao', 'buscaSetor', 'tiposServico'));
+        return view('aquisicao.editar-aquisicao-servicos', compact('solicitacao', 'buscaEmpresa', 'documentos', 'classeAquisicao', 'buscaSetor', 'tiposServico'));
     }
 
 

@@ -124,7 +124,7 @@
                     <div class="col-md-4 mb-3">
                         <label for="dt_final">Data Limite</label>
                         <input type="date" class="form-control" name="dt_final[]"
-                            placeholder="Digite a data final do prazo da proposta">
+                            placeholder="Digite a data final do prazo da proposta" min="">
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="arquivo">Arquivo da Proposta</label>

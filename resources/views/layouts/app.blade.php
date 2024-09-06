@@ -45,7 +45,7 @@
 
 
     <!-- Estilo para o dropdown-->
-      <style>
+    <style>
         .dropdown:hover .dropdown-menu {
             display: block;
         }
@@ -56,16 +56,28 @@
 
 <body>
 
-        @include('layouts/sidebar')
+    @include('layouts/sidebar')
 
-        @yield('content')
+    @yield('content')
 
-        <!-- footerScript -->
-        @yield('footerScript')
+    <!-- footerScript -->
+    @yield('footerScript')
 
 
     <!-- App js-->
 
+
 </body>
+
+<script>
+    $("body").on("submit", "form", function() {
+        $(this).submit(function() {
+            return false;
+        });
+        $(':submit').html(
+            '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Carregando...')
+        return true;
+    });
+</script>
 
 </html>

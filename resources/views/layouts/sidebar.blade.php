@@ -40,7 +40,7 @@ $setor = session()->get('usuario.setor');
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
 
                             {{-- @if (in_array(13, $acesso) or in_array(14, $acesso)) --}}
-                            <li><a class="dropdown-item" href="">Documentos</a>
+                            <li><a class="dropdown-item" href="{{route('gerenciar-documentos')}}">Documentos</a>
                             </li>
                             {{-- @endif --}}
                         </ul>

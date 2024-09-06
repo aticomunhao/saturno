@@ -30,7 +30,7 @@ Documento extends Model
 
     public function empresa()
     {
-        return $this->belongsTo(Empresa::class, 'id_empresa', 'id');
+        return $this->belongsTo(Empresa::class, 'id_empresa' );
     }
     public function tipoDocumento()
     {

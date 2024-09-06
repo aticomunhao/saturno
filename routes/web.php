@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Http\Controllers\DocumentoController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -342,3 +343,7 @@ Route::get('/incluir-empresa', [CatalogoEmpresaController::class, 'create']);
 Route::post('/salvar-empresa', [CatalogoEmpresaController::class, 'store']);
 Route::get('/retorna-cidade-dados-residenciais/{id}', [CatalogoEmpresaController::class, 'retornaCidadeDadosResidenciais']);
 
+
+
+//CadastroDeDocumentos
+Route::get('/gerenciar-documentos', [DocumentoController::class, 'index'])->name('gerenciar-documentos');

@@ -64,7 +64,7 @@
                                             <td>{{ $empresas->cnpj_cpf }}</td>
                                             <td>{{ $empresas->TipoUf->extenso }}</td>
                                             <td>
-                                                <a href=""
+                                                <a href="/editar-empresa/{{ $empresas->id }}"
                                                     class="btn btn-sm btn-outline-warning" data-tt="tooltip"
                                                     style="font-size: 1rem; color:#303030" data-placement="top"
                                                     title="Editar">

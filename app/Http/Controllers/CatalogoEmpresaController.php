@@ -66,10 +66,31 @@ class CatalogoEmpresaController extends Controller
 
         return redirect()->route('empresa.index');
     }
+
     public function retornaCidadeDadosResidenciais($id)
     {
         $cidadeDadosResidenciais = TipoCidade::with('TipoUf')->where('id_uf', $id)->orderby('descricao')->get();
 
         return response()->json($cidadeDadosResidenciais);
+    }
+
+    public function edit($id)
+    {
+
+        $buscaEmpresa = Empresa::with(['TipoUf'])->find($id);
+        $tiposUf = TipoUf::all();
+
+        //dd($buscaEmpresa->TipoUf->id);
+
+
+
+        return view('empresa.editar-empresa', compact('buscaEmpresa', 'tiposUf'));
+    }
+
+    public function update()
+    {
+
+
+
     }
 }

@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('title')
-    Incluir de Empresa
+    Editar de Empresa
 @endsection
 @section('content')
-    <form method="POST" action="/salvar-empresa">{{-- Formulario de Inserção --}}
+    <form method="POST" action="/atualizar-empresa">{{-- Formulario de Inserção --}}
         @csrf
         <div class="container-fluid"> {{-- Container completo da página  --}}
             <div class="justify-content-center">
@@ -24,44 +24,51 @@
                                 <!-- Campo Nome da Empresa(Razão social) -->
                                 <div class="col-md-3 col-sm-12">Razão Social
                                     <input type="text" class="form-control" id="razaoSocialId" name="razaoSocial"
-                                        style="border: 1px solid #999999; padding: 5px;" required>
+                                        style="border: 1px solid #999999; padding: 5px;"
+                                        value="{{ $buscaEmpresa->razaosocial }}" required>
                                 </div>
                                 <!-- Campo Nome Fantasia -->
                                 <div class="col-md-3 col-sm-12">Nome Fantasia
                                     <input type="text" class="form-control" id="nomeFantasiaId" name="nomeFantasia"
-                                        style="border: 1px solid #999999; padding: 5px;" required>
+                                        style="border: 1px solid #999999; padding: 5px;"
+                                        value="{{ $buscaEmpresa->nomefantasia }}" required>
                                 </div>
                                 <!-- Campo CNPJ/CPF -->
                                 <div class="col-md-3 col-sm-12">CNPJ - CPF
                                     <input type="text" class="form-control" id="cnpjId" name="cnpj"
-                                        style="border: 1px solid #999999; padding: 5px;" required>
+                                        style="border: 1px solid #999999; padding: 5px;"
+                                        value="{{ $buscaEmpresa->cnpj_cpf }}" required>
                                 </div>
                                 <!-- Campo País -->
                                 <div class="col-md-3 col-sm-12">País
                                     <input type="text" class="form-control" id="paisId" name="pais"
-                                        style="border: 1px solid #999999; padding: 5px;">
+                                        style="border: 1px solid #999999; padding: 5px;"
+                                        value="{{ $buscaEmpresa->pais_cod }}">
                                 </div>
                             </div>
                             <div class="row">
                                 <!-- Campo Inscrição Estadual -->
                                 <div class="col-md-3 col-sm-12">Inscrição Estadual
                                     <input type="text" class="form-control" id="inscraicaoEstadualId"
-                                        name="inscricaoEstadual" style="border: 1px solid #999999; padding: 5px;" required>
+                                        name="inscricaoEstadual" style="border: 1px solid #999999; padding: 5px;"
+                                        value="{{ $buscaEmpresa->inscestadual }}" required>
                                 </div>
                                 <!-- Campo Inscrição Municipal -->
                                 <div class="col-md-3 col-sm-12">Inscrição Municipal
                                     <input type="text" class="form-control" id="inscraicaoMunicipalId"
-                                        name="inscricaoMunicipal" style="border: 1px solid #999999; padding: 5px;">
+                                        name="inscricaoMunicipal" style="border: 1px solid #999999; padding: 5px;"
+                                        value="{{ $buscaEmpresa->inscmunicipal }}">
                                 </div>
                                 <!-- Campo Telefone -->
                                 <div class="col-md-3 col-sm-12">Telefone
                                     <input type="text" class="form-control" id="inscraicaoTelefoneId"
-                                        name="inscricaoTelefone" style="border: 1px solid #999999; padding: 5px;">
+                                        name="inscricaoTelefone" style="border: 1px solid #999999; padding: 5px;"
+                                        value="{{ $buscaEmpresa->telefone }}">
                                 </div>
                                 <!-- Campo Email -->
                                 <div class="col-md-3 col-sm-12">Email
                                     <input type="text" class="form-control" id="inscraicaoEmailId" name="inscricaoEmail"
-                                        style="border: 1px solid #999999; padding: 5px;">
+                                        style="border: 1px solid #999999; padding: 5px;" value="{{ $buscaEmpresa->email }}">
                                 </div>
                             </div>
                             <hr>
@@ -70,16 +77,18 @@
                                 <!-- Campo CEP -->
                                 <div class="col-md-3 col-sm-12">CEP
                                     <input type="text" class="form-control" id="inscraicaoCepId" name="inscricaoCep"
-                                        style="border: 1px solid #999999; padding: 5px;" required>
+                                        style="border: 1px solid #999999; padding: 5px;" value="{{ $buscaEmpresa->cep }}"
+                                        required>
                                 </div>
                                 <!-- Campo UF -->
                                 <div class="col-md-1 col-sm-12">UF
                                     <select class="form-select select2" style="border: 1px solid #999999; padding: 5px;"
                                         id="tp_uf" name="tp_uf">
                                         <option value=""></option>
-                                        @foreach ($tp_uf as $tp_ufs)
-                                            <option @if (old('tp_uf') == $tp_ufs->id) {{ 'selected="selected"' }} @endif
-                                                value="{{ $tp_ufs->id }}">{{ $tp_ufs->sigla }}
+                                        @foreach ($tiposUf as $tipoUf)
+                                            <option value="{{ $tipoUf->id }}"
+                                                @if (old('tp_uf', $buscaEmpresa->tipoUf->id) == $tipoUf->id) selected @endif>
+                                                {{ $tipoUf->sigla }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -97,30 +106,33 @@
                                     <label class="form-label">Logradouro</label>
                                     <input type="text" class="form-control" id="inscraicaoLogradouroId"
                                         name="inscricaoLogradouro" style="border: 1px solid #999999; padding: 5px;"
-                                        required>
+                                        value="{{ $buscaEmpresa->logradouro }}" required>
                                 </div>
                             </div>
                             <div class="row">
                                 <!-- Campo Número -->
                                 <div class="col-md-2 col-sm-12">Número
                                     <input type="text" class="form-control" id="inscraicaoNumeroId"
-                                        name="inscricaoNumero" style="border: 1px solid #999999; padding: 5px;" required>
+                                        name="inscricaoNumero" style="border: 1px solid #999999; padding: 5px;"
+                                        value="{{ $buscaEmpresa->numero }}" required>
                                 </div>
                                 <!-- Campo Complemento -->
                                 <div class="col-md-4 col-sm-12">Complemento
                                     <input type="text" class="form-control" id="inscraicaoComplementoId"
                                         name="inscricaoComplemento" style="border: 1px solid #999999; padding: 5px;"
-                                        required>
+                                        value="{{ $buscaEmpresa->complemento }}" required>
                                 </div>
                                 <!-- Campo Bairro -->
                                 <div class="col-md-3 col-sm-12">Bairro
                                     <input type="text" class="form-control" id="inscraicaoBairroId"
-                                        name="inscricaoBairro" style="border: 1px solid #999999; padding: 5px;" required>
+                                        name="inscricaoBairro" style="border: 1px solid #999999; padding: 5px;"
+                                        value="{{ $buscaEmpresa->bairro }}" required>
                                 </div>
                                 <!-- Campo Código do Município -->
                                 <div class="col-md-3 col-sm-12">Código do Município
                                     <input type="text" class="form-control" id="inscraicaoCodMunId"
-                                        name="inscricaoCodMun" style="border: 1px solid #999999; padding: 5px;" required>
+                                        name="inscricaoCodMun" style="border: 1px solid #999999; padding: 5px;"
+                                        value="{{ $buscaEmpresa->uf_cod }}" required>
                                 </div>
                             </div>
                             <div style="display: flex; gap: 20px; align-items: flex-end;">

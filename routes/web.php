@@ -343,6 +343,9 @@ Route::get('/incluir-empresa', [CatalogoEmpresaController::class, 'create']);
 Route::post('/salvar-empresa', [CatalogoEmpresaController::class, 'store']);
 Route::get('/retorna-cidade-dados-residenciais/{id}', [CatalogoEmpresaController::class, 'retornaCidadeDadosResidenciais']);
 Route::get('/editar-empresa/{id}', [CatalogoEmpresaController::class, 'edit']);
+Route::post('/atualizar-empresa', [CatalogoEmpresaController::class, 'update']);
+Route::delete('/deletar-empresa/{$id}', [CatalogoEmpresaController::class, 'delete']);
+
 
 
 

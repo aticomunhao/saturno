@@ -45,12 +45,12 @@
                             <div class="row">
                                 <!-- Campo Inscrição Estadual -->
                                 <div class="col-md-3 col-sm-12">Inscrição Estadual
-                                    <input type="text" class="form-control" id="inscraicaoEstadualId"
+                                    <input type="text" class="form-control" id="inscricaoEstadualId"
                                         name="inscricaoEstadual" style="border: 1px solid #999999; padding: 5px;" required>
                                 </div>
                                 <!-- Campo Inscrição Municipal -->
                                 <div class="col-md-3 col-sm-12">Inscrição Municipal
-                                    <input type="text" class="form-control" id="inscraicaoMunicipalId"
+                                    <input type="text" class="form-control" id="inscricaoMunicipalId"
                                         name="inscricaoMunicipal" style="border: 1px solid #999999; padding: 5px;">
                                 </div>
                                 <!-- Campo Telefone -->

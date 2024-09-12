@@ -41,33 +41,41 @@
                                 </div>
                                 <!-- Campo País -->
                                 <div class="col-md-3 col-sm-12">País
-                                    <input type="text" class="form-control" id="paisId" name="pais"
-                                        style="border: 1px solid #999999; padding: 5px;"
-                                        value="{{ $buscaEmpresa->pais_cod }}">
+                                    <select class="js-example-responsive form-select select2"
+                                        style="border: 1px solid #999999; padding: 5px;" id="paisId" name="pais">
+                                        <option value=""></option>
+                                        @foreach ($tipoPais as $tipoPaiss)
+                                            <option value="{{ $tipoPaiss->id }}"
+                                                @if (old('tp_uf', $buscaEmpresa->tipoPais->id) == $tipoPaiss->id) selected @endif>
+                                                {{ $tipoPaiss->descricao }}
+                                            </option>
+                                        @endforeach
+                                        <!-- As cidades serão carregadas via AJAX -->
+                                    </select>
                                 </div>
                             </div>
                             <div class="row">
                                 <!-- Campo Inscrição Estadual -->
                                 <div class="col-md-3 col-sm-12">Inscrição Estadual
-                                    <input type="text" class="form-control" id="inscraicaoEstadualId"
+                                    <input type="text" class="form-control" id="inscricaoEstadualId"
                                         name="inscricaoEstadual" style="border: 1px solid #999999; padding: 5px;"
                                         value="{{ $buscaEmpresa->inscestadual }}" required>
                                 </div>
                                 <!-- Campo Inscrição Municipal -->
                                 <div class="col-md-3 col-sm-12">Inscrição Municipal
-                                    <input type="text" class="form-control" id="inscraicaoMunicipalId"
+                                    <input type="text" class="form-control" id="inscricaoMunicipalId"
                                         name="inscricaoMunicipal" style="border: 1px solid #999999; padding: 5px;"
                                         value="{{ $buscaEmpresa->inscmunicipal }}">
                                 </div>
                                 <!-- Campo Telefone -->
                                 <div class="col-md-3 col-sm-12">Telefone
-                                    <input type="text" class="form-control" id="inscraicaoTelefoneId"
+                                    <input type="text" class="form-control" id="inscricaoTelefoneId"
                                         name="inscricaoTelefone" style="border: 1px solid #999999; padding: 5px;"
                                         value="{{ $buscaEmpresa->telefone }}">
                                 </div>
                                 <!-- Campo Email -->
                                 <div class="col-md-3 col-sm-12">Email
-                                    <input type="text" class="form-control" id="inscraicaoEmailId" name="inscricaoEmail"
+                                    <input type="text" class="form-control" id="inscricaoEmailId" name="inscricaoEmail"
                                         style="border: 1px solid #999999; padding: 5px;" value="{{ $buscaEmpresa->email }}">
                                 </div>
                             </div>
@@ -76,7 +84,7 @@
                             <div class="row">
                                 <!-- Campo CEP -->
                                 <div class="col-md-3 col-sm-12">CEP
-                                    <input type="text" class="form-control" id="inscraicaoCepId" name="inscricaoCep"
+                                    <input type="text" class="form-control" id="inscricaoCepId" name="inscricaoCep"
                                         style="border: 1px solid #999999; padding: 5px;" value="{{ $buscaEmpresa->cep }}"
                                         required>
                                 </div>
@@ -97,14 +105,21 @@
                                 <div class="col-md-4 col-sm-12">Cidade
                                     <br>
                                     <select class="js-example-responsive form-select select2"
-                                        style="border: 1px solid #999999; padding: 5px;" id="cidade" name="cidade"
-                                        value="{{ old('cidade') }}" disabled>
+                                        style="border: 1px solid #999999; padding: 5px;" id="cidade" name="cidade">
+                                        <option value=""></option>
+                                        @foreach ($tipoCidade as $tipoCidades)
+                                            <option value="{{ $tipoCidades->id_cidade }}"
+                                                @if (old('tp_uf', $buscaEmpresa->tipoCidade->id_cidade) == $tipoCidades->id_cidade) selected @endif>
+                                                {{ $tipoCidades->descricao }}
+                                            </option>
+                                        @endforeach
+                                        <!-- As cidades serão carregadas via AJAX -->
                                     </select>
                                 </div>
                                 <!-- Campo Logradouro -->
                                 <div class="col-md-4 col-sm-12">
                                     <label class="form-label">Logradouro</label>
-                                    <input type="text" class="form-control" id="inscraicaoLogradouroId"
+                                    <input type="text" class="form-control" id="inscricaoLogradouroId"
                                         name="inscricaoLogradouro" style="border: 1px solid #999999; padding: 5px;"
                                         value="{{ $buscaEmpresa->logradouro }}" required>
                                 </div>
@@ -112,25 +127,25 @@
                             <div class="row">
                                 <!-- Campo Número -->
                                 <div class="col-md-2 col-sm-12">Número
-                                    <input type="text" class="form-control" id="inscraicaoNumeroId"
+                                    <input type="text" class="form-control" id="inscricaoNumeroId"
                                         name="inscricaoNumero" style="border: 1px solid #999999; padding: 5px;"
                                         value="{{ $buscaEmpresa->numero }}" required>
                                 </div>
                                 <!-- Campo Complemento -->
                                 <div class="col-md-4 col-sm-12">Complemento
-                                    <input type="text" class="form-control" id="inscraicaoComplementoId"
+                                    <input type="text" class="form-control" id="inscricaoComplementoId"
                                         name="inscricaoComplemento" style="border: 1px solid #999999; padding: 5px;"
                                         value="{{ $buscaEmpresa->complemento }}" required>
                                 </div>
                                 <!-- Campo Bairro -->
                                 <div class="col-md-3 col-sm-12">Bairro
-                                    <input type="text" class="form-control" id="inscraicaoBairroId"
+                                    <input type="text" class="form-control" id="inscricaoBairroId"
                                         name="inscricaoBairro" style="border: 1px solid #999999; padding: 5px;"
                                         value="{{ $buscaEmpresa->bairro }}" required>
                                 </div>
                                 <!-- Campo Código do Município -->
                                 <div class="col-md-3 col-sm-12">Código do Município
-                                    <input type="text" class="form-control" id="inscraicaoCodMunId"
+                                    <input type="text" class="form-control" id="inscricaoCodMunId"
                                         name="inscricaoCodMun" style="border: 1px solid #999999; padding: 5px;"
                                         value="{{ $buscaEmpresa->uf_cod }}" required>
                                 </div>
@@ -141,6 +156,7 @@
                     </div>
                 </div>
             </div>
+            <input type="hidden" name="id" value="{{ $buscaEmpresa->id }}">
         </div>
         </div>
         </div>
@@ -150,37 +166,4 @@
             <input type="submit" value="Confirmar" class="btn btn-primary col-md-3 col-1 mt-4 offset-md-2">
         </div>
     </form>{{-- Final Formulario de Inserção --}}
-
-    <script>
-        $(document).ready(function() {
-            function populateCities(selectElement, stateValue) {
-                $.ajax({
-                    type: "get",
-                    url: "/retorna-cidade-dados-residenciais/" + stateValue,
-                    dataType: "json",
-                    success: function(response) {
-                        selectElement.empty();
-                        $.each(response, function(indexInArray, item) {
-                            selectElement.append(
-                                '<option value="' +
-                                item.id_cidade +
-                                '">' +
-                                item.descricao +
-                                "</option>"
-                            );
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("An error occurred:", error);
-                    },
-                });
-            }
-
-            $("#tp_uf").change(function(e) {
-                var stateValue = $(this).val();
-                $("#cidade").removeAttr("disabled");
-                populateCities($("#cidade"), stateValue);
-            });
-        });
-    </script>
 @endsection

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Empresa;
 use App\Models\TipoCidade;
 use App\Models\TipoUf;
+use App\Models\TipoPais;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -77,20 +78,57 @@ class CatalogoEmpresaController extends Controller
     public function edit($id)
     {
 
-        $buscaEmpresa = Empresa::with(['TipoUf'])->find($id);
+        $buscaEmpresa = Empresa::with(['TipoUf', 'TipoPais', 'TipoCidade'])->find($id);
         $tiposUf = TipoUf::all();
+        $tipoPais = TipoPais::all();
+        $tipoCidade = TipoCidade::all();
 
         //dd($buscaEmpresa->TipoUf->id);
 
 
 
-        return view('empresa.editar-empresa', compact('buscaEmpresa', 'tiposUf'));
+        return view('empresa.editar-empresa', compact('buscaEmpresa', 'tiposUf', 'tipoPais', 'tipoCidade'));
     }
 
-    public function update()
+    public function update(Request $request)
     {
+        $empresa = Empresa::find($request->input('id'));
 
 
+        $empresa->razaosocial = $request->input('razaoSocial');
+        $empresa->nomefantasia = $request->input('nomeFantasia');
+        $empresa->cnpj_cpf = $request->input('cnpj');
+        $empresa->pais_cod = $request->input('pais');
+        $empresa->inscestadual = $request->input('inscricaoEstadual');
+        $empresa->inscmunicipal = $request->input('inscricaoMunicipal');
+        $empresa->telefone = $request->input('telefone');
+        $empresa->email = $request->input('inscricaoEmail');
+        $empresa->cep = $request->input('inscricaoCep');
+        $empresa->uf_cod = $request->input('tp_uf');
+        $empresa->municipio_cod = $request->input('cidade');
+        $empresa->logradouro = $request->input('inscricaoLogradouro');
+        $empresa->numero = $request->input('inscricaoNumero');
+        $empresa->complemento = $request->input('inscricaoComplemento');
+        $empresa->bairro = $request->input('inscricaoBairro');
+        $empresa->uf_cod = $request->input('inscricaoCodMun');
 
+        //dd($empresa);
+
+        $empresa->save();
+
+        return redirect()->route('empresa.index');
+    }
+
+    public function delete($id)
+    {
+        $empresa = Empresa::find($id);
+
+        if (!$empresa) {
+            return redirect()->route('empresa.index')->with('error', 'Empresa não encontrada.');
+        }
+
+        $empresa->delete();
+
+        return redirect()->route('empresa.index')->with('success', 'Empresa deletada com sucesso.');
     }
 }

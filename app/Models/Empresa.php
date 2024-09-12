@@ -35,4 +35,14 @@ class Empresa extends Model
     {
         return $this->belongsTo(tipoUf::class, 'uf_cod');
     }
+
+    public function TipoCidade()
+    {
+        return $this->belongsTo(tipoCidade::class, 'municipio_cod', 'id_cidade');
+    }
+
+    public function TipoPais()
+    {
+        return $this->belongsTo(tipoPais::class, 'pais_cod');
+    }
 }

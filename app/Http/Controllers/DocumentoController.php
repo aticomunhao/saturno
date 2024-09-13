@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Documento;
 use App\Models\Empresa;
+use App\Models\Setor;
 use App\Models\TipoDocumento;
 use Illuminate\Http\Request;
 
@@ -30,7 +31,11 @@ class DocumentoController extends Controller
      */
     public function create()
     {
-        //
+        $empresas = Empresa::all();
+        $tipos_documentos = TipoDocumento::all();
+        $setores = Setor::all();
+
+        return view('documento.create', compact('empresas', 'tipos_documentos', 'setores'));
     }
 
     /**

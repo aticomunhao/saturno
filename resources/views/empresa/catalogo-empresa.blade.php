@@ -70,11 +70,17 @@
                                                     title="Editar">
                                                     <i class="bi bi-pencil"></i>
                                                 </a>
-                                                <a href="" class="btn btn-sm btn-outline-danger" data-tt="tooltip"
-                                                    style="font-size: 1rem; color:#303030" data-placement="top"
-                                                    title="Excluir">
-                                                    <i class="bi bi-x-circle"></i>
-                                                </a>
+                                                <form action="{{ route('empresa.delete', $empresas->id) }}" method="POST"
+                                                    style="display:inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                        data-tt="tooltip" style="font-size: 1rem; color:#303030"
+                                                        data-placement="top" title="Excluir"
+                                                        onclick="return confirm('Tem certeza que deseja excluir esta empresa?');">
+                                                        <i class="bi bi-x-circle"></i>
+                                                    </button>
+                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -87,14 +93,4 @@
             </div>
         </div>
     </form>{{-- Final Formulario de Inserção --}}
-    <script>
-        $(document).ready(function() {
-
-            //Importa o select2 com tema do Bootstrap para a classe "select2"
-            $('.select2').select2({
-                theme: 'bootstrap-5'
-            });
-
-        });
-    </script>
 @endsection

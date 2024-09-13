@@ -356,4 +356,4 @@ Route::post('/salvar-documento', [DocumentoController::class, 'store'])->name('d
 Route::get('/retorna-documento/{id}', [DocumentoController::class, 'show'])->name('documento.show');
 Route::get('/editar-documento/{id}', [DocumentoController::class, 'edit'])->name('documento.edit');
 Route::post('/atualizar-documento/{id}', [DocumentoController::class, 'update'])->name('documento.edit');
-Route::delete('/deletar-documento/{id}', [DocumentoController::class, 'destroy'])->name('documento.destroy');
+Route::delete('/empresa/{id}', [CatalogoEmpresaController::class, 'delete'])->name('empresa.delete');

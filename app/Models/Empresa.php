@@ -45,4 +45,9 @@ class Empresa extends Model
     {
         return $this->belongsTo(tipoPais::class, 'pais_cod');
     }
+
+    public function documento()
+{
+    return $this->hasMany(Documento::class, 'id_empresa', 'id');
+}
 }

@@ -121,14 +121,24 @@ class CatalogoEmpresaController extends Controller
 
     public function delete($id)
     {
-        $empresa = Empresa::find($id);
+    $empresa = Empresa::with('documento')->find($id);
 
-        if (!$empresa) {
-            return redirect()->route('empresa.index')->with('error', 'Empresa não encontrada.');
-        }
-
-        $empresa->delete();
-
-        return redirect()->route('empresa.index')->with('success', 'Empresa deletada com sucesso.');
+    if (!$empresa) {
+        app('flasher')->addWarning('Empresa não encontrada.');
+        return redirect()->route('empresa.index');
     }
+
+    // Verifica se há documentos associados à empresa
+    if ($empresa->documento()->count() > 0) {
+        app('flasher')->addError('Não é possível excluir esta empresa, pois há documentos associados.');
+        return redirect()->route('empresa.index');
+    }
+
+    // Se não houver documentos, a empresa é excluída
+    $empresa->delete();
+
+    app('flasher')->addSuccess('Empresa deletada com sucesso.');
+    return redirect()->route('empresa.index');
+    }
+
 }

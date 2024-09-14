@@ -54,13 +54,13 @@ $setor = session()->get('usuario.setor');
                             data-bs-toggle="dropdown" aria-expanded="false">Catálogos</a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
                             {{-- @if (in_array(13, $acesso) or in_array(14, $acesso)) --}}
-                            <li><a class="dropdown-item" href="/catalogo-empresa">Catálogo de Empresas</a>
+                            <li><a class="dropdown-item" href="/catalogo-empresa">Empresas</a>
                             </li>
-                            <li><a class="dropdown-item" href="/catalogo-material">Catálogo de Materiais</a>
+                            <li><a class="dropdown-item" href="/catalogo-material">Materiais</a>
                             </li>
-                            <li><a class="dropdown-item" href="/catalogo-servico">Catálogo de Serviços</a>
+                            <li><a class="dropdown-item" href="/catalogo-servico">Serviços</a>
                             </li>
-                            <li><a class="dropdown-item" href="/catalogo-conta">Catálogo de Contas</a>
+                            <li><a class="dropdown-item" href="/catalogo-conta">Contas</a>
                             </li>
                             {{-- @endif --}}
                         </ul>

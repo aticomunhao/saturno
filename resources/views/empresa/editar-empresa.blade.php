@@ -24,29 +24,29 @@
                                 <!-- Campo Nome da Empresa(Razão social) -->
                                 <div class="col-md-3 col-sm-12">Razão Social
                                     <input type="text" class="form-control" id="razaoSocialId" name="razaoSocial"
-                                        style="border: 1px solid #999999; padding: 5px;"
+                                        style="border: 1px solid #999999; padding: 5px; background-color: white"
                                         value="{{ $buscaEmpresa->razaosocial }}" required>
                                 </div>
                                 <!-- Campo Nome Fantasia -->
                                 <div class="col-md-3 col-sm-12">Nome Fantasia
                                     <input type="text" class="form-control" id="nomeFantasiaId" name="nomeFantasia"
-                                        style="border: 1px solid #999999; padding: 5px;"
+                                        style="border: 1px solid #999999; padding: 5px; background-color: white"
                                         value="{{ $buscaEmpresa->nomefantasia }}" required>
                                 </div>
                                 <!-- Campo CNPJ/CPF -->
                                 <div class="col-md-3 col-sm-12">CNPJ - CPF
                                     <input type="text" class="form-control" id="cnpjId" name="cnpj"
-                                        style="border: 1px solid #999999; padding: 5px;"
+                                        style="border: 1px solid #999999; padding: 5px; background-color: white"
                                         value="{{ $buscaEmpresa->cnpj_cpf }}" required>
                                 </div>
                                 <!-- Campo País -->
                                 <div class="col-md-3 col-sm-12">País
                                     <select class="js-example-responsive form-select select2"
-                                        style="border: 1px solid #999999; padding: 5px;" id="paisId" name="pais">
+                                        style="border: 1px solid #999999; padding: 5px; background-color: white" id="paisId" name="pais">
                                         <option value=""></option>
                                         @foreach ($tipoPais as $tipoPaiss)
                                             <option value="{{ $tipoPaiss->id }}"
-                                                @if (old('tp_uf', $buscaEmpresa->tipoPais->id) == $tipoPaiss->id) selected @endif>
+                                                @if (old('pais', $buscaEmpresa->tipoPais->id) == $tipoPaiss->id) selected @endif>
                                                 {{ $tipoPaiss->descricao }}
                                             </option>
                                         @endforeach
@@ -58,25 +58,25 @@
                                 <!-- Campo Inscrição Estadual -->
                                 <div class="col-md-3 col-sm-12">Inscrição Estadual
                                     <input type="text" class="form-control" id="inscricaoEstadualId"
-                                        name="inscricaoEstadual" style="border: 1px solid #999999; padding: 5px;"
+                                        name="inscricaoEstadual" style="border: 1px solid #999999; padding: 5px; background-color: white"
                                         value="{{ $buscaEmpresa->inscestadual }}" required>
                                 </div>
                                 <!-- Campo Inscrição Municipal -->
                                 <div class="col-md-3 col-sm-12">Inscrição Municipal
                                     <input type="text" class="form-control" id="inscricaoMunicipalId"
-                                        name="inscricaoMunicipal" style="border: 1px solid #999999; padding: 5px;"
+                                        name="inscricaoMunicipal" style="border: 1px solid #999999; padding: 5px; background-color: white"
                                         value="{{ $buscaEmpresa->inscmunicipal }}">
                                 </div>
                                 <!-- Campo Telefone -->
                                 <div class="col-md-3 col-sm-12">Telefone
                                     <input type="text" class="form-control" id="inscricaoTelefoneId"
-                                        name="inscricaoTelefone" style="border: 1px solid #999999; padding: 5px;"
+                                        name="inscricaoTelefone" style="border: 1px solid #999999; padding: 5px; background-color: white"
                                         value="{{ $buscaEmpresa->telefone }}">
                                 </div>
                                 <!-- Campo Email -->
                                 <div class="col-md-3 col-sm-12">Email
                                     <input type="text" class="form-control" id="inscricaoEmailId" name="inscricaoEmail"
-                                        style="border: 1px solid #999999; padding: 5px;" value="{{ $buscaEmpresa->email }}">
+                                        style="border: 1px solid #999999; padding: 5px; background-color: white" value="{{ $buscaEmpresa->email }}">
                                 </div>
                             </div>
                             <hr>
@@ -85,12 +85,12 @@
                                 <!-- Campo CEP -->
                                 <div class="col-md-3 col-sm-12">CEP
                                     <input type="text" class="form-control" id="inscricaoCepId" name="inscricaoCep"
-                                        style="border: 1px solid #999999; padding: 5px;" value="{{ $buscaEmpresa->cep }}"
+                                        style="border: 1px solid #999999; padding: 5px; background-color: white" value="{{ $buscaEmpresa->cep }}"
                                         required>
                                 </div>
                                 <!-- Campo UF -->
                                 <div class="col-md-1 col-sm-12">UF
-                                    <select class="form-select select2" style="border: 1px solid #999999; padding: 5px;"
+                                    <select class="form-select select2" style="border: 1px solid #999999; padding: 5px; background-color: white"
                                         id="tp_uf" name="tp_uf">
                                         <option value=""></option>
                                         @foreach ($tiposUf as $tipoUf)
@@ -105,11 +105,11 @@
                                 <div class="col-md-4 col-sm-12">Cidade
                                     <br>
                                     <select class="js-example-responsive form-select select2"
-                                        style="border: 1px solid #999999; padding: 5px;" id="cidade" name="cidade">
+                                        style="border: 1px solid #999999; padding: 5px; background-color: white" id="cidade" name="cidade">
                                         <option value=""></option>
                                         @foreach ($tipoCidade as $tipoCidades)
                                             <option value="{{ $tipoCidades->id_cidade }}"
-                                                @if (old('tp_uf', $buscaEmpresa->tipoCidade->id_cidade) == $tipoCidades->id_cidade) selected @endif>
+                                                @if (old('cidade', $buscaEmpresa->tipoCidade->id_cidade) == $tipoCidades->id_cidade) selected @endif>
                                                 {{ $tipoCidades->descricao }}
                                             </option>
                                         @endforeach
@@ -120,7 +120,7 @@
                                 <div class="col-md-4 col-sm-12">
                                     <label class="form-label">Logradouro</label>
                                     <input type="text" class="form-control" id="inscricaoLogradouroId"
-                                        name="inscricaoLogradouro" style="border: 1px solid #999999; padding: 5px;"
+                                        name="inscricaoLogradouro" style="border: 1px solid #999999; padding: 5px; background-color: white"
                                         value="{{ $buscaEmpresa->logradouro }}" required>
                                 </div>
                             </div>
@@ -128,26 +128,20 @@
                                 <!-- Campo Número -->
                                 <div class="col-md-2 col-sm-12">Número
                                     <input type="text" class="form-control" id="inscricaoNumeroId"
-                                        name="inscricaoNumero" style="border: 1px solid #999999; padding: 5px;"
+                                        name="inscricaoNumero" style="border: 1px solid #999999; padding: 5px; background-color: white"
                                         value="{{ $buscaEmpresa->numero }}" required>
                                 </div>
-                                <!-- Campo Complemento -->
-                                <div class="col-md-4 col-sm-12">Complemento
-                                    <input type="text" class="form-control" id="inscricaoComplementoId"
-                                        name="inscricaoComplemento" style="border: 1px solid #999999; padding: 5px;"
-                                        value="{{ $buscaEmpresa->complemento }}" required>
-                                </div>
-                                <!-- Campo Bairro -->
-                                <div class="col-md-3 col-sm-12">Bairro
+                                 <!-- Campo Bairro -->
+                                 <div class="col-md-3 col-sm-12">Bairro
                                     <input type="text" class="form-control" id="inscricaoBairroId"
-                                        name="inscricaoBairro" style="border: 1px solid #999999; padding: 5px;"
+                                        name="inscricaoBairro" style="border: 1px solid #999999; padding: 5px; background-color: white"
                                         value="{{ $buscaEmpresa->bairro }}" required>
                                 </div>
-                                <!-- Campo Código do Município -->
-                                <div class="col-md-3 col-sm-12">Código do Município
-                                    <input type="text" class="form-control" id="inscricaoCodMunId"
-                                        name="inscricaoCodMun" style="border: 1px solid #999999; padding: 5px;"
-                                        value="{{ $buscaEmpresa->uf_cod }}" required>
+                                <!-- Campo Complemento -->
+                                <div class="col-md-7 col-sm-12">Complemento
+                                    <input type="text" class="form-control" id="inscricaoComplementoId"
+                                        name="inscricaoComplemento" style="border: 1px solid #999999; padding: 5px; background-color: white"
+                                        value="{{ $buscaEmpresa->complemento }}" required>
                                 </div>
                             </div>
                             <div style="display: flex; gap: 20px; align-items: flex-end;">

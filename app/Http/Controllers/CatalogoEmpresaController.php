@@ -9,6 +9,7 @@ use App\Models\TipoUf;
 use App\Models\TipoPais;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Rules\CpfCnpj;
 use Carbon\Carbon;
 
 use function Laravel\Prompts\select;
@@ -38,13 +39,17 @@ class CatalogoEmpresaController extends Controller
     {
 
         $tp_uf = TipoUf::all();
+        $tipoPais = TipoPais::all();
 
 
-        return view('empresa.incluir-empresa', compact('tp_uf'));
+        return view('empresa.incluir-empresa', compact('tp_uf', 'tipoPais'));
     }
 
     public function store(Request $request)
     {
+        $request->validate([
+            'cnpj' => ['required', new CpfCnpj],
+        ]);
 
         $empresa = Empresa::create([
             'razaosocial' => $request->input('razaoSocial'),
@@ -64,7 +69,7 @@ class CatalogoEmpresaController extends Controller
             'municipio_cod' => $request->input('cidade')
         ]);
 
-
+        app('flasher')->addSuccess('Empresa criada com sucesso.');
         return redirect()->route('empresa.index');
     }
 
@@ -93,6 +98,10 @@ class CatalogoEmpresaController extends Controller
     public function update(Request $request)
     {
         $empresa = Empresa::find($request->input('id'));
+
+        $request->validate([
+            'cnpj' => ['required', new CpfCnpj],
+        ]);
 
 
         $empresa->razaosocial = $request->input('razaoSocial');
@@ -123,14 +132,15 @@ class CatalogoEmpresaController extends Controller
     {
     $empresa = Empresa::with('documento')->find($id);
 
+
     if (!$empresa) {
         app('flasher')->addWarning('Empresa não encontrada.');
         return redirect()->route('empresa.index');
     }
 
     // Verifica se há documentos associados à empresa
-    if ($empresa->documento()->count() > 0) {
-        app('flasher')->addError('Não é possível excluir esta empresa, pois há documentos associados.');
+    if ($empresa->documento->count() > 0) {
+        app('flasher')->addError('Não é possível excluir esta empresa, pois há documentos associados a ela.');
         return redirect()->route('empresa.index');
     }
 

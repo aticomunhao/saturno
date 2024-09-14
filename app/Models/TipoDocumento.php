@@ -12,7 +12,7 @@ class TipoDocumento extends Model
     protected $table = 'tipo_documento';
     protected $fillable = [
         'descricao',
-        'sigla,'
+        'sigla'
     ];
     public $timestamps = false;
 

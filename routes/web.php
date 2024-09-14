@@ -352,7 +352,7 @@ Route::delete('/deletar-empresa/{$id}', [CatalogoEmpresaController::class, 'dele
 //Cadastro De Documentos
 Route::get('/gerenciar-documentos', [DocumentoController::class, 'index'])->name('documento.index');
 Route::get('/incluir-documento', [DocumentoController::class, 'create'])->name('documento.create');
-Route::post('/salvar-documento', [DocumentoController::class, 'store'])->name('documento.store');
+Route::any('/salvar-documento', [DocumentoController::class, 'store'])->name('documento.store');
 Route::get('/retorna-documento/{id}', [DocumentoController::class, 'show'])->name('documento.show');
 Route::get('/editar-documento/{id}', [DocumentoController::class, 'edit'])->name('documento.edit');
 Route::post('/atualizar-documento/{id}', [DocumentoController::class, 'update'])->name('documento.edit');

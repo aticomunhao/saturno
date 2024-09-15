@@ -1,0 +1,241 @@
+@extends('layouts.app')
+
+@section('title')
+    Gerenciar Aquisição de Serviços
+@endsection
+@section('content')
+    <form method="GET" action="/gerenciar-aquisicao-material">{{-- Formulario de pesquisa --}}
+        @csrf
+        <div class="container-fluid"> {{-- Container completo da página  --}}
+            <div class="justify-content-center">
+                <div class="col-12">
+                    <br>
+                    <div class="card" style="border-color: #355089;">
+                        <div class="card-header">
+                            <div class="ROW">
+                                <h5 class="col-12" style="color: #355089">
+                                    Gerenciar Aquisição de Material
+                                </h5>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="card-body">
+                            <div class="ROW" style="margin-left:5px">
+                                <div style="display: flex; gap: 20px; align-items: flex-end;">
+                                    <div class="col-md-2 col-sm-12">Categoria do Material
+                                        <br>
+                                        <select class="js-example-responsive form-select"
+                                            style="border: 1px solid #999999; padding: 5px;" id="categoriaMaterial"
+                                            name="classe">
+                                            <option value="">Selecione</option>
+                                            @foreach ($categoriaMaterial as $categoriaMateriais)
+                                                <option value="{{ $categoriaMateriais->id }}" {{ old('categoriaMaterial') }}>
+                                                    {{ $categoriaMateriais->nome }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2 col-sm-12">Tipo de Material
+                                        <br>
+                                        <select class="js-example-responsive form-select"
+                                            style="border: 1px solid #999999; padding: 5px;" id="tipoMaterial"
+                                            name="classe">
+                                            <option value="">Selecione</option>
+                                            @foreach ($tipoMaterial as $tipoMateriais)
+                                                <option value="{{ $tipoMateriais->id }}" {{ old('tipoMaterial') }}>
+                                                    {{ $tipoMateriais->nome }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2 col-sm-12">Status
+                                        <select class="form-select" style="border: 1px solid #999999;" name="status_servico"
+                                            value="" id="statusServico">
+                                            <option value="">Todos</option>
+                                            @foreach ($status as $statuss)
+                                                <option value="{{ $statuss->id }}"
+                                                    {{ old('status_servicos') == $statuss->id ? 'selected' : '' }}>
+                                                    {{ $statuss->nome }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <a href="/gerenciar-aquisicao-servicos" type="button" class="btn btn-light btn-sm"
+                                            style="box-shadow: 1px 2px 5px #000000; font-size: 1rem"
+                                            value="">Limpar</a>
+                                        <button class="btn btn-light btn-sm "
+                                            style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-left:5px;"{{-- Botao submit do formulario de pesquisa --}}
+                                            type="submit">Pesquisar
+                                        </button>
+                                        <a href="/incluir-aquisicao-material" class="btn btn-success"
+                                            style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-left:5px">
+                                            Novo+
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="ROW justify-content-start">
+                                    <div class="col-12" style="margin-top:10px;">
+                                        <a href="/incluir-aquisicao-servicos" class="btn btn-primary "
+                                            style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-right:5px">
+                                            Aprovar em Lote
+                                        </a>
+                                        <a href="/incluir-aquisicao-servicos" class="btn btn-success "
+                                            style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-right:5px">
+                                            Homologar em Lote
+                                        </a>
+                                        <a href="/incluir-aquisicao-servicos" class="btn btn-warning "
+                                            style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-right:5px">
+                                            Confirmar em Lote
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <hr>
+                            <table {{-- Inicio da tabela de informacoes --}}
+                                class= "table table-sm table-striped table-bordered border-secondary table-hover align-middle">
+                                <thead style="text-align: center; ">{{-- inicio header tabela --}}
+                                    <tr style="background-color: #d6e3ff; font-size:19px; color:#000;" class="align-middle">
+                                        <th></th>
+                                        <th>Número</th>
+                                        <th>Data</th>
+                                        <th>Tipo Material</th>
+                                        <th>Setor</th>
+                                        <th>Prioridade</th>
+                                        <th>Status</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>{{-- Fim do header da tabela --}}
+                                <tbody style="font-size: 15px; color:#000000; text-align: center;">{{-- Inicio body tabela --}}
+                                    @foreach ($aquisicao as $aquisicaos)
+                                        <tr>
+                                            <td></td>
+                                            <td>{{ $aquisicaos->id }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($aquisicaos->data_cadastro)->format('d/m/Y') }}</td>
+                                            <td>{{ $aquisicaos->TipoMaterial->nome }}</td>
+                                            <td>{{ $aquisicaos->setor->nome }}</td>
+                                            <td>{{ $aquisicaos->prioridade }}</td>
+                                            <td>{{ $aquisicaos->tipoStatus->nome }}</td>
+                                            <td>
+                                                <a href="/aprovar-aquisicao-servicos/{{ $aquisicaos->id }}"
+                                                    class="btn btn-sm btn-outline-primary" data-tt="tooltip"
+                                                    style="font-size: 1rem; color:#303030" data-placement="top"
+                                                    title="Aprovar">
+                                                    <i class="bi bi-check-lg"></i>
+                                                </a>
+                                                <a href="" class="btn btn-sm btn-outline-success" data-tt="tooltip"
+                                                    style="font-size: 1rem; color:#303030" data-placement="top"
+                                                    title="Homologar">
+                                                    <i class="bi bi-clipboard-check"></i>
+                                                </a>
+                                                <a href="/editar-aquisicao-servicos/{{ $aquisicaos->id }}"
+                                                    class="btn btn-sm btn-outline-warning" data-tt="tooltip"
+                                                    style="font-size: 1rem; color:#303030" data-placement="top"
+                                                    title="Editar">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                                <a href="" class="btn btn-sm btn-outline-primary" data-tt="tooltip"
+                                                    style="font-size: 1rem; color:#303030" data-placement="top"
+                                                    title="Enviar">
+                                                    <i class="bi bi-cart-check"></i>
+                                                </a>
+                                                <a href="" class="btn btn-sm btn-outline-primary" data-tt="tooltip"
+                                                    style="font-size: 1rem; color:#303030" data-placement="top"
+                                                    title="visualizar">
+                                                    <i class="bi bi-search"></i>
+                                                </a>
+                                                <a href="" class="btn btn-sm btn-outline-info" data-tt="tooltip"
+                                                    style="font-size: 1rem; color:#303030" data-placement="top"
+                                                    title="Aceite">
+                                                    <i class="bi bi-hand-thumbs-up"></i>
+                                                </a>
+                                                <a href="" class="btn btn-sm btn-outline-warning"
+                                                    data-tt="tooltip" style="font-size: 1rem; color:#303030"
+                                                    data-placement="top" title="Confirmar">
+                                                    <i class="bi bi-currency-dollar"></i>
+                                                </a>
+                                                <a href="" class="btn btn-sm btn-outline-warning"
+                                                    data-tt="tooltip" style="font-size: 1rem; color:#303030"
+                                                    data-placement="top" title="Editar Compra">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                </a>
+                                                <a href="" class="btn btn-sm btn-outline-danger" data-tt="tooltip"
+                                                    style="font-size: 1rem; color:#303030" data-placement="top"
+                                                    title="Excluir">
+                                                    <i class="bi bi-x-circle"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                                {{-- Fim body da tabela --}}
+                            </table>
+                        </div>
+                        <div style="margin-right: 10px; margin-left: 10px">
+                            {{ $aquisicao->links('pagination::bootstrap-5') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>{{-- Final Formulario de pesquisa --}}
+
+    <script>
+        $(document).ready(function() {
+            function populateServicos(selectElement, classeServicoValue) {
+                $.ajax({
+                    type: "GET",
+                    url: "/retorna-nome-servicos/" + classeServicoValue,
+                    dataType: "json",
+                    success: function(response) {
+                        selectElement.empty();
+                        selectElement.append(
+                            '<option value="">Selecione um serviço</option>'
+                        );
+                        $.each(response, function(index, item) {
+                            selectElement.append(
+                                '<option value="' +
+                                item.id +
+                                '">' +
+                                item.descricao +
+                                "</option>"
+                            );
+                        });
+                        selectElement.prop("disabled", false);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Ocorreu um erro:", error);
+                        console.log(xhr.responseText);
+                    },
+                });
+            }
+
+            $("#classeServico").change(function() {
+                var classeServicoValue = $(this).val();
+                var servicosSelect = $("#servicos");
+
+                if (!classeServicoValue) {
+                    servicosSelect
+                        .empty()
+                        .append('<option value="">Selecione um serviço</option>');
+                    servicosSelect.prop("disabled", true);
+                    return;
+                }
+
+                populateServicos(servicosSelect, classeServicoValue);
+            });
+
+            $("#add-proposta").click(function() {
+                var newProposta = $("#template-proposta-comercial").html();
+                $("#form-propostas-comerciais").append(newProposta);
+            });
+
+            $(document).on("click", ".remove-proposta", function() {
+                $(this).closest(".proposta-comercial").remove();
+            });
+        });
+    </script>
+
+
+@endsection

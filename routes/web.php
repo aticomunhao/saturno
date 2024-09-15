@@ -44,6 +44,7 @@ use App\Http\Controllers\CalculadoraController;
 use App\Http\Controllers\GerenciarInventariosController;
 use App\Http\Controllers\GerenciarPerfil;
 use App\Http\Controllers\AquisicaoServicosController;
+use App\Http\Controllers\AquisicaoMaterialController;
 use App\Http\Controllers\CatalogoEmpresaController;
 
 
@@ -334,6 +335,15 @@ Route::any('/atualizar-aquisicao-servicos/{id}', [AquisicaoServicosController::c
 Route::get('/aprovar-aquisicao-servicos/{idSolicitacao}', [AquisicaoServicosController::class, 'aprovar']);
 Route::post('/validaAprovacao-aquisicao-servicos', [AquisicaoServicosController::class, 'validaAprovacao']);
 
+//Gerenciar Aquisição de Material
+Route::get('/gerenciar-aquisicao-material', [AquisicaoMaterialController::class, 'index']);
+Route::get('/retorna-tipo-material/{id}', [AquisicaoMaterialController::class, 'retornaTipoMaterial']);
+Route::get('/incluir-aquisicao-material', [AquisicaoMaterialController::class, 'create']);
+Route::post('/salvar-aquisicao-material', [AquisicaoMaterialController::class, 'store']);
+Route::get('/editar-aquisicao-servicos/{idS}', [AquisicaoMaterialController::class, 'edit']);
+Route::any('/atualizar-aquisicao-servicos/{id}', [AquisicaoMaterialController::class, 'update'])->name('atualizar-aquisicao-servico');
+Route::get('/aprovar-aquisicao-servicos/{idSolicitacao}', [AquisicaoMaterialController::class, 'aprovar']);
+Route::post('/validaAprovacao-aquisicao-servicos', [AquisicaoMaterialController::class, 'validaAprovacao']);
 
 
 

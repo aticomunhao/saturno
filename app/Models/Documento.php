@@ -21,7 +21,7 @@ Documento extends Model
         'id_setor',
         'vencedor',
         'id_sol_sv',
-        'is_sol_mat',
+        'id_sol_mat',
         'dt_validade',
         'end_arquivo',
     ];

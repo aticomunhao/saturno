@@ -23,8 +23,8 @@ class CpfCnpj implements Rule
 
     public function message()
     {
-        app('flasher')->addError('Por favor, insira um CNPJ ou CPF válido.');
-        return 'O campo :attribute não é um CPF ou CNPJ válido.';
+        //app('flasher')->addError('Por favor, insira um CNPJ ou CPF válido.');
+        return 'Pof favor, insira um CPF ou CNPJ válido.';
     }
 
     private function validarCPF($cpf)

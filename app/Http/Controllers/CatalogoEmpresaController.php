@@ -10,6 +10,8 @@ use App\Models\TipoPais;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Rules\CpfCnpj;
+use App\Rules\Telefone;
+use App\Rules\Cep;
 use Carbon\Carbon;
 
 use function Laravel\Prompts\select;
@@ -49,7 +51,19 @@ class CatalogoEmpresaController extends Controller
     {
         $request->validate([
             'cnpj' => ['required', new CpfCnpj],
+            'inscricaoEmail' => 'required|email',
+            'inscricaoTelefone' => ['required', new Telefone],
+            'inscricaoCep' => ['required', new Cep],
         ]);
+
+         // Verifica se o CNPJ ou CPF já existe
+    $cnpjCpfExistente = Empresa::where('cnpj_cpf', $request->input('cnpj'))->exists();
+
+    if ($cnpjCpfExistente) {
+
+        app('flasher')->addError('Não é possível incluir esta empresa, pois ela ja foi registrada.');
+        return redirect()->back()->withInput();
+    }
 
         $empresa = Empresa::create([
             'razaosocial' => $request->input('razaoSocial'),

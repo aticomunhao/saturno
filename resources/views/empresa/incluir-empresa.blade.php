@@ -6,8 +6,6 @@
 @section('content')
     <form method="POST" action="/salvar-empresa">{{-- Formulario de Inserção --}}
         @csrf
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
         <div class="container-fluid"> {{-- Container completo da página  --}}
             <div class="justify-content-center">
                 <div class="col-12">
@@ -39,7 +37,11 @@
                                 <div class="col-md-3 col-sm-12">CNPJ - CPF
                                     <input type="text" class="form-control" id="cnpjId" name="cnpj"
                                         style="border: 1px solid #999999; padding: 5px; background-color: white"
-                                        value="{{ old('cnpj') }}" required>
+                                        value="{{ old('cnpj') }}" required placeholder="Ex.:00.000.000/0000-00 ou 000.000.000-00">
+                                    @if ($errors->has('cnpj'))
+                                        <span class="text-danger">{{ $errors->first('cnpj') }}</span>
+                                    @endif
+
                                 </div>
                                 <!-- Campo País -->
                                 <div class="col-md-3 col-sm-12">País
@@ -48,7 +50,8 @@
                                         id="paisId" name="pais">
                                         <option value=""></option>
                                         @foreach ($tipoPais as $tipoPaiss)
-                                            <option @if (old('pais') == $tipoPaiss->id) {{ 'selected="selected"' }} @endif value="{{ $tipoPaiss->id }}">
+                                            <option @if (old('pais') == $tipoPaiss->id) {{ 'selected="selected"' }} @endif
+                                                value="{{ $tipoPaiss->id }}">
                                                 {{ $tipoPaiss->descricao }}
                                             </option>
                                         @endforeach
@@ -76,13 +79,20 @@
                                     <input type="text" class="form-control" id="inscricaoTelefoneId"
                                         name="inscricaoTelefone"
                                         style="border: 1px solid #999999; padding: 5px; background-color: white"
-                                        value="{{ old('inscricaoTelefone') }}">
+                                        value="{{ old('inscricaoTelefone') }}" placeholder="Ex.: (99) 99999-9999">
+                                    @if ($errors->has('inscricaoTelefone'))
+                                        <span class="text-danger">Por favor, insira um Telefone válido.</span>
+                                    @endif
+
                                 </div>
                                 <!-- Campo Email -->
                                 <div class="col-md-3 col-sm-12">Email
                                     <input type="text" class="form-control" id="inscricaoEmailId" name="inscricaoEmail"
                                         style="border: 1px solid #999999; padding: 5px; background-color: white"
                                         value="{{ old('inscricaoEmail') }}">
+                                    @if ($errors->has('inscricaoEmail'))
+                                        <span class="text-danger">Por favor, insira um Email válido.</span>
+                                    @endif
                                 </div>
                             </div>
                             <hr>
@@ -92,7 +102,11 @@
                                 <div class="col-md-3 col-sm-12">CEP
                                     <input type="text" class="form-control" id="inscricaoCepId" name="inscricaoCep"
                                         style="border: 1px solid #999999; padding: 5px; background-color: white"
-                                        value="{{ old('inscricaoCep') }}" required>
+                                        value="{{ old('inscricaoCep') }}" required placeholder="Ex.:00000-000">
+                                    @if ($errors->has('inscricaoCep'))
+                                        <span class="text-danger">{{ $errors->first('inscricaoCep') }}</span>
+                                    @endif
+
                                 </div>
                                 <!-- Campo UF -->
                                 <div class="col-md-1 col-sm-12">UF
@@ -161,7 +175,6 @@
             <input type="submit" value="Confirmar" class="btn btn-primary col-md-3 col-1 mt-4 offset-md-2">
         </div>
     </form>{{-- Final Formulario de Inserção --}}
-
     <script>
         $(document).ready(function() {
             function populateCities(selectElement, stateValue) {
@@ -192,20 +205,6 @@
                 $("#cidade").removeAttr("disabled");
                 populateCities($("#cidade"), stateValue);
             });
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            var CpfCnpjMaskBehavior = function(val) {
-                    return val.replace(/\D/g, '').length === 11 ? '000.000.000-00' : '00.000.000/0000-00';
-                },
-                cpfCnpjOptions = {
-                    onKeyPress: function(val, e, field, options) {
-                        field.mask(CpfCnpjMaskBehavior.apply({}, arguments), options);
-                    }
-                };
-
-            $('#cnpjId').mask(CpfCnpjMaskBehavior, cpfCnpjOptions);
         });
     </script>
 @endsection

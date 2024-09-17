@@ -14,6 +14,8 @@ import $ from 'jquery';
 
 import 'select2';
 
+import Inputmask from "inputmask";
+
 window.$ = window.jQuery = $;
 
 

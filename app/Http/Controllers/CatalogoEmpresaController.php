@@ -165,4 +165,21 @@ class CatalogoEmpresaController extends Controller
     return redirect()->route('empresa.index');
     }
 
+    // EnderecoController.php
+    public function retornaEndereco($cep)
+    {
+        // Remove o hífen do CEP
+        $cep = str_replace('-', '', $cep);
+
+        $endereco = DB::table('tp_logradouro')->connection('pgsql2')
+            ->where('cep', $cep)
+            ->first();
+
+        if ($endereco) {
+            return response()->json($endereco);
+        } else {
+            return response()->json(['message' => 'Endereço não encontrado'], 404);
+        }
+    }
+
 }

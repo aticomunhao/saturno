@@ -37,7 +37,7 @@
                                 <div class="col-md-3 col-sm-12">CNPJ - CPF
                                     <input type="text" class="form-control" id="cnpjId" name="cnpj"
                                         style="border: 1px solid #999999; padding: 5px; background-color: white"
-                                        value="{{ old('cnpj') }}" required placeholder="Ex.:00.000.000/0000-00 ou 000.000.000-00">
+                                        value="{{ old('cnpj') }}" required>
                                     @if ($errors->has('cnpj'))
                                         <span class="text-danger">{{ $errors->first('cnpj') }}</span>
                                     @endif
@@ -75,7 +75,8 @@
                                         value="{{ old('inscricaoMunicipal') }}">
                                 </div>
                                 <!-- Campo Telefone -->
-                                <div class="col-md-3 col-sm-12">Telefone
+                                <div class="col-md-3 col-sm-12">
+                                    Telefone
                                     <input type="text" class="form-control" id="inscricaoTelefoneId"
                                         name="inscricaoTelefone"
                                         style="border: 1px solid #999999; padding: 5px; background-color: white"
@@ -83,7 +84,6 @@
                                     @if ($errors->has('inscricaoTelefone'))
                                         <span class="text-danger">Por favor, insira um Telefone válido.</span>
                                     @endif
-
                                 </div>
                                 <!-- Campo Email -->
                                 <div class="col-md-3 col-sm-12">Email
@@ -100,7 +100,7 @@
                             <div class="row">
                                 <!-- Campo CEP -->
                                 <div class="col-md-3 col-sm-12">CEP
-                                    <input type="text" class="form-control" id="inscricaoCepId" name="inscricaoCep"
+                                    <input type="text" class="form-control" id="cep" name="cep"
                                         style="border: 1px solid #999999; padding: 5px; background-color: white"
                                         value="{{ old('inscricaoCep') }}" required placeholder="Ex.:00000-000">
                                     @if ($errors->has('inscricaoCep'))
@@ -131,8 +131,7 @@
                                 <!-- Campo Logradouro -->
                                 <div class="col-md-4 col-sm-12">
                                     <label class="form-label">Logradouro</label>
-                                    <input type="text" class="form-control" id="inscricaoLogradouroId"
-                                        name="inscricaoLogradouro"
+                                    <input type="text" class="form-control" id="logradouro" name="logradouro"
                                         style="border: 1px solid #999999; padding: 5px; background-color: white"
                                         value="{{ old('inscricaoLogradouro') }}" required>
                                 </div>
@@ -147,8 +146,7 @@
                                 </div>
                                 <!-- Campo Bairro -->
                                 <div class="col-md-3 col-sm-12">Bairro
-                                    <input type="text" class="form-control" id="inscricaoBairroId"
-                                        name="inscricaoBairro"
+                                    <input type="text" class="form-control" id="bairro" name="bairro"
                                         style="border: 1px solid #999999; padding: 5px; background-color: white"
                                         value="{{ old('inscricaoBairro') }}" required>
                                 </div>
@@ -175,6 +173,31 @@
             <input type="submit" value="Confirmar" class="btn btn-primary col-md-3 col-1 mt-4 offset-md-2">
         </div>
     </form>{{-- Final Formulario de Inserção --}}
+    <!-- Script para buscar e preencher os dados -->
+    <script>
+        $('#cep').on('change', function() {
+            var cep = $(this).val();
+            console.log('CEP enviado:', cep); // Verifique o valor do CEP no console do navegador
+
+            if (cep) {
+                $.ajax({
+                    url: '/retorna-endereco/' + encodeURIComponent(cep),
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log('Dados recebidos:', data); // Verifique os dados recebidos
+                        $('#logradouro').val(data.descricao);
+                        $('#cidade').val(data.descricao_cidade);
+                        $('#bairro').val(data.descricao_bairro);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Erro:', xhr.responseText); // Verifique o erro detalhado
+                        alert('Endereço não encontrado!');
+                    }
+                });
+            }
+        });
+    </script>
     <script>
         $(document).ready(function() {
             function populateCities(selectElement, stateValue) {

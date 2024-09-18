@@ -100,9 +100,9 @@
                             <div class="row">
                                 <!-- Campo CEP -->
                                 <div class="col-md-3 col-sm-12">CEP
-                                    <input type="text" class="form-control" id="cep" name="cep"
+                                    <input type="text" class="form-control" id="isncricaoCepId" name="inscricaoCep"
                                         style="border: 1px solid #999999; padding: 5px; background-color: white"
-                                        value="{{ old('inscricaoCep') }}" required placeholder="Ex.:00000-000">
+                                        value="{{ old('inscricaoCep') }}" required>
                                     @if ($errors->has('inscricaoCep'))
                                         <span class="text-danger">{{ $errors->first('inscricaoCep') }}</span>
                                     @endif
@@ -133,7 +133,7 @@
                                     <label class="form-label">Logradouro</label>
                                     <input type="text" class="form-control" id="logradouro" name="logradouro"
                                         style="border: 1px solid #999999; padding: 5px; background-color: white"
-                                        value="{{ old('inscricaoLogradouro') }}" required>
+                                        value="{{ old('logradouro') }}" required>
                                 </div>
                             </div>
                             <div class="row">
@@ -148,7 +148,7 @@
                                 <div class="col-md-3 col-sm-12">Bairro
                                     <input type="text" class="form-control" id="bairro" name="bairro"
                                         style="border: 1px solid #999999; padding: 5px; background-color: white"
-                                        value="{{ old('inscricaoBairro') }}" required>
+                                        value="{{ old('bairro') }}" required>
                                 </div>
                                 <!-- Campo Complemento -->
                                 <div class="col-md-7 col-sm-12">Complemento
@@ -173,31 +173,6 @@
             <input type="submit" value="Confirmar" class="btn btn-primary col-md-3 col-1 mt-4 offset-md-2">
         </div>
     </form>{{-- Final Formulario de Inserção --}}
-    <!-- Script para buscar e preencher os dados -->
-    <script>
-        $('#cep').on('change', function() {
-            var cep = $(this).val();
-            console.log('CEP enviado:', cep); // Verifique o valor do CEP no console do navegador
-
-            if (cep) {
-                $.ajax({
-                    url: '/retorna-endereco/' + encodeURIComponent(cep),
-                    type: 'GET',
-                    dataType: 'json',
-                    success: function(data) {
-                        console.log('Dados recebidos:', data); // Verifique os dados recebidos
-                        $('#logradouro').val(data.descricao);
-                        $('#cidade').val(data.descricao_cidade);
-                        $('#bairro').val(data.descricao_bairro);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Erro:', xhr.responseText); // Verifique o erro detalhado
-                        alert('Endereço não encontrado!');
-                    }
-                });
-            }
-        });
-    </script>
     <script>
         $(document).ready(function() {
             function populateCities(selectElement, stateValue) {

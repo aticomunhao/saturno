@@ -72,10 +72,10 @@ class CatalogoEmpresaController extends Controller
             'inscestadual' => $request->input('inscricaoEstadual'),
             'inscmunicipal' => $request->input('inscricaoMunicipal'),
             'cep' => $request->input('inscricaoCep'),
-            'logradouro' => $request->input('inscricaoLogradouro'),
+            'logradouro' => $request->input('logradouro'),
             'numero' => $request->input('inscricaoNumero'),
             'complemento' => $request->input('inscricaoComplemento'),
-            'bairro' => $request->input('inscricaoBairro'),
+            'bairro' => $request->input('bairro'),
             'pais_cod' => $request->input('pais'),
             'uf_cod' => $request->input('tp_uf'),
             'telefone' => $request->input('inscricaoTelefone'),
@@ -115,25 +115,28 @@ class CatalogoEmpresaController extends Controller
 
         $request->validate([
             'cnpj' => ['required', new CpfCnpj],
+            'inscricaoEmail' => 'required|email',
+            'inscricaoTelefone' => ['required', new Telefone],
+            'inscricaoCep' => ['required', new Cep],
         ]);
 
-
-        $empresa->razaosocial = $request->input('razaoSocial');
-        $empresa->nomefantasia = $request->input('nomeFantasia');
-        $empresa->cnpj_cpf = $request->input('cnpj');
-        $empresa->pais_cod = $request->input('pais');
-        $empresa->inscestadual = $request->input('inscricaoEstadual');
-        $empresa->inscmunicipal = $request->input('inscricaoMunicipal');
-        $empresa->telefone = $request->input('telefone');
-        $empresa->email = $request->input('inscricaoEmail');
-        $empresa->cep = $request->input('inscricaoCep');
-        $empresa->uf_cod = $request->input('tp_uf');
-        $empresa->municipio_cod = $request->input('cidade');
-        $empresa->logradouro = $request->input('inscricaoLogradouro');
-        $empresa->numero = $request->input('inscricaoNumero');
-        $empresa->complemento = $request->input('inscricaoComplemento');
-        $empresa->bairro = $request->input('inscricaoBairro');
-        $empresa->uf_cod = $request->input('inscricaoCodMun');
+        $empresa->fill([
+            'razaosocial' => $request->input('razaoSocial'),
+            'nomefantasia' => $request->input('nomeFantasia'),
+            'cnpj_cpf' => $request->input('cnpj'),
+            'inscestadual' => $request->input('inscricaoEstadual'),
+            'inscmunicipal' => $request->input('inscricaoMunicipal'),
+            'cep' => $request->input('inscricaoCep'),
+            'logradouro' => $request->input('logradouro'),
+            'numero' => $request->input('inscricaoNumero'),
+            'complemento' => $request->input('inscricaoComplemento'),
+            'bairro' => $request->input('bairro'),
+            'pais_cod' => $request->input('pais'),
+            'uf_cod' => $request->input('tp_uf'),
+            'telefone' => $request->input('inscricaoTelefone'),
+            'email' => $request->input('inscricaoEmail'),
+            'municipio_cod' => $request->input('cidade')
+        ]);
 
         //dd($empresa);
 
@@ -164,22 +167,4 @@ class CatalogoEmpresaController extends Controller
     app('flasher')->addSuccess('Empresa deletada com sucesso.');
     return redirect()->route('empresa.index');
     }
-
-    // EnderecoController.php
-    public function retornaEndereco($cep)
-    {
-        // Remove o hífen do CEP
-        $cep = str_replace('-', '', $cep);
-
-        $endereco = DB::table('tp_logradouro')->connection('pgsql2')
-            ->where('cep', $cep)
-            ->first();
-
-        if ($endereco) {
-            return response()->json($endereco);
-        } else {
-            return response()->json(['message' => 'Endereço não encontrado'], 404);
-        }
-    }
-
 }

@@ -13,8 +13,4 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-document.addEventListener('DOMContentLoaded', function () {
-    // Máscara para o CEP
-    Inputmask("99999-999").mask("#inscricaoCepId");
-});
 

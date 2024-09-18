@@ -18,7 +18,7 @@ class Empresa extends Model
             'nomefantasia',
             'cnpj_cpf',
             'inscestadual',
-            'inscricaoMunicipal',
+            'inscmunicipal',
             'cep',
             'logradouro',
             'numero',

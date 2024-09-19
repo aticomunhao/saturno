@@ -10,4 +10,9 @@ class CatalogoServico extends Model
     use HasFactory;
 
     protected $table = 'catalogo_servico';
+
+    public function tipoClasseSv()
+    {
+        return $this->belongsTo(TipoClasseSv::class, 'id_cl_sv');
+    }
 }

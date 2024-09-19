@@ -45,6 +45,7 @@ use App\Http\Controllers\GerenciarInventariosController;
 use App\Http\Controllers\GerenciarPerfil;
 use App\Http\Controllers\AquisicaoServicosController;
 use App\Http\Controllers\CatalogoEmpresaController;
+use App\Http\Controllers\CatalogoServicoController;
 
 
 
@@ -346,6 +347,9 @@ Route::get('/editar-empresa/{id}', [CatalogoEmpresaController::class, 'edit']);
 Route::post('/atualizar-empresa', [CatalogoEmpresaController::class, 'update']);
 Route::delete('/deletar-empresa/{$id}', [CatalogoEmpresaController::class, 'delete']);
 Route::get('/retorna-endereco/{cep}', [CatalogoEmpresaController::class, 'retornaEndereco']);
+
+//Catálogo de Serviços
+Route::get('/catalogo-servico', [CatalogoServicoController::class, 'index'])->name('catalogo-servico.index');
 
 
 

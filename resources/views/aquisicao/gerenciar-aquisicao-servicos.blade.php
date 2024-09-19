@@ -24,7 +24,7 @@
                                 <div style="display: flex; gap: 20px; align-items: flex-end;">
                                     <div class="col-md-2 col-sm-12">Classe do Serviço
                                         <br>
-                                        <select class="js-example-responsive form-select"
+                                        <select class="js-example-responsive form-select select2"
                                             style="border: 1px solid #999999; padding: 5px;" id="classeServico"
                                             name="classe">
                                             <option value=""></option>
@@ -37,7 +37,7 @@
                                     </div>
                                     <div class="col-md-2 col-sm-12">Tipo de Serviço
                                         <br>
-                                        <select class="js-example-responsive form-select" style="border: 1px solid #999999;"
+                                        <select class="js-example-responsive form-select select2" style="border: 1px solid #999999;"
                                             id="servicos" name="servicos" value="{{ old('servicos') }}" disabled>
                                         </select>
                                     </div>

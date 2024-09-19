@@ -117,7 +117,7 @@ class CatalogoEmpresaController extends Controller
             'cnpj' => ['required', new CpfCnpj],
             'inscricaoEmail' => 'required|email',
             'inscricaoTelefone' => ['required', new Telefone],
-            'inscricaoCep' => ['required', new Cep],
+            'cep' => ['required', new Cep],
         ]);
 
         $empresa->fill([
@@ -126,7 +126,7 @@ class CatalogoEmpresaController extends Controller
             'cnpj_cpf' => $request->input('cnpj'),
             'inscestadual' => $request->input('inscricaoEstadual'),
             'inscmunicipal' => $request->input('inscricaoMunicipal'),
-            'cep' => $request->input('inscricaoCep'),
+            'cep' => $request->input('cep'),
             'logradouro' => $request->input('logradouro'),
             'numero' => $request->input('inscricaoNumero'),
             'complemento' => $request->input('inscricaoComplemento'),

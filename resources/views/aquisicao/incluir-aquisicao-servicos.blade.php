@@ -77,7 +77,8 @@
         </div>
         <div class="botões">
             <a href="/gerenciar-aquisicao-servicos" class="btn btn-danger col-md-3 col-2 mt-4 offset-md-2">Cancelar</a>
-            <input type="submit" value="Confirmar" class="btn btn-primary col-md-3 col-1 mt-4 offset-md-2">
+            <button type="submit" value="Confirmar" class="btn btn-primary col-md-3 col-1 mt-4 offset-md-2">Confirmar
+            </button>
         </div>
     </form>
 

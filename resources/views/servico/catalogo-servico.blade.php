@@ -17,17 +17,16 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form method="GET" action="{{ route('catalogo-servico.index') }}">{{-- Formulario de Inserção --}}
+                        <form method="GET" action="/catalogo-servico">{{-- Formulario de Inserção --}}
                             @csrf
-                            <div class="row">
+                            <div style="display: flex; gap: 20px; align-items: flex-end;">
                                 <div class="col-md-2 col-sm-12">Classe do Serviço
                                     <br>
                                     <select class="js-example-responsive form-select select2"
                                         style="border: 1px solid #999999; padding: 5px;" id="classeServico" name="classe">
                                         <option value=""></option>
-                                        @foreach ($classesAquisicao as $classeAquisicaos)
-                                            <option value="" <option value="{{ $classeAquisicaos->id }}"
-                                                {{ old('classe') }}>
+                                        @foreach ($classeAquisicao as $classeAquisicaos)
+                                            <option value="{{ $classeAquisicaos->id }}" {{ old('classe') }}>
                                                 {{ $classeAquisicaos->descricao }}
                                             </option>
                                         @endforeach
@@ -41,7 +40,7 @@
                                     </select>
                                 </div>
                                 <div class="col" style="margin-top: 20px">
-                                    <a href="{{ route('catalogo-servico.index') }}" class="btn btn-light btn-sm"
+                                    <a href="/catalogo-servico" class="btn btn-light btn-sm"
                                         style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin:5px;" type="button"
                                         value="">
                                         Limpar
@@ -49,35 +48,85 @@
                                     <input class="btn btn-light btn-sm"
                                         style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin:5px;" type="submit"
                                         value="Pesquisar">
+                                    <a href="/incluir-empresa">
+                                        <input class="btn btn-success btn-sm" type="button" name="novo" value="Novo+"
+                                            style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin:5px;">
+                                    </a>
                                 </div>
                             </div>
-                        </form>
+                        </form>{{-- Final Formulario de Inserção --}}
+                        <br>
+                        <hr>
+                        <table {{-- Inicio da tabela de informacoes --}}
+                            class= "table table-sm table-striped table-bordered border-secondary table-hover align-middle">
+                            <thead style="text-align: center; ">{{-- inicio header tabela --}}
+                                <tr style="background-color: #d6e3ff; color:#000;" class="align-middle">
 
-                        <div class="accordion accordion-flush" id="accordionFlushExample">
-                            @foreach ($classesAquisicao as $classeAquisicaos)
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#flush-collapse{{ $classeAquisicaos->id }}"
-                                            aria-expanded="false" aria-controls="flush-collapse{{ $classeAquisicaos->id }}">
-                                            {{ $classeAquisicaos->descricao }}
-                                        </button>
-                                    </h2>
-                                    <div id="flush-collapse{{ $classeAquisicaos->id }}" class="accordion-collapse collapse"
-                                        data-bs-parent="#accordionFlushExample">
-                                        <div class="accordion-body">
-                                            <ul>
-                                                @foreach ($classeAquisicaos->catalogoServico as $tipoServico)
-                                                    <li>{{ $tipoServico->descricao }}</li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
+                                    <th>CLASSE</th>
+                                    <th>TIPO</th>
+                                    <th>AÇÕES</th>
+                                </tr>
+                            </thead>{{-- Fim do header da tabela --}}
+                            <tbody style="color:#000000; text-align: center;">{{-- Inicio body tabela --}}
+                                @foreach ($aquisicao as $aquisicaos)
+                                    @foreach ($aquisicaos->CatalogoServico as $servico)
+                                        <tr>
 
+                                            <td>{{ $aquisicaos->descricao }}</td>
+                                            <td>{{ $servico->descricao }}</td>
+                                            <td>
+                                                <a href="/editar-aquisicao-servicos/{{ $aquisicaos->id }}"
+                                                    class="btn btn-sm btn-outline-warning" data-tt="tooltip"
+                                                    style="font-size: 1rem; color:#303030" data-placement="top"
+                                                    title="Editar">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                                <button type="button" class="btn btn-sm btn-outline-danger"
+                                                    data-bs-toggle="modal" data-bs-target="#A{{ $aquisicaos->id }}"
+                                                    class="btn btn-outline-danger btn-sm" data-bs-placement="top"
+                                                    title="Excluir"><i class="bi bi-x-circle"
+                                                        style="font-size: 1rem; color:#303030;"></i></button>
 
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="A{{ $aquisicaos->id }}" tabindex="-1"
+                                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <form class="form-horizontal" method="POST"
+                                                            action="{{ url('/deletar-empresa/' . $aquisicaos->id) }}">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <div class="modal-content">
+                                                                <div class="modal-header" style="background-color:#DC4C64;">
+                                                                    <h5 class="modal-title" id="exampleModalLabel"
+                                                                        style=" color:rgb(255, 255, 255)">Excluir Empresa
+                                                                    </h5>
+                                                                    <button type="button" class="btn-close"
+                                                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body" style="text-align: center">
+                                                                    Você realmente deseja excluir <br><span
+                                                                        style="color:#DC4C64; font-weight: bold">{{ $aquisicaos->id }}</span>
+                                                                    ?
+
+                                                                </div>
+                                                                <div class="modal-footer mt-2">
+                                                                    <button type="button" class="btn btn-danger"
+                                                                        data-bs-dismiss="modal">Cancelar</button>
+                                                                    <button type="submit"
+                                                                        class="btn btn-primary">Confirmar</button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <!--Fim Modal-->
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endforeach
+                            </tbody>
+                            {{-- Fim body da tabela --}}
+                        </table>
                     </div>
                 </div>
             </div>
@@ -123,7 +172,7 @@
                     servicosSelect
                         .empty()
                         .append('<option value="">Selecione um serviço</option>');
-                    servicosSelect.prop("disabled", false);
+                    servicosSelect.prop("disabled", true);
                     return;
                 }
 

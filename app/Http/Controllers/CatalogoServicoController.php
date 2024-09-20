@@ -17,22 +17,21 @@ class CatalogoServicoController extends Controller
 
     public function index(Request $request)
 {
-    $query = SolServico::with(['tipoClasse', 'catalogoServico', 'tipoStatus', 'setor']);
+    $query = TipoClasseSv::with('catalogoServico');
 
     // Aplicar filtros se forem fornecidos
     if ($request->classe) {
-        $query->where('id_classe_sv', $request->classe);
-    }
-    if ($request->servicos) {
-        $query->where('id_tp_sv', $request->servicos);
+        $query->where('id', $request->classe);
     }
 
-    $aquisicao = $query->orderBy('id')->paginate(20);
+    $aquisicao = $query->orderBy('descricao')->paginate(20);
+
+    //dd($aquisicao);
 
     // Pegar todas as classes e os serviços
-    $classesAquisicao = TipoClasseSv::with('catalogoServico')->get();
+    $classeAquisicao = TipoClasseSv::all();
 
-    return view('servico.catalogo-servico', compact('aquisicao', 'classesAquisicao'));
+    return view('servico.catalogo-servico', compact('aquisicao', 'classeAquisicao'));
 }
 
 }

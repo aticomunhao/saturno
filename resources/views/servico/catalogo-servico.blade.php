@@ -68,12 +68,12 @@
                                 </tr>
                             </thead>{{-- Fim do header da tabela --}}
                             <tbody style="color:#000000; text-align: center;">{{-- Inicio body tabela --}}
-                                @foreach ($aquisicao as $aquisicaos)
-                                    @foreach ($aquisicaos->CatalogoServico as $servico)
+                                @foreach ($classeAquisicao as $aquisicaos)
+                                    @foreach ($aquisicaos->catalogoServico as $servico)
                                         <tr>
 
-                                            <td>{{ $aquisicaos->descricao }}</td>
-                                            <td>{{ $servico->descricao }}</td>
+                                            <td>{{ $aquisicaos->descricao}}</td>
+                                            <td>{{ $servico->descricao}}</td>
                                             <td>
                                                 <a href="/editar-aquisicao-servicos/{{ $aquisicaos->id }}"
                                                     class="btn btn-sm btn-outline-warning" data-tt="tooltip"

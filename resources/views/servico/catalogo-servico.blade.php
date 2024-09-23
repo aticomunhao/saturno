@@ -68,12 +68,12 @@
                                 </tr>
                             </thead>{{-- Fim do header da tabela --}}
                             <tbody style="color:#000000; text-align: center;">{{-- Inicio body tabela --}}
-                                @foreach ($classeAquisicao as $aquisicaos)
-                                    @foreach ($aquisicaos->catalogoServico as $servico)
+                                @foreach ($aquisicao as $aquisicaos)
+                                    @if ($aquisicaos->tipoClasseSv)
                                         <tr>
 
-                                            <td>{{ $aquisicaos->descricao}}</td>
-                                            <td>{{ $servico->descricao}}</td>
+                                            <td>{{ $aquisicaos->tipoClasseSv->descricao }}</td>
+                                            <td>{{ $aquisicaos->descricao }}</td>
                                             <td>
                                                 <a href="/editar-aquisicao-servicos/{{ $aquisicaos->id }}"
                                                     class="btn btn-sm btn-outline-warning" data-tt="tooltip"
@@ -122,11 +122,14 @@
                                                 <!--Fim Modal-->
                                             </td>
                                         </tr>
-                                    @endforeach
+                                    @endif
                                 @endforeach
                             </tbody>
                             {{-- Fim body da tabela --}}
                         </table>
+                    </div>
+                    <div style="margin-right: 10px; margin-left: 10px">
+                        {{ $aquisicao->links('pagination::bootstrap-5') }}
                     </div>
                 </div>
             </div>

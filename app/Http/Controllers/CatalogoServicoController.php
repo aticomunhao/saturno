@@ -39,4 +39,21 @@ class CatalogoServicoController extends Controller
     return view('servico.catalogo-servico', compact('aquisicao', 'classeAquisicao'));
 }
 
+    public function create()
+    {
+
+
+
+
+        return view('servico.incluir-servico');
+    }
+
+
+    public function store(Request $request)
+    {
+
+
+        app('flasher')->addSuccess('Empresa criada com sucesso.');
+        return redirect()->route('empresa.index');
+    }
 }

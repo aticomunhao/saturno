@@ -45,7 +45,7 @@ class AquisicaoServicosController extends Controller
 
 
 
-        return view('aquisicao.gerenciar-aquisicao-servicos', compact('aquisicao', 'classeAquisicao', 'status'));
+        return view('solServico.gerenciar-aquisicao-servicos', compact('aquisicao', 'classeAquisicao', 'status'));
     }
 
     public function retornaNomeServicos($idClasse)
@@ -82,7 +82,7 @@ class AquisicaoServicosController extends Controller
             }
         }
 
-        return view('aquisicao.incluir-aquisicao-servicos',  compact('servico', 'classeAquisicao', 'setor', 'buscaSetor', 'buscaEmpresa', 'empresas'));
+        return view('solServico.incluir-aquisicao-servicos',  compact('servico', 'classeAquisicao', 'setor', 'buscaSetor', 'buscaEmpresa', 'empresas'));
     }
 
     public function store(Request $request)
@@ -153,7 +153,7 @@ class AquisicaoServicosController extends Controller
             }
         }
 
-        return view('aquisicao.editar-aquisicao-servicos', compact('solicitacao', 'buscaEmpresa', 'documentos', 'classeAquisicao', 'buscaSetor', 'tiposServico'));
+        return view('solServico.editar-aquisicao-servicos', compact('solicitacao', 'buscaEmpresa', 'documentos', 'classeAquisicao', 'buscaSetor', 'tiposServico'));
     }
 
 
@@ -246,7 +246,7 @@ class AquisicaoServicosController extends Controller
 
         $empresas = Documento::where('id_sol_sv', $idSolicitacao)->get();
 
-        return view('aquisicao.aprovar-aquisicao-servicos', compact('aquisicao', 'numeros', 'todosSetor', 'empresas'));
+        return view('solServico.aprovar-aquisicao-servicos', compact('aquisicao', 'numeros', 'todosSetor', 'empresas'));
     }
 
     public function validaAprovacao(Request $request)

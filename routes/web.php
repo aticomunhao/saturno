@@ -352,6 +352,7 @@ Route::get('/retorna-endereco/{cep}', [CatalogoEmpresaController::class, 'retorn
 Route::get('/catalogo-servico', [CatalogoServicoController::class, 'index'])->name('catalogo-servico.index');
 Route::get('/incluir-servico', [CatalogoServicoController::class, 'create']);
 Route::post('/salvar-servico', [CatalogoServicoController::class, 'store']);
+Route::get('/get-tipos/{classe_id}', [CatalogoServicoController::class, 'getTipos']);
 
 
 

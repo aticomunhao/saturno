@@ -42,15 +42,14 @@ class CatalogoServicoController extends Controller
     public function create()
     {
 
+        $classes = TipoClasseSv::all();
 
-
-
-        return view('servico.incluir-servico');
+        return view('servico.incluir-servico', compact('classes'));
     }
-
-
+    
     public function store(Request $request)
     {
+
 
 
         app('flasher')->addSuccess('Empresa criada com sucesso.');

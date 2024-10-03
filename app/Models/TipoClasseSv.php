@@ -16,4 +16,9 @@ class TipoClasseSv extends Model
     {
         return $this->hasMany(CatalogoServico::class, 'id_cl_sv');
     }
+
+    protected $fillable = [
+        'descricao',
+        'sigla',
+    ];
 }

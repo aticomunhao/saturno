@@ -15,4 +15,10 @@ class CatalogoServico extends Model
     {
         return $this->belongsTo(TipoClasseSv::class, 'id_cl_sv');
     }
+
+    protected $fillable = [
+        'id_cl_sv',
+        'descricao',
+    ];
+    public $timestamps = false;
 }

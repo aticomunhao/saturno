@@ -56,14 +56,14 @@ class CatalogoEmpresaController extends Controller
             'inscricaoCep' => ['required', new Cep],
         ]);
 
-         // Verifica se o CNPJ ou CPF já existe
-    $cnpjCpfExistente = Empresa::where('cnpj_cpf', $request->input('cnpj'))->exists();
+        // Verifica se o CNPJ ou CPF já existe
+        $cnpjCpfExistente = Empresa::where('cnpj_cpf', $request->input('cnpj'))->exists();
 
-    if ($cnpjCpfExistente) {
+        if ($cnpjCpfExistente) {
 
-        app('flasher')->addError('Não é possível incluir esta empresa, pois ela ja foi registrada.');
-        return redirect()->back()->withInput();
-    }
+            app('flasher')->addError('Não é possível incluir esta empresa, pois ela ja foi registrada.');
+            return redirect()->back()->withInput();
+        }
 
         $empresa = Empresa::create([
             'razaosocial' => $request->input('razaoSocial'),
@@ -147,24 +147,24 @@ class CatalogoEmpresaController extends Controller
 
     public function delete($id)
     {
-    $empresa = Empresa::with('documento')->find($id);
+        $empresa = Empresa::with('documento')->find($id);
 
 
-    if (!$empresa) {
-        app('flasher')->addWarning('Empresa não encontrada.');
+        if (!$empresa) {
+            app('flasher')->addWarning('Empresa não encontrada.');
+            return redirect()->route('empresa.index');
+        }
+
+        // Verifica se há documentos associados à empresa
+        if ($empresa->documento->count() > 0) {
+            app('flasher')->addError('Não é possível excluir esta empresa, pois há documentos associados a ela.');
+            return redirect()->route('empresa.index');
+        }
+
+        // Se não houver documentos, a empresa é excluída
+        $empresa->delete();
+
+        app('flasher')->addSuccess('Empresa deletada com sucesso.');
         return redirect()->route('empresa.index');
-    }
-
-    // Verifica se há documentos associados à empresa
-    if ($empresa->documento->count() > 0) {
-        app('flasher')->addError('Não é possível excluir esta empresa, pois há documentos associados a ela.');
-        return redirect()->route('empresa.index');
-    }
-
-    // Se não houver documentos, a empresa é excluída
-    $empresa->delete();
-
-    app('flasher')->addSuccess('Empresa deletada com sucesso.');
-    return redirect()->route('empresa.index');
     }
 }

@@ -82,59 +82,59 @@ class AquisicaoServicosController extends Controller
             }
         }
 
-        return view('solServico.incluir-aquisicao-servicos',  compact('servico', 'classeAquisicao', 'setor', 'buscaSetor', 'buscaEmpresa', 'empresas'));
+        return view('solServico.incluir-aquisicao-servicos', compact('servico', 'classeAquisicao', 'setor', 'buscaSetor', 'buscaEmpresa', 'empresas'));
     }
 
     public function store(Request $request)
-{
-    $request->validate([
-        'classeSv' => 'required',
-        'tipoServicos' => 'required',
-        'motivo' => 'required|string',
-        'numero.*' => 'required|string',
-        'valor.*' => 'required|numeric',
-        'dt_inicial.*' => 'required|date',
-        'arquivo.*' => 'nullable|file|mimes:pdf,doc,docx',
-    ]);
-
-    $today = Carbon::today()->format('Y-m-d');
-
-    DB::beginTransaction();
-    try {
-        $solicitacao = SolServico::create([
-            'id_classe_sv' => $request->classeSv,
-            'id_tp_sv' => $request->tipoServicos,
-            'motivo' => $request->motivo,
-            'data' => $today,
-            'status' => '1',
-            'id_setor' => $request->idSetor,
+    {
+        $request->validate([
+            'classeSv' => 'required',
+            'tipoServicos' => 'required',
+            'motivo' => 'required|string',
+            'numero.*' => 'required|string',
+            'valor.*' => 'required|numeric',
+            'dt_inicial.*' => 'required|date',
+            'arquivo.*' => 'nullable|file|mimes:pdf,doc,docx',
         ]);
 
-        foreach ($request->numero as $index => $numero) {
-            $endArquivo = $request->hasFile('arquivo.' . $index)
-                ? $request->file('arquivo.' . $index)->store('documentos', 'public')
-                : null;
+        $today = Carbon::today()->format('Y-m-d');
 
-            Documento::create([
-                'numero' => $numero,
-                'dt_doc' => $today,
-                'id_tp_doc' => '14',
-                'valor' => $request->valor[$index],
-                'id_empresa' => $request->razaoSocial[$index],
-                'id_setor' => $request->input('idSetor'),
-                'dt_validade' => $request->dt_final[$index],
-                'end_arquivo' => $endArquivo,
-                'id_sol_sv' => $solicitacao->id,
+        DB::beginTransaction();
+        try {
+            $solicitacao = SolServico::create([
+                'id_classe_sv' => $request->classeSv,
+                'id_tp_sv' => $request->tipoServicos,
+                'motivo' => $request->motivo,
+                'data' => $today,
+                'status' => '1',
+                'id_setor' => $request->idSetor,
             ]);
-        }
 
-        DB::commit();
-        return redirect('/gerenciar-aquisicao-servicos')->with('success', 'Solicitação e documentos salvos com sucesso!');
-    } catch (\Exception $e) {
-        DB::rollBack();
-        return back()->withErrors(['error' => 'Ocorreu um erro ao salvar a solicitação.']);
+            foreach ($request->numero as $index => $numero) {
+                $endArquivo = $request->hasFile('arquivo.' . $index)
+                    ? $request->file('arquivo.' . $index)->store('documentos', 'public')
+                    : null;
+
+                Documento::create([
+                    'numero' => $numero,
+                    'dt_doc' => $today,
+                    'id_tp_doc' => '14',
+                    'valor' => $request->valor[$index],
+                    'id_empresa' => $request->razaoSocial[$index],
+                    'id_setor' => $request->input('idSetor'),
+                    'dt_validade' => $request->dt_final[$index],
+                    'end_arquivo' => $endArquivo,
+                    'id_sol_sv' => $solicitacao->id,
+                ]);
+            }
+
+            DB::commit();
+            return redirect('/gerenciar-aquisicao-servicos')->with('success', 'Solicitação e documentos salvos com sucesso!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => 'Ocorreu um erro ao salvar a solicitação.']);
+        }
     }
-}
 
 
     public function edit($idS)
@@ -158,80 +158,80 @@ class AquisicaoServicosController extends Controller
 
 
     public function update(Request $request, $id)
-{
-    // Validação dos campos
-    $request->validate([
-        'classeSv' => 'required',
-        'tipoServicos' => 'required',
-        'motivo' => 'required|string',
-        'numero.*' => 'required|string',
-        'valor.*' => 'required|numeric',
-        'dt_inicial.*' => 'required|date',
-        'arquivo.*' => 'nullable|file|mimes:pdf,doc,docx',
-        'arquivoOld.*' => 'nullable|file|mimes:pdf,doc,docx',
-    ]);
-
-    $setor = session()->get('usuario.setor')[0];
-
-    DB::beginTransaction();
-    try {
-        // Encontrar a solicitação
-        $solicitacao = SolServico::findOrFail($id);
-
-        // Atualizar dados da solicitação
-        $solicitacao->update([
-            'id_classe_sv' => $request->input('classeSv'),
-            'id_tp_sv' => $request->input('tipoServicos'),
-            'motivo' => $request->input('motivo'),
+    {
+        // Validação dos campos
+        $request->validate([
+            'classeSv' => 'required',
+            'tipoServicos' => 'required',
+            'motivo' => 'required|string',
+            'numero.*' => 'required|string',
+            'valor.*' => 'required|numeric',
+            'dt_inicial.*' => 'required|date',
+            'arquivo.*' => 'nullable|file|mimes:pdf,doc,docx',
+            'arquivoOld.*' => 'nullable|file|mimes:pdf,doc,docx',
         ]);
 
-        // Atualizar os documentos existentes com novos arquivos (arquivoOld)
-        if ($request->hasFile('arquivoOld')) {
-            foreach ($request->file('arquivoOld') as $index => $file) {
-                if ($file) {
-                    // Obter caminho do arquivo
-                    $path = $file->store('propostas', 'public');
+        $setor = session()->get('usuario.setor')[0];
 
-                    // Atualizar o documento existente
-                    $documento = Documento::find($request->input('documento_id')[$index]);
-                    if ($documento) {
-                        $documento->update([
+        DB::beginTransaction();
+        try {
+            // Encontrar a solicitação
+            $solicitacao = SolServico::findOrFail($id);
+
+            // Atualizar dados da solicitação
+            $solicitacao->update([
+                'id_classe_sv' => $request->input('classeSv'),
+                'id_tp_sv' => $request->input('tipoServicos'),
+                'motivo' => $request->input('motivo'),
+            ]);
+
+            // Atualizar os documentos existentes com novos arquivos (arquivoOld)
+            if ($request->hasFile('arquivoOld')) {
+                foreach ($request->file('arquivoOld') as $index => $file) {
+                    if ($file) {
+                        // Obter caminho do arquivo
+                        $path = $file->store('propostas', 'public');
+
+                        // Atualizar o documento existente
+                        $documento = Documento::find($request->input('documento_id')[$index]);
+                        if ($documento) {
+                            $documento->update([
+                                'end_arquivo' => $path,
+                            ]);
+                        }
+                    }
+                }
+            }
+
+            // Adicionar novos documentos (arquivo)
+            if ($request->hasFile('arquivo') && is_array($request->file('arquivo'))) {
+                foreach ($request->file('arquivo') as $index => $file) {
+                    if ($file) {
+                        // Obter o caminho do arquivo
+                        $path = $file->store('propostas', 'public');
+
+                        // Criar um novo documento
+                        $solicitacao->documentos()->create([
                             'end_arquivo' => $path,
+                            'numero' => $request->input('numero')[$index],
+                            'dt_doc' => $request->input('dt_inicial')[$index],
+                            'valor' => $request->input('valor')[$index],
+                            'id_empresa' => $request->input('razaoSocial')[$index],
+                            'dt_validade' => $request->input('dt_final')[$index],
+                            'id_tp_doc' => '14',
+                            'id_setor' => $setor,
                         ]);
                     }
                 }
             }
+
+            DB::commit();
+            return redirect('/gerenciar-aquisicao-servicos')->with('success', 'Solicitação atualizada com sucesso!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => 'Ocorreu um erro ao atualizar a solicitação.']);
         }
-
-        // Adicionar novos documentos (arquivo)
-        if ($request->hasFile('arquivo') && is_array($request->file('arquivo'))) {
-            foreach ($request->file('arquivo') as $index => $file) {
-                if ($file) {
-                    // Obter o caminho do arquivo
-                    $path = $file->store('propostas', 'public');
-
-                    // Criar um novo documento
-                    $solicitacao->documentos()->create([
-                        'end_arquivo' => $path,
-                        'numero' => $request->input('numero')[$index],
-                        'dt_doc' => $request->input('dt_inicial')[$index],
-                        'valor' => $request->input('valor')[$index],
-                        'id_empresa' => $request->input('razaoSocial')[$index],
-                        'dt_validade' => $request->input('dt_final')[$index],
-                        'id_tp_doc' => '14',
-                        'id_setor' => $setor,
-                    ]);
-                }
-            }
-        }
-
-        DB::commit();
-        return redirect('/gerenciar-aquisicao-servicos')->with('success', 'Solicitação atualizada com sucesso!');
-    } catch (\Exception $e) {
-        DB::rollBack();
-        return back()->withErrors(['error' => 'Ocorreu um erro ao atualizar a solicitação.']);
     }
-}
 
     public function aprovar($idSolicitacao)
     {

@@ -17,27 +17,27 @@ class CatalogoServicoController extends Controller
 {
 
     public function index(Request $request)
-{
-    $query = CatalogoServico::with('tipoClasseSv');
+    {
+        $query = CatalogoServico::with('tipoClasseSv');
 
-    // Aplicar filtros se forem fornecidos
-    if ($request->classe) {
-        $query->where('id_cl_sv', $request->classe);
+        // Aplicar filtros se forem fornecidos
+        if ($request->classe) {
+            $query->where('id_cl_sv', $request->classe);
+        }
+
+        if ($request->servicos) {
+            $query->where('id', $request->servicos);
+        }
+
+        $aquisicao = $query->orderBy('id_cl_sv')->paginate(20);
+
+        //dd($aquisicao);
+
+        // Pegar todas as classes e os serviços
+        $classeAquisicao = TipoClasseSv::all();
+
+        return view('servico.catalogo-servico', compact('aquisicao', 'classeAquisicao'));
     }
-
-    if ($request->servicos) {
-        $query->where('id', $request->servicos);
-    }
-
-    $aquisicao = $query->orderBy('id_cl_sv')->paginate(20);
-
-    //dd($aquisicao);
-
-    // Pegar todas as classes e os serviços
-    $classeAquisicao = TipoClasseSv::all();
-
-    return view('servico.catalogo-servico', compact('aquisicao', 'classeAquisicao'));
-}
 
     public function create()
     {
@@ -46,13 +46,30 @@ class CatalogoServicoController extends Controller
 
         return view('servico.incluir-servico', compact('classes'));
     }
-    
+
     public function store(Request $request)
     {
 
+        // Verifica se uma nova classe foi fornecida ou se uma classe existente foi selecionada
+        $classeId = $request->input('classe_servico');
 
+        if (!$classeId && $request->filled('nova_classe_servico')) {
+            // Cria uma nova classe de serviço se o campo de nova classe foi preenchido
+            $novaClasse = TipoClasseSv::create([
+                'descricao' => $request->input('nova_classe_servico'),
+            ]);
+            $classeId = $novaClasse->id;
+        }
 
-        app('flasher')->addSuccess('Empresa criada com sucesso.');
-        return redirect()->route('empresa.index');
+        // Adiciona os tipos de serviço relacionados à classe
+        foreach ($request->input('tipos_servico') as $tipoServico) {
+            CatalogoServico::create([
+                'id_cl_sv' => $classeId,
+                'descricao' => $tipoServico,
+            ]);
+        }
+
+        app('flasher')->addSuccess('Serviço criado com sucesso.');
+        return redirect()->route('catalogo-servico.index');
     }
 }

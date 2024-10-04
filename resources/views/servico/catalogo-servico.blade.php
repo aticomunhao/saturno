@@ -90,20 +90,20 @@ Catálogo de Serviços
                                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <form class="form-horizontal" method="POST"
-                                                        action="{{ url('/deletar-empresa/' . $aquisicaos->id) }}">
+                                                        action="{{ url('/deletar-servico/' . $aquisicaos->id) }}">
                                                         @csrf
                                                         @method('DELETE')
                                                         <div class="modal-content">
                                                             <div class="modal-header" style="background-color:#DC4C64;">
                                                                 <h5 class="modal-title" id="exampleModalLabel"
-                                                                    style=" color:rgb(255, 255, 255)">Excluir Empresa
+                                                                    style=" color:rgb(255, 255, 255)">Excluir Servico
                                                                 </h5>
                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                                     aria-label="Close"></button>
                                                             </div>
                                                             <div class="modal-body" style="text-align: center">
                                                                 Você realmente deseja excluir <br><span
-                                                                    style="color:#DC4C64; font-weight: bold">{{ $aquisicaos->id }}</span>
+                                                                    style="color:#DC4C64; font-weight: bold">{{ $aquisicaos->descricao }}</span>
                                                                 ?
 
                                                             </div>

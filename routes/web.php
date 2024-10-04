@@ -353,7 +353,7 @@ Route::get('/catalogo-servico', [CatalogoServicoController::class, 'index'])->na
 Route::get('/incluir-servico', [CatalogoServicoController::class, 'create']);
 Route::post('/salvar-servico', [CatalogoServicoController::class, 'store']);
 Route::get('/get-tipos/{classe_id}', [CatalogoServicoController::class, 'getTipos']);
-
+Route::delete('/deletar-servico/{id}', [CatalogoServicoController::class, 'delete']);
 
 
 

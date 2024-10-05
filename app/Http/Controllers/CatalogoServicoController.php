@@ -90,4 +90,23 @@ class CatalogoServicoController extends Controller
         app('flasher')->addSuccess('Serviço deletado com sucesso.');
         return redirect()->route('catalogo-servico.index');
     }
+
+    public function deleteClasse( request $request)
+    {
+        $id = $request->input('classeExcluir');
+        $classeServico = TipoClasseSv::with('SolServico')->find($id);
+        if (!$classeServico) {
+            app('flasher')->addWarning('Serviço não encontrado.');
+            return redirect()->route('catalogo-servico.index');
+        }
+        if ($classeServico->SolServico->count() > 0) {
+            app('flasher')->addError('Não é possível excluir este serviço, pois há documentos associados a ele.');
+            return redirect()->route('catalogo-servico.index');
+        }
+
+        $classeServico->delete();
+
+        app('flasher')->addSuccess('Serviço deletado com sucesso.');
+        return redirect()->route('catalogo-servico.index');
+    }
 }

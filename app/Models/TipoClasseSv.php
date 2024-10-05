@@ -16,6 +16,10 @@ class TipoClasseSv extends Model
     {
         return $this->hasMany(CatalogoServico::class, 'id_cl_sv');
     }
+    public function SolServico()
+    {
+        return $this->hasMany( SolServico::class,'id_classe_sv');
+    }
 
     protected $fillable = [
         'descricao',

@@ -57,7 +57,7 @@
                                     <a href="#" class="btn btn-danger btn-sm"
                                         style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin:5px;"
                                         data-bs-toggle="modal" data-bs-target="#modalExcluir">
-                                        Inativar Classe
+                                        Excluir Classe
                                     </a>
 
                                     <!-- Modal Inativar Classe -->
@@ -70,7 +70,7 @@
                                                 @method('DELETE')
                                                 <div class="modal-content">
                                                     <div class="modal-header" style="background-color:#DC4C64;">
-                                                        <h5 class="modal-title" id="modalExcluirLabel">Confirmar Inativação
+                                                        <h5 class="modal-title" id="modalExcluirLabel">Confirmar Exclusão
                                                         </h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>

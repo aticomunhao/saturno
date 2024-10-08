@@ -60,12 +60,12 @@
                                         Excluir Classe
                                     </a>
 
-                                    <!-- Modal Inativar Classe -->
+                                    <!-- Modal Excluir Classe -->
                                     <div class="modal fade" id="modalExcluir" tabindex="-1"
                                         aria-labelledby="modalExcluirLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <form class="form-horizontal" method="POST"
-                                                action="{{ url('/deletar-classe-servico/') }}">
+                                                action="{{ url('/deletar-classe-servico') }}">
                                                 @csrf
                                                 @method('DELETE')
                                                 <div class="modal-content">
@@ -77,12 +77,13 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         Selecione a classe a ser excluída:
-                                                        <select name = "classeExcluir" class="form-select select2"
+                                                        <select name="classeExcluir" class="form-select select2">
                                                             @foreach ($classeAquisicao as $classeAquisicaos)
-                                                         <option value="{{ $classeAquisicaos->id }}">
-                                                            {{ $classeAquisicaos->descricao }}
-                                                         </option> @endforeach
-                                                            </select>
+                                                                <option value="{{ $classeAquisicaos->id }}">
+                                                                    {{ $classeAquisicaos->descricao }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
                                                     </div>
                                                     <div class="modal-footer mt-2">
                                                         <button type="button" class="btn btn-danger"

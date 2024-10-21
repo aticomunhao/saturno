@@ -39,6 +39,26 @@
                                         value="{{ old('servicos') }}" disabled>
                                     </select>
                                 </div>
+                                <div class="col-md-2 col-sm-12">Situação da Classe
+                                    <br>
+                                    <select class="js-example-responsive form-select select2"
+                                        style="border: 1px solid #999999; padding: 5px;" id="classeSituacao"
+                                        name="classeSituacao">
+                                        <option value="">Todos</option> <!-- Opção 'Todos' com valor vazio -->
+                                        <option value="true">Ativo</option>
+                                        <option value="false">Inativo</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2 col-sm-12">Situação da Serviço
+                                    <br>
+                                    <select class="js-example-responsive form-select select2"
+                                        style="border: 1px solid #999999; padding: 5px;" id="servSituacao"
+                                        name="servSituacao">
+                                        <option value="">Todos</option> <!-- Opção 'Todos' com valor vazio -->
+                                        <option value="true">Ativo</option>
+                                        <option value="false">Inativo</option>
+                                    </select>
+                                </div>
                                 <div class="col" style="margin-top: 20px">
                                     <input class="btn btn-light btn-sm"
                                         style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin:5px;" type="submit"
@@ -70,13 +90,13 @@
                                                 @method('DELETE')
                                                 <div class="modal-content">
                                                     <div class="modal-header" style="background-color:#DC4C64;">
-                                                        <h5 class="modal-title" id="modalExcluirLabel">Confirmar Exclusão
+                                                        <h5 class="modal-title" id="modalExcluirLabel">Confirmar Exclusão/Inativação
                                                         </h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                             aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        Selecione a classe a ser excluída:
+                                                        Selecione a classe a ser excluída/Inativada:
                                                         <select name="classeExcluir" class="form-select select2">
                                                             @foreach ($classeAquisicao as $classeAquisicaos)
                                                                 <option value="{{ $classeAquisicaos->id }}">
@@ -143,14 +163,15 @@
                                                                 <div class="modal-header"
                                                                     style="background-color:#DC4C64;">
                                                                     <h5 class="modal-title" id="exampleModalLabel"
-                                                                        style=" color:rgb(255, 255, 255)">Excluir Servico
+                                                                        style=" color:rgb(255, 255, 255)">Excluir/Inativar
+                                                                        Servico
                                                                     </h5>
                                                                     <button type="button" class="btn-close"
                                                                         data-bs-dismiss="modal"
                                                                         aria-label="Close"></button>
                                                                 </div>
                                                                 <div class="modal-body" style="text-align: center">
-                                                                    Você realmente deseja excluir <br><span
+                                                                    Você realmente deseja Excluir/Inativar <br><span
                                                                         style="color:#DC4C64; font-weight: bold">{{ $aquisicaos->descricao }}</span>
                                                                     ?
 

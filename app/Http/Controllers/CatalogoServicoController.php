@@ -29,6 +29,17 @@ class CatalogoServicoController extends Controller
             $query->where('id', $request->servicos);
         }
 
+        if ($request->classeSituacao) {
+            $query->whereHas('tipoClasseSv', function ($q) use ($request) {
+                $q->where('situacao', $request->classeSituacao);
+            });
+        }
+
+        if ($request->servSituacao) {
+            $query->where('situacao', $request->servSituacao);
+        }
+
+
         $aquisicao = $query->orderBy('id_cl_sv')->paginate(20);
 
         //dd($aquisicao);
@@ -52,21 +63,25 @@ class CatalogoServicoController extends Controller
 
         // Verifica se uma nova classe foi fornecida ou se uma classe existente foi selecionada
         $classeId = $request->input('classe_servico');
+        $servicoId = $request->input('tipos_servico');
 
         if (!$classeId && $request->filled('nova_classe_servico')) {
             // Cria uma nova classe de serviço se o campo de nova classe foi preenchido
             $novaClasse = TipoClasseSv::create([
                 'descricao' => $request->input('nova_classe_servico'),
+                'situacao' => 'true',
             ]);
             $classeId = $novaClasse->id;
         }
-
-        // Adiciona os tipos de serviço relacionados à classe
-        foreach ($request->input('tipos_servico') as $tipoServico) {
-            CatalogoServico::create([
-                'id_cl_sv' => $classeId,
-                'descricao' => $tipoServico,
-            ]);
+        if (!is_null($servicoId)) {
+            // Adiciona os tipos de serviço relacionados à classe
+            foreach ($request->input('tipos_servico') as $tipoServico) {
+                CatalogoServico::create([
+                    'id_cl_sv' => $classeId,
+                    'descricao' => $tipoServico,
+                    'situacao' => 'true',
+                ]);
+            }
         }
 
         app('flasher')->addSuccess('Serviço criado com sucesso.');
@@ -81,7 +96,10 @@ class CatalogoServicoController extends Controller
             return redirect()->route('catalogo-servico.index');
         }
         if ($tipoServico->SolServico->count() > 0) {
-            app('flasher')->addError('Não é possível excluir este serviço, pois há documentos associados a ele.');
+
+            $tipoServico->update(['situacao' => 'false']);
+
+            app('flasher')->addWarning('Este serviço foi inativado, pois há documentos associados a ele.');
             return redirect()->route('catalogo-servico.index');
         }
 
@@ -91,16 +109,25 @@ class CatalogoServicoController extends Controller
         return redirect()->route('catalogo-servico.index');
     }
 
-    public function deleteClasse( request $request)
+    public function deleteClasse(request $request)
     {
         $id = $request->input('classeExcluir');
-        $classeServico = TipoClasseSv::with('SolServico')->find($id);
+        dd($id);
+        $classeServico = TipoClasseSv::with('SolServico', 'catalogoServico')->find($id);
         if (!$classeServico) {
-            app('flasher')->addWarning('Serviço não encontrado.');
+            app('flasher')->addError('Serviço não encontrado.');
             return redirect()->route('catalogo-servico.index');
         }
         if ($classeServico->SolServico->count() > 0) {
-            app('flasher')->addError('Não é possível excluir este serviço, pois há documentos associados a ele.');
+
+            foreach ($classeServico->catalogoServico as $catalogo) {
+                $catalogo->update(['situacao' => 'false']); // Atualiza o status do catálogo
+            }
+
+            $classeServico->update(['situacao' => 'false']);
+
+
+            app('flasher')->addWarning('Esta classe de serviço foi inativada, pois há documentos associados a ela.');
             return redirect()->route('catalogo-servico.index');
         }
 

@@ -24,5 +24,6 @@ class TipoClasseSv extends Model
     protected $fillable = [
         'descricao',
         'sigla',
+        'situacao'
     ];
 }

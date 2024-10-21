@@ -23,6 +23,7 @@ class CatalogoServico extends Model
     protected $fillable = [
         'id_cl_sv',
         'descricao',
+        'situacao'
     ];
     public $timestamps = false;
 }

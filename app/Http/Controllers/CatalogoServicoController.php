@@ -60,22 +60,28 @@ class CatalogoServicoController extends Controller
 
     public function store(Request $request)
     {
-
         // Verifica se uma nova classe foi fornecida ou se uma classe existente foi selecionada
         $classeId = $request->input('classe_servico');
         $servicoId = $request->input('tipos_servico');
 
+        // Cria uma nova classe de serviço se o campo de nova classe foi preenchido
         if (!$classeId && $request->filled('nova_classe_servico')) {
-            // Cria uma nova classe de serviço se o campo de nova classe foi preenchido
             $novaClasse = TipoClasseSv::create([
                 'descricao' => $request->input('nova_classe_servico'),
+                'sigla' => $request->input('sigla_classe_servico'),
                 'situacao' => 'true',
             ]);
             $classeId = $novaClasse->id;
         }
+
         if (!is_null($servicoId)) {
+            // Filtra os tipos de serviço para remover valores vazios ou nulos
+            $servicosValidos = array_filter($request->input('tipos_servico'), function ($tipoServico) {
+                return !is_null($tipoServico) && trim($tipoServico) !== '';
+            });
+
             // Adiciona os tipos de serviço relacionados à classe
-            foreach ($request->input('tipos_servico') as $tipoServico) {
+            foreach ($servicosValidos as $tipoServico) {
                 CatalogoServico::create([
                     'id_cl_sv' => $classeId,
                     'descricao' => $tipoServico,
@@ -85,6 +91,59 @@ class CatalogoServicoController extends Controller
         }
 
         app('flasher')->addSuccess('Serviço criado com sucesso.');
+        return redirect()->route('catalogo-servico.index');
+    }
+
+
+    public function edit($id)
+    {
+        // Encontre o serviço pelo ID
+        $servico = CatalogoServico::with('tipoClasseSv')->findOrFail($id);
+
+        // Busque todas as classes disponíveis
+        $classes = TipoClasseSv::all(); // ou qualquer lógica que você tenha para pegar as classes
+
+        return view('servico.editar-servico', [
+            'servico' => $servico,
+            'classes' => $classes,
+            'classeSelecionada' => $servico->tipoClasseSv, // passando a classe selecionada
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        // Validação dos dados
+        $request->validate([
+            'classe_servico' => 'required|exists:tipo_classe_sv,id', // Valida se a classe existe
+            'nomeServico' => 'required|string|max:255',
+            'servicoSituacao' => 'required|boolean', // Verifica se o valor é booleano (true/false) para o serviço
+            'classeSituacao' => 'required|boolean', // Verifica se o valor é booleano (true/false) para a classe
+        ]);
+
+        // Encontre o serviço pelo ID
+        $servico = CatalogoServico::findOrFail($id);
+        $classe = TipoClasseSv::findOrFail($servico->id_cl_sv);
+
+        // Atualize os dados do serviço
+        $servico->descricao = $request->input('nomeServico');
+        $servico->id_cl_sv = $request->input('classe_servico');
+        $servico->situacao = (bool) $request->input('servicoSituacao');
+
+        // Atualize a situação da classe
+        $classe->situacao = (bool) $request->input('classeSituacao');
+
+        // Se a classe for inativada, inative todos os serviços dessa classe
+        if ($classe->situacao === false) {
+            // Atualiza a situação de todos os serviços associados a essa classe
+            CatalogoServico::where('id_cl_sv', $classe->id)->update(['situacao' => false]);
+        }
+
+        // Salve as alterações no banco
+        $servico->save();
+        $classe->save();
+
+        // Adiciona a mensagem de sucesso e redireciona
+        app('flasher')->addSuccess('Serviço alterado com sucesso.');
         return redirect()->route('catalogo-servico.index');
     }
 
@@ -112,7 +171,6 @@ class CatalogoServicoController extends Controller
     public function deleteClasse(request $request)
     {
         $id = $request->input('classeExcluir');
-        dd($id);
         $classeServico = TipoClasseSv::with('SolServico', 'catalogoServico')->find($id);
         if (!$classeServico) {
             app('flasher')->addError('Serviço não encontrado.');
@@ -127,13 +185,17 @@ class CatalogoServicoController extends Controller
             $classeServico->update(['situacao' => 'false']);
 
 
-            app('flasher')->addWarning('Esta classe de serviço foi inativada, pois há documentos associados a ela.');
+            app('flasher')->addWarning('Esta classe e seus serviços foram inativados, pois há documentos associados a eles.');
             return redirect()->route('catalogo-servico.index');
         }
 
         $classeServico->delete();
 
-        app('flasher')->addSuccess('Serviço deletado com sucesso.');
+        foreach ($classeServico->catalogoServico as $catalogo) {
+            $catalogo->delete(); // Atualiza o status do catálogo
+        }
+
+        app('flasher')->addSuccess('A classe e seus serviços foram deletados com sucesso.');
         return redirect()->route('catalogo-servico.index');
     }
 }

@@ -29,14 +29,14 @@
                                         maxlength="50" type="text" id="" name="nomeFantasia" value="">
                                 </div>
                                 <div class="col" style="margin-top: 20px">
+                                    <input class="btn btn-light btn-sm"
+                                        style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin:5px;" type="submit"
+                                        value="Pesquisar">
                                     <a href="/catalogo-empresa" class="btn btn-light btn-sm"
                                         style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin:5px;" type="button"
                                         value="">
                                         Limpar
                                     </a>
-                                    <input class="btn btn-light btn-sm"
-                                        style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin:5px;" type="submit"
-                                        value="Pesquisar">
                                     <a href="/incluir-empresa">
                                         <input class="btn btn-success btn-sm" type="button" name="novo" value="Novo+"
                                             style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin:5px;">

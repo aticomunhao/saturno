@@ -39,7 +39,7 @@
                                         value="{{ old('servicos') }}" disabled>
                                     </select>
                                 </div>
-                                <div class="col-md-2 col-sm-12">Situação da Classe
+                                <div class="col-md-1 col-sm-12">Situação da Classe
                                     <br>
                                     <select class="js-example-responsive form-select select2"
                                         style="border: 1px solid #999999; padding: 5px;" id="classeSituacao"
@@ -49,7 +49,7 @@
                                         <option value="false">Inativo</option>
                                     </select>
                                 </div>
-                                <div class="col-md-2 col-sm-12">Situação da Serviço
+                                <div class="col-md-1 col-sm-12">Situação da Serviço
                                     <br>
                                     <select class="js-example-responsive form-select select2"
                                         style="border: 1px solid #999999; padding: 5px;" id="servSituacao"
@@ -73,52 +73,49 @@
                                         type="button">
                                         Novo+
                                     </a>
-
-                                    <a href="#" class="btn btn-danger btn-sm"
+                                    <a  class="btn btn-danger btn-sm"
                                         style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin:5px;"
                                         data-bs-toggle="modal" data-bs-target="#modalExcluir">
                                         Excluir Classe
                                     </a>
-
-                                    <!-- Modal Excluir Classe -->
-                                    <div class="modal fade" id="modalExcluir" tabindex="-1"
-                                        aria-labelledby="modalExcluirLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <form class="form-horizontal" method="POST"
-                                                action="{{ url('/deletar-classe-servico') }}">
-                                                @csrf
-                                                @method('DELETE')
-                                                <div class="modal-content">
-                                                    <div class="modal-header" style="background-color:#DC4C64;">
-                                                        <h5 class="modal-title" id="modalExcluirLabel">Confirmar Exclusão/Inativação
-                                                        </h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        Selecione a classe a ser excluída/Inativada:
-                                                        <select name="classeExcluir" class="form-select select2">
-                                                            @foreach ($classeAquisicao as $classeAquisicaos)
-                                                                <option value="{{ $classeAquisicaos->id }}">
-                                                                    {{ $classeAquisicaos->descricao }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                    <div class="modal-footer mt-2">
-                                                        <button type="button" class="btn btn-danger"
-                                                            data-bs-dismiss="modal">Cancelar</button>
-                                                        <button type="submit" class="btn btn-primary">Confirmar</button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-
-
                                 </div>
                             </div>
-                        </form>{{-- Final Formulario de Inserção --}}
+                        </form>
+                        {{-- Final Formulario de Inserção --}}
+                        <!-- Modal Excluir Classe -->
+                        <div class="modal fade" id="modalExcluir" tabindex="-1" aria-labelledby="modalExcluirLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <form class="form-horizontal" method="POST" action="{{ url('/deletar-classe-servico') }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <div class="modal-content">
+                                        <div class="modal-header" style="background-color:#DC4C64;">
+                                            <h5 class="modal-title" id="modalExcluirLabel">Confirmar Exclusão/Inativação
+                                            </h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Selecione a classe a ser excluída/Inativada:
+                                            <select name="classeExcluir" class="form-select select2">
+                                                @foreach ($classeAquisicao as $classeAquisicaos)
+                                                    <option value="{{ $classeAquisicaos->id }}">
+                                                        {{ $classeAquisicaos->descricao }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="modal-footer mt-2">
+                                            <button type="button" class="btn btn-danger"
+                                                data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="submit" class="btn btn-primary">Confirmar</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- FIM da Modal Excluir Classe -->
                         <br>
                         <hr>
                         <table {{-- Inicio da tabela de informacoes --}}
@@ -139,7 +136,7 @@
                                             <td>{{ $aquisicaos->tipoClasseSv->descricao }}</td>
                                             <td>{{ $aquisicaos->descricao }}</td>
                                             <td>
-                                                <a href="/editar-aquisicao-servicos/{{ $aquisicaos->id }}"
+                                                <a href="/editar-servico/{{ $aquisicaos->id }}"
                                                     class="btn btn-sm btn-outline-warning" data-tt="tooltip"
                                                     style="font-size: 1rem; color:#303030" data-placement="top"
                                                     title="Editar">

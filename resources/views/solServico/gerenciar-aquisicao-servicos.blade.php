@@ -54,13 +54,13 @@
                                         </select>
                                     </div>
                                     <div class="col-12">
+                                        <button class="btn btn-light btn-sm "
+                                            style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-right:5px;"{{-- Botao submit do formulario de pesquisa --}}
+                                            type="submit">Pesquisar
+                                        </button>
                                         <a href="/gerenciar-aquisicao-servicos" type="button" class="btn btn-light btn-sm"
                                             style="box-shadow: 1px 2px 5px #000000; font-size: 1rem"
                                             value="">Limpar</a>
-                                        <button class="btn btn-light btn-sm "
-                                            style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-left:5px;"{{-- Botao submit do formulario de pesquisa --}}
-                                            type="submit">Pesquisar
-                                        </button>
                                         <a href="/incluir-aquisicao-servicos" class="btn btn-success"
                                             style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-left:5px">
                                             Novo+

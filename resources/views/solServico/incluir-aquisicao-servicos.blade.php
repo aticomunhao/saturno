@@ -102,7 +102,7 @@
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="razaoSocial">Nome Empresa</label>
-                        <select class="form-select" style="border: 1px solid #999999; padding: 5px;" id="idSetor"
+                        <select class="form-select" style="border: 1px solid #999999; padding: 5px;"
                             name="razaoSocial[]" required>
                             <option></option>
                             @foreach ($buscaEmpresa as $buscaEmpresas)

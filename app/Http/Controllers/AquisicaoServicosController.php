@@ -110,6 +110,12 @@ class AquisicaoServicosController extends Controller
                 'id_setor' => $request->idSetor,
             ]);
 
+            foreach ($request->dt_inicial as $index => $dt_inicial) {
+                if ($request->dt_final[$index] && $request->dt_final[$index] < $dt_inicial) {
+                    return back()->withErrors(['error' => 'A data final não pode ser anterior à data inicial.']);
+                }
+            }
+
             foreach ($request->numero as $index => $numero) {
                 $endArquivo = $request->hasFile('arquivo.' . $index)
                     ? $request->file('arquivo.' . $index)->store('documentos', 'public')

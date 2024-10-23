@@ -18,7 +18,8 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form method="POST" action="/atualizar-servico/{{ $servico->id }}">{{-- Formulario de Inserção --}}
+                        <form method="POST" action="/atualizar-servico/{{ $servico->id }}" id="formAtualizarServico">
+                            {{-- Formulario de Inserção --}}
                             @csrf
                             {{-- Selecione a classe de serviço ou crie uma nova --}}
                             <div class="row">
@@ -69,11 +70,35 @@
                             <div class="botões">
                                 <a href="/catalogo-servico" type="button" value=""
                                     class="btn btn-danger col-md-3 col-2 mt-4 offset-md-2">Cancelar</a>
-                                <button type="submit" value="Confirmar"
-                                    class="btn btn-primary col-md-3 col-1 mt-4 offset-md-2"
-                                    onclick="return confirmInactivation();">Confirmar
+                                <button type="button" class="btn btn-primary col-md-3 col-1 mt-4 offset-md-2"
+                                    data-bs-toggle="modal" data-bs-target="#modalConfirmar" id="btnAbrirModal">
+                                    Confirmar
                                 </button>
                             </div>
+                            <!-- Modal Confirmar -->
+                            <div class="modal fade" id="modalConfirmar" tabindex="-1" aria-labelledby="modalConfirmarLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header" style="background-color:#DC4C64;">
+                                            <h5 class="modal-title" id="modalConfirmarLabel">Confirmar</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body" id="modalConfirmarBody">
+                                            Deseja realmente inativar essa classe e todos os serviços associados?
+                                        </div>
+                                        <div class="modal-footer mt-2">
+                                            <button type="button" class="btn btn-danger"
+                                                data-bs-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn btn-primary" id="confirmarInativacao">
+                                                Confirmar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- FIM da Modal Confirmar -->
                         </form>{{-- Final Formulario de Inserção --}}
                     </div>
                 </div>
@@ -81,18 +106,25 @@
         </div>
     </div>
     <script>
-        function confirmInactivation() {
+        document.getElementById('btnAbrirModal').addEventListener('click', function() {
             const classeSituacao = document.getElementById('classeSituacao').value;
             const servicoSituacao = document.getElementById('servicoSituacao').value;
+            const modalBody = document.getElementById('modalConfirmarBody');
 
-            if (classeSituacao == '0' && servicoSituacao == '0') { // Inativa classe e serviço
-                return confirm('Deseja realmente inativar essa classe e todos os serviços associados?');
-            } else if (classeSituacao == '0') { // Apenas inativa a classe
-                return confirm('Deseja realmente inativar essa classe? Todos os serviços associados também serão inativados.');
-            } else if (servicoSituacao == '0') { // Apenas inativa o serviço
-                return confirm('Deseja realmente inativar esse serviço?');
+            // Alterar o conteúdo da modal com base nas opções selecionadas
+            if (classeSituacao == '0' && servicoSituacao == '0') {
+                modalBody.textContent = 'Deseja realmente inativar essa classe e todos os serviços associados?';
+            } else if (classeSituacao == '0') {
+                modalBody.textContent = 'Deseja realmente inativar essa classe? Todos os serviços associados também serão inativados.';
+            } else if (servicoSituacao == '0') {
+                modalBody.textContent = 'Deseja realmente inativar esse serviço?';
+            } else {
+                modalBody.textContent = 'Deseja realmente confirmar as alterações?';
             }
-            return true; // Se não for inativar, envia o formulário normalmente
-        }
+        });
+
+        document.getElementById('confirmarInativacao').addEventListener('click', function() {
+            document.getElementById('formAtualizarServico').submit();
+        });
     </script>
 @endsection

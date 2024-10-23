@@ -25,10 +25,10 @@ class CatalogoEmpresaController extends Controller
         $query = Empresa::with(['TipoUf']);
 
         if ($request->razaoSocial) {
-            $query->where('razaosocial', $request->razaoSocial);
+            $query->where('razaosocial', 'ILIKE', '%' . $request->razaoSocial . '%');
         }
         if ($request->nomeFantasia) {
-            $query->where('nomefantasia', $request->nomeFantasia);
+            $query->where('nomefantasia', 'ILIKE', '%' . $request->nomeFantasia . '%');
         }
 
         $empresa = $query->orderby('nomefantasia')->paginate(20);

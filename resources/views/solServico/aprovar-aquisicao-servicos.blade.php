@@ -48,7 +48,7 @@
                                     <label>Classe</label>
                                     <br>
                                     <input class="form-control" style="text-align: center;" type="text" disabled
-                                        value="{{ $aquisicao->tipoClasse->descricao}}">
+                                        value="{{ $aquisicao->tipoClasse->descricao }}">
                                 </div>
                                 <div class="col-md-3">
                                     <label>Tipo</label>
@@ -69,10 +69,14 @@
                                 <div class="col-md-4">
                                     <label>Setor Responsável por Acompanhar</label>
                                     <br>
-                                    <select id="cargoSelect" class="form-select status select2 pesquisa-select"
+                                    <select id="idSetorResponsavel" class="form-select status select2 pesquisa-select"
                                         style="" name="setorResponsavel" required>
-                                        @foreach ($todosSetor as $todosSetores)
-                                            <option value="{{ $todosSetores->id }}">{{ $todosSetores->nome }}</option>
+                                        <option></option>
+                                        @foreach ($todosSetor as $setor)
+                                            <option value="{{ $setor->id }}"
+                                                {{ $setor->id == $aquisicao->id_resp_sv ? 'selected' : '' }}>
+                                                {{ $setor->nome }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -88,8 +92,7 @@
                             <div class="ROW" style="margin-left:5px">
                                 @foreach ($empresas as $index => $empresa)
                                     <div style="display: flex; gap: 20px; align-items: flex-end;">
-                                        <div class="col-md-3">{{ 0 + 1 }}º Empresa (ID:
-                                            {{ $empresa->id_empresa }})
+                                        <div class="col-md-3">{{ 0 + 1 }}º Empresa
                                             <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
                                                 type="text" name="empresas[{{ $index }}][id_empresa]"
                                                 value="{{ $empresa->id_empresa }}" readonly>
@@ -109,8 +112,17 @@
                                                 type="date" name="empresas[{{ $index }}][dt_validade]"
                                                 value="{{ $empresa->dt_validade }}" readonly>
                                         </div>
-                                        <div class="col-md-3">Arquivo da Proposta
-                                            <a href="{{ $empresa->end_arquivo }}" target="_blank">Ver Arquivo</a>
+                                        <div class="col-md-3 row">
+                                            <label for="arquivo">Arquivo da Proposta</label>
+                                            @if ($empresa->arquivo_url)
+                                                <a href="{{ $empresa->arquivo_url }}" target="_blank"
+                                                    class="btn btn-primary">
+                                                    Ver Arquivo
+                                                </a>
+                                            @else
+                                                <a class="btn btn-secondary" disabled>Nenhum arquivo
+                                                    disponível.</a>
+                                            @endif
                                         </div>
                                     </div>
                                 @endforeach
@@ -137,8 +149,8 @@
                             </div>
                             <div class=" col-12">Motivo
                                 <br>
-                                <textarea class="form-control" style="border: 1px solid #999999;" id="idMotivo" rows="4" name="motivoRejeicao"
-                                    value="" required></textarea>
+                                <textarea class="form-control" style="border: 1px solid #999999;" id="idMotivo" rows="4"
+                                    name="motivoRejeicao" value="" required>{{ $aquisicao->motivo_recusa }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -155,11 +167,30 @@
     <script>
         $(document).ready(function() {
 
-            //Importa o select2 com tema do Bootstrap para a classe "select2"
-            $('.select2').select2({
-                theme: 'bootstrap-5'
-            });
+            // Seletores dos inputs de radio
+            const radioAprovar = $('#radioAprovar');
+            const radioDevolver = $('#radioDevolver');
+            const radioCancelar = $('#radioCancelar');
+            const motivoField = $('#idMotivo');
+            const setorRespField = $('#idSetorResponsavel');
 
+            // Função para habilitar/desabilitar o campo de motivo
+            function toggleMotivoField() {
+                if (radioAprovar.is(':checked')) {
+                    motivoField.prop('disabled', true).removeAttr('required');
+                } else {
+                    motivoField.prop('disabled', false).attr('required', true);
+                    setorRespField.prop('disabled', true).removeAttr('required');
+                }
+            }
+
+            // Atribuir a função aos eventos de clique nos radios
+            radioAprovar.on('change', toggleMotivoField);
+            radioDevolver.on('change', toggleMotivoField);
+            radioCancelar.on('change', toggleMotivoField);
+
+            // Inicializar com o estado correto
+            toggleMotivoField();
         });
     </script>
 @endsection

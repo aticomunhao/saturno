@@ -135,9 +135,11 @@ class AquisicaoServicosController extends Controller
             }
 
             DB::commit();
-            return redirect('/gerenciar-aquisicao-servicos')->with('success', 'Solicitação e documentos salvos com sucesso!');
+            app('flasher')->addSuccess('Solicitação e documentos salvos com sucesso!');
+            return redirect('/gerenciar-aquisicao-servicos');
         } catch (\Exception $e) {
             DB::rollBack();
+            app('flasher')->addError('Ocorreu um erro ao salvar a solicitação.');
             return back()->withErrors(['error' => 'Ocorreu um erro ao salvar a solicitação.']);
         }
     }
@@ -232,9 +234,11 @@ class AquisicaoServicosController extends Controller
             }
 
             DB::commit();
-            return redirect('/gerenciar-aquisicao-servicos')->with('success', 'Solicitação atualizada com sucesso!');
+            app('flasher')->addSuccess('Solicitação modificada com sucesso!');
+            return redirect('/gerenciar-aquisicao-servicos');
         } catch (\Exception $e) {
             DB::rollBack();
+            app('flasher')->addError('Ocorreu um erro ao atualizar a solicitação.');
             return back()->withErrors(['error' => 'Ocorreu um erro ao atualizar a solicitação.']);
         }
     }
@@ -252,6 +256,16 @@ class AquisicaoServicosController extends Controller
 
         $empresas = Documento::where('id_sol_sv', $idSolicitacao)->get();
 
+        $documentos = Documento::where('id_sol_sv', $idSolicitacao)->get();
+
+        // Adiciona a URL completa do arquivo
+        foreach ($empresas as $empresa) {
+            if ($empresa->end_arquivo) {
+                $empresa->arquivo_url = Storage::url($empresa->end_arquivo);
+            }
+        }
+
+
         return view('solServico.aprovar-aquisicao-servicos', compact('aquisicao', 'numeros', 'todosSetor', 'empresas'));
     }
 
@@ -264,14 +278,37 @@ class AquisicaoServicosController extends Controller
         $aquisicao = SolServico::find($aquisicaoId);
 
         // Verifica se a aquisição foi encontrada
-        if ($aquisicao) {
-            // Atualiza o status e salva
-            $aquisicao->status = $request->input('status');
-            $aquisicao->prioridade = $request->input('prioridade');
-            $aquisicao->save();
-
-
+        if (!$aquisicao) {
+            app('flasher')->addError('Solicitação não encontrada.');
             return redirect('/gerenciar-aquisicao-servicos');
         }
+
+        // Obtém o status enviado pelo formulário
+        $status = $request->input('status');
+
+        // Atualiza o status
+        $aquisicao->status = $status;
+
+        // Verifica o status e trata cada caso
+        if ($status == '3') { // Aprovado
+
+            $aquisicao->id_resp_sv = $request->input('setorResponsavel');
+            $aquisicao->prioridade = $request->input('prioridade');
+            $aquisicao->motivo_recusa = null;
+            $aquisicao->save();
+            app('flasher')->addSuccess('A solicitação foi aprovada.');
+        } elseif ($status == '1' || $status == '7') { // Devolver ou Cancelar
+
+            $aquisicao->id_resp_sv = null;
+            $aquisicao->prioridade = null;
+            $aquisicao->motivo_recusa = $request->input('motivoRejeicao');
+            $aquisicao->save();
+
+            $message = ($status == '1') ? 'A solicitação foi devolvida.' : 'A solicitação foi cancelada.';
+            app('flasher')->addWarning($message);
+        }
+
+        return redirect('/gerenciar-aquisicao-servicos');
+
     }
 }

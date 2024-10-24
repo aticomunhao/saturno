@@ -20,6 +20,7 @@
                         </div>
                         <div class="card-body">
                             <h5>Identificação do Serviço</h5>
+                            <hr>
                             <div class="ROW" style="margin-left:5px">
                                 <div style="display: flex; gap: 20px; align-items: flex-end;">
                                     <div class="col-md-2 col-sm-12">Classe do Serviço
@@ -59,6 +60,56 @@
                                     <br>
                                     <textarea class="form-control" style="border: 1px solid #999999; padding: 5px;" id="idmotivo" rows="4"
                                         name="motivo"></textarea>
+                                </div>
+                            </div>
+                            <div >
+                                <div class="card proposta-comercial" style="border-color: #355089; margin-top: 20px;">
+                                    <div class="card-header">
+                                        <div style="display: flex; gap: 20px; align-items: flex-end;">
+                                            <h5 style="color: #355089">Proposta Comercial</h5>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class=" form-group row" style="margin-left:5px">
+                                            <div class="col-md-4 mb-3">
+                                                <label for="numero">Número da Proposta</label>
+                                                <input type="text" class="form-control" name="numero[]" placeholder="Digite o Número da proposta"
+                                                    required>
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label for="razaoSocial">Nome Empresa</label>
+                                                <select class="form-select" style="border: 1px solid #999999; padding: 5px;"
+                                                    name="razaoSocial[]" required>
+                                                    <option></option>
+                                                    @foreach ($buscaEmpresa as $buscaEmpresas)
+                                                        <option value="{{ $buscaEmpresas->id }}">
+                                                            {{ $buscaEmpresas->razaosocial }} - {{ $buscaEmpresas->nomefantasia }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label for="valor">Valor</label>
+                                                <input type="text" class="form-control" name="valor[]" placeholder="Digite o valor da proposta"
+                                                    required>
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label for="dt_inicial">Data da Proposta</label>
+                                                <input type="date" class="form-control" name="dt_inicial[]"
+                                                    placeholder="Digite a data da proposta" required>
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label for="dt_final">Data Limite</label>
+                                                <input type="date" class="form-control" name="dt_final[]"
+                                                    placeholder="Digite a data final do prazo da proposta" min="">
+                                            </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label for="arquivo">Arquivo da Proposta</label>
+                                                <input type="file" class="form-control" name="arquivo[]"
+                                                    placeholder="Insira o arquivo da proposta" required>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <!-- Container para os formulários de propostas comerciais -->
@@ -136,6 +187,7 @@
             </div>
         </div>
     </div>
+    <!-- FIM do Template de formulário de proposta comercial -->
     <script>
         $(document).ready(function() {
             function populateServicos(selectElement, classeServicoValue) {

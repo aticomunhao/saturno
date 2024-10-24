@@ -21,13 +21,12 @@
                         <div class="card-body">
                             <h5>Identificação do Serviço</h5>
                             <hr>
-                            <br>
                             <div class="ROW" style="margin-left:5px">
                                 <div style="display: flex; gap: 20px; align-items: flex-end;">
                                     <div class="col-md-2 col-sm-12">
                                         <label>Número da Solicitação</label>
                                         <input class="form-control" type="text" value="{{ $solicitacao->id }}"
-                                            id="iddt_inicio" name="numeorSolicitacao" required="required" disabled>
+                                            id="iddt_inicio" name="numeroSolicitacao" required="required" disabled>
                                     </div>
                                     <div class="col-md-2 col-sm-12">
                                         <label>Data de Criação da Solicitação</label>
@@ -35,18 +34,30 @@
                                             value="{{ \Carbon\Carbon::parse($solicitacao->data)->format('d/m/Y') }}"
                                             id="iddt_inicio" name="dt_inicio" required="required" disabled>
                                     </div>
+                                    <div class="col-md-3 col-sm-12">Setor
+                                        <br>
+                                        <select class="form-select" style="border: 1px solid #999999; padding: 5px;"
+                                            id="idSetor" name="idSetor" disabled>
+                                            <option></option>
+                                            @foreach ($buscaSetor as $buscaSetors)
+                                                <option value="{{ $buscaSetors->id }}"
+                                                    {{ $solicitacao->id_setor == $buscaSetors->id ? 'selected' : '' }}>
+                                                    {{ $buscaSetors->sigla }} - {{ $buscaSetors->nome }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                                 <div style="display: flex; gap: 20px; align-items: flex-end;">
                                     <div class="col-md-2 col-sm-12">Classe do Serviço
                                         <br>
-                                        <select class="js-example-responsive form-select"
-                                            style="border: 1px solid #999999; padding: 5px;" id="classeServico"
-                                            name="classeSv" required>
-                                            <option></option>
-                                            @foreach ($classeAquisicao as $classeAquisicaos)
-                                                <option value="{{ $classeAquisicaos->id }}"
-                                                    {{ $solicitacao->id_classe_sv == $classeAquisicaos->id ? 'selected' : '' }}>
-                                                    {{ $classeAquisicaos->descricao }}
+                                        <select class="form-select select2"
+                                            style="border: 1px solid #999999; padding: 5px;" id="classeServicoEditar"
+                                            name="classeSvEditar" required>
+                                            @foreach ($classeAquisicao as $classe)
+                                                <option value="{{ $classe->id }}"
+                                                    {{ $classe->id == $solicitacao->id_classe_sv ? 'selected' : '' }}>
+                                                    {{ $classe->descricao }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -61,19 +72,6 @@
                                                 <option value="{{ $tipoServico->id }}"
                                                     {{ $solicitacao->id_tp_sv == $tipoServico->id ? 'selected' : '' }}>
                                                     {{ $tipoServico->descricao }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3 col-sm-12">Setor
-                                        <br>
-                                        <select class="form-select" style="border: 1px solid #999999; padding: 5px;"
-                                            id="idSetor" name="idSetor" disabled>
-                                            <option></option>
-                                            @foreach ($buscaSetor as $buscaSetors)
-                                                <option value="{{ $buscaSetors->id }}"
-                                                    {{ $solicitacao->id_setor == $buscaSetors->id ? 'selected' : '' }}>
-                                                    {{ $buscaSetors->sigla }} - {{ $buscaSetors->nome }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -112,7 +110,7 @@
                                                         value="{{ $documento->numero }}">
                                                 </div>
                                                 <div class="col-md-4 mb-3">
-                                                    <label for="razaoSocial">Razão Social</label>
+                                                    <label for="razaoSocial">Nome da Empresa</label>
                                                     <input type="text" class="form-control" name="razaoSocialOld[]"
                                                         placeholder="Digite a razão social da empresa proposta"
                                                         value="{{ $documento->id_empresa }}" required>
@@ -136,7 +134,7 @@
                                                         placeholder="Digite a data final do prazo da proposta">
                                                 </div>
                                                 <div class="col-md-3 mb-3">
-                                                    <label for="arquivo">Arquivo da Proposta</label>
+                                                    <label for="arquivo">Novo Arquivo</label>
                                                     <input type="file" class="form-control" name="arquivoOld[]"
                                                         value="{{ $documento->end_arquivo }}" required
                                                         placeholder="Insira o arquivo da proposta">
@@ -256,6 +254,7 @@
                             <label for="razaoSocial">Nome da Empresa</label>
                             <select class="form-select" style="border: 1px solid #999999; padding: 5px;" id="idSetor"
                             name="razaoSocial[]" required>
+                            <option></option>
                                 @foreach ($buscaEmpresa as $buscaEmpresas)
                                     <option value="{{ $buscaEmpresas->id }}">
                                         {{ $buscaEmpresas->razaosocial }} - {{ $buscaEmpresas->nomefantasia }}

@@ -88,7 +88,7 @@
                             <hr>
                             <table {{-- Inicio da tabela de informacoes --}}
                                 class= "table table-sm table-striped table-bordered border-secondary table-hover align-middle">
-                                <thead style="text-align: center; ">{{-- inicio header tabela --}}
+                                <thead style="text-align: center;">{{-- inicio header tabela --}}
                                     <tr style="background-color: #d6e3ff; font-size:19px; color:#000;" class="align-middle">
                                         <th></th>
                                         <th>Número</th>

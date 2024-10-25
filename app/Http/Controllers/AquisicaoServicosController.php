@@ -14,6 +14,7 @@ use App\Models\Setor;
 use App\Models\Documento;
 use App\Models\Empresa;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 
 use function Laravel\Prompts\select;
@@ -36,7 +37,7 @@ class AquisicaoServicosController extends Controller
             $query->where('id_tp_sv', $request->servicos);
         }
 
-        $aquisicao = $query->orderBy('id')->paginate(20);
+        $aquisicao = $query->orderBy('prioridade')->paginate(20);
 
         //dd($aquisicao);
 
@@ -65,7 +66,6 @@ class AquisicaoServicosController extends Controller
     {
 
         $setor = session()->get('usuario.setor', 'cpf');
-
         //dd($setor);
 
         $buscaSetor = Setor::whereIn('id', $setor)->get();
@@ -94,6 +94,7 @@ class AquisicaoServicosController extends Controller
             'numero.*' => 'required|string',
             'valor.*' => 'required|numeric',
             'dt_inicial.*' => 'required|date',
+            'dt_final.*' => 'nullable|date|after_or_equal:dt_inicial.*',
             'arquivo.*' => 'nullable|file|mimes:pdf,doc,docx',
         ]);
 
@@ -101,6 +102,8 @@ class AquisicaoServicosController extends Controller
 
         DB::beginTransaction();
         try {
+
+
             $solicitacao = SolServico::create([
                 'id_classe_sv' => $request->classeSv,
                 'id_tp_sv' => $request->tipoServicos,
@@ -110,13 +113,8 @@ class AquisicaoServicosController extends Controller
                 'id_setor' => $request->idSetor,
             ]);
 
-            foreach ($request->dt_inicial as $index => $dt_inicial) {
-                if ($request->dt_final[$index] && $request->dt_final[$index] < $dt_inicial) {
-                    return back()->withErrors(['error' => 'A data final não pode ser anterior à data inicial.']);
-                }
-            }
-
             foreach ($request->numero as $index => $numero) {
+                // Armazena o arquivo se existir
                 $endArquivo = $request->hasFile('arquivo.' . $index)
                     ? $request->file('arquivo.' . $index)->store('documentos', 'public')
                     : null;
@@ -124,7 +122,7 @@ class AquisicaoServicosController extends Controller
                 Documento::create([
                     'numero' => $numero,
                     'dt_doc' => $today,
-                    'id_tp_doc' => '14',
+                    'id_tp_doc' => '14', // Considere alterar para uma constante ou buscar no banco
                     'valor' => $request->valor[$index],
                     'id_empresa' => $request->razaoSocial[$index],
                     'id_setor' => $request->input('idSetor'),
@@ -143,6 +141,7 @@ class AquisicaoServicosController extends Controller
             return back()->withErrors(['error' => 'Ocorreu um erro ao salvar a solicitação.']);
         }
     }
+
 
 
     public function edit($idS)
@@ -250,7 +249,17 @@ class AquisicaoServicosController extends Controller
             ->where('id', $idSolicitacao)
             ->first();
 
-        $numeros = range(1, 100); // Gera um array de 1 a 100
+        // Recupera todas as prioridades existentes
+        $prioridadesExistentes = SolServico::pluck('prioridade')->unique()->toArray();
+
+        // Se existirem prioridades, encontra a maior e adiciona 1
+        if (!empty($prioridadesExistentes)) {
+            $maiorPrioridade = max($prioridadesExistentes);
+            $numeros = range(1, $maiorPrioridade + 1); // Gera uma lista de 1 até a maior prioridade + 1
+        } else {
+            // Se não houver prioridades, você pode definir o range inicial como desejado, por exemplo, 1
+            $numeros = range(1, 1);
+        }
 
         $todosSetor = Setor::orderBy('nome')->get();
 
@@ -276,6 +285,7 @@ class AquisicaoServicosController extends Controller
 
         // Busca a aquisição no banco de dados
         $aquisicao = SolServico::find($aquisicaoId);
+        $novaPrioridade = $request->input('prioridade');
 
         // Verifica se a aquisição foi encontrada
         if (!$aquisicao) {
@@ -292,10 +302,34 @@ class AquisicaoServicosController extends Controller
         // Verifica o status e trata cada caso
         if ($status == '3') { // Aprovado
 
+            $prioridadeAtual = $aquisicao->prioridade;
+
+            if ($novaPrioridade > $prioridadeAtual) {
+                // Desce as prioridades entre a atual e a nova prioridade
+                SolServico::whereBetween('prioridade', [$prioridadeAtual + 1, $novaPrioridade])
+                    ->decrement('prioridade');
+            } elseif ($novaPrioridade < $prioridadeAtual) {
+                // Sobe as prioridades entre a nova e a atual prioridade
+                SolServico::whereBetween('prioridade', [$novaPrioridade, $prioridadeAtual - 1])
+                    ->increment('prioridade');
+            }
+
+            // Define a nova prioridade da solicitação
             $aquisicao->id_resp_sv = $request->input('setorResponsavel');
-            $aquisicao->prioridade = $request->input('prioridade');
+            $aquisicao->prioridade = $novaPrioridade;
+
+            // Impede que a prioridade fique abaixo de 1
+            if ($aquisicao->prioridade < 1) {
+                $aquisicao->prioridade = 1;
+            }
+
+            // Salva a solicitação
             $aquisicao->motivo_recusa = null;
             $aquisicao->save();
+
+            // Reorganiza as prioridades para garantir que não haja lacunas
+            $this->reorganizarPrioridades();
+
             app('flasher')->addSuccess('A solicitação foi aprovada.');
         } elseif ($status == '1' || $status == '7') { // Devolver ou Cancelar
 
@@ -310,5 +344,46 @@ class AquisicaoServicosController extends Controller
 
         return redirect('/gerenciar-aquisicao-servicos');
 
+    }
+    private function reorganizarPrioridades()
+    {
+        // Reorganiza as prioridades para garantir que não haja lacunas
+        $solicitacoes = SolServico::whereNotNull('prioridade')
+            ->orderBy('prioridade')
+            ->get();
+
+        $prioridadeAtual = 1;
+        foreach ($solicitacoes as $solicitacao) {
+            if ($solicitacao->prioridade != $prioridadeAtual) {
+                $solicitacao->prioridade = $prioridadeAtual;
+                $solicitacao->save();
+            }
+            $prioridadeAtual++;
+        }
+    }
+
+    public function enviar($idS)
+    {
+        try {
+
+             // Recupera a última prioridade e define a nova como maior + 1
+             $ultimaPrioridade = SolServico::max('prioridade');
+             $novaPrioridade = $ultimaPrioridade ? $ultimaPrioridade + 1 : 1;
+
+            // Encontra a solicitação pelo ID ou lança uma exceção se não for encontrada
+            SolServico::findOrFail($idS)->update([
+                'status' => '2',
+                'prioridade' => $novaPrioridade,
+            ]);
+
+            // Adiciona uma mensagem de sucesso
+            app('flasher')->addSuccess('Solicitação enviada com sucesso!');
+        } catch (ModelNotFoundException $e) {
+            // Adiciona uma mensagem de erro se a solicitação não for encontrada
+            app('flasher')->addError('Solicitação não encontrada!');
+        }
+
+        // Redireciona para a página de gerenciamento
+        return redirect('/gerenciar-aquisicao-servicos');
     }
 }

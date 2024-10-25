@@ -59,10 +59,10 @@
                                 <div class=" col-12">Motivo
                                     <br>
                                     <textarea class="form-control" style="border: 1px solid #999999; padding: 5px;" id="idmotivo" rows="4"
-                                        name="motivo"></textarea>
+                                        name="motivo" required></textarea>
                                 </div>
                             </div>
-                            <div >
+                            <div>
                                 <div class="card proposta-comercial" style="border-color: #355089; margin-top: 20px;">
                                     <div class="card-header">
                                         <div style="display: flex; gap: 20px; align-items: flex-end;">
@@ -73,8 +73,8 @@
                                         <div class=" form-group row" style="margin-left:5px">
                                             <div class="col-md-4 mb-3">
                                                 <label for="numero">Número da Proposta</label>
-                                                <input type="text" class="form-control" name="numero[]" placeholder="Digite o Número da proposta"
-                                                    required>
+                                                <input type="number" class="form-control" name="numero[]"
+                                                    placeholder="Digite o Número da proposta" required>
                                             </div>
                                             <div class="col-md-4 mb-3">
                                                 <label for="razaoSocial">Nome Empresa</label>
@@ -83,15 +83,16 @@
                                                     <option></option>
                                                     @foreach ($buscaEmpresa as $buscaEmpresas)
                                                         <option value="{{ $buscaEmpresas->id }}">
-                                                            {{ $buscaEmpresas->razaosocial }} - {{ $buscaEmpresas->nomefantasia }}
+                                                            {{ $buscaEmpresas->razaosocial }} -
+                                                            {{ $buscaEmpresas->nomefantasia }}
                                                         </option>
                                                     @endforeach
                                                 </select>
                                             </div>
                                             <div class="col-md-4 mb-3">
                                                 <label for="valor">Valor</label>
-                                                <input type="text" class="form-control" name="valor[]" placeholder="Digite o valor da proposta"
-                                                    required>
+                                                <input type="number" class="form-control" name="valor[]"
+                                                    placeholder="Digite o valor da proposta" required>
                                             </div>
                                             <div class="col-md-4 mb-3">
                                                 <label for="dt_inicial">Data da Proposta</label>
@@ -148,13 +149,13 @@
                 <div class=" form-group row" style="margin-left:5px">
                     <div class="col-md-4 mb-3">
                         <label for="numero">Número da Proposta</label>
-                        <input type="text" class="form-control" name="numero[]" placeholder="Digite o Número da proposta"
-                            required>
+                        <input type="number" class="form-control" name="numero[]"
+                            placeholder="Digite o Número da proposta">
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="razaoSocial">Nome Empresa</label>
                         <select class="form-select" style="border: 1px solid #999999; padding: 5px;"
-                            name="razaoSocial[]" required>
+                            name="razaoSocial[]">
                             <option></option>
                             @foreach ($buscaEmpresa as $buscaEmpresas)
                                 <option value="{{ $buscaEmpresas->id }}">
@@ -165,13 +166,13 @@
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="valor">Valor</label>
-                        <input type="text" class="form-control" name="valor[]" placeholder="Digite o valor da proposta"
-                            required>
+                        <input type="number" class="form-control" name="valor[]"
+                            placeholder="Digite o valor da proposta">
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="dt_inicial">Data da Proposta</label>
                         <input type="date" class="form-control" name="dt_inicial[]"
-                            placeholder="Digite a data da proposta" required>
+                            placeholder="Digite a data da proposta">
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="dt_final">Data Limite</label>
@@ -181,7 +182,7 @@
                     <div class="col-md-4 mb-3">
                         <label for="arquivo">Arquivo da Proposta</label>
                         <input type="file" class="form-control" name="arquivo[]"
-                            placeholder="Insira o arquivo da proposta" required>
+                            placeholder="Insira o arquivo da proposta">
                     </div>
                 </div>
             </div>

@@ -128,7 +128,7 @@
                                                     title="Editar">
                                                     <i class="bi bi-pencil"></i>
                                                 </a>
-                                                <a href="" class="btn btn-sm btn-outline-primary" data-tt="tooltip"
+                                                <a href="/enviar-aquisicao-servicos/{{ $aquisicaos->id }}" class="btn btn-sm btn-outline-primary" data-tt="tooltip"
                                                     style="font-size: 1rem; color:#303030" data-placement="top"
                                                     title="Enviar">
                                                     <i class="bi bi-cart-check"></i>

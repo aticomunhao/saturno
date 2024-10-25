@@ -334,6 +334,7 @@ Route::get('/editar-aquisicao-servicos/{idS}', [AquisicaoServicosController::cla
 Route::any('/atualizar-aquisicao-servicos/{id}', [AquisicaoServicosController::class, 'update'])->name('atualizar-aquisicao-servico');
 Route::get('/aprovar-aquisicao-servicos/{idSolicitacao}', [AquisicaoServicosController::class, 'aprovar']);
 Route::post('/validaAprovacao-aquisicao-servicos', [AquisicaoServicosController::class, 'validaAprovacao']);
+Route::any('/enviar-aquisicao-servicos/{idS}', [AquisicaoServicosController::class, 'enviar']);
 
 
 

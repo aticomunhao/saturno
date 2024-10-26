@@ -43,10 +43,21 @@ class AquisicaoServicosController extends Controller
 
         $status = TipoStatusSolSv::all();
         $classeAquisicao = TipoClasseSv::all();
+        $todosSetor = Setor::orderBy('nome')->get();
+
+        $prioridadesExistentes = SolServico::pluck('prioridade')->unique()->toArray();
+
+        // Se existirem prioridades, encontra a maior e adiciona 1
+        if (!empty($prioridadesExistentes)) {
+            $maiorPrioridade = max($prioridadesExistentes);
+            $numeros = range(1, $maiorPrioridade + 1); // Gera uma lista de 1 até a maior prioridade + 1
+        } else {
+            // Se não houver prioridades, você pode definir o range inicial como desejado, por exemplo, 1
+            $numeros = range(1, 1);
+        }
 
 
-
-        return view('solServico.gerenciar-aquisicao-servicos', compact('aquisicao', 'classeAquisicao', 'status'));
+        return view('solServico.gerenciar-aquisicao-servicos', compact('aquisicao', 'classeAquisicao', 'status', 'todosSetor', 'numeros'));
     }
 
     public function retornaNomeServicos($idClasse)
@@ -366,9 +377,9 @@ class AquisicaoServicosController extends Controller
     {
         try {
 
-             // Recupera a última prioridade e define a nova como maior + 1
-             $ultimaPrioridade = SolServico::max('prioridade');
-             $novaPrioridade = $ultimaPrioridade ? $ultimaPrioridade + 1 : 1;
+            // Recupera a última prioridade e define a nova como maior + 1
+            $ultimaPrioridade = SolServico::max('prioridade');
+            $novaPrioridade = $ultimaPrioridade ? $ultimaPrioridade + 1 : 1;
 
             // Encontra a solicitação pelo ID ou lança uma exceção se não for encontrada
             SolServico::findOrFail($idS)->update([
@@ -386,4 +397,33 @@ class AquisicaoServicosController extends Controller
         // Redireciona para a página de gerenciamento
         return redirect('/gerenciar-aquisicao-servicos');
     }
+
+    public function aprovarEmLote(Request $request)
+    {
+        $ids = $request->input('ids');
+        $prioridades = $request->input('prioridade'); // Captura as prioridades
+        $setores = $request->input('setor'); // Captura os setores
+
+        if (!$ids || empty($prioridades) || empty($setores)) {
+            return response()->json(['success' => false, 'message' => 'Nenhum item selecionado ou dados faltando.']);
+        }
+
+        try {
+            // Atualiza o status, prioridade e setor em lote
+            foreach ($ids as $id) {
+                SolServico::where('id', $id)->update([
+                    'status' => 3,
+                    'prioridade' => $prioridades[$id], // Atualiza a prioridade correspondente
+                    'setor_responsavel' => $setores[$id], // Atualiza o setor correspondente
+                ]);
+            }
+            app('flasher')->addSuccess('Solicitações aprovadas com sucesso');
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            app('flasher')->addError('Erro ao aprovar as Solicitações');
+            return response()->json(['success' => false, 'message' => 'Erro ao atualizar status.']);
+        }
+    }
+
+
 }

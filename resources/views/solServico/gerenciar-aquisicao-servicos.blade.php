@@ -37,8 +37,9 @@
                                     </div>
                                     <div class="col-md-2 col-sm-12">Tipo de Serviço
                                         <br>
-                                        <select class="js-example-responsive form-select select2" style="border: 1px solid #999999;"
-                                            id="servicos" name="servicos" value="{{ old('servicos') }}" disabled>
+                                        <select class="js-example-responsive form-select select2"
+                                            style="border: 1px solid #999999;" id="servicos" name="servicos"
+                                            value="{{ old('servicos') }}" disabled>
                                         </select>
                                     </div>
                                     <div class="col-md-2 col-sm-12">Status
@@ -69,8 +70,9 @@
                                 </div>
                                 <div class="ROW justify-content-start">
                                     <div class="col-12" style="margin-top:10px;">
-                                        <a href="/incluir-aquisicao-servicos" class="btn btn-primary "
-                                            style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-right:5px">
+                                        <a href="" class="btn btn-primary"
+                                            style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-right:5px"
+                                            data-bs-toggle="modal" data-bs-target="#modalAprovarLote">
                                             Aprovar em Lote
                                         </a>
                                         <a href="/incluir-aquisicao-servicos" class="btn btn-success "
@@ -87,23 +89,35 @@
                             <br>
                             <hr>
                             <table {{-- Inicio da tabela de informacoes --}}
-                                class= "table table-sm table-striped table-bordered border-secondary table-hover align-middle">
+                                class= "table table-sm table-striped table-bordered border-secondary table-hover align-middle"
+                                id="tabela-servicos">
                                 <thead style="text-align: center;">{{-- inicio header tabela --}}
-                                    <tr style="background-color: #d6e3ff; font-size:19px; color:#000;" class="align-middle">
-                                        <th></th>
-                                        <th>Número</th>
-                                        <th>Data</th>
-                                        <th>Tipo Serviço</th>
-                                        <th>Setor</th>
-                                        <th>Prioridade</th>
-                                        <th>Status</th>
-                                        <th>Ações</th>
+                                    <tr style="background-color: #d6e3ff; font-size:15px; color:#000;" class="align-middle">
+                                        <th>
+                                            <div style="display: flex; justify-content: center; align-items: center;">
+                                                <input type="checkbox" id="selectAll" onclick="toggleCheckboxes(this)"
+                                                    aria-label="Selecionar todos" style="border: 1px solid #000">
+                                            </div>
+                                        </th>
+                                        <th>NÚMERO</th>
+                                        <th>DATA</th>
+                                        <th>TIPO SERVIÇO</th>
+                                        <th>SETOR</th>
+                                        <th>PRIORIDADE</th>
+                                        <th>STATUS</th>
+                                        <th>AÇÕES</th>
                                     </tr>
                                 </thead>{{-- Fim do header da tabela --}}
                                 <tbody style="font-size: 15px; color:#000000; text-align: center;">{{-- Inicio body tabela --}}
                                     @foreach ($aquisicao as $aquisicaos)
                                         <tr>
-                                            <td></td>
+                                            <td>
+                                                <div style="display: flex; justify-content: center; align-items: center;">
+                                                    <input class="form-check-input item-checkbox" type="checkbox"
+                                                        id="checkboxNoLabel" value="{{ $aquisicaos->id }}" aria-label="..."
+                                                        style="border: 1px solid #000">
+                                                </div>
+                                            </td>
                                             <td>{{ $aquisicaos->id }}</td>
                                             <td>{{ \Carbon\Carbon::parse($aquisicaos->data)->format('d/m/Y') }}</td>
                                             <td>{{ $aquisicaos->CatalogoServico->descricao }}</td>
@@ -128,14 +142,15 @@
                                                     title="Editar">
                                                     <i class="bi bi-pencil"></i>
                                                 </a>
-                                                <a href="/enviar-aquisicao-servicos/{{ $aquisicaos->id }}" class="btn btn-sm btn-outline-primary" data-tt="tooltip"
+                                                <a href="/enviar-aquisicao-servicos/{{ $aquisicaos->id }}"
+                                                    class="btn btn-sm btn-outline-primary" data-tt="tooltip"
                                                     style="font-size: 1rem; color:#303030" data-placement="top"
                                                     title="Enviar">
                                                     <i class="bi bi-cart-check"></i>
                                                 </a>
-                                                <a href="" class="btn btn-sm btn-outline-primary" data-tt="tooltip"
-                                                    style="font-size: 1rem; color:#303030" data-placement="top"
-                                                    title="visualizar">
+                                                <a href="" class="btn btn-sm btn-outline-primary"
+                                                    data-tt="tooltip" style="font-size: 1rem; color:#303030"
+                                                    data-placement="top" title="visualizar">
                                                     <i class="bi bi-search"></i>
                                                 </a>
                                                 <a href="" class="btn btn-sm btn-outline-info" data-tt="tooltip"
@@ -173,6 +188,31 @@
             </div>
         </div>
     </form>{{-- Final Formulario de pesquisa --}}
+
+    <!-- Modal Aprovar em Lote -->
+    <div class="modal fade" id="modalAprovarLote" tabindex="-1" aria-labelledby="modalAprovarLoteLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <form class="form-horizontal" method="POST" action="{{ url('/aprovar-em-lote') }}" >
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color:#DC4C64;">
+                        <h5 class="modal-title" id="modalAprovarLoteLabel">Confirmar Aprovação</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="modal-body-content">
+                            <!-- O conteúdo dinâmico será inserido aqui -->
+                    </div>
+                    <div class="modal-footer mt-2">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Confirmar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- FIM da Modal Aprovar em Lote -->
+
 
     <script>
         $(document).ready(function() {
@@ -229,6 +269,64 @@
             });
         });
     </script>
+    <script>
+        // Função para selecionar ou desmarcar todos os checkboxes
+        function toggleCheckboxes(selectAllCheckbox) {
+            const checkboxes = document.querySelectorAll('.item-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+        }
 
+        $(document).ready(function() {
+            // Código existente...
 
+            $('#modalAprovarLote').on('show.bs.modal', function() {
+                // Limpa o conteúdo anterior
+                $('#modal-body-content').empty();
+
+                // Seleciona todos os checkboxes marcados
+                const selectedCheckboxes = $('.item-checkbox:checked');
+
+                if (selectedCheckboxes.length === 0) {
+                    // Se não houver checkboxes selecionados, fecha a modal
+                    alert('Por favor, selecione pelo menos uma solicitação.');
+                    $('#modalAprovarLote').modal('hide');
+                    return;
+                }
+
+                // Itera sobre cada checkbox selecionado
+                selectedCheckboxes.each(function() {
+                    const id = $(this).val(); // Obtém o valor (ID) do checkbox
+
+                    // Cria um novo conjunto de opções para prioridade e setor
+                    const newContent = `
+                    <div class="row mb-3">
+                        <div class="d-flex col-md-12">
+                            <div class="col-md-4" style="margin-right: 5px">
+                                <label for="prioridade-${id}" class="form-label">Prioridade da solicitação ${id}:</label>
+                                <select name="prioridade[${id}]" id="prioridade-${id}" class="form-select select2">
+                                    @foreach ($numeros as $number)
+                                        <option value="{{ $number }}">{{ $number }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-8">
+                                <label for="setor-${id}" class="form-label">Setor responsável:</label>
+                                <select name="setor[${id}]" id="setor-${id}" class="form-select select2">
+                                    @foreach ($todosSetor as $setor)
+                                        <option value="{{ $setor->id }}">{{ $setor->nome }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                `;
+                    // Adiciona o novo conteúdo ao corpo da modal
+                    $('#modal-body-content').append(newContent);
+                });
+            });
+        });
+    </script>
 @endsection

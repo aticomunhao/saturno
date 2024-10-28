@@ -75,7 +75,7 @@
                                         @foreach ($todosSetor as $setor)
                                             <option value="{{ $setor->id }}"
                                                 {{ $setor->id == $aquisicao->id_resp_sv ? 'selected' : '' }}>
-                                                {{ $setor->nome }}
+                                                {{ $setor->nome }} - {{ $setor->sigla }}
                                             </option>
                                         @endforeach
                                     </select>

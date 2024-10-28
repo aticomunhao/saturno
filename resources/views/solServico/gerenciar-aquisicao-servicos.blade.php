@@ -193,7 +193,7 @@
     <div class="modal fade" id="modalAprovarLote" tabindex="-1" aria-labelledby="modalAprovarLoteLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
-            <form class="form-horizontal" method="POST" action="{{ url('/aprovar-em-lote') }}" >
+            <form class="form-horizontal" method="POST" action="{{ url('/aprovar-em-lote') }}">
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header" style="background-color:#DC4C64;">
@@ -201,7 +201,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body" id="modal-body-content">
-                            <!-- O conteúdo dinâmico será inserido aqui -->
+                        <!-- O conteúdo dinâmico será inserido aqui -->
                     </div>
                     <div class="modal-footer mt-2">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
@@ -212,8 +212,6 @@
         </div>
     </div>
     <!-- FIM da Modal Aprovar em Lote -->
-
-
     <script>
         $(document).ready(function() {
             function populateServicos(selectElement, classeServicoValue) {
@@ -279,7 +277,13 @@
         }
 
         $(document).ready(function() {
-            // Código existente...
+            // Inicializa o Select2 dentro da modal
+            $('#modalAprovarLote').on('shown.bs.modal', function() {
+                $('.select2').select2({
+                    dropdownParent: $(
+                        '#modalAprovarLote') // Define a modal como o container do dropdown
+                });
+            });
 
             $('#modalAprovarLote').on('show.bs.modal', function() {
                 // Limpa o conteúdo anterior
@@ -301,31 +305,77 @@
 
                     // Cria um novo conjunto de opções para prioridade e setor
                     const newContent = `
-                    <div class="row mb-3">
+                    <div class="row mb-3" data-id="${id}">
                         <div class="d-flex col-md-12">
                             <div class="col-md-4" style="margin-right: 5px">
                                 <label for="prioridade-${id}" class="form-label">Prioridade da solicitação ${id}:</label>
                                 <select name="prioridade[${id}]" id="prioridade-${id}" class="form-select select2">
-                                    @foreach ($numeros as $number)
-                                        <option value="{{ $number }}">{{ $number }}</option>
-                                    @endforeach
+                                    @for ($i = 1; $i <= 100; $i++)
+                    <option value="{{ $i }}">{{ $i }}</option>
+                @endfor
                                 </select>
                             </div>
                             <div class="col-md-8">
                                 <label for="setor-${id}" class="form-label">Setor responsável:</label>
                                 <select name="setor[${id}]" id="setor-${id}" class="form-select select2">
                                     @foreach ($todosSetor as $setor)
-                                        <option value="{{ $setor->id }}">{{ $setor->nome }}</option>
+                                        <option value="{{ $setor->id }}">{{ $setor->nome }} - {{ $setor->sigla}}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
                     </div>
                     <br>
-                `;
+                    `;
                     // Adiciona o novo conteúdo ao corpo da modal
                     $('#modal-body-content').append(newContent);
                 });
+            });
+
+            // Ação para aprovar em lote
+            $('#btnAprovarLote').on('click', function() {
+                const ids = [];
+                const prioridades = {};
+                const setores = {};
+
+                // Coleta os IDs, prioridades e setores
+                $('.item-checkbox:checked').each(function() {
+                    const id = $(this).val();
+                    ids.push(id); // Adiciona ID ao array
+
+                    // Captura as prioridades e setores correspondentes
+                    prioridades[id] = $(`#prioridade-${id}`).val();
+                    setores[id] = $(`#setor-${id}`).val();
+                });
+
+                // Envia os dados via AJAX
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('aquisicao.aprovarEmLote') }}",
+                    data: {
+                        ids: ids,
+                        prioridade: prioridades,
+                        setor: setores,
+                        _token: '{{ csrf_token() }}' // Inclui o token CSRF
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.success) {
+                            alert('Solicitações aprovadas com sucesso');
+                            location.reload(); // Atualiza a página
+                        } else {
+                            alert(response.message || 'Erro ao aprovar solicitações');
+                        }
+                    },
+                    error: function() {
+                        alert('Erro ao aprovar solicitações');
+                    }
+                });
+            });
+
+            $('.btn-danger[data-bs-dismiss="modal"]').on('click', function() {
+                // Recarrega a página ao clicar no botão de cancelar
+                location.reload();
             });
         });
     </script>

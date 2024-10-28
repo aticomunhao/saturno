@@ -335,6 +335,8 @@ class AquisicaoServicosController extends Controller
             }
 
             // Salva a solicitação
+            $aquisicao->aut_usu_adm = true;
+            $aquisicao->dt_usu_adm = now();
             $aquisicao->motivo_recusa = null;
             $aquisicao->save();
 
@@ -358,13 +360,15 @@ class AquisicaoServicosController extends Controller
     }
     private function reorganizarPrioridades()
     {
-        // Reorganiza as prioridades para garantir que não haja lacunas
+        // Obtém todas as solicitações com prioridade, ordenadas pela prioridade
         $solicitacoes = SolServico::whereNotNull('prioridade')
             ->orderBy('prioridade')
             ->get();
 
         $prioridadeAtual = 1;
+
         foreach ($solicitacoes as $solicitacao) {
+            // Ajusta a prioridade para que seja sequencial
             if ($solicitacao->prioridade != $prioridadeAtual) {
                 $solicitacao->prioridade = $prioridadeAtual;
                 $solicitacao->save();
@@ -400,30 +404,46 @@ class AquisicaoServicosController extends Controller
 
     public function aprovarEmLote(Request $request)
     {
-        $ids = $request->input('ids');
         $prioridades = $request->input('prioridade'); // Captura as prioridades
         $setores = $request->input('setor'); // Captura os setores
+        //dd($setores);
 
-        if (!$ids || empty($prioridades) || empty($setores)) {
-            return response()->json(['success' => false, 'message' => 'Nenhum item selecionado ou dados faltando.']);
-        }
+        foreach ($prioridades as $id => $novaPrioridade) {
+            if (isset($setores[$id]) && isset($novaPrioridade)) {
+                $solicitacao = SolServico::find($id);
 
-        try {
-            // Atualiza o status, prioridade e setor em lote
-            foreach ($ids as $id) {
-                SolServico::where('id', $id)->update([
-                    'status' => 3,
-                    'prioridade' => $prioridades[$id], // Atualiza a prioridade correspondente
-                    'setor_responsavel' => $setores[$id], // Atualiza o setor correspondente
-                ]);
+                if ($solicitacao) {
+                    $prioridadeAtual = $solicitacao->prioridade;
+
+                    // Caso a nova prioridade seja maior ou menor que a atual, ajusta as prioridades intermediárias
+                    if ($novaPrioridade != $prioridadeAtual) {
+                        if ($novaPrioridade > $prioridadeAtual) {
+                            // Desce as prioridades entre a atual e a nova prioridade
+                            SolServico::whereBetween('prioridade', [$prioridadeAtual + 1, $novaPrioridade])
+                                ->decrement('prioridade');
+                        } elseif ($novaPrioridade < $prioridadeAtual) {
+                            // Sobe as prioridades entre a nova e a atual prioridade
+                            SolServico::whereBetween('prioridade', [$novaPrioridade, $prioridadeAtual - 1])
+                                ->increment('prioridade');
+                        }
+                    }
+
+                    $solicitacao->update([
+                        'status' => 3,
+                        'prioridade' => $novaPrioridade,
+                        'id_resp_sv' => $setores[$id],
+                        'aut_usu_adm' => true,
+                        'dt_usu_adm' => now(),
+                    ]);
+                    dd($solicitacao);
+                }
             }
-            app('flasher')->addSuccess('Solicitações aprovadas com sucesso');
-            return response()->json(['success' => true]);
-        } catch (\Exception $e) {
-            app('flasher')->addError('Erro ao aprovar as Solicitações');
-            return response()->json(['success' => false, 'message' => 'Erro ao atualizar status.']);
         }
+
+        // Reorganiza as prioridades para garantir que não haja lacunas
+        $this->reorganizarPrioridades();
+
+        app('flasher')->addSuccess('Solicitações aprovadas com sucesso');
+        return redirect('/gerenciar-aquisicao-servicos');
     }
-
-
 }

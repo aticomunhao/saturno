@@ -7,10 +7,7 @@ $(document).ready(function () {
         theme: "bootstrap-5",
     });
 });
-//Máscara de telefonev (INCLUIR EMPRESA)
-document.addEventListener('DOMContentLoaded', function () {
-    Inputmask("(99) 99999-9999").mask(document.querySelector("#inscricaoTelefoneId"));
-});
+
 
 
 

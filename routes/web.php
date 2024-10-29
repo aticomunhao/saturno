@@ -336,8 +336,10 @@ Route::get('/aprovar-aquisicao-servicos/{idSolicitacao}', [AquisicaoServicosCont
 Route::post('/validaAprovacao-aquisicao-servicos', [AquisicaoServicosController::class, 'validaAprovacao']);
 Route::any('/enviar-aquisicao-servicos/{idS}', [AquisicaoServicosController::class, 'enviar']);
 Route::post('/aprovar-em-lote', [AquisicaoServicosController::class, 'aprovarEmLote'])->name('aquisicao.aprovarEmLote');
-
-
+Route::get('/homologar-aquisicao-servicos/{id}', [AquisicaoServicosController::class, 'homologar']);
+Route::post('/validaHomologacao-aquisicao-servicos', [AquisicaoServicosController::class, 'validaHomologacao']);
+Route::post('/homologar-em-lote', [AquisicaoServicosController::class, 'homologarEmLote'])->name('aquisicao.homologarEmLote');
+Route::get('/visualizar-aquisicao-servicos/{id}', [AquisicaoServicosController::class, 'show']);
 
 
 //Catálogo de Empresas

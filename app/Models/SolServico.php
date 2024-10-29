@@ -19,6 +19,9 @@ class SolServico extends Model
         'status',
         'id_setor',
         'prioridade',
+        'aut_usu_adm',
+        'dt_usu_adm',
+        'id_resp_sv',
     ];
 
     public function tipoClasse()

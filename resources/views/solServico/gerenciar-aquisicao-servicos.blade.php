@@ -75,13 +75,14 @@
                                             data-bs-toggle="modal" data-bs-target="#modalAprovarLote">
                                             Aprovar em Lote
                                         </a>
-                                        <a href="/incluir-aquisicao-servicos" class="btn btn-success "
-                                            style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-right:5px">
+                                        <a href="" class="btn btn-success"
+                                            style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-right:5px"
+                                            data-bs-toggle="modal" data-bs-target="#modalHomologarLote">
                                             Homologar em Lote
                                         </a>
-                                        <a href="/incluir-aquisicao-servicos" class="btn btn-warning "
+                                        <a href="" class="btn btn-warning "
                                             style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-right:5px">
-                                            Confirmar em Lote
+                                            Pagamento
                                         </a>
                                     </div>
                                 </div>
@@ -90,7 +91,7 @@
                             <hr>
                             <table {{-- Inicio da tabela de informacoes --}}
                                 class= "table table-sm table-striped table-bordered border-secondary table-hover align-middle"
-                                id="tabela-servicos">
+                                id="tabela-servicos" style="width: 100%">
                                 <thead style="text-align: center;">{{-- inicio header tabela --}}
                                     <tr style="background-color: #d6e3ff; font-size:15px; color:#000;" class="align-middle">
                                         <th>
@@ -131,7 +132,8 @@
                                                     title="Aprovar">
                                                     <i class="bi bi-check-lg"></i>
                                                 </a>
-                                                <a href="" class="btn btn-sm btn-outline-success" data-tt="tooltip"
+                                                <a href="/homologar-aquisicao-servicos/{{ $aquisicaos->id }}"
+                                                    class="btn btn-sm btn-outline-success" data-tt="tooltip"
                                                     style="font-size: 1rem; color:#303030" data-placement="top"
                                                     title="Homologar">
                                                     <i class="bi bi-clipboard-check"></i>
@@ -148,7 +150,7 @@
                                                     title="Enviar">
                                                     <i class="bi bi-cart-check"></i>
                                                 </a>
-                                                <a href="" class="btn btn-sm btn-outline-primary"
+                                                <a href="/visualizar-aquisicao-servicos/{{ $aquisicaos->id }}" class="btn btn-sm btn-outline-primary"
                                                     data-tt="tooltip" style="font-size: 1rem; color:#303030"
                                                     data-placement="top" title="visualizar">
                                                     <i class="bi bi-search"></i>
@@ -157,16 +159,6 @@
                                                     style="font-size: 1rem; color:#303030" data-placement="top"
                                                     title="Aceite">
                                                     <i class="bi bi-hand-thumbs-up"></i>
-                                                </a>
-                                                <a href="" class="btn btn-sm btn-outline-warning"
-                                                    data-tt="tooltip" style="font-size: 1rem; color:#303030"
-                                                    data-placement="top" title="Confirmar">
-                                                    <i class="bi bi-currency-dollar"></i>
-                                                </a>
-                                                <a href="" class="btn btn-sm btn-outline-warning"
-                                                    data-tt="tooltip" style="font-size: 1rem; color:#303030"
-                                                    data-placement="top" title="Editar Compra">
-                                                    <i class="bi bi-pencil-square"></i>
                                                 </a>
                                                 <a href="" class="btn btn-sm btn-outline-danger" data-tt="tooltip"
                                                     style="font-size: 1rem; color:#303030" data-placement="top"
@@ -200,7 +192,7 @@
                         <h5 class="modal-title" id="modalAprovarLoteLabel">Confirmar Aprovação</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body" id="modal-body-content">
+                    <div class="modal-body" id="modal-body-content-aprovar">
                         <!-- O conteúdo dinâmico será inserido aqui -->
                     </div>
                     <div class="modal-footer mt-2">
@@ -212,6 +204,29 @@
         </div>
     </div>
     <!-- FIM da Modal Aprovar em Lote -->
+    <!-- Modal Homologar em Lote -->
+    <div class="modal fade" id="modalHomologarLote" tabindex="-1" aria-labelledby="modalHomologarLoteLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <form class="form-horizontal" method="POST" action="{{ url('/homologar-em-lote') }}">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color:#DC4C64;">
+                        <h5 class="modal-title" id="modalHomologarLoteLabel">Confirmar Homologação</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="modal-body-content-homologar">
+                        <!-- O conteúdo dinâmico será inserido aqui -->
+                    </div>
+                    <div class="modal-footer mt-2">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Confirmar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- FIM da Modal Homologar em Lote -->
     <script>
         $(document).ready(function() {
             function populateServicos(selectElement, classeServicoValue) {
@@ -276,107 +291,78 @@
             });
         }
 
-        $(document).ready(function() {
-            // Inicializa o Select2 dentro da modal
-            $('#modalAprovarLote').on('shown.bs.modal', function() {
-                $('.select2').select2({
-                    dropdownParent: $(
-                        '#modalAprovarLote') // Define a modal como o container do dropdown
-                });
-            });
-
-            $('#modalAprovarLote').on('show.bs.modal', function() {
-                // Limpa o conteúdo anterior
-                $('#modal-body-content').empty();
-
-                // Seleciona todos os checkboxes marcados
-                const selectedCheckboxes = $('.item-checkbox:checked');
-
-                if (selectedCheckboxes.length === 0) {
-                    // Se não houver checkboxes selecionados, fecha a modal
-                    alert('Por favor, selecione pelo menos uma solicitação.');
-                    $('#modalAprovarLote').modal('hide');
-                    return;
-                }
-
-                // Itera sobre cada checkbox selecionado
-                selectedCheckboxes.each(function() {
-                    const id = $(this).val(); // Obtém o valor (ID) do checkbox
-
-                    // Cria um novo conjunto de opções para prioridade e setor
-                    const newContent = `
+        // Função para gerar conteúdo dinâmico nos modais
+        function generateModalContent(selectedCheckboxes, modalContentId) {
+            selectedCheckboxes.each(function() {
+                const id = $(this).val();
+                const newContent = `
                     <div class="row mb-3" data-id="${id}">
                         <div class="d-flex col-md-12">
                             <div class="col-md-4" style="margin-right: 5px">
                                 <label for="prioridade-${id}" class="form-label">Prioridade da solicitação ${id}:</label>
                                 <select name="prioridade[${id}]" id="prioridade-${id}" class="form-select select2">
                                     @for ($i = 1; $i <= 100; $i++)
-                    <option value="{{ $i }}">{{ $i }}</option>
-                @endfor
+                                        <option value="{{ $i }}">{{ $i }}</option>
+                                    @endfor
                                 </select>
                             </div>
                             <div class="col-md-8">
                                 <label for="setor-${id}" class="form-label">Setor responsável:</label>
                                 <select name="setor[${id}]" id="setor-${id}" class="form-select select2">
                                     @foreach ($todosSetor as $setor)
-                                        <option value="{{ $setor->id }}">{{ $setor->nome }} - {{ $setor->sigla}}</option>
+                                        <option value="{{ $setor->id }}">{{ $setor->nome }} - {{ $setor->sigla }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
                     </div>
                     <br>
-                    `;
-                    // Adiciona o novo conteúdo ao corpo da modal
-                    $('#modal-body-content').append(newContent);
+                `;
+                $(modalContentId).append(newContent);
+            });
+        }
+
+        $(document).ready(function() {
+            // Inicializa o Select2 dentro dos modais
+            $('#modalAprovarLote, #modalHomologarLote').on('shown.bs.modal', function() {
+                $('.select2').select2({
+                    dropdownParent: $(this)
                 });
             });
 
-            // Ação para aprovar em lote
-            $('#btnAprovarLote').on('click', function() {
-                const ids = [];
-                const prioridades = {};
-                const setores = {};
-
-                // Coleta os IDs, prioridades e setores
-                $('.item-checkbox:checked').each(function() {
-                    const id = $(this).val();
-                    ids.push(id); // Adiciona ID ao array
-
-                    // Captura as prioridades e setores correspondentes
-                    prioridades[id] = $(`#prioridade-${id}`).val();
-                    setores[id] = $(`#setor-${id}`).val();
-                });
-
-                // Envia os dados via AJAX
-                $.ajax({
-                    type: "POST",
-                    url: "{{ route('aquisicao.aprovarEmLote') }}",
-                    data: {
-                        ids: ids,
-                        prioridade: prioridades,
-                        setor: setores,
-                        _token: '{{ csrf_token() }}' // Inclui o token CSRF
-                    },
-                    dataType: "json",
-                    success: function(response) {
-                        if (response.success) {
-                            alert('Solicitações aprovadas com sucesso');
-                            location.reload(); // Atualiza a página
-                        } else {
-                            alert(response.message || 'Erro ao aprovar solicitações');
-                        }
-                    },
-                    error: function() {
-                        alert('Erro ao aprovar solicitações');
-                    }
-                });
+            // Configuração do modal de Aprovar em Lote
+            $('#modalAprovarLote').on('show.bs.modal', function() {
+                $('#modal-body-content-aprovar').empty();
+                const selectedCheckboxes = $('.item-checkbox:checked');
+                if (selectedCheckboxes.length === 0) {
+                    alert('Por favor, selecione pelo menos uma solicitação.');
+                    $('#modalAprovarLote').modal('hide');
+                    return;
+                }
+                generateModalContent(selectedCheckboxes, '#modal-body-content-aprovar');
             });
 
+            // Configuração do modal de Homologar em Lote
+            $('#modalHomologarLote').on('show.bs.modal', function() {
+                $('#modal-body-content-homologar').empty();
+                const selectedCheckboxes = $('.item-checkbox:checked');
+                if (selectedCheckboxes.length === 0) {
+                    alert('Por favor, selecione pelo menos uma solicitação.');
+                    $('#modalHomologarLote').modal('hide');
+                    return;
+                }
+                generateModalContent(selectedCheckboxes, '#modal-body-content-homologar');
+            });
+
+            // Recarrega a página ao cancelar no modal
             $('.btn-danger[data-bs-dismiss="modal"]').on('click', function() {
-                // Recarrega a página ao clicar no botão de cancelar
                 location.reload();
             });
         });
     </script>
+    <style>
+        .card-body {
+            overflow-x: hidden;
+        }
+    </style>
 @endsection

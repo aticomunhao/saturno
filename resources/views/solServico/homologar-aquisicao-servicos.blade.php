@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('title')
-    Incluir Aquisição de Serviços
+    Homologar Aquisição de Serviços
 @endsection
 @section('content')
-    <form method="POST" action="/salvar-aquisicao-servicos">{{-- Formulario de Inserção --}}
+    <form method="POST" action="/validaHomologacao-aquisicao-servicos">{{-- Formulario de Inserção --}}
         @csrf
         <div class="container-fluid"> {{-- Container completo da página  --}}
             <div class="justify-content-center">
@@ -14,52 +14,77 @@
                         <div class="card-header">
                             <div class="ROW">
                                 <h5 class="col-12" style="color: #355089">
-                                    Incluir Aquisição de Serviços
+                                    Homologar Aquisição de Serviços
                                 </h5>
                             </div>
                         </div>
                         <div class="card-body">
-                            <h5>Identificação do Serviço</h5>
-                            <div class="ROW" style="margin-left:5px">
-                                <div style="display: flex; gap: 20px; align-items: flex-end;">
-                                    <div class="col-md-2 col-sm-12">Classe do Serviço
-                                        <br>
-                                        <select class="js-example-responsive form-select"
-                                            style="border: 1px solid #999999; padding: 5px;" id="classeServico"
-                                            name="classeSv">
-                                            <option value=""></option>
-                                            @foreach ($classeAquisicao as $classeAquisicaos)
-                                                <option value="{{ $classeAquisicaos->idClasse }}">
-                                                    {{ $classeAquisicaos->descricaoClasse }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-md-2 col-sm-12">Tipo de Serviço
-                                        <br>
-                                        <select class="js-example-responsive form-select"
-                                            style="border: 1px solid #999999; padding: 5px;" id="servicos"
-                                            name="tipoServicos" value="{{ old('servicos') }}" disabled>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-2 col-sm-12">Selecione seu Setor
-                                        <br>
-                                        <select class="form-select select2" style="border: 1px solid #999999; padding: 5px;"
-                                            id="idSetor" name="idSetor" value="">
-                                            <option value=""></option>
-                                            @foreach ($buscaSetor as $buscaSetors)
-                                                <option value="{{ $buscaSetors->id }}">
-                                                    {{ $buscaSetors->nome }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class=" col-12">Motivo
+                            <h5>Identificação do Solicitante</h5>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>Número da Proposta</label>
                                     <br>
-                                    <textarea class="form-control" style="border: 1px solid #999999; padding: 5px;" id="idmotivo" rows="4"
-                                        name="motivo" value=""></textarea>
+                                    <input class="form-control" style="text-align: center;" type="text" disabled
+                                        value="{{ $aquisicao->id }}">
                                 </div>
+                                <div class="col-md-4">
+                                    <label>Data da Criação</label>
+                                    <br>
+                                    <input class="form-control" style="text-align: center;" type="date" format="d-m-Y"
+                                        disabled value="{{ $aquisicao->data }}">
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Setor</label>
+                                    <br>
+                                    <input class="form-control" style="text-align: center;" type="text" disabled
+                                        value="{{ $aquisicao->setor->nome }}">
+                                </div>
+                            </div>
+                            <br>
+                            <hr>
+                            <h5>Identificação do Serviço</h5>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label>Classe</label>
+                                    <br>
+                                    <input class="form-control" style="text-align: center;" type="text" disabled
+                                        value="{{ $aquisicao->tipoClasse->descricao }}">
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Tipo</label>
+                                    <br>
+                                    <input class="form-control" style="text-align: center;" type="text" disabled
+                                        value="{{ $aquisicao->catalogoServico->descricao }}">
+                                </div>
+                                <div class="col-md-2">
+                                    <label>Prioridade</label>
+                                    <br>
+                                    <select id="cargoSelect" class="form-select status select2 pesquisa-select"
+                                        style="" name="prioridade" required>
+                                        @foreach ($numeros as $number)
+                                            <option value="{{ $number }}">{{ $number }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Setor Responsável por Acompanhar</label>
+                                    <br>
+                                    <select id="idSetorResponsavel" class="form-select status select2 pesquisa-select"
+                                        style="" name="setorResponsavel" required>
+                                        <option></option>
+                                        @foreach ($todosSetor as $setor)
+                                            <option value="{{ $setor->id }}"
+                                                {{ $setor->id == $aquisicao->id_resp_sv ? 'selected' : '' }}>
+                                                {{ $setor->nome }} - {{ $setor->sigla }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class=" col-12">Motivo
+                                <br>
+                                <textarea class="form-control" style="border: 1px solid #999999; padding: 5px;" id="idmotivo" rows="4"
+                                    value="" disabled>{{ $aquisicao->motivo }}</textarea>
                             </div>
                             <br>
                             <hr>
@@ -67,7 +92,7 @@
                             <div class="ROW" style="margin-left:5px">
                                 @foreach ($empresas as $index => $empresa)
                                     <div style="display: flex; gap: 20px; align-items: flex-end;">
-                                        <div class="col-md-3">{{ 0 + 1 }}º Empresa (ID: {{ $empresa->id_empresa }})
+                                        <div class="col-md-3">{{ 0 + 1 }}º Empresa
                                             <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
                                                 type="text" name="empresas[{{ $index }}][id_empresa]"
                                                 value="{{ $empresa->id_empresa }}" readonly>
@@ -87,11 +112,45 @@
                                                 type="date" name="empresas[{{ $index }}][dt_validade]"
                                                 value="{{ $empresa->dt_validade }}" readonly>
                                         </div>
-                                        <div class="col-md-3">Arquivo da Proposta
-                                            <a href="{{ $empresa->end_arquivo }}" target="_blank">Ver Arquivo</a>
+                                        <div class="col-md-3 row">
+                                            <label for="arquivo">Arquivo da Proposta</label>
+                                            @if ($empresa->arquivo_url)
+                                                <a href="{{ $empresa->arquivo_url }}" target="_blank"
+                                                    class="btn btn-primary">
+                                                    Ver Arquivo
+                                                </a>
+                                            @else
+                                                <a class="btn btn-secondary" disabled>Nenhum arquivo
+                                                    disponível.</a>
+                                            @endif
                                         </div>
                                     </div>
                                 @endforeach
+                            </div>
+                            <br>
+                            <hr>
+                            <h5>Decisão</h5>
+
+                            <input type="hidden" name="solicitacao_id" value="{{ $aquisicao->id }}">
+
+                            <div class="d-flex gap-5 align-items-end">
+                                <div class="form-check">
+                                    <input type="radio" name="status" id="radioDevolver" value="1">
+                                    <label for="radioDevolver">Devolver</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="radio" name="status" id="radioAprovar" value="3" checked>
+                                    <label for="radioAprovar">Aprovar</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="radio" name="status" id="radioCancelar" value="7">
+                                    <label for="radioCancelar">Cancelar</label>
+                                </div>
+                            </div>
+                            <div class=" col-12">Motivo
+                                <br>
+                                <textarea class="form-control" style="border: 1px solid #999999;" id="idMotivo" rows="4"
+                                    name="motivoRejeicao" value="" required>{{ $aquisicao->motivo_recusa }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -99,7 +158,7 @@
             </div>
         </div>
         <div class="botões">
-            <a href="/gerenciar-aquisicao-servicos" type="button" value=""
+            <a href="javascript:history.back()" type="button" value=""
                 class="btn btn-danger col-md-3 col-2 mt-4 offset-md-2">Cancelar</a>
             <button type="submit" value="Confirmar" class="btn btn-primary col-md-3 col-1 mt-4 offset-md-2">Confirmar
             </button>
@@ -107,67 +166,31 @@
     </form>{{-- Final Formulario de Inserção --}}
     <script>
         $(document).ready(function() {
-            $('#servicos, #classeServico').select2({
-                theme: 'bootstrap-5',
-                width: '100%',
-            });
 
-            // Função para popular o select de serviços baseado no valor do select de classe de serviço
-            function populateServicos(selectElement, classeServicoValue) {
-                $.ajax({
-                    type: "GET",
-                    url: "/retorna-nome-servicos/" + classeServicoValue,
-                    dataType: "json",
-                    success: function(response) {
-                        // Limpa o select antes de adicionar novas opções
-                        selectElement.empty();
+            // Seletores dos inputs de radio
+            const radioAprovar = $('#radioAprovar');
+            const radioDevolver = $('#radioDevolver');
+            const radioCancelar = $('#radioCancelar');
+            const motivoField = $('#idMotivo');
+            const setorRespField = $('#idSetorResponsavel');
 
-                        // Adiciona um option padrão
-                        selectElement.append('<option value="">Selecione um serviço</option>');
-
-                        // Itera sobre os dados retornados e adiciona as opções ao select
-                        $.each(response, function(index, item) {
-                            selectElement.append('<option value="' + item.id + '">' +
-                                item.descricao + '</option>');
-                        });
-
-                        // Ativa o select caso ele estivesse desabilitado
-                        selectElement.prop('disabled', false);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Ocorreu um erro:", error);
-                        console.log(xhr.responseText); // Detalhes do erro, se necessário
-                    }
-                });
+            // Função para habilitar/desabilitar o campo de motivo
+            function toggleMotivoField() {
+                if (radioAprovar.is(':checked')) {
+                    motivoField.prop('disabled', true).removeAttr('required');
+                } else {
+                    motivoField.prop('disabled', false).attr('required', true);
+                    setorRespField.prop('disabled', true).removeAttr('required');
+                }
             }
 
-            // Evento change para detectar a mudança no select de classe de serviço
-            $('#classeServico').change(function() {
-                var classeServicoValue = $(this).val();
+            // Atribuir a função aos eventos de clique nos radios
+            radioAprovar.on('change', toggleMotivoField);
+            radioDevolver.on('change', toggleMotivoField);
+            radioCancelar.on('change', toggleMotivoField);
 
-                // Selecione o elemento do select de serviços
-                var servicosSelect = $('#servicos');
-
-                // Desabilita o select de serviços se nenhum valor for selecionado na classe de serviço
-                if (!classeServicoValue) {
-                    servicosSelect.empty().append('<option value="">Selecione um serviço</option>');
-                    servicosSelect.prop('disabled', true);
-                    return;
-                }
-
-                // Chama a função para popular os serviços
-                populateServicos(servicosSelect, classeServicoValue);
-            });
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-
-            //Importa o select2 com tema do Bootstrap para a classe "select2"
-            $('.select2').select2({
-                theme: 'bootstrap-5'
-            });
-
+            // Inicializar com o estado correto
+            toggleMotivoField();
         });
     </script>
 @endsection

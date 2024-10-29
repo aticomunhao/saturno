@@ -291,12 +291,15 @@ class AquisicaoServicosController extends Controller
 
     public function validaAprovacao(Request $request)
     {
+
+        $usuario = session('usuario.id_usuario');
         // Obtém o valor do ID da solicitação
         $aquisicaoId = $request->input('solicitacao_id');
 
         // Busca a aquisição no banco de dados
         $aquisicao = SolServico::find($aquisicaoId);
-        $novaPrioridade = $request->input('prioridade');
+
+        $novaPrioridade = $aquisicao->aut_usu_pres ?? $request->input('prioridade');
 
         // Verifica se a aquisição foi encontrada
         if (!$aquisicao) {
@@ -335,7 +338,7 @@ class AquisicaoServicosController extends Controller
             }
 
             // Salva a solicitação
-            $aquisicao->aut_usu_adm = true;
+            $aquisicao->aut_usu_adm = $usuario;
             $aquisicao->dt_usu_adm = now();
             $aquisicao->motivo_recusa = null;
             $aquisicao->save();
@@ -346,6 +349,8 @@ class AquisicaoServicosController extends Controller
             app('flasher')->addSuccess('A solicitação foi aprovada.');
         } elseif ($status == '1' || $status == '7') { // Devolver ou Cancelar
 
+            $aquisicao->aut_usu_adm = $usuario;
+            $aquisicao->dt_usu_adm = now();
             $aquisicao->id_resp_sv = null;
             $aquisicao->prioridade = null;
             $aquisicao->motivo_recusa = $request->input('motivoRejeicao');
@@ -402,12 +407,149 @@ class AquisicaoServicosController extends Controller
         return redirect('/gerenciar-aquisicao-servicos');
     }
 
+
+    public function homologar($id)
+    {
+
+        $aquisicao = SolServico::with(['tipoClasse', 'catalogoServico', 'tipoStatus', 'setor'])
+            ->where('id', $id)
+            ->first();
+
+        // Recupera todas as prioridades existentes
+        $prioridadesExistentes = SolServico::pluck('prioridade')->unique()->toArray();
+
+        // Se existirem prioridades, encontra a maior e adiciona 1
+        if (!empty($prioridadesExistentes)) {
+            $maiorPrioridade = max($prioridadesExistentes);
+            $numeros = range(1, $maiorPrioridade + 1); // Gera uma lista de 1 até a maior prioridade + 1
+        } else {
+            // Se não houver prioridades, você pode definir o range inicial como desejado, por exemplo, 1
+            $numeros = range(1, 1);
+        }
+
+        $todosSetor = Setor::orderBy('nome')->get();
+
+        $empresas = Documento::where('id_sol_sv', $id)->get();
+
+        $documentos = Documento::where('id_sol_sv', $id)->get();
+
+        // Adiciona a URL completa do arquivo
+        foreach ($empresas as $empresa) {
+            if ($empresa->end_arquivo) {
+                $empresa->arquivo_url = Storage::url($empresa->end_arquivo);
+            }
+        }
+
+        return view('solServico.homologar-aquisicao-servicos', compact('aquisicao', 'numeros', 'todosSetor', 'empresas'));
+    }
+
+    public function validaHomologacao(Request $request)
+    {
+
+        $usuario = session('usuario.id_usuario');
+
+        // Obtém o valor do ID da solicitação
+        $aquisicaoId = $request->input('solicitacao_id');
+
+        // Busca a aquisição no banco de dados
+        $aquisicao = SolServico::find($aquisicaoId);
+        $novaPrioridade = $request->input('prioridade');
+
+        // Verifica se a aquisição foi encontrada
+        if (!$aquisicao) {
+            app('flasher')->addError('Solicitação não encontrada.');
+            return redirect('/gerenciar-aquisicao-servicos');
+        }
+
+        // Obtém o status enviado pelo formulário
+        $status = $request->input('status');
+
+        // Atualiza o status
+        $aquisicao->status = $status;
+
+        // Verifica o status e trata cada caso
+        if ($status == '3') { // Aprovado
+
+            $prioridadeAtual = $aquisicao->prioridade;
+
+            if ($novaPrioridade > $prioridadeAtual) {
+                // Desce as prioridades entre a atual e a nova prioridade
+                SolServico::whereBetween('prioridade', [$prioridadeAtual + 1, $novaPrioridade])
+                    ->decrement('prioridade');
+            } elseif ($novaPrioridade < $prioridadeAtual) {
+                // Sobe as prioridades entre a nova e a atual prioridade
+                SolServico::whereBetween('prioridade', [$novaPrioridade, $prioridadeAtual - 1])
+                    ->increment('prioridade');
+            }
+
+            // Define a nova prioridade da solicitação
+            $aquisicao->id_resp_sv = $request->input('setorResponsavel');
+            $aquisicao->prioridade = $novaPrioridade;
+
+            // Impede que a prioridade fique abaixo de 1
+            if ($aquisicao->prioridade < 1) {
+                $aquisicao->prioridade = 1;
+            }
+
+            // Salva a solicitação
+            $aquisicao->aut_usu_pres = $usuario;
+            $aquisicao->dt_usu_pres = now();
+            $aquisicao->motivo_recusa = null;
+            $aquisicao->save();
+
+            // Reorganiza as prioridades para garantir que não haja lacunas
+            $this->reorganizarPrioridades();
+
+            app('flasher')->addSuccess('A solicitação foi aprovada.');
+        } elseif ($status == '1' || $status == '7') { // Devolver ou Cancelar
+
+            $aquisicao->aut_usu_pres = $usuario;
+            $aquisicao->dt_usu_pres = now();
+            $aquisicao->id_resp_sv = null;
+            $aquisicao->prioridade = null;
+            $aquisicao->motivo_recusa = $request->input('motivoRejeicao');
+            $aquisicao->save();
+
+            $message = ($status == '1') ? 'A solicitação foi devolvida.' : 'A solicitação foi cancelada.';
+            app('flasher')->addWarning($message);
+        }
+
+        return redirect('/gerenciar-aquisicao-servicos');
+    }
     public function aprovarEmLote(Request $request)
     {
-        $prioridades = $request->input('prioridade'); // Captura as prioridades
-        $setores = $request->input('setor'); // Captura os setores
-        //dd($setores);
+        $usuario = session('usuario.id_usuario');
+        $prioridades = $request->input('prioridade');
+        $setores = $request->input('setor');
 
+        $this->processarLote($prioridades, $setores, [
+            'status' => 3,
+            'aut_usu_adm' => $usuario,
+            'dt_usu_adm' => now(),
+        ]);
+
+        app('flasher')->addSuccess('Solicitações aprovadas com sucesso');
+        return redirect('/gerenciar-aquisicao-servicos');
+    }
+
+    public function homologarEmLote(Request $request)
+    {
+        $usuario = session('usuario.id_usuario');
+        $prioridades = $request->input('prioridade');
+        $setores = $request->input('setor');
+
+        $this->processarLote($prioridades, $setores, [
+            'status' => 3,
+            'aut_usu_pres' => $usuario,
+            'dt_usu_pres' => now(),
+        ]);
+
+        app('flasher')->addSuccess('Solicitações homologadas com sucesso');
+        return redirect('/gerenciar-aquisicao-servicos');
+    }
+
+    private function processarLote($prioridades, $setores, array $camposAdicionais)
+    {
         foreach ($prioridades as $id => $novaPrioridade) {
             if (isset($setores[$id]) && isset($novaPrioridade)) {
                 $solicitacao = SolServico::find($id);
@@ -415,35 +557,42 @@ class AquisicaoServicosController extends Controller
                 if ($solicitacao) {
                     $prioridadeAtual = $solicitacao->prioridade;
 
-                    // Caso a nova prioridade seja maior ou menor que a atual, ajusta as prioridades intermediárias
-                    if ($novaPrioridade != $prioridadeAtual) {
-                        if ($novaPrioridade > $prioridadeAtual) {
-                            // Desce as prioridades entre a atual e a nova prioridade
-                            SolServico::whereBetween('prioridade', [$prioridadeAtual + 1, $novaPrioridade])
-                                ->decrement('prioridade');
-                        } elseif ($novaPrioridade < $prioridadeAtual) {
-                            // Sobe as prioridades entre a nova e a atual prioridade
-                            SolServico::whereBetween('prioridade', [$novaPrioridade, $prioridadeAtual - 1])
-                                ->increment('prioridade');
+                    // Verifica se aut_usu_pres é nulo antes de alterar a prioridade
+                    if (is_null($solicitacao->aut_usu_pres)) {
+                        // Ajuste das prioridades intermediárias se houver alteração
+                        if ($novaPrioridade != $prioridadeAtual) {
+                            if ($novaPrioridade > $prioridadeAtual) {
+                                // Reduz prioridades entre a atual e a nova
+                                SolServico::whereBetween('prioridade', [$prioridadeAtual + 1, $novaPrioridade])
+                                    ->decrement('prioridade');
+                            } elseif ($novaPrioridade < $prioridadeAtual) {
+                                // Aumenta prioridades entre a nova e a atual
+                                SolServico::whereBetween('prioridade', [$novaPrioridade, $prioridadeAtual - 1])
+                                    ->increment('prioridade');
+                            }
+
+                            // Atualiza a prioridade apenas se a condição for atendida
+                            $solicitacao->update(['prioridade' => $novaPrioridade]);
                         }
                     }
 
-                    $solicitacao->update([
-                        'status' => 3,
-                        'prioridade' => $novaPrioridade,
+                    // Atualiza os outros campos conforme os parâmetros fornecidos
+                    $solicitacao->update(array_merge([
                         'id_resp_sv' => $setores[$id],
-                        'aut_usu_adm' => true,
-                        'dt_usu_adm' => now(),
-                    ]);
-                    dd($solicitacao);
+                    ], $camposAdicionais));
                 }
             }
         }
 
-        // Reorganiza as prioridades para garantir que não haja lacunas
+        // Reorganização das prioridades após as atualizações
         $this->reorganizarPrioridades();
+    }
+    public function show($id)
+    {
+        $solicitacao = SolServico::with('tipoClasse', 'catalogoServico', 'tipoStatus', 'setor')->find($id);
+        $documento = Documento::where('id_sol_sv', $id)->get();
 
-        app('flasher')->addSuccess('Solicitações aprovadas com sucesso');
-        return redirect('/gerenciar-aquisicao-servicos');
+
+        return view('solServico.visualizar-aquisicao-servicos', compact('solicitacao'));
     }
 }

@@ -4,7 +4,7 @@
     Incluir Aquisição de Serviços
 @endsection
 @section('content')
-    <form method="POST" action="/salvar-aquisicao-servicos/" enctype="multipart/form-data">{{-- Formulario de Inserção --}}
+    <form method="POST" action="/salvar-aquisicao-servicos" enctype="multipart/form-data">{{-- Formulario de Inserção --}}
         @csrf
         <div class="container-fluid"> {{-- Container completo da página  --}}
             <div class="justify-content-center">

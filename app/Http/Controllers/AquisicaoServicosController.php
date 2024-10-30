@@ -15,6 +15,7 @@ use App\Models\Documento;
 use App\Models\Empresa;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Validator;
 
 
 use function Laravel\Prompts\select;
@@ -98,16 +99,16 @@ class AquisicaoServicosController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'classeSv' => 'required',
-            'tipoServicos' => 'required',
-            'motivo' => 'required|string',
-            'numero.*' => 'required|string',
-            'valor.*' => 'required|numeric',
-            'dt_inicial.*' => 'required|date',
+        // Validação dos dados
+        $validator = Validator::make($request->all(), [
             'dt_final.*' => 'nullable|date|after_or_equal:dt_inicial.*',
-            'arquivo.*' => 'nullable|file|mimes:pdf,doc,docx',
         ]);
+
+        // Se a validação falhar, retorna os erros
+        if ($validator->fails()) {
+            app('flasher')->addError('A data limite do documento não pode ser anterior a data inicial.');
+            return back()->withErrors($validator)->withInput();
+        }
 
         $today = Carbon::today()->format('Y-m-d');
 
@@ -132,7 +133,7 @@ class AquisicaoServicosController extends Controller
 
                 Documento::create([
                     'numero' => $numero,
-                    'dt_doc' => $today,
+                    'dt_doc' => $request->dt_inicial[$index],
                     'id_tp_doc' => '14', // Considere alterar para uma constante ou buscar no banco
                     'valor' => $request->valor[$index],
                     'id_empresa' => $request->razaoSocial[$index],
@@ -152,7 +153,6 @@ class AquisicaoServicosController extends Controller
             return back()->withErrors(['error' => 'Ocorreu um erro ao salvar a solicitação.']);
         }
     }
-
 
 
     public function edit($idS)

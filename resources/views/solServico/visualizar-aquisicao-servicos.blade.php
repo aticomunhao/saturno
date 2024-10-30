@@ -1,3 +1,5 @@
+@extends('layouts.app')
+
 @section('head')
     <title>Visualizar Solicitação de Serviço</title>
 @endsection
@@ -13,7 +15,7 @@
                         <div class="row">
                             <div class="col">
                                 <h5 class="col-12" style="color: #355089">
-                                    Visualizar Dados Pessoais
+                                    Visualizar Solicitação de Serviços
                                 </h5>
                             </div>
                             <div class="col">
@@ -26,10 +28,10 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <fieldset class="border rounded p-4 position-relative" style="margin-bottom: 20px">
+                        <fieldset class="rounded p-4 position-relative" style="margin-bottom: 20px; border: 1px #8f8181 solid">
                             <legend class="w-auto"
                                 style="font-size: .9rem; padding: 0 10px; position: absolute; top: -12px; left: 20px; background: white; color: red">
-                                Dados pessoais</legend>
+                                Identificação do Serviço</legend>
                             <div class="row" style="margin-bottom: 10px">
                                 <div class="col">
                                     <legend class="schedule-border"
@@ -43,14 +45,14 @@
                                         style="font-size: small; width:inherit; font-weight: bold;">
                                         Prioridade:
                                     </legend>
-                                    {{ $solicitacao->prioridade}}
+                                    {{ $solicitacao->prioridade }}
                                 </div>
                                 <div class="col">
                                     <legend class="schedule-border"
                                         style="font-size: small; width:inherit; font-weight: bold;">
                                         Status da Solicitação:
                                     </legend>
-                                    {{ $solicitacao->tipoStatus->status }}
+                                    {{ $solicitacao->tipoStatus->nome }}
                                 </div>
                                 <div class="col">
                                     <legend class="schedule-border"
@@ -66,6 +68,8 @@
                                     </legend>
                                     {{ $solicitacao->data }}
                                 </div>
+                            </div>
+                            <div class="row" style="margin-bottom: 10px">
                                 <div class="col">
                                     <legend class="schedule-border"
                                         style="font-size: small; width:inherit; font-weight: bold;">
@@ -73,8 +77,6 @@
                                     </legend>
                                     {{ $solicitacao->tipoClasse->descricao }}
                                 </div>
-                            </div>
-                            <div class="row" style="margin-bottom: 10px">
                                 <div class="col">
                                     <legend class="schedule-border"
                                         style="font-size: small; width:inherit; font-weight: bold;">
@@ -103,13 +105,13 @@
                                     </legend>
                                     {{ $solicitacao->motivo_recusa }}
                                 </div>
-                                <div class="col">
-                                    <legend class="schedule-border"
-                                        style="font-size: small; width:inherit; font-weight: bold;">
-                                        Autorização do Presidente:
-                                    </legend>
-                                    {{ $solicitacao->aut_usu_pres }}
-                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="rounded p-4 position-relative" style="margin-bottom: 20px; border: 1px #8f8181 solid">
+                            <legend class="w-auto"
+                                style="font-size: .9rem; padding: 0 10px; position: absolute; top: -12px; left: 20px; background: white; color: red">
+                                Nível de Autorização</legend>
+                            <div class="row" style="margin-bottom: 10px">
                                 <div class="col">
                                     <legend class="schedule-border"
                                         style="font-size: small; width:inherit; font-weight: bold;">
@@ -117,8 +119,14 @@
                                     </legend>
                                     {{ $solicitacao->aut_usu_dir }}
                                 </div>
-                            </div>
-                            <div class="row">
+                                <div class="col">
+                                    <legend class="schedule-border"
+                                        style="font-size: small; width:inherit; font-weight: bold;">
+                                        Autorização da DAF:
+                                    </legend>
+                                    {{ $solicitacao->aut_usu_daf }}
+                                </div>
+
                                 <div class="col">
                                     <legend class="schedule-border"
                                         style="font-size: small; width:inherit; font-weight: bold;">
@@ -129,226 +137,98 @@
                                 <div class="col">
                                     <legend class="schedule-border"
                                         style="font-size: small; width:inherit; font-weight: bold;">
-                                        Autorização da DAF:
-                                    </legend>
-                                    {{ $solicitacao->aut_usu_daf }}
-                                </div>
-                                <div class="col">
-                                    <legend class="schedule-border"
-                                        style="font-size: small; width:inherit; font-weight: bold;">
-                                        Autorização da DFIN
+                                        Autorização da DIFIN:
                                     </legend>
                                     {{ $solicitacao->aut_usu_fin }}
                                 </div>
                                 <div class="col">
                                     <legend class="schedule-border"
                                         style="font-size: small; width:inherit; font-weight: bold;">
-                                        Data de Emissão:
+                                        Autorização do Presidente:
                                     </legend>
-                                    {{ $pessoa[0]->dt_emissao_identidade }}
-                                </div>
-                                <div class="col">
-                                    <legend class="schedule-border"
-                                        style="font-size: small; width:inherit; font-weight: bold;">
-                                        Ascendente 1:
-                                    </legend>
-                                    {{ $funcionario[0]->nome_mae }}
-                                </div>
-                                <div class="col">
-                                    <legend class="schedule-border"
-                                        style="font-size: small; width:inherit; font-weight: bold;">
-                                        Ascendente 2:
-                                    </legend>
-                                    {{ $funcionario[0]->nome_pai }}
-                                </div>
-                            </div>
-                        </fieldset>
-                        <fieldset class="border rounded p-4 position-relative" style="margin-bottom: 20px">
-                            <legend class="w-auto"
-                                style="font-size: .9rem; padding: 0 10px; position: absolute; top: -12px; left: 20px; background: white; color: red">
-                                Dados Funcionais</legend>
-                            <div class="row" style="margin-bottom: 10px">
-                                <div class="col">
-                                    <legend class="schedule-border"
-                                        style="font-size: small; width:inherit; font-weight: bold;">
-                                        Titulo Eleitor:
-                                    </legend>
-                                    {{ $funcionario[0]->titulo_eleitor }}
-                                </div>
-                                <div class="col">
-                                    <legend class="schedule-border"
-                                        style="font-size: small; width:inherit; font-weight: bold;">
-                                        Zona:
-                                    </legend>
-                                    {{ $funcionario[0]->zona_titulo }}
-                                </div>
-                                <div class="col">
-                                    <legend class="schedule-border"
-                                        style="font-size: small; width:inherit; font-weight: bold;">
-                                        Seção:
-                                    </legend>
-                                    {{ $funcionario[0]->secao_titulo }}
-                                </div>
-                                <div class="col">
-                                    <legend class="schedule-border"
-                                        style="font-size: small; width:inherit; font-weight: bold;">
-                                        Data de Emissão:
-                                    </legend>
-                                    {{ $funcionario[0]->dt_titulo }}
-                                </div>
-                                <div class="col">
-                                    <legend class="schedule-border"
-                                        style="font-size: small; width:inherit; font-weight: bold;">
-                                        Tipo Programa:
-                                    </legend>
-                                    {{ $funcionario[0]->nome_programa }}
-                                </div>
-                                <div class="col">
-                                    <legend class="schedule-border"
-                                        style="font-size: small; width:inherit; font-weight: bold;">
-                                        Número do PIS ou PASEP:
-                                    </legend>
-                                    {{ $funcionario[0]->nr_programa }}
-                                </div>
-                            </div>
-                            <div class="row" style="margin-bottom: 10px">
-                                <div class="col">
-                                    <legend class="schedule-border"
-                                        style="font-size: small; width:inherit; font-weight: bold;">
-                                        Data de Ingresso na Comunhão:
-                                    </legend>
-                                    {{ $funcionario[0]->dt_inicio }}
-                                </div>
-                                <div class="col">
-                                    <legend class="schedule-border"
-                                        style="font-size: small; width:inherit; font-weight: bold;">
-                                        CTPS:
-                                    </legend>
-                                    {{ $funcionario[0]->ctps }}
-                                </div>
-                                <div class="col">
-                                    <legend class="schedule-border"
-                                        style="font-size: small; width:inherit; font-weight: bold;">
-                                        Série do CTPS:
-                                    </legend>
-                                    {{ $funcionario[0]->serie_ctps }}
-                                </div>
-                                <div class="col">
-                                    <legend class="schedule-border"
-                                        style="font-size: small; width:inherit; font-weight: bold;">
-                                        UF do CTPS:
-                                    </legend>
-                                    {{ $funcionario[0]->sigla_ctps }}
-                                </div>
-                                <div class="col">
-                                    <legend class="schedule-border"
-                                        style="font-size: small; width:inherit; font-weight: bold;">
-                                        Data de Emissão do CTPS:
-                                    </legend>
-                                    {{ $funcionario[0]->emissao_ctps }}
-                                </div>
-                                <div class="col">
-                                    <legend class="schedule-border"
-                                        style="font-size: small; width:inherit; font-weight: bold;">
-                                        Cor Pele:
-                                    </legend>
-                                    {{ $funcionario[0]->nome_cor }}
+                                    {{ $solicitacao->aut_usu_pres }}
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col">
                                     <legend class="schedule-border"
                                         style="font-size: small; width:inherit; font-weight: bold;">
-                                        Setor Alocado:
+                                        Data Autorização Diretoria:
                                     </legend>
-                                    {{ $funcionario[0]->nome_setor }}
+                                    {{ $solicitacao->aut_usu_dir }}
                                 </div>
                                 <div class="col">
                                     <legend class="schedule-border"
                                         style="font-size: small; width:inherit; font-weight: bold;">
-                                        Número de Reservista:
+                                        Data Autorização DAF:
                                     </legend>
-                                    {{ $funcionario[0]->reservista }}
+                                    {{ $solicitacao->aut_usu_daf }}
                                 </div>
                                 <div class="col">
                                     <legend class="schedule-border"
                                         style="font-size: small; width:inherit; font-weight: bold;">
-                                        Cat CNH:
+                                        Data Autorização ADM:
                                     </legend>
-                                    {{ $funcionario[0]->tp_cnh }}
+                                    {{ $solicitacao->aut_usu_adm }}
                                 </div>
                                 <div class="col">
                                     <legend class="schedule-border"
                                         style="font-size: small; width:inherit; font-weight: bold;">
-                                        Tipo Sanguíneo:
+                                        Data Autorização DIFIN:
                                     </legend>
-                                    {{ $funcionario[0]->nome_sangue }}
+                                    {{ $solicitacao->aut_usu_fin }}
                                 </div>
                                 <div class="col">
                                     <legend class="schedule-border"
                                         style="font-size: small; width:inherit; font-weight: bold;">
-                                        Fator RH:
+                                        Data Autorização Presidente:
                                     </legend>
-                                    {{ $funcionario[0]->nome_fator }}
+                                    {{ $solicitacao->aut_usu_pres }}
                                 </div>
-
                             </div>
                         </fieldset>
-                        <fieldset class="border rounded p-4 position-relative" style="margin-bottom: 10px">
-                            <legend class="w-auto"
-                                style="font-size: .9rem; padding: 0 10px; position: absolute; top: -12px; left: 20px; background: white; color: red">
-                                Endereço</legend>
-                            <div class="row">
-                                <div class="col">
-                                    <legend class="schedule-border"
-                                        style="font-size: small; width:inherit; font-weight: bold;">
-                                        CEP:
-                                    </legend>
-                                    {{ $endereco[0]->cep }}
-                                </div>
-                                <div class="col">
-                                    <legend class="schedule-border"
-                                        style="font-size: small; width:inherit; font-weight: bold;">
-                                        UF:
-                                    </legend>
-                                    {{ $endereco[0]->sigla_uf_endereco }}
-                                </div>
-                                <div class="col">
-                                    <legend class="schedule-border"
-                                        style="font-size: small; width:inherit; font-weight: bold;">
-                                        Cidade:
-                                    </legend>
-                                    {{ $endereco[0]->nome_cidade }}
-                                </div>
-                                <div class="col">
-                                    <legend class="schedule-border"
-                                        style="font-size: small; width:inherit; font-weight: bold;">
-                                        Logradouro:
-                                    </legend>
-                                    {{ $endereco[0]->logradouro }}
-                                </div>
-                                <div class="col">
-                                    <legend class="schedule-border"
-                                        style="font-size: small; width:inherit; font-weight: bold;">
-                                        Número:
-                                    </legend>
-                                    {{ $endereco[0]->numero }}
-                                </div>
-                                <div class="col">
-                                    <legend class="schedule-border"
-                                        style="font-size: small; width:inherit; font-weight: bold;">
-                                        Complemento:
-                                    </legend>
-                                    {{ $endereco[0]->complemento }}
-                                </div>
-                                <div class="col">
-                                    <legend class="schedule-border"
-                                        style="font-size: small; width:inherit; font-weight: bold;">
-                                        Bairro:
-                                    </legend>
-                                    {{ $endereco[0]->bairro }}
-                                </div>
-                            </div>
+                        <fieldset class="rounded p-4 position-relative" style="border: 1px #8f8181 solid">
+                            <legend class="w-auto" style="font-size: .9rem; padding: 0 10px; position: absolute; top: -12px; left: 20px; background: white; color: red">
+                                Documentos Relacionados
+                            </legend>
+                            @foreach ($documentos as $doc)
+                                    <div class="row" style="margin-bottom: 20px">
+                                        <div class="col">
+                                            <legend class="schedule-border" style="font-size: small; font-weight: bold;">
+                                                Documento ID:
+                                            </legend>
+                                            {{ $doc->id }}
+                                        </div>
+                                        <div class="col">
+                                            <legend class="schedule-border" style="font-size: small; font-weight: bold;">
+                                                Empresa:
+                                            </legend>
+                                            {{ $doc->id_empresa }}
+                                        </div>
+                                        <div class="col">
+                                            <legend class="schedule-border" style="font-size: small; font-weight: bold;">
+                                                Valor:
+                                            </legend>
+                                            {{ $doc->valor }}
+                                        </div>
+                                        <div class="col">
+                                            <legend class="schedule-border" style="font-size: small; font-weight: bold;">
+                                                Data de Validade:
+                                            </legend>
+                                            {{ $doc->dt_validade }}
+                                        </div>
+                                        <div class="col">
+                                            <legend class="schedule-border" style="font-size: small; font-weight: bold;">
+                                                Arquivo:
+                                            </legend>
+                                            @if(isset($doc->arquivo_url))
+                                                <a href="{{ $doc->arquivo_url }}" target="_blank">Ver Arquivo</a>
+                                            @else
+                                                Não disponível
+                                            @endif
+                                        </div>
+                                    </div>
+                            @endforeach
                         </fieldset>
                     </div>
                 </div>

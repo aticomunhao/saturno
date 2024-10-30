@@ -267,7 +267,7 @@ Route::get('/substituicao/buscaritem', [GerenciarDevolucoesController::class, 'b
 
 
 
-Route::name('pagamentos')->middleware('validaUsuario')->group(function () {});
+Route::name('pagamentos')->middleware('validaUsuario')->group(function () { });
 
 
 Route::get('/gerenciar-pagamentos/{id}', [GerenciarpagamentoController::class, 'show'])->name('pagamento.show');
@@ -339,8 +339,7 @@ Route::post('/aprovar-em-lote', [AquisicaoServicosController::class, 'aprovarEmL
 Route::get('/homologar-aquisicao-servicos/{id}', [AquisicaoServicosController::class, 'homologar']);
 Route::post('/validaHomologacao-aquisicao-servicos', [AquisicaoServicosController::class, 'validaHomologacao']);
 Route::post('/homologar-em-lote', [AquisicaoServicosController::class, 'homologarEmLote'])->name('aquisicao.homologarEmLote');
-Route::get('/visualizar-aquisicao-servicos/{id}', [AquisicaoServicosController::class, 'show']);
-
+Route::get('/visualizar-aquisicao-servicos/{id}', [AquisicaoServicosController::class, 'show'])->name('visualizar.aquisicao.servicos');
 
 //Catálogo de Empresas
 Route::get('/catalogo-empresa', [CatalogoEmpresaController::class, 'index'])->name('empresa.index');

@@ -128,7 +128,7 @@
             </div>
         </div>
         <div class="botões">
-            <a href="/gerenciar-aquisicao-servicos" class="btn btn-danger col-md-3 col-2 mt-4 offset-md-2">Cancelar</a>
+            <a href="javascript:history.back()" class="btn btn-danger col-md-3 col-2 mt-4 offset-md-2">Cancelar</a>
             <button type="submit" value="Confirmar" class="btn btn-primary col-md-3 col-1 mt-4 offset-md-2">Confirmar
             </button>
         </div>

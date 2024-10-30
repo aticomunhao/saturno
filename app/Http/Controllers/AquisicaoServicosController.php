@@ -590,9 +590,14 @@ class AquisicaoServicosController extends Controller
     public function show($id)
     {
         $solicitacao = SolServico::with('tipoClasse', 'catalogoServico', 'tipoStatus', 'setor')->find($id);
-        $documento = Documento::where('id_sol_sv', $id)->get();
+        $documentos = Documento::where('id_sol_sv', $id)->get();
 
+        foreach ($documentos as $documento) {
+            if ($documento->end_arquivo) {
+                $documento->arquivo_url = Storage::url($documento->end_arquivo);
+            }
+        }
 
-        return view('solServico.visualizar-aquisicao-servicos', compact('solicitacao'));
+        return view('solServico.visualizar-aquisicao-servicos', compact('solicitacao', 'documentos'));
     }
 }

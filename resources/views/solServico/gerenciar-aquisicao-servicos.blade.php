@@ -150,11 +150,13 @@
                                                     title="Enviar">
                                                     <i class="bi bi-cart-check"></i>
                                                 </a>
-                                                <a href="/visualizar-aquisicao-servicos/{{ $aquisicaos->id }}" class="btn btn-sm btn-outline-primary"
-                                                    data-tt="tooltip" style="font-size: 1rem; color:#303030"
-                                                    data-placement="top" title="visualizar">
+                                                <a href="{{ route('visualizar.aquisicao.servicos', ['id' => $aquisicaos->id]) }}"
+                                                    class="btn btn-sm btn-outline-primary" data-tt="tooltip"
+                                                    style="font-size: 1rem; color:#303030" data-placement="top"
+                                                    title="Visualizar">
                                                     <i class="bi bi-search"></i>
                                                 </a>
+
                                                 <a href="" class="btn btn-sm btn-outline-info" data-tt="tooltip"
                                                     style="font-size: 1rem; color:#303030" data-placement="top"
                                                     title="Aceite">

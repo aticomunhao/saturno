@@ -68,7 +68,7 @@
                             </div>
                             <br>
                             <div class="botões">
-                                <a href="/catalogo-servico" type="button" value=""
+                                <a href="javascript:history.back()" type="button" value=""
                                     class="btn btn-danger col-md-3 col-2 mt-4 offset-md-2">Cancelar</a>
                                 <button type="button" class="btn btn-primary col-md-3 col-1 mt-4 offset-md-2"
                                     data-bs-toggle="modal" data-bs-target="#modalConfirmar" id="btnAbrirModal">

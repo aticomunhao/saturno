@@ -117,14 +117,14 @@
                                         style="font-size: small; width:inherit; font-weight: bold;">
                                         Autorização da Diretoria Responsável:
                                     </legend>
-                                    {{ $solicitacao->aut_usu_dir }}
+                                    {{ $solicitacao->aut_usu_dir ?? '-' }}
                                 </div>
                                 <div class="col">
                                     <legend class="schedule-border"
                                         style="font-size: small; width:inherit; font-weight: bold;">
                                         Autorização da DAF:
                                     </legend>
-                                    {{ $solicitacao->aut_usu_daf }}
+                                    {{ $solicitacao->aut_usu_daf ?? '-' }}
                                 </div>
 
                                 <div class="col">
@@ -132,21 +132,21 @@
                                         style="font-size: small; width:inherit; font-weight: bold;">
                                         Autorização da DIADM:
                                     </legend>
-                                    {{ $solicitacao->aut_usu_adm }}
+                                    {{ $solicitacao->aut_usu_adm ?? '-' }}
                                 </div>
                                 <div class="col">
                                     <legend class="schedule-border"
                                         style="font-size: small; width:inherit; font-weight: bold;">
                                         Autorização da DIFIN:
                                     </legend>
-                                    {{ $solicitacao->aut_usu_fin }}
+                                    {{ $solicitacao->aut_usu_fin ?? '-' }}
                                 </div>
                                 <div class="col">
                                     <legend class="schedule-border"
                                         style="font-size: small; width:inherit; font-weight: bold;">
                                         Autorização do Presidente:
                                     </legend>
-                                    {{ $solicitacao->aut_usu_pres }}
+                                    {{ $solicitacao->aut_usu_pres ?? '-' }}
                                 </div>
                             </div>
                             <div class="row">
@@ -155,35 +155,35 @@
                                         style="font-size: small; width:inherit; font-weight: bold;">
                                         Data Autorização Diretoria:
                                     </legend>
-                                    {{ $solicitacao->aut_usu_dir }}
+                                    {{ $solicitacao->dt_usu_dir ? \Carbon\Carbon::parse($solicitacao->dt_usu_dir)->format('d/m/Y') : '-' }}
                                 </div>
                                 <div class="col">
                                     <legend class="schedule-border"
                                         style="font-size: small; width:inherit; font-weight: bold;">
                                         Data Autorização DAF:
                                     </legend>
-                                    {{ $solicitacao->aut_usu_daf }}
+                                    {{ $solicitacao->dt_usu_daf ? \Carbon\Carbon::parse($solicitacao->dt_usu_daf)->format('d/m/Y') : '-' }}
                                 </div>
                                 <div class="col">
                                     <legend class="schedule-border"
                                         style="font-size: small; width:inherit; font-weight: bold;">
                                         Data Autorização ADM:
                                     </legend>
-                                    {{ $solicitacao->aut_usu_adm }}
+                                    {{ $solicitacao->dt_usu_adm ? \Carbon\Carbon::parse($solicitacao->dt_usu_adm)->format('d/m/Y') : '-' }}
                                 </div>
                                 <div class="col">
                                     <legend class="schedule-border"
                                         style="font-size: small; width:inherit; font-weight: bold;">
                                         Data Autorização DIFIN:
                                     </legend>
-                                    {{ $solicitacao->aut_usu_fin }}
+                                    {{ $solicitacao->dt_usu_fin ? \Carbon\Carbon::parse($solicitacao->dt_usu_fin)->format('d/m/Y') : '-' }}
                                 </div>
                                 <div class="col">
                                     <legend class="schedule-border"
                                         style="font-size: small; width:inherit; font-weight: bold;">
                                         Data Autorização Presidente:
                                     </legend>
-                                    {{ $solicitacao->aut_usu_pres }}
+                                    {{ $solicitacao->dt_usu_pres ? \Carbon\Carbon::parse($solicitacao->dt_usu_pres)->format('d/m/Y') : '-' }}
                                 </div>
                             </div>
                         </fieldset>

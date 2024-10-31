@@ -26,6 +26,10 @@ class AquisicaoServicosController extends Controller
     public function index(Request $request)
     {
 
+        $usuario = session('usuario.id_usuario');
+        $setor = session('usuario.setor');
+
+        //dd($setor);
         $query = SolServico::with(['tipoClasse', 'catalogoServico', 'tipoStatus', 'setor']);
 
         if ($request->status_servico) {
@@ -58,7 +62,7 @@ class AquisicaoServicosController extends Controller
         }
 
 
-        return view('solServico.gerenciar-aquisicao-servicos', compact('aquisicao', 'classeAquisicao', 'status', 'todosSetor', 'numeros'));
+        return view('solServico.gerenciar-aquisicao-servicos', compact('aquisicao', 'classeAquisicao', 'status', 'todosSetor', 'numeros', 'usuario', 'setor'));
     }
 
     public function retornaNomeServicos($idClasse)
@@ -77,7 +81,7 @@ class AquisicaoServicosController extends Controller
     public function create(Request $request)
     {
 
-        $setor = session()->get('usuario.setor', 'cpf');
+        $setor = session('usuario.setor');
         //dd($setor);
 
         $buscaSetor = Setor::whereIn('id', $setor)->get();

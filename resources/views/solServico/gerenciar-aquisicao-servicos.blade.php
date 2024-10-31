@@ -89,90 +89,108 @@
                             </div>
                             <br>
                             <hr>
-                            <table {{-- Inicio da tabela de informacoes --}}
-                                class= "table table-sm table-striped table-bordered border-secondary table-hover align-middle"
-                                id="tabela-servicos" style="width: 100%">
-                                <thead style="text-align: center;">{{-- inicio header tabela --}}
-                                    <tr style="background-color: #d6e3ff; font-size:15px; color:#000;" class="align-middle">
-                                        <th>
-                                            <div style="display: flex; justify-content: center; align-items: center;">
-                                                <input type="checkbox" id="selectAll" onclick="toggleCheckboxes(this)"
-                                                    aria-label="Selecionar todos" style="border: 1px solid #000">
-                                            </div>
-                                        </th>
-                                        <th>NÚMERO</th>
-                                        <th>DATA</th>
-                                        <th>TIPO SERVIÇO</th>
-                                        <th>SETOR</th>
-                                        <th>PRIORIDADE</th>
-                                        <th>STATUS</th>
-                                        <th>AÇÕES</th>
-                                    </tr>
-                                </thead>{{-- Fim do header da tabela --}}
-                                <tbody style="font-size: 15px; color:#000000; text-align: center;">{{-- Inicio body tabela --}}
-                                    @foreach ($aquisicao as $aquisicaos)
-                                        <tr>
-                                            <td>
-                                                <div style="display: flex; justify-content: center; align-items: center;">
-                                                    <input class="form-check-input item-checkbox" type="checkbox"
-                                                        id="checkboxNoLabel" value="{{ $aquisicaos->id }}" aria-label="..."
-                                                        style="border: 1px solid #000">
-                                                </div>
-                                            </td>
-                                            <td>{{ $aquisicaos->id }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($aquisicaos->data)->format('d/m/Y') }}</td>
-                                            <td>{{ $aquisicaos->CatalogoServico->descricao }}</td>
-                                            <td>{{ $aquisicaos->setor->nome }}</td>
-                                            <td>{{ $aquisicaos->prioridade }}</td>
-                                            <td>{{ $aquisicaos->tipoStatus->nome }}</td>
-                                            <td>
-                                                <a href="/aprovar-aquisicao-servicos/{{ $aquisicaos->id }}"
-                                                    class="btn btn-sm btn-outline-primary" data-tt="tooltip"
-                                                    style="font-size: 1rem; color:#303030" data-placement="top"
-                                                    title="Aprovar">
-                                                    <i class="bi bi-check-lg"></i>
-                                                </a>
-                                                <a href="/homologar-aquisicao-servicos/{{ $aquisicaos->id }}"
-                                                    class="btn btn-sm btn-outline-success" data-tt="tooltip"
-                                                    style="font-size: 1rem; color:#303030" data-placement="top"
-                                                    title="Homologar">
-                                                    <i class="bi bi-clipboard-check"></i>
-                                                </a>
-                                                <a href="/editar-aquisicao-servicos/{{ $aquisicaos->id }}"
-                                                    class="btn btn-sm btn-outline-warning" data-tt="tooltip"
-                                                    style="font-size: 1rem; color:#303030" data-placement="top"
-                                                    title="Editar">
-                                                    <i class="bi bi-pencil"></i>
-                                                </a>
-                                                <a href="/enviar-aquisicao-servicos/{{ $aquisicaos->id }}"
-                                                    class="btn btn-sm btn-outline-primary" data-tt="tooltip"
-                                                    style="font-size: 1rem; color:#303030" data-placement="top"
-                                                    title="Enviar">
-                                                    <i class="bi bi-cart-check"></i>
-                                                </a>
-                                                <a href="{{ route('visualizar.aquisicao.servicos', ['id' => $aquisicaos->id]) }}"
-                                                    class="btn btn-sm btn-outline-primary" data-tt="tooltip"
-                                                    style="font-size: 1rem; color:#303030" data-placement="top"
-                                                    title="Visualizar">
-                                                    <i class="bi bi-search"></i>
-                                                </a>
-
-                                                <a href="" class="btn btn-sm btn-outline-info" data-tt="tooltip"
-                                                    style="font-size: 1rem; color:#303030" data-placement="top"
-                                                    title="Aceite">
-                                                    <i class="bi bi-hand-thumbs-up"></i>
-                                                </a>
-                                                <a href="" class="btn btn-sm btn-outline-danger" data-tt="tooltip"
-                                                    style="font-size: 1rem; color:#303030" data-placement="top"
-                                                    title="Excluir">
-                                                    <i class="bi bi-x-circle"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                                {{-- Fim body da tabela --}}
-                            </table>
+                            {{-- @foreach ($aquisicao as $aquisicaos)
+                                @if (in_array($aquisicaos->id_setor, ['1', '2', '5', $setor])) --}}
+                                    <table {{-- Inicio da tabela de informacoes --}}
+                                        class= "table table-sm table-striped table-bordered border-secondary table-hover align-middle"
+                                        id="tabela-servicos" style="width: 100%">
+                                        <thead style="text-align: center;">{{-- inicio header tabela --}}
+                                            <tr style="background-color: #d6e3ff; font-size:15px; color:#000;"
+                                                class="align-middle">
+                                                <th>
+                                                    <div
+                                                        style="display: flex; justify-content: center; align-items: center;">
+                                                        <input type="checkbox" id="selectAll"
+                                                            onclick="toggleCheckboxes(this)" aria-label="Selecionar todos"
+                                                            style="border: 1px solid #000">
+                                                    </div>
+                                                </th>
+                                                <th>NÚMERO</th>
+                                                <th>DATA</th>
+                                                <th>TIPO SERVIÇO</th>
+                                                <th>SETOR</th>
+                                                <th>PRIORIDADE</th>
+                                                <th>STATUS</th>
+                                                <th>AÇÕES</th>
+                                            </tr>
+                                        </thead>{{-- Fim do header da tabela --}}
+                                        <tbody style="font-size: 15px; color:#000000; text-align: center;">
+                                            {{-- Inicio body tabela --}}
+                                            @foreach ($aquisicao as $aquisicaos)
+                                                <tr>
+                                                    <td>
+                                                        <div
+                                                            style="display: flex; justify-content: center; align-items: center;">
+                                                            <input class="form-check-input item-checkbox" type="checkbox"
+                                                                id="checkboxNoLabel" value="{{ $aquisicaos->id }}"
+                                                                aria-label="..." style="border: 1px solid #000">
+                                                        </div>
+                                                    </td>
+                                                    <td>{{ $aquisicaos->id }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($aquisicaos->data)->format('d/m/Y') }}</td>
+                                                    <td>{{ $aquisicaos->CatalogoServico->descricao }}</td>
+                                                    <td>{{ $aquisicaos->setor->nome }}</td>
+                                                    <td>{{ $aquisicaos->prioridade }}</td>
+                                                    <td>{{ $aquisicaos->tipoStatus->nome }}</td>
+                                                    <td>
+                                                        <a href="{{ route('visualizar.aquisicao.servicos', ['id' => $aquisicaos->id]) }}"
+                                                            class="btn btn-sm btn-outline-primary" data-tt="tooltip"
+                                                            style="font-size: 1rem; color:#303030" data-placement="top"
+                                                            title="Visualizar">
+                                                            <i class="bi bi-search"></i>
+                                                        </a>
+                                                        @if (in_array($aquisicaos->tipoStatus->id, ['3', '2']))
+                                                            <a href="/aprovar-aquisicao-servicos/{{ $aquisicaos->id }}"
+                                                                class="btn btn-sm btn-outline-primary" data-tt="tooltip"
+                                                                style="font-size: 1rem; color:#303030" data-placement="top"
+                                                                title="Aprovar">
+                                                                <i class="bi bi-check-lg"></i>
+                                                            </a>
+                                                        @endif
+                                                        @if ($aquisicaos->tipoStatus->id == '3')
+                                                            <a href="/homologar-aquisicao-servicos/{{ $aquisicaos->id }}"
+                                                                class="btn btn-sm btn-outline-success" data-tt="tooltip"
+                                                                style="font-size: 1rem; color:#303030"
+                                                                data-placement="top" title="Homologar">
+                                                                <i class="bi bi-clipboard-check"></i>
+                                                            </a>
+                                                        @endif
+                                                        @if ($aquisicaos->tipoStatus->id == '1')
+                                                            <a href="/editar-aquisicao-servicos/{{ $aquisicaos->id }}"
+                                                                class="btn btn-sm btn-outline-warning" data-tt="tooltip"
+                                                                style="font-size: 1rem; color:#303030"
+                                                                data-placement="top" title="Editar">
+                                                                <i class="bi bi-pencil"></i>
+                                                            </a>
+                                                            <a href="/enviar-aquisicao-servicos/{{ $aquisicaos->id }}"
+                                                                class="btn btn-sm btn-outline-primary" data-tt="tooltip"
+                                                                style="font-size: 1rem; color:#303030"
+                                                                data-placement="top" title="Enviar">
+                                                                <i class="bi bi-cart-check"></i>
+                                                            </a>
+                                                        @endif
+                                                        @if (isset($aquisicaos->aut_usu_pres, $aquisicaos->aut_usu_adm, $aquisicaos->aut_usu_daf))
+                                                            <a href="" class="btn btn-sm btn-outline-info"
+                                                                data-tt="tooltip" style="font-size: 1rem; color:#303030"
+                                                                data-placement="top" title="Aceite">
+                                                                <i class="bi bi-hand-thumbs-up"></i>
+                                                            </a>
+                                                        @endif
+                                                        @if ($aquisicaos->tipoStatus->id == '1')
+                                                            <a href="" class="btn btn-sm btn-outline-danger"
+                                                                data-tt="tooltip" style="font-size: 1rem; color:#303030"
+                                                                data-placement="top" title="Excluir">
+                                                                <i class="bi bi-x-circle"></i>
+                                                            </a>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                        {{-- Fim body da tabela --}}
+                                    </table>
+                                {{-- @endif
+                            @endforeach --}}
                         </div>
                         <div style="margin-right: 10px; margin-left: 10px">
                             {{ $aquisicao->links('pagination::bootstrap-5') }}

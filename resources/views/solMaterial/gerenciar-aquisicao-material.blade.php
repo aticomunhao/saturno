@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    Gerenciar Aquisição de Serviços
+    Gerenciar Aquisição de Material
 @endsection
 @section('content')
     <form method="GET" action="/gerenciar-aquisicao-servicos">{{-- Formulario de pesquisa --}}
@@ -14,7 +14,7 @@
                         <div class="card-header">
                             <div class="ROW">
                                 <h5 class="col-12" style="color: #355089">
-                                    Gerenciar Aquisição de Serviços
+                                    Gerenciar Aquisição de Material
                                 </h5>
                             </div>
                         </div>
@@ -22,7 +22,7 @@
                         <div class="card-body">
                             <div class="ROW" style="margin-left:5px">
                                 <div style="display: flex; gap: 20px; align-items: flex-end;">
-                                    <div class="col-md-2 col-sm-12">Classe do Serviço
+                                    <div class="col-md-2 col-sm-12">Classe do Material
                                         <br>
                                         <select class="js-example-responsive form-select select2"
                                             style="border: 1px solid #999999; padding: 5px;" id="classeServico"
@@ -35,7 +35,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="col-md-2 col-sm-12">Tipo de Serviço
+                                    <div class="col-md-2 col-sm-12">Tipo de Material
                                         <br>
                                         <select class="js-example-responsive form-select select2"
                                             style="border: 1px solid #999999;" id="servicos" name="servicos"
@@ -140,7 +140,7 @@
                                                     <td>{{ $aquisicaos->id }}</td>
                                                     <td>{{ \Carbon\Carbon::parse($aquisicaos->data)->format('d/m/Y') }}</td>
                                                     <td>{{ $aquisicaos->CatalogoServico->descricao }}</td>
-                                                    <td>{{ $aquisicaos->setor->nome }} - {{ $aquisicaos->setor->sigla }}</td>
+                                                    <td>{{ $aquisicaos->setor->nome }}</td>
                                                     <td>{{ $aquisicaos->prioridade }}</td>
                                                     <td>{{ $aquisicaos->tipoStatus->nome }}</td>
                                                     <td>

@@ -46,6 +46,7 @@ use App\Http\Controllers\GerenciarPerfil;
 use App\Http\Controllers\AquisicaoServicosController;
 use App\Http\Controllers\CatalogoEmpresaController;
 use App\Http\Controllers\CatalogoServicoController;
+use App\Http\Controllers\AquisicaoMaterialController;
 
 
 
@@ -361,9 +362,6 @@ Route::post('/atualizar-servico/{id}', [CatalogoServicoController::class, 'updat
 Route::delete('/deletar-servico/{id}', [CatalogoServicoController::class, 'delete']);
 Route::delete('/deletar-classe-servico', [CatalogoServicoController::class, 'deleteClasse']);
 
-
-
-
 //Cadastro De Documentos
 Route::get('/gerenciar-documentos', [DocumentoController::class, 'index'])->name('documento.index');
 Route::get('/incluir-documento', [DocumentoController::class, 'create'])->name('documento.create');
@@ -372,3 +370,8 @@ Route::get('/retorna-documento/{id}', [DocumentoController::class, 'show'])->nam
 Route::get('/editar-documento/{id}', [DocumentoController::class, 'edit'])->name('documento.edit');
 Route::post('/atualizar-documento/{id}', [DocumentoController::class, 'update'])->name('documento.edit');
 Route::delete('/deletar-empresa/{id}', [CatalogoEmpresaController::class, 'delete'])->name('empresa.delete');
+
+
+//Gerenciar Aquisição de Material
+Route::get('/gerenciar-aquisicao-material', [AquisicaoMaterialController::class, 'index']);
+

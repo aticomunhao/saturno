@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Validator;
 
 use function Laravel\Prompts\select;
 
-class AquisicaoServicosController extends Controller
+class AquisicaoMaterialController extends Controller
 {
 
     public function index(Request $request)
@@ -65,7 +65,7 @@ class AquisicaoServicosController extends Controller
         }
 
 
-        return view('solServico.gerenciar-aquisicao-servicos', compact('aquisicao', 'classeAquisicao', 'status', 'todosSetor', 'numeros', 'usuario', 'setor'));
+        return view('solMaterial.gerenciar-aquisicao-material', compact('aquisicao', 'classeAquisicao', 'status', 'todosSetor', 'numeros', 'usuario', 'setor'));
     }
 
     public function retornaNomeServicos($idClasse)

@@ -9,9 +9,9 @@ class catalogoMaterial extends Model
 {
     use HasFactory;
     protected $table = 'catalogo_material';
-    public function tipoClasseMt()
+    public function tipoCategoriaMt()
     {
-        return $this->belongsTo(TipoClasseMt::class, 'id_cl_mt');
+        return $this->belongsTo(TipoCategoriaMt::class, 'id_cl_mt');
     }
     public function SolMaterial()
     {

@@ -4,7 +4,7 @@
     Gerenciar Aquisição de Material
 @endsection
 @section('content')
-    <form method="GET" action="/gerenciar-aquisicao-servicos">{{-- Formulario de pesquisa --}}
+    <form method="GET" action="/gerenciar-aquisicao-material">{{-- Formulario de pesquisa --}}
         @csrf
         <div class="container-fluid"> {{-- Container completo da página  --}}
             <div class="justify-content-center">
@@ -22,15 +22,15 @@
                         <div class="card-body">
                             <div class="ROW" style="margin-left:5px">
                                 <div style="display: flex; gap: 20px; align-items: flex-end;">
-                                    <div class="col-md-2 col-sm-12">Classe do Material
+                                    <div class="col-md-2 col-sm-12">Categoria do Material
                                         <br>
                                         <select class="js-example-responsive form-select select2"
-                                            style="border: 1px solid #999999; padding: 5px;" id="classeServico"
-                                            name="classe">
+                                            style="border: 1px solid #999999; padding: 5px;" id="categoriaServico"
+                                            name="categoria">
                                             <option value=""></option>
-                                            @foreach ($classeAquisicao as $classeAquisicaos)
-                                                <option value="{{ $classeAquisicaos->id }}" {{ old('classe') }}>
-                                                    {{ $classeAquisicaos->descricao }}
+                                            @foreach ($categoriaAquisicao as $categoriaAquisicaos)
+                                                <option value="{{ $categoriaAquisicaos->id }}" {{ old('categoria') }}>
+                                                    {{ $categoriaAquisicaos->nome }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -38,28 +38,28 @@
                                     <div class="col-md-2 col-sm-12">Tipo de Material
                                         <br>
                                         <select class="js-example-responsive form-select select2"
-                                            style="border: 1px solid #999999;" id="servicos" name="servicos"
-                                            value="{{ old('servicos') }}" disabled>
+                                            style="border: 1px solid #999999;" id="materiais" name="materiais"
+                                            value="{{ old('materiais') }}" disabled>
                                         </select>
                                     </div>
                                     <div class="col-md-2 col-sm-12">Setor
-                                        <select class="form-select select2" style="border: 1px solid #999999;" name="setor" id="setor">
+                                        <select class="form-select select2" style="border: 1px solid #999999;" name="material" id="material">
                                             <option value="">Todos</option>
-                                            @foreach ($todosSetor as $todosSetors)
-                                                <option value="{{ $todosSetors->id }}"
-                                                    {{ old('setor') == $todosSetors->id ? 'selected' : '' }}>
-                                                    {{ $todosSetors->nome }} - {{ $todosSetors->sigla }}
+                                            @foreach ($todosSetor as $todosSetores)
+                                                <option value="{{ $todosSetores->id }}"
+                                                    {{ old('material') == $todosSetores->id ? 'selected' : '' }}>
+                                                    {{ $todosSetores->nome }} - {{ $todosSetores->sigla }}
                                                 </option>
                                             @endforeach
                                         </select>
                                     </div>
                                     <div class="col-md-2 col-sm-12">Status
-                                        <select class="form-select" style="border: 1px solid #999999;" name="status_servico"
-                                            value="" id="statusServico">
+                                        <select class="form-select" style="border: 1px solid #999999;" name="status_material"
+                                            value="" id="statusMaterial">
                                             <option value="">Todos</option>
                                             @foreach ($status as $statuss)
                                                 <option value="{{ $statuss->id }}"
-                                                    {{ old('status_servicos') == $statuss->id ? 'selected' : '' }}>
+                                                    {{ old('status_materiais') == $statuss->id ? 'selected' : '' }}>
                                                     {{ $statuss->nome }}
                                                 </option>
                                             @endforeach
@@ -70,10 +70,10 @@
                                             style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-right:5px;"{{-- Botao submit do formulario de pesquisa --}}
                                             type="submit">Pesquisar
                                         </button>
-                                        <a href="/gerenciar-aquisicao-servicos" type="button" class="btn btn-light btn-sm"
+                                        <a href="/gerenciar-aquisicao-material" type="button" class="btn btn-light btn-sm"
                                             style="box-shadow: 1px 2px 5px #000000; font-size: 1rem"
                                             value="">Limpar</a>
-                                        <a href="/incluir-aquisicao-servicos" class="btn btn-success"
+                                        <a href="/incluir-aquisicao-material" class="btn btn-success"
                                             style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-left:5px">
                                             Novo+
                                         </a>
@@ -104,7 +104,7 @@
                                 @if (in_array($aquisicaos->id_setor, ['1', '2', '5', $setor])) --}}
                                     <table {{-- Inicio da tabela de informacoes --}}
                                         class= "table table-sm table-striped table-bordered border-secondary table-hover align-middle"
-                                        id="tabela-servicos" style="width: 100%">
+                                        id="tabela-materiais" style="width: 100%">
                                         <thead style="text-align: center;">{{-- inicio header tabela --}}
                                             <tr style="background-color: #d6e3ff; font-size:15px; color:#000;"
                                                 class="align-middle">
@@ -118,7 +118,7 @@
                                                 </th>
                                                 <th>NÚMERO</th>
                                                 <th>DATA</th>
-                                                <th>TIPO SERVIÇO</th>
+                                                <th>TIPO MATERIAL</th>
                                                 <th>SETOR</th>
                                                 <th>PRIORIDADE</th>
                                                 <th>STATUS</th>
@@ -139,61 +139,61 @@
                                                     </td>
                                                     <td>{{ $aquisicaos->id }}</td>
                                                     <td>{{ \Carbon\Carbon::parse($aquisicaos->data)->format('d/m/Y') }}</td>
-                                                    <td>{{ $aquisicaos->CatalogoServico->descricao }}</td>
+                                                    <td>{{ $aquisicaos->CatalogoMaterial->descricao }}</td>
                                                     <td>{{ $aquisicaos->setor->nome }}</td>
                                                     <td>{{ $aquisicaos->prioridade }}</td>
                                                     <td>{{ $aquisicaos->tipoStatus->nome }}</td>
                                                     <td>
-                                                        <a href="{{ route('visualizar.aquisicao.servicos', ['id' => $aquisicaos->id]) }}"
+                                                        <a href=""
                                                             class="btn btn-sm btn-outline-primary" data-tt="tooltip"
                                                             style="font-size: 1rem; color:#303030" data-placement="top"
                                                             title="Visualizar">
                                                             <i class="bi bi-search"></i>
                                                         </a>
-                                                        @if (in_array($aquisicaos->tipoStatus->id, ['3', '2']))
-                                                            <a href="/aprovar-aquisicao-servicos/{{ $aquisicaos->id }}"
+                                                        {{-- @if (in_array($aquisicaos->tipoStatus->id, ['3', '2'])) --}}
+                                                            <a href=""
                                                                 class="btn btn-sm btn-outline-primary" data-tt="tooltip"
                                                                 style="font-size: 1rem; color:#303030" data-placement="top"
                                                                 title="Aprovar">
                                                                 <i class="bi bi-check-lg"></i>
                                                             </a>
-                                                        @endif
-                                                        @if ($aquisicaos->tipoStatus->id == '3')
-                                                            <a href="/homologar-aquisicao-servicos/{{ $aquisicaos->id }}"
+                                                        {{-- @endif --}}
+                                                        {{-- @if ($aquisicaos->tipoStatus->id == '3') --}}
+                                                            <a href=""
                                                                 class="btn btn-sm btn-outline-success" data-tt="tooltip"
                                                                 style="font-size: 1rem; color:#303030"
                                                                 data-placement="top" title="Homologar">
                                                                 <i class="bi bi-clipboard-check"></i>
                                                             </a>
-                                                        @endif
-                                                        @if ($aquisicaos->tipoStatus->id == '1')
-                                                            <a href="/editar-aquisicao-servicos/{{ $aquisicaos->id }}"
+                                                        {{-- @endif --}}
+                                                        {{-- @if ($aquisicaos->tipoStatus->id == '1') --}}
+                                                            <a href=""
                                                                 class="btn btn-sm btn-outline-warning" data-tt="tooltip"
                                                                 style="font-size: 1rem; color:#303030"
                                                                 data-placement="top" title="Editar">
                                                                 <i class="bi bi-pencil"></i>
                                                             </a>
-                                                            <a href="/enviar-aquisicao-servicos/{{ $aquisicaos->id }}"
+                                                            <a href=""
                                                                 class="btn btn-sm btn-outline-primary" data-tt="tooltip"
                                                                 style="font-size: 1rem; color:#303030"
                                                                 data-placement="top" title="Enviar">
                                                                 <i class="bi bi-cart-check"></i>
                                                             </a>
-                                                        @endif
-                                                        @if (isset($aquisicaos->aut_usu_pres, $aquisicaos->aut_usu_adm, $aquisicaos->aut_usu_daf))
+                                                        {{-- @endif --}}
+                                                        {{-- @if (isset($aquisicaos->aut_usu_pres, $aquisicaos->aut_usu_adm, $aquisicaos->aut_usu_daf)) --}}
                                                             <a href="" class="btn btn-sm btn-outline-info"
                                                                 data-tt="tooltip" style="font-size: 1rem; color:#303030"
                                                                 data-placement="top" title="Aceite">
                                                                 <i class="bi bi-hand-thumbs-up"></i>
                                                             </a>
-                                                        @endif
-                                                        @if ($aquisicaos->tipoStatus->id == '1')
+                                                        {{-- @endif --}}
+                                                        {{-- @if ($aquisicaos->tipoStatus->id == '1') --}}
                                                             <a href="" class="btn btn-sm btn-outline-danger"
                                                                 data-tt="tooltip" style="font-size: 1rem; color:#303030"
                                                                 data-placement="top" title="Excluir">
-                                                                <i class="bi bi-x-circle"></i>
+                                                                <i class="bi bi-trash"></i>
                                                             </a>
-                                                        @endif
+                                                        {{-- @endif --}}
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -260,15 +260,15 @@
     <!-- FIM da Modal Homologar em Lote -->
     <script>
         $(document).ready(function() {
-            function populateServicos(selectElement, classeServicoValue) {
+            function populateMateriais(selectElement, classeMaterialValue) {
                 $.ajax({
                     type: "GET",
-                    url: "/retorna-nome-servicos/" + classeServicoValue,
+                    url: "/retorna-nome-materiais/" + classeMaterialValue,
                     dataType: "json",
                     success: function(response) {
                         selectElement.empty();
                         selectElement.append(
-                            '<option value="">Selecione um serviço</option>'
+                            '<option value="">Selecione um material</option>'
                         );
                         $.each(response, function(index, item) {
                             selectElement.append(
@@ -290,17 +290,17 @@
 
             $("#classeServico").change(function() {
                 var classeServicoValue = $(this).val();
-                var servicosSelect = $("#servicos");
+                var materiaisSelect = $("#materiais");
 
-                if (!classeServicoValue) {
-                    servicosSelect
+                if (!classeMaterialValue) {
+                    materiaisSelect
                         .empty()
-                        .append('<option value="">Selecione um serviço</option>');
+                        .append('<option value="">Selecione um material</option>');
                     servicosSelect.prop("disabled", true);
                     return;
                 }
 
-                populateServicos(servicosSelect, classeServicoValue);
+                populateMateriais(materiaisSelect, classeMaterialValue);
             });
 
             $("#add-proposta").click(function() {

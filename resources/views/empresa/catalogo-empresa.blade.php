@@ -72,7 +72,7 @@
                                             </a>
                                             <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal"
                                                 data-bs-target="#A{{ $empresas->id }}" class="btn btn-outline-danger btn-sm"
-                                                data-bs-placement="top" title="Excluir"><i class="bi bi-x-circle"
+                                                data-bs-placement="top" title="Excluir"><i class="bi bi-trash"
                                                     style="font-size: 1rem; color:#303030;"></i></button>
 
                                             <!-- Modal -->

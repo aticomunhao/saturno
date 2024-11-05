@@ -6,5 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ModelCatMaterial extends Model
 {
-   	protected $table ='tipo_categoria_material';
+    protected $table = 'tipo_categoria_material';
+    public $timestamps = false;
+
 }

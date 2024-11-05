@@ -42,6 +42,8 @@ $setor = session()->get('usuario.setor');
                             {{-- @if (in_array(13, $acesso) or in_array(14, $acesso)) --}}
                             <li><a class="dropdown-item" href="{{route('documento.index')}}">Documentos</a>
                             </li>
+                            <li><a class="dropdown-item" href="/cad-cat-material">Categorias</a>
+                            </li>
                             {{-- @endif --}}
                         </ul>
                     </li>

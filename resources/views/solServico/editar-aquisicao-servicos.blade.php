@@ -136,7 +136,7 @@
                                                 <div class="col-md-3 mb-3">
                                                     <label for="arquivo">Novo Arquivo</label>
                                                     <input type="file" class="form-control" name="arquivoOld[]"
-                                                        value="{{ $documento->end_arquivo }}" required
+                                                        value="{{ $documento->end_arquivo }}"
                                                         placeholder="Insira o arquivo da proposta">
                                                 </div>
                                                 <div class="col-md-3 mb-3 row">
@@ -162,7 +162,7 @@
             </div>
         </div>
         <div class="botões">
-            <a href="javascript:history.back()" type="button" value=""
+            <a href="/gerenciar-aquisicao-servicos" type="button" value=""
                 class="btn btn-danger col-md-3 col-2 mt-4 offset-md-2">Cancelar</a>
             <button type="submit" value="Confirmar" class="btn btn-primary col-md-3 col-1 mt-4 offset-md-2">Confirmar
             </button>

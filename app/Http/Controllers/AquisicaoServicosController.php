@@ -45,7 +45,7 @@ class AquisicaoServicosController extends Controller
             $query->where('id_setor', $request->setor);
         }
 
-        $aquisicao = $query->orderBy('prioridade')->paginate(20);
+        $aquisicao = $query->orderBy('prioridade')->orderBy('id')->paginate(20);
 
         //dd($aquisicao);
 
@@ -118,7 +118,7 @@ class AquisicaoServicosController extends Controller
         }
 
         $today = Carbon::today()->format('Y-m-d');
-
+        dd($request->all());
         DB::beginTransaction();
         try {
 
@@ -168,6 +168,7 @@ class AquisicaoServicosController extends Controller
         $solicitacao = SolServico::findOrFail($idS);
         $documentos = Documento::where('id_sol_sv', $idS)->get();
         $tiposServico = CatalogoServico::where('id_cl_sv', $solicitacao->id_classe_sv)->get();
+       // dd($tiposServico);
         $classeAquisicao = TipoClasseSv::all();
         $buscaSetor = Setor::all();
 
@@ -214,19 +215,25 @@ class AquisicaoServicosController extends Controller
             if ($request->hasFile('arquivoOld')) {
                 foreach ($request->file('arquivoOld') as $index => $file) {
                     if ($file) {
-                        // Obter caminho do arquivo
+                        // Obter o caminho do arquivo
                         $path = $file->store('propostas', 'public');
 
-                        // Atualizar o documento existente
+                        // Verificar se o documento existe
                         $documento = Documento::find($request->input('documento_id')[$index]);
-                        if ($documento) {
-                            $documento->update([
-                                'end_arquivo' => $path,
-                            ]);
+
+                        if (!$documento) {
+                            // Se o documento não existir, continue para o próximo
+                            continue; // Ignora essa iteração e vai para o próximo arquivo
                         }
+
+                        // Atualizar o documento existente
+                        $documento->update([
+                            'end_arquivo' => $path,
+                        ]);
                     }
                 }
             }
+
 
             // Adicionar novos documentos (arquivo)
             if ($request->hasFile('arquivo') && is_array($request->file('arquivo'))) {

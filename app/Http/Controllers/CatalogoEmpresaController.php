@@ -49,12 +49,11 @@ class CatalogoEmpresaController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'cnpj' => ['required', new CpfCnpj],
-            'inscricaoEmail' => 'required|email',
-            'inscricaoTelefone' => ['required', new Telefone],
-            'inscricaoCep' => ['required', new Cep],
-        ]);
+        // $request->validate([
+        //     'cnpj' => ['required', new CpfCnpj],
+        //     'inscricaoEmail' => 'required|email',
+        //     'inscricaoCep' => ['required', new Cep],
+        // ]);
 
         // Verifica se o CNPJ ou CPF já existe
         $cnpjCpfExistente = Empresa::where('cnpj_cpf', $request->input('cnpj'))->exists();
@@ -113,12 +112,12 @@ class CatalogoEmpresaController extends Controller
     {
         $empresa = Empresa::find($request->input('id'));
 
-        $request->validate([
-            'cnpj' => ['required', new CpfCnpj],
-            'inscricaoEmail' => 'required|email',
-            'inscricaoTelefone' => ['required', new Telefone],
-            'cep' => ['required', new Cep],
-        ]);
+        // $request->validate([
+        //     'cnpj' => ['required', new CpfCnpj],
+        //     'inscricaoEmail' => 'required|email',
+        //     'inscricaoTelefone' => ['required', new Telefone],
+        //     'cep' => ['required', new Cep],
+        // ]);
 
         $empresa->fill([
             'razaosocial' => $request->input('razaoSocial'),

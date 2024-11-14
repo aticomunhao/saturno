@@ -149,7 +149,7 @@
                 <div class=" form-group row" style="margin-left:5px">
                     <div class="col-md-4 mb-3">
                         <label for="numero">Número da Proposta</label>
-                        <input type="number" class="form-control" name="numero[]"
+                        <input type="text" class="form-control" name="numero[]"
                             placeholder="Digite o Número da proposta">
                     </div>
                     <div class="col-md-4 mb-3">

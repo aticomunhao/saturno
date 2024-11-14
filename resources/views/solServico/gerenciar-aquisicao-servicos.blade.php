@@ -180,7 +180,7 @@
                                                                 <i class="bi bi-cart-check"></i>
                                                             </a>
                                                         @endif
-                                                        @if (isset($aquisicaos->aut_usu_pres, $aquisicaos->aut_usu_adm, $aquisicaos->aut_usu_daf))
+                                                        @if (isset($aquisicaos->aut_usu_pres, $aquisicaos->aut_usu_adm))
                                                             <a href="" class="btn btn-sm btn-outline-info"
                                                                 data-tt="tooltip" style="font-size: 1rem; color:#303030"
                                                                 data-placement="top" title="Aceite">

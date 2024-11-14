@@ -92,7 +92,7 @@
                             <div class="ROW" style="margin-left:5px">
                                 @foreach ($empresas as $index => $empresa)
                                     <div style="display: flex; gap: 20px; align-items: flex-end;">
-                                        <div class="col-md-3">{{ 0 + 1 }}º Empresa
+                                        <div class="col-md-3">Nome Empresa
                                             <input class="form-control" style="border: 1px solid #999999; padding: 5px;"
                                                 type="text" name="empresas[{{ $index }}][id_empresa]"
                                                 value="{{ $empresa->id_empresa }}" readonly>

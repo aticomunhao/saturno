@@ -299,8 +299,9 @@ class AquisicaoServicosController extends Controller
             }
         }
 
+        $contadorEmpresa = 1;
 
-        return view('solServico.aprovar-aquisicao-servicos', compact('aquisicao', 'numeros', 'todosSetor', 'empresas'));
+        return view('solServico.aprovar-aquisicao-servicos', compact('aquisicao', 'contadorEmpresa', 'numeros', 'todosSetor', 'empresas'));
     }
 
     public function validaAprovacao(Request $request)

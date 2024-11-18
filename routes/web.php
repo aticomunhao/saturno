@@ -47,6 +47,7 @@ use App\Http\Controllers\AquisicaoServicosController;
 use App\Http\Controllers\CatalogoEmpresaController;
 use App\Http\Controllers\CatalogoServicoController;
 use App\Http\Controllers\AquisicaoMaterialController;
+use App\Http\Controllers\ValorCompraController;
 
 
 
@@ -376,3 +377,5 @@ Route::delete('/deletar-empresa/{id}', [CatalogoEmpresaController::class, 'delet
 //Gerenciar Aquisição de Material
 Route::get('/gerenciar-aquisicao-material', [AquisicaoMaterialController::class, 'index']);
 
+//Valor Mínimo de Compra
+Route::get('/valor-compra', [ValorCompraController::class, 'index']);

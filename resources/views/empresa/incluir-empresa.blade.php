@@ -35,13 +35,12 @@
                                 </div>
                                 <!-- Campo CNPJ/CPF -->
                                 <div class="col-md-3 col-sm-12">CNPJ - CPF
-                                    <input type="text" class="form-control" id="cnpjId" name="cnpj"
+                                    <input type="number" class="form-control" id="cnpjId" name="cnpj"
                                         style="border: 1px solid #999999; padding: 5px; background-color: white"
                                         value="{{ old('cnpj') }}" required>
                                     @if ($errors->has('cnpj'))
                                         <span class="text-danger">{{ $errors->first('cnpj') }}</span>
                                     @endif
-
                                 </div>
                                 <!-- Campo País -->
                                 <div class="col-md-3 col-sm-12">País
@@ -158,7 +157,24 @@
                                         value="{{ old('inscricaoComplemento') }}" required>
                                 </div>
                             </div>
-                            <div style="display: flex; gap: 20px; align-items: flex-end;">
+                            <hr>
+                            <h5>CNAE da Empresa</h5>
+                            <div class="row">
+                                <!-- Campo CNAE -->
+                                <div class="col-md-3 col-sm-12">Número CNAE
+                                    <input type="text" class="form-control" id="cnae" name="cnae[]"
+                                        style="border: 1px solid #999999; padding: 5px; background-color: white"
+                                        value="{{ old('cnae') }}" required>
+                                </div>
+                                <!-- Container para os formulários de propostas comerciais -->
+                                <div id="form-propostas-comerciais">
+                                    <!-- Formulários de propostas comerciais serão adicionados aqui -->
+                                </div>
+                                <!-- Botão para adicionar nova proposta comercial -->
+                                <div class="col-12 text-center mt-4">
+                                    <button type="button" id="add-proposta" class="btn btn-success">Adicionar Proposta
+                                        Comercial</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -174,6 +190,24 @@
             </button>
         </div>
     </form>{{-- Final Formulario de Inserção --}}
+
+    <div id="template-numero-cnae" style="display: none;">
+        <div class="template-numero-cnae" style="border-color: #355089; margin-top: 5px;">
+            <div class="card-body">
+                <div class=" form-group row" style="margin-left:5px">
+                    <!-- Campo CNAE -->
+                    <div class="col-md-3 col-sm-12">Número CNAE
+                        <input type="text" class="form-control" id="cnae" name="cnae[]"
+                            style="border: 1px solid #999999; background-color: white"
+                            value="{{ old('cnae') }}">
+                            <button type="button" class="btn btn-danger btn-sm float-end remove-proposta">
+                                <i class="bi bi-x"></i>
+                            </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         $(document).ready(function() {
             function populateCities(selectElement, stateValue) {
@@ -203,6 +237,15 @@
                 var stateValue = $(this).val();
                 $("#cidade").removeAttr("disabled");
                 populateCities($("#cidade"), stateValue);
+            });
+
+            $("#add-proposta").click(function() {
+                var newProposta = $("#template-numero-cnae").html();
+                $("#form-propostas-comerciais").append(newProposta);
+            });
+
+            $(document).on("click", ".remove-proposta", function() {
+                $(this).closest(".proposta-comercial").remove();
             });
         });
     </script>

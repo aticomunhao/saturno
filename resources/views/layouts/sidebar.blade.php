@@ -69,12 +69,12 @@ $setor = session()->get('usuario.setor');
                     </li>
                 </ul>
                 {{-- @endif --}}
-
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="3" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">Administrar sistema</a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                            <li><a class="dropdown-item" href="/valor-compra">Valor de Compra</a></li>
                             {{-- @if (in_array(2, $acesso)) --}}
                             <li><a class="dropdown-item" href="/gerenciar-fatos">Gerenciar Fatos</a></li>
                             {{-- @endif --}}
@@ -87,11 +87,9 @@ $setor = session()->get('usuario.setor');
                                 @if (in_array(28, $acesso)) --}}
                             <li><a class="dropdown-item" href="/gerenciar-versoes">Gerenciar Versões</a></li>
                             {{-- @endif --}}
-
                         </ul>
                     </li>
                 </ul>
-
                 <div class="col">
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">

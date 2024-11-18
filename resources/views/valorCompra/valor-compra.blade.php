@@ -21,23 +21,39 @@
                             <h5>Gerenciar Valor de Compra</h5>
                             <hr>
                              <!-- Campo Valor Máximo de compra -->
-                             <div class="row mb-3">
-                                <div class="col-md-3 col-sm-12">Valor Máximo para Supervisão da DIADM
+                             <div class="row mb-3 row">
+                                <div class="col-md-4 col-sm-12">Valor Limite Máximo para Solicitação de <span class="text-danger">SERVIÇO</span> da DIADM
                                     <div class="input-group">
                                         <span class="input-group-text">R$</span>
-                                        <input type="number" class="form-control" id="valorMaxDIADMId" name="valorMaxDIADM"
+                                        <input type="number" class="form-control" id="valorServDIADMId" name="valorServDIADM"
                                                style="border: 1px solid #999999; padding: 5px; background-color: white"
-                                               value="{{ old('valorMaxDIADM') }}" required>
+                                               value="{{ old('valorServDIADM') }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-12">Valor Limite Máximo para Solicitação de <span class="text-danger">MATERIAL</span> da DIADM
+                                    <div class="input-group">
+                                        <span class="input-group-text">R$</span>
+                                        <input type="number" class="form-control" id="valorMatDIADMId" name="valorMatDIADM"
+                                               style="border: 1px solid #999999; padding: 5px; background-color: white"
+                                               value="{{ old('valorMatDIADM') }}" required>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mb-3">
-                                <div class="col-md-3 col-sm-12">Valor Máximo de Compra sem Necessidade de 3 Propostas
+                            <div class="row mb-3 row">
+                                <div class="col-md-4 col-sm-12">Valor Limite Máximo de Compra de <span class="text-danger">SERVIÇO</span> sem Necessidade de 3 Propostas
                                     <div class="input-group">
                                         <span class="input-group-text">R$</span>
-                                        <input type="number" class="form-control" id="valorMaxId" name="valorMax"
+                                        <input type="number" class="form-control" id="valorMaxId" name="valorMaxServ"
                                                style="border: 1px solid #999999; padding: 5px; background-color: white"
-                                               value="{{ old('valorMax') }}" required>
+                                               value="{{ old('valorMaxServ') }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-sm-12">Valor Limite Máximo de Compra de <span class="text-danger">MATERIAL</span> sem Necessidade de 3 Propostas
+                                    <div class="input-group">
+                                        <span class="input-group-text">R$</span>
+                                        <input type="number" class="form-control" id="valorMaxId" name="valorMaxMat"
+                                               style="border: 1px solid #999999; padding: 5px; background-color: white"
+                                               value="{{ old('valorMaxMat') }}" required>
                                     </div>
                                 </div>
                             </div>

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Validator;
 use App\Models\ValorCompra;
+use App\Models\HistValorCompra;
 
 
 use function Laravel\Prompts\select;
@@ -31,6 +32,12 @@ class ValorCompraController extends Controller
                 // Atualiza o 'dt_fim' do registro existente, se necessário
                 if ($existingRecord) {
                     $existingRecord->update(['dt_fim' => now()]);
+
+                    HistValorCompra::create([
+                        'id_valor_autoprizacao_compra' => $existingRecord->id,
+                        'id_funcionario' => $id_funcionario,
+                        'id_motivo' => 1,
+                    ]);
                 }
                 // Insere um novo registro
                 ValorCompra::create([
@@ -38,10 +45,10 @@ class ValorCompraController extends Controller
                     'tipo_sol' => 1,
                     'tipo_compra' => 1,
                     'dt_inicio' => now(),
-                    'id_funcionario' => $id_funcionario,
                 ]);
+
+                app('flasher')->addSuccess('Valor máximo de serviço foi alterado com sucesso!');
             }
-            app('flasher')->addSuccess('Valor máximo de serviço foi alterado com sucesso!');
         }
 
         // Verifica e atualiza valorMatDIADM
@@ -55,18 +62,25 @@ class ValorCompraController extends Controller
                 // Atualiza o 'dt_fim' do registro existente, se necessário
                 if ($existingRecord) {
                     $existingRecord->update(['dt_fim' => now()]);
+
+                    HistValorCompra::create([
+                        'id_valor_autoprizacao_compra' => $existingRecord->id,
+                        'id_funcionario' => $id_funcionario,
+                        'id_motivo' => 1,
+                    ]);
                 }
 
                 // Insere um novo registro
-                ValorCompra::create([
+                $segundo = ValorCompra::create([
                     'valor' => $request->input('valorMatDIADM'),
                     'tipo_sol' => 2,
                     'tipo_compra' => 1,
                     'dt_inicio' => now(),
                     'id_funcionario' => $id_funcionario,
                 ]);
+
+                app('flasher')->addSuccess('Valor máximo de material foi alterado com sucesso!');
             }
-            app('flasher')->addSuccess('Valor máximo de material foi alterado com sucesso!');
         }
 
         // Verifica e atualiza valorServ
@@ -80,18 +94,25 @@ class ValorCompraController extends Controller
                 // Atualiza o 'dt_fim' do registro existente, se necessário
                 if ($existingRecord) {
                     $existingRecord->update(['dt_fim' => now()]);
+
+                    HistValorCompra::create([
+                        'id_valor_autoprizacao_compra' => $existingRecord->id,
+                        'id_funcionario' => $id_funcionario,
+                        'id_motivo' => 1,
+                    ]);
                 }
 
                 // Insere um novo registro
-                ValorCompra::create([
+                $terceiro = ValorCompra::create([
                     'valor' => $request->input('valorMaxServ'),
                     'tipo_sol' => 1,
                     'tipo_compra' => 2,
                     'dt_inicio' => now(),
                     'id_funcionario' => $id_funcionario,
                 ]);
+
+                app('flasher')->addSuccess('Valor máximo de compra sem necessidade de 3 proposta alterado com sucesso!');
             }
-            app('flasher')->addSuccess('Valor máximo de compra sem necessidade de 3 proposta alterado com sucesso!');
         }
 
         // Verifica e atualiza valorMat
@@ -105,18 +126,25 @@ class ValorCompraController extends Controller
                 // Atualiza o 'dt_fim' do registro existente, se necessário
                 if ($existingRecord) {
                     $existingRecord->update(['dt_fim' => now()]);
+
+                    HistValorCompra::create([
+                        'id_valor_autoprizacao_compra' => $existingRecord->id,
+                        'id_funcionario' => $id_funcionario,
+                        'id_motivo' => 1,
+                    ]);
                 }
 
                 // Insere um novo registro
-                ValorCompra::create([
+                $quarto = ValorCompra::create([
                     'valor' => $request->input('valorMaxMat'),
                     'tipo_sol' => 2,
                     'tipo_compra' => 2,
                     'dt_inicio' => now(),
                     'id_funcionario' => $id_funcionario,
                 ]);
+
+                app('flasher')->addSuccess('Valor máximo de compra sem necessidade de 3 proposta alterado com sucesso!');
             }
-            app('flasher')->addSuccess('Valor máximo de compra sem necessidade de 3 proposta alterado com sucesso!');
         }
 
         $valorServDIADM = ValorCompra::where('tipo_sol', 1)//tipo 1 significa que se refere a um servico

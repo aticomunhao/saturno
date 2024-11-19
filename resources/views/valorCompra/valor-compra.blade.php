@@ -27,7 +27,7 @@
                                         <span class="input-group-text">R$</span>
                                         <input type="number" class="form-control" id="valorServDIADMId" name="valorServDIADM"
                                                style="border: 1px solid #999999; padding: 5px; background-color: white"
-                                               value="{{ old('valorServDIADM') }}" required>
+                                               value="{{ $valorServDIADM->valor }}" required>
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-sm-12">Valor Limite Máximo para Solicitação de <span class="text-danger">MATERIAL</span> da DIADM
@@ -35,7 +35,7 @@
                                         <span class="input-group-text">R$</span>
                                         <input type="number" class="form-control" id="valorMatDIADMId" name="valorMatDIADM"
                                                style="border: 1px solid #999999; padding: 5px; background-color: white"
-                                               value="{{ old('valorMatDIADM') }}" required>
+                                               value="{{ $valorMatDIADM->valor }}" required>
                                     </div>
                                 </div>
                             </div>
@@ -45,7 +45,7 @@
                                         <span class="input-group-text">R$</span>
                                         <input type="number" class="form-control" id="valorMaxId" name="valorMaxServ"
                                                style="border: 1px solid #999999; padding: 5px; background-color: white"
-                                               value="{{ old('valorMaxServ') }}" required>
+                                               value="{{ $valorMaxServ->valor }}" required>
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-sm-12">Valor Limite Máximo de Compra de <span class="text-danger">MATERIAL</span> sem Necessidade de 3 Propostas
@@ -53,7 +53,7 @@
                                         <span class="input-group-text">R$</span>
                                         <input type="number" class="form-control" id="valorMaxId" name="valorMaxMat"
                                                style="border: 1px solid #999999; padding: 5px; background-color: white"
-                                               value="{{ old('valorMaxMat') }}" required>
+                                               value="{{ $valorMaxMat->valor }}" required>
                                     </div>
                                 </div>
                             </div>

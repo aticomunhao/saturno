@@ -19,6 +19,7 @@ class ValorCompraController extends Controller
 
     public function index(Request $request)
     {
+        $id_funcionario = session('usuario.id_usuario');
         // Verifica e atualiza valorServDIADM
         if ($request->input('valorServDIADM') != null) {
             $existingRecord = ValorCompra::where('tipo_sol', 1)
@@ -31,15 +32,16 @@ class ValorCompraController extends Controller
                 if ($existingRecord) {
                     $existingRecord->update(['dt_fim' => now()]);
                 }
-
                 // Insere um novo registro
                 ValorCompra::create([
                     'valor' => $request->input('valorServDIADM'),
                     'tipo_sol' => 1,
                     'tipo_compra' => 1,
                     'dt_inicio' => now(),
+                    'id_funcionario' => $id_funcionario,
                 ]);
             }
+            app('flasher')->addSuccess('Valor máximo de serviço foi alterado com sucesso!');
         }
 
         // Verifica e atualiza valorMatDIADM
@@ -61,18 +63,20 @@ class ValorCompraController extends Controller
                     'tipo_sol' => 2,
                     'tipo_compra' => 1,
                     'dt_inicio' => now(),
+                    'id_funcionario' => $id_funcionario,
                 ]);
             }
+            app('flasher')->addSuccess('Valor máximo de material foi alterado com sucesso!');
         }
 
         // Verifica e atualiza valorServ
-        if ($request->input('valorServ') != null) {
+        if ($request->input('valorMaxServ') != null) {
             $existingRecord = ValorCompra::where('tipo_sol', 1)
                 ->where('tipo_compra', 2)
                 ->whereNull('dt_fim') // Busca registros sem 'dt_fim'
                 ->first();
 
-            if (!$existingRecord || $existingRecord->valor != $request->input('valorServ')) {
+            if (!$existingRecord || $existingRecord->valor != $request->input('valorMaxServ')) {
                 // Atualiza o 'dt_fim' do registro existente, se necessário
                 if ($existingRecord) {
                     $existingRecord->update(['dt_fim' => now()]);
@@ -80,22 +84,24 @@ class ValorCompraController extends Controller
 
                 // Insere um novo registro
                 ValorCompra::create([
-                    'valor' => $request->input('valorServ'),
+                    'valor' => $request->input('valorMaxServ'),
                     'tipo_sol' => 1,
                     'tipo_compra' => 2,
                     'dt_inicio' => now(),
+                    'id_funcionario' => $id_funcionario,
                 ]);
             }
+            app('flasher')->addSuccess('Valor máximo de compra sem necessidade de 3 proposta alterado com sucesso!');
         }
 
         // Verifica e atualiza valorMat
-        if ($request->input('valorMat') != null) {
-            $existingRecord = ValorCompra::where('tipo_sol', 1)
+        if ($request->input('valorMaxMat') != null) {
+            $existingRecord = ValorCompra::where('tipo_sol', 2)
                 ->where('tipo_compra', 2)
                 ->whereNull('dt_fim') // Busca registros sem 'dt_fim'
                 ->first();
 
-            if (!$existingRecord || $existingRecord->valor != $request->input('valorMat')) {
+            if (!$existingRecord || $existingRecord->valor != $request->input('valorMaxMat')) {
                 // Atualiza o 'dt_fim' do registro existente, se necessário
                 if ($existingRecord) {
                     $existingRecord->update(['dt_fim' => now()]);
@@ -103,14 +109,36 @@ class ValorCompraController extends Controller
 
                 // Insere um novo registro
                 ValorCompra::create([
-                    'valor' => $request->input('valorMat'),
-                    'tipo_sol' => 1,
+                    'valor' => $request->input('valorMaxMat'),
+                    'tipo_sol' => 2,
                     'tipo_compra' => 2,
                     'dt_inicio' => now(),
+                    'id_funcionario' => $id_funcionario,
                 ]);
             }
+            app('flasher')->addSuccess('Valor máximo de compra sem necessidade de 3 proposta alterado com sucesso!');
         }
 
-        return view('valorCompra.valor-compra');
+        $valorServDIADM = ValorCompra::where('tipo_sol', 1)//tipo 1 significa que se refere a um servico
+            ->where('tipo_compra', 1)//tipo 1 significa que se refere ao valor max que a DIADM vê
+            ->whereNull('dt_fim') // Busca registros sem 'dt_fim'
+            ->first();
+
+        $valorMatDIADM = ValorCompra::where('tipo_sol', 2)//tipo 2 significa que se refere a um material
+            ->where('tipo_compra', 1)//tipo 1 significa que se refere ao valor max que a DIADM vê
+            ->whereNull('dt_fim') // Busca registros sem 'dt_fim'
+            ->first();
+
+        $valorMaxServ = ValorCompra::where('tipo_sol', 1)//tipo 1 significa que se refere a um servico
+            ->where('tipo_compra', 2)//tipo 2 significa que se refere ao valor max que  não necessita 3 propostas comerciais
+            ->whereNull('dt_fim') // Busca registros sem 'dt_fim'
+            ->first();
+
+        $valorMaxMat = ValorCompra::where('tipo_sol', 2)//tipo 2 significa que se refere a um material
+            ->where('tipo_compra', 2)//tipo 2 significa que se refere ao valor max que  não necessita 3 propostas comerciais
+            ->whereNull('dt_fim') // Busca registros sem 'dt_fim'
+            ->first();
+
+        return view('valorCompra.valor-compra', compact('valorServDIADM', 'valorMatDIADM', 'valorMaxServ', 'valorMaxMat'));
     }
 }

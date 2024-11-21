@@ -31,12 +31,9 @@ class ValorCompraController extends Controller
             if (!$existingRecord || $existingRecord->valor != $request->input('valorServDIADM')) {
                 // Atualiza o 'dt_fim' do registro existente, se necessário
                 if ($existingRecord) {
-                    $existingRecord->update(['dt_fim' => now()]);
-
-                    HistValorCompra::create([
-                        'id_valor_autoprizacao_compra' => $existingRecord->id,
+                    $existingRecord->update([
+                        'dt_fim' => now(),
                         'id_funcionario' => $id_funcionario,
-                        'id_motivo' => 1,
                     ]);
                 }
                 // Insere um novo registro
@@ -61,22 +58,17 @@ class ValorCompraController extends Controller
             if (!$existingRecord || $existingRecord->valor != $request->input('valorMatDIADM')) {
                 // Atualiza o 'dt_fim' do registro existente, se necessário
                 if ($existingRecord) {
-                    $existingRecord->update(['dt_fim' => now()]);
-
-                    HistValorCompra::create([
-                        'id_valor_autoprizacao_compra' => $existingRecord->id,
+                    $existingRecord->update([
+                        'dt_fim' => now(),
                         'id_funcionario' => $id_funcionario,
-                        'id_motivo' => 1,
                     ]);
                 }
-
                 // Insere um novo registro
                 $segundo = ValorCompra::create([
                     'valor' => $request->input('valorMatDIADM'),
                     'tipo_sol' => 2,
                     'tipo_compra' => 1,
                     'dt_inicio' => now(),
-                    'id_funcionario' => $id_funcionario,
                 ]);
 
                 app('flasher')->addSuccess('Valor máximo de material foi alterado com sucesso!');
@@ -93,22 +85,17 @@ class ValorCompraController extends Controller
             if (!$existingRecord || $existingRecord->valor != $request->input('valorMaxServ')) {
                 // Atualiza o 'dt_fim' do registro existente, se necessário
                 if ($existingRecord) {
-                    $existingRecord->update(['dt_fim' => now()]);
-
-                    HistValorCompra::create([
-                        'id_valor_autoprizacao_compra' => $existingRecord->id,
+                    $existingRecord->update([
+                        'dt_fim' => now(),
                         'id_funcionario' => $id_funcionario,
-                        'id_motivo' => 1,
                     ]);
                 }
-
                 // Insere um novo registro
                 $terceiro = ValorCompra::create([
                     'valor' => $request->input('valorMaxServ'),
                     'tipo_sol' => 1,
                     'tipo_compra' => 2,
                     'dt_inicio' => now(),
-                    'id_funcionario' => $id_funcionario,
                 ]);
 
                 app('flasher')->addSuccess('Valor máximo de compra sem necessidade de 3 proposta alterado com sucesso!');
@@ -125,22 +112,17 @@ class ValorCompraController extends Controller
             if (!$existingRecord || $existingRecord->valor != $request->input('valorMaxMat')) {
                 // Atualiza o 'dt_fim' do registro existente, se necessário
                 if ($existingRecord) {
-                    $existingRecord->update(['dt_fim' => now()]);
-
-                    HistValorCompra::create([
-                        'id_valor_autoprizacao_compra' => $existingRecord->id,
+                    $existingRecord->update([
+                        'dt_fim' => now(),
                         'id_funcionario' => $id_funcionario,
-                        'id_motivo' => 1,
                     ]);
                 }
-
                 // Insere um novo registro
                 $quarto = ValorCompra::create([
                     'valor' => $request->input('valorMaxMat'),
                     'tipo_sol' => 2,
                     'tipo_compra' => 2,
                     'dt_inicio' => now(),
-                    'id_funcionario' => $id_funcionario,
                 ]);
 
                 app('flasher')->addSuccess('Valor máximo de compra sem necessidade de 3 proposta alterado com sucesso!');

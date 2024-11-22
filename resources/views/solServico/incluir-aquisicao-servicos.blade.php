@@ -109,6 +109,17 @@
                                                 <input type="file" class="form-control" name="arquivo[]"
                                                     placeholder="Insira o arquivo da proposta" required>
                                             </div>
+                                            <div class="form-check col-md-4 mb-3">
+                                                <label for="garantiaBotao">Possui garantia?</label>
+                                                <input type="checkbox" style="border: 1px solid #999999; padding: 5px;"
+                                                    class="form-check-input" id="garantiaBotao" name="garantiaBotao[]"
+                                                    @if (old('garantiaBotao')) checked @endif>
+                                            </div>
+                                            <div id="tempoGarantia" class="col-md-4 mb-3" style="display: none;">
+                                                <label for="tempoGarantiaInput">Tempo de Garantia (em dias)</label>
+                                                <input type="number" class="form-control" id="tempoGarantiaInput"
+                                                    name="tempoGarantia[]" placeholder="Digite o tempo de garantia">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -184,6 +195,18 @@
                         <input type="file" class="form-control" name="arquivo[]"
                             placeholder="Insira o arquivo da proposta">
                     </div>
+                    <div class="form-check col-md-4 mb-3">
+                        <input type="checkbox" style="border: 1px solid #999999; padding: 5px;" class="form-check-input"
+                            id="garantiaBotao" name="garantiaBotao[]" @if (old('garantiaBotao')) checked @endif>
+                        <label class="form-check-label" for="garantiaBotao">
+                            Possui garantia?
+                        </label>
+                    </div>
+                    <div id="tempoGarantia" class="col-md-4 mb-3" style="display: none;">
+                        <label for="tempoGarantiaInput">Tempo de Garantia (em dias)</label>
+                        <input type="number" class="form-control" id="tempoGarantiaInput" name="tempoGarantia[]"
+                            placeholder="Digite o tempo de garantia">
+                    </div>
                 </div>
             </div>
         </div>
@@ -191,6 +214,7 @@
     <!-- FIM do Template de formulário de proposta comercial -->
     <script>
         $(document).ready(function() {
+            // Função para popular serviços com base na classe de serviço
             function populateServicos(selectElement, classeServicoValue) {
                 $.ajax({
                     type: "GET",
@@ -198,15 +222,10 @@
                     dataType: "json",
                     success: function(response) {
                         selectElement.empty();
-                        selectElement.append(
-                            '<option value="">Selecione um serviço</option>'
-                        );
+                        selectElement.append('<option value="">Selecione um serviço</option>');
                         $.each(response, function(index, item) {
                             selectElement.append(
-                                '<option value="' +
-                                item.id +
-                                '">' +
-                                item.descricao +
+                                '<option value="' + item.id + '">' + item.descricao +
                                 "</option>"
                             );
                         });
@@ -219,14 +238,13 @@
                 });
             }
 
-            $("#classeServico").change(function() {
-                var classeServicoValue = $(this).val();
-                var servicosSelect = $("#servicos");
+            // Atualiza os serviços ao alterar a classe de serviço
+            $(document).on("change", "#classeServico", function() {
+                const classeServicoValue = $(this).val();
+                const servicosSelect = $("#servicos");
 
                 if (!classeServicoValue) {
-                    servicosSelect
-                        .empty()
-                        .append('<option value="">Selecione um serviço</option>');
+                    servicosSelect.empty().append('<option value="">Selecione um serviço</option>');
                     servicosSelect.prop("disabled", true);
                     return;
                 }
@@ -234,13 +252,43 @@
                 populateServicos(servicosSelect, classeServicoValue);
             });
 
+            // Adiciona nova proposta comercial
             $("#add-proposta").click(function() {
-                var newProposta = $("#template-proposta-comercial").html();
+                const newProposta = $("#template-proposta-comercial").html();
                 $("#form-propostas-comerciais").append(newProposta);
             });
 
+            // Remove proposta comercial
             $(document).on("click", ".remove-proposta", function() {
                 $(this).closest(".proposta-comercial").remove();
+            });
+
+            // Alterna campo de tempo de garantia para formulários dinâmicos
+            $(document).on("change", ".form-check-input[name='garantiaBotao[]']", function() {
+                const garantiaCheckbox = $(this);
+                const tempoGarantiaDiv = garantiaCheckbox
+                    .closest(".form-group.row")
+                    .find("#tempoGarantia");
+
+                if (garantiaCheckbox.is(":checked")) {
+                    tempoGarantiaDiv.show();
+                } else {
+                    tempoGarantiaDiv.hide();
+                }
+            });
+
+            // Inicializa a visibilidade do campo de garantia com base no estado inicial
+            $(".form-check-input[name='garantiaBotao[]']").each(function() {
+                const garantiaCheckbox = $(this);
+                const tempoGarantiaDiv = garantiaCheckbox
+                    .closest(".form-group.row")
+                    .find("#tempoGarantia");
+
+                if (garantiaCheckbox.is(":checked")) {
+                    tempoGarantiaDiv.show();
+                } else {
+                    tempoGarantiaDiv.hide();
+                }
             });
         });
     </script>

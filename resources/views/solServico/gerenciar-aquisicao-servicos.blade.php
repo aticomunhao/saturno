@@ -150,6 +150,12 @@
                                                             title="Visualizar">
                                                             <i class="bi bi-search"></i>
                                                         </a>
+                                                        <a href="/aditivo-aquisicao-servicos/{{ $aquisicaos->id }}"
+                                                            class="btn btn-sm btn-outline-primary" data-tt="tooltip"
+                                                            style="font-size: 1rem; color:#303030" data-placement="top"
+                                                            title="Aditivo">
+                                                            <i class="bi bi-plus-square"></i>
+                                                        </a>
                                                         @if (in_array($aquisicaos->tipoStatus->id, ['3', '2']))
                                                             <a href="/aprovar-aquisicao-servicos/{{ $aquisicaos->id }}"
                                                                 class="btn btn-sm btn-outline-primary" data-tt="tooltip"

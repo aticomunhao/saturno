@@ -11,36 +11,36 @@ class CatMaterialController extends Controller
 
     private $objTpMat;
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->objTpMat = new ModelCatMaterial();
     }
 
     public function index()
     {
-        $result= $this->objTpMat->all();
-        return view('/cadastro-geral/cad-cat-material',['result'=>$result]);
+        $result = $this->objTpMat->all();
+        return view('/cadastro-geral/cad-cat-material', ['result' => $result]);
     }
 
     public function create(Request $request)
     {
-       // $tpMat = new ModelCatMaterial();
 
-       //  $tpMat->id = 5;
-       //  $tpMat->nome = Input::get('nome');;
 
-        // $mensagem = "Produto inserido com sucesso";
-        // return view('/produtos/cad-tipo-material')->with('mensagem', $mensagem);
+
+
+
+        return view('/cadastro-geral/inserir-cat-material');
     }
 
     public function store(Request $request)
     {
         $tipoMat = $request->input('tipoMat');
         DB::insert('insert into tipo_categoria_material (nome) values (?)', [$tipoMat]);
-        $result= $this->objTpMat->all();
+        $result = $this->objTpMat->all();
 
         return redirect()
-        ->route('cadcat.index')
-        ->with('message', 'sucesso ao criar a categoria');
+            ->route('cadcat.index')
+            ->with('message', 'sucesso ao criar a categoria');
 
     }
 
@@ -58,27 +58,27 @@ class CatMaterialController extends Controller
 
     public function update(Request $request, $id)
     {
-         DB::table('tipo_categoria_material')
-        ->where('id', $id)
-        ->update([
-            'nome' => $request->input('categoria'),
-        ]);
+        DB::table('tipo_categoria_material')
+            ->where('id', $id)
+            ->update([
+                'nome' => $request->input('categoria'),
+            ]);
 
         return redirect()
-        ->action('CatMaterialController@index')
-        ->with('message', 'a categoria foi alterada com sucesso');
+            ->action('CatMaterialController@index')
+            ->with('message', 'a categoria foi alterada com sucesso');
 
     }
 
     public function destroy($id)
     {
 
-        $deleted = DB::delete('delete from tipo_categoria_material where id =?' , [$id]);
-        $result= $this->objTpMat->all();
+        $deleted = DB::delete('delete from tipo_categoria_material where id =?', [$id]);
+        $result = $this->objTpMat->all();
 
         return redirect()
-        ->action('CatMaterialController@index')
-        ->with('message', 'sucesso ao excluir a categoria');
+            ->action('CatMaterialController@index')
+            ->with('message', 'sucesso ao excluir a categoria');
     }
 }
 

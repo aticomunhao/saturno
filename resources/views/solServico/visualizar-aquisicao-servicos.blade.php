@@ -28,7 +28,8 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <fieldset class="rounded p-4 position-relative" style="margin-bottom: 20px; border: 1px #8f8181 solid">
+                        <fieldset class="rounded p-4 position-relative"
+                            style="margin-bottom: 20px; border: 1px #8f8181 solid">
                             <legend class="w-auto"
                                 style="font-size: .9rem; padding: 0 10px; position: absolute; top: -12px; left: 20px; background: white; color: red">
                                 Identificação do Serviço</legend>
@@ -96,7 +97,7 @@
                                         style="font-size: small; width:inherit; font-weight: bold;">
                                         Setor Responsável por Acompanhar:
                                     </legend>
-                                    {{ $solicitacao->setor->nome }}
+                                    {{ $solicitacao->respSetor->nome ?? '-' }}
                                 </div>
                                 <div class="col">
                                     <legend class="schedule-border"
@@ -107,7 +108,8 @@
                                 </div>
                             </div>
                         </fieldset>
-                        <fieldset class="rounded p-4 position-relative" style="margin-bottom: 20px; border: 1px #8f8181 solid">
+                        <fieldset class="rounded p-4 position-relative"
+                            style="margin-bottom: 20px; border: 1px #8f8181 solid">
                             <legend class="w-auto"
                                 style="font-size: .9rem; padding: 0 10px; position: absolute; top: -12px; left: 20px; background: white; color: red">
                                 Nível de Autorização</legend>
@@ -188,46 +190,47 @@
                             </div>
                         </fieldset>
                         <fieldset class="rounded p-4 position-relative" style="border: 1px #8f8181 solid">
-                            <legend class="w-auto" style="font-size: .9rem; padding: 0 10px; position: absolute; top: -12px; left: 20px; background: white; color: red">
+                            <legend class="w-auto"
+                                style="font-size: .9rem; padding: 0 10px; position: absolute; top: -12px; left: 20px; background: white; color: red">
                                 Documentos Relacionados
                             </legend>
                             @foreach ($documentos as $doc)
-                                    <div class="row" style="margin-bottom: 20px">
-                                        <div class="col">
-                                            <legend class="schedule-border" style="font-size: small; font-weight: bold;">
-                                                Documento ID:
-                                            </legend>
-                                            {{ $doc->id }}
-                                        </div>
-                                        <div class="col">
-                                            <legend class="schedule-border" style="font-size: small; font-weight: bold;">
-                                                Empresa:
-                                            </legend>
-                                            {{ $doc->id_empresa }}
-                                        </div>
-                                        <div class="col">
-                                            <legend class="schedule-border" style="font-size: small; font-weight: bold;">
-                                                Valor:
-                                            </legend>
-                                            {{ $doc->valor }}
-                                        </div>
-                                        <div class="col">
-                                            <legend class="schedule-border" style="font-size: small; font-weight: bold;">
-                                                Data de Validade:
-                                            </legend>
-                                            {{ $doc->dt_validade }}
-                                        </div>
-                                        <div class="col">
-                                            <legend class="schedule-border" style="font-size: small; font-weight: bold;">
-                                                Arquivo:
-                                            </legend>
-                                            @if(isset($doc->arquivo_url))
-                                                <a href="{{ $doc->arquivo_url }}" target="_blank">Ver Arquivo</a>
-                                            @else
-                                                Não disponível
-                                            @endif
-                                        </div>
+                                <div class="row" style="margin-bottom: 20px">
+                                    <div class="col">
+                                        <legend class="schedule-border" style="font-size: small; font-weight: bold;">
+                                            Documento ID:
+                                        </legend>
+                                        {{ $doc->id }}
                                     </div>
+                                    <div class="col">
+                                        <legend class="schedule-border" style="font-size: small; font-weight: bold;">
+                                            Empresa:
+                                        </legend>
+                                        {{ $doc->id_empresa }}
+                                    </div>
+                                    <div class="col">
+                                        <legend class="schedule-border" style="font-size: small; font-weight: bold;">
+                                            Valor:
+                                        </legend>
+                                        {{ $doc->valor }}
+                                    </div>
+                                    <div class="col">
+                                        <legend class="schedule-border" style="font-size: small; font-weight: bold;">
+                                            Data de Validade:
+                                        </legend>
+                                        {{ $doc->dt_validade }}
+                                    </div>
+                                    <div class="col">
+                                        <legend class="schedule-border" style="font-size: small; font-weight: bold;">
+                                            Arquivo:
+                                        </legend>
+                                        @if (isset($doc->arquivo_url))
+                                            <a href="{{ $doc->arquivo_url }}" target="_blank">Ver Arquivo</a>
+                                        @else
+                                            Não disponível
+                                        @endif
+                                    </div>
+                                </div>
                             @endforeach
                         </fieldset>
                     </div>

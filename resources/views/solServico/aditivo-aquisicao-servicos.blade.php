@@ -1,11 +1,13 @@
 @extends('layouts.app')
 
 @section('title')
-    Aprovar Solicitação de Serviços
+    Aditivo da Solicitação de Serviços
 @endsection
 @section('content')
-    <form method="POST" action="/validaAprovacao-aquisicao-servicos">{{-- Formulario de Inserção --}}
+    <form method="POST" action="/validaAditivo-aquisicao-servicos" enctype="multipart/form-data">{{-- Formulario de Inserção --}}
         @csrf
+        <input type="hidden" name="solicitacao_id" value="{{ $aquisicao->id }}">
+        <input type="hidden" name="setor_id" value="{{ $aquisicao->setor->id }}">
         <div class="container-fluid"> {{-- Container completo da página  --}}
             <div class="justify-content-center">
                 <div class="col-12">
@@ -14,7 +16,7 @@
                         <div class="card-header">
                             <div class="ROW">
                                 <h5 class="col-12" style="color: #355089">
-                                    Aprovar Solicitação de Serviços
+                                    Aditivo da Solicitação de Serviços
                                 </h5>
                             </div>
                         </div>
@@ -36,7 +38,7 @@
                                 <div class="col-md-4">
                                     <label>Setor</label>
                                     <br>
-                                    <input class="form-control" style="text-align: center;" type="text" disabled
+                                    <input class="form-control" style="text-align: center;" type="text" name="idSetor" disabled
                                         value="{{ $aquisicao->setor->nome }}">
                                 </div>
                             </div>
@@ -59,26 +61,14 @@
                                 <div class="col-md-2">
                                     <label>Prioridade</label>
                                     <br>
-                                    <select id="cargoSelect" class="form-select status select2 pesquisa-select"
-                                        style="" name="prioridade" required>
-                                        @foreach ($numeros as $number)
-                                            <option value="{{ $number }}">{{ $number }}</option>
-                                        @endforeach
-                                    </select>
+                                    <input class="form-control" style="text-align: center;" type="text" disabled
+                                        value="{{ $aquisicao->prioridade }}">
                                 </div>
                                 <div class="col-md-4">
                                     <label>Setor Responsável por Acompanhar</label>
                                     <br>
-                                    <select id="idSetorResponsavel" class="form-select status select2 pesquisa-select"
-                                        style="" name="setorResponsavel" required>
-                                        <option></option>
-                                        @foreach ($todosSetor as $setor)
-                                            <option value="{{ $setor->id }}"
-                                                {{ $setor->id == $aquisicao->id_resp_sv ? 'selected' : '' }}>
-                                                {{ $setor->nome }} - {{ $setor->sigla }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                    <input class="form-control" style="text-align: center;" type="text" disabled
+                                        value="{{ $aquisicao->respSetor->nome ?? '' }} - {{ $aquisicao->respSetor->sigla ?? '' }}">
                                 </div>
                             </div>
                             <div class=" col-12">Motivo
@@ -132,28 +122,65 @@
                             </div>
                             <br>
                             <hr>
-                            <h5>Decisão</h5>
-
-                            <input type="hidden" name="solicitacao_id" value="{{ $aquisicao->id }}">
-
-                            <div class="d-flex gap-5 align-items-end">
-                                <div class="form-check">
-                                    <input type="radio" name="status" id="radioDevolver" value="1">
-                                    <label for="radioDevolver">Devolver</label>
+                            <div class="card proposta-comercial" style="border-color: #355089; margin-top: 20px;">
+                                <div class="card-header">
+                                    <div style="display: flex; gap: 20px; align-items: flex-end;">
+                                        <h5 style="color: #355089">Aditivo de Contrato</h5>
+                                    </div>
                                 </div>
-                                <div class="form-check">
-                                    <input type="radio" name="status" id="radioAprovar" value="3" checked>
-                                    <label for="radioAprovar">Aprovar</label>
+                                <div class="card-body">
+                                    <div class=" form-group row" style="margin-left:5px">
+                                        <div class="col-md-4 mb-3">
+                                            <label for="numero">Número da Proposta</label>
+                                            <input type="text" class="form-control" name="numeroAditivo"
+                                                placeholder="Digite o Número da proposta" required>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="razaoSocial">Nome Empresa</label>
+                                            <select class="form-select" style="border: 1px solid #999999; padding: 5px;"
+                                                name="razaoSocialAditivo" required>
+                                                <option></option>
+                                                @foreach ($buscaEmpresa as $buscaEmpresas)
+                                                    <option value="{{ $buscaEmpresas->id }}">
+                                                        {{ $buscaEmpresas->razaosocial }} -
+                                                        {{ $buscaEmpresas->nomefantasia }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="valor">Valor</label>
+                                            <input type="number" class="form-control" name="valorAditivo"
+                                                placeholder="Digite o valor da proposta" required>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="dt_inicial">Data da Proposta</label>
+                                            <input type="date" class="form-control" name="dt_inicialAditivo"
+                                                placeholder="Digite a data da proposta" required>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="dt_final">Data Limite</label>
+                                            <input type="date" class="form-control" name="dt_finalAditivo"
+                                                placeholder="Digite a data final do prazo da proposta" min="">
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="arquivo">Arquivo da Proposta</label>
+                                            <input type="file" class="form-control" name="arquivoAditivo"
+                                                placeholder="Insira o arquivo da proposta" required>
+                                        </div>
+                                        <div class="form-check col-md-4 mb-3">
+                                            <label for="garantiaBotao">Possui garantia?</label>
+                                            <input type="checkbox" style="border: 1px solid #999999; padding: 5px;"
+                                                class="form-check-input" id="garantiaBotao" name="garantiaBotaoAditivo"
+                                                @if (old('garantiaBotao')) checked @endif>
+                                        </div>
+                                        <div id="tempoGarantia" class="col-md-4 mb-3" style="display: none;">
+                                            <label for="tempoGarantiaInput">Tempo de Garantia (em dias)</label>
+                                            <input type="number" class="form-control" id="tempoGarantiaInput"
+                                                name="tempoGarantiaAditivo" placeholder="Digite o tempo de garantia">
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-check">
-                                    <input type="radio" name="status" id="radioCancelar" value="7">
-                                    <label for="radioCancelar">Cancelar</label>
-                                </div>
-                            </div>
-                            <div class=" col-12">Motivo
-                                <br>
-                                <textarea class="form-control" style="border: 1px solid #999999;" id="idMotivo" rows="4"
-                                    name="motivoRejeicao" value="" required>{{ $aquisicao->motivo_recusa }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -194,6 +221,27 @@
 
             // Inicializar com o estado correto
             toggleMotivoField();
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const garantiaCheckbox = document.getElementById('garantiaBotao');
+            const tempoGarantiaDiv = document.getElementById('tempoGarantia');
+
+            // Função para alternar visibilidade
+            function toggleGarantiaField() {
+                if (garantiaCheckbox.checked) {
+                    tempoGarantiaDiv.style.display = 'block';
+                } else {
+                    tempoGarantiaDiv.style.display = 'none';
+                }
+            }
+
+            // Evento de mudança no checkbox
+            garantiaCheckbox.addEventListener('change', toggleGarantiaField);
+
+            // Inicializar visibilidade com base no estado inicial
+            toggleGarantiaField();
         });
     </script>
 @endsection

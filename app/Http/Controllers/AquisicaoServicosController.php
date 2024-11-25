@@ -168,7 +168,7 @@ class AquisicaoServicosController extends Controller
         $solicitacao = SolServico::findOrFail($idS);
         $documentos = Documento::where('id_sol_sv', $idS)->get();
         $tiposServico = CatalogoServico::where('id_cl_sv', $solicitacao->id_classe_sv)->get();
-       // dd($tiposServico);
+        // dd($tiposServico);
         $classeAquisicao = TipoClasseSv::all();
         $buscaSetor = Setor::all();
 
@@ -344,7 +344,7 @@ class AquisicaoServicosController extends Controller
             }
 
             // Define a nova prioridade da solicitação
-            $aquisicao->id_resp_sv = $request->input('setorResponsavel');
+            $aquisicao->id_setor_resp_sv = $request->input('setorResponsavel');
             $aquisicao->prioridade = $novaPrioridade;
 
             // Impede que a prioridade fique abaixo de 1
@@ -366,7 +366,7 @@ class AquisicaoServicosController extends Controller
 
             $aquisicao->aut_usu_adm = $usuario;
             $aquisicao->dt_usu_adm = now();
-            $aquisicao->id_resp_sv = null;
+            $aquisicao->id_setor_resp_sv = null;
             $aquisicao->prioridade = null;
             $aquisicao->motivo_recusa = $request->input('motivoRejeicao');
             $aquisicao->save();
@@ -498,7 +498,7 @@ class AquisicaoServicosController extends Controller
             }
 
             // Define a nova prioridade da solicitação
-            $aquisicao->id_resp_sv = $request->input('setorResponsavel');
+            $aquisicao->id_setor_resp_sv = $request->input('setorResponsavel');
             $aquisicao->prioridade = $novaPrioridade;
 
             // Impede que a prioridade fique abaixo de 1
@@ -520,7 +520,7 @@ class AquisicaoServicosController extends Controller
 
             $aquisicao->aut_usu_pres = $usuario;
             $aquisicao->dt_usu_pres = now();
-            $aquisicao->id_resp_sv = null;
+            $aquisicao->id_setor_resp_sv = null;
             $aquisicao->prioridade = null;
             $aquisicao->motivo_recusa = $request->input('motivoRejeicao');
             $aquisicao->save();
@@ -593,7 +593,7 @@ class AquisicaoServicosController extends Controller
 
                     // Atualiza os outros campos conforme os parâmetros fornecidos
                     $solicitacao->update(array_merge([
-                        'id_resp_sv' => $setores[$id],
+                        'id_setor_resp_sv' => $setores[$id],
                     ], $camposAdicionais));
                 }
             }
@@ -614,5 +614,62 @@ class AquisicaoServicosController extends Controller
         }
 
         return view('solServico.visualizar-aquisicao-servicos', compact('solicitacao', 'documentos'));
+    }
+
+    public function aditivo($idSolicitacao)
+    {
+        $aquisicao = SolServico::with(['tipoClasse', 'catalogoServico', 'tipoStatus', 'setor', 'respSetor'])
+            ->where('id', $idSolicitacao)
+            ->first();
+
+        // Recupera todas as prioridades existentes
+        $prioridadesExistentes = SolServico::pluck('prioridade')->unique()->toArray();
+
+
+
+        $empresas = Documento::where('id_sol_sv', $idSolicitacao)->get();
+
+        $documentos = Documento::where('id_sol_sv', $idSolicitacao)->get();
+
+        // Adiciona a URL completa do arquivo
+        foreach ($empresas as $empresa) {
+            if ($empresa->end_arquivo) {
+                $empresa->arquivo_url = Storage::url($empresa->end_arquivo);
+            }
+        }
+
+        $buscaEmpresa = Empresa::all();
+
+        $contadorEmpresa = 1;
+
+        return view('solServico.aditivo-aquisicao-servicos', compact('aquisicao', 'contadorEmpresa', 'empresas', 'buscaEmpresa'));
+    }
+
+    public function validaAditivo(Request $request)
+    {
+
+        $id_solicitacao = $request->input('solicitacao_id');
+        $id_setor = $request->input('setor_id');
+
+        // Processamento do arquivo enviado
+        $endArquivo = $request->hasFile('arquivoAditivo')
+            ? $request->file('arquivoAditivo')->store('documentos', 'public')
+            : null;
+
+        // Inserção no banco de dados
+        Documento::create([
+            'numero' => $request->numeroAditivo,
+            'dt_doc' => $request->dt_inicialAditivo,
+            'id_tp_doc' => '15', // Considere usar uma constante ou buscar dinamicamente
+            'valor' => $request->valorAditivo,
+            'id_empresa' => $request->razaoSocialAditivo,
+            'id_setor' => $id_setor,
+            'dt_validade' => $request->dt_finalAditivo,
+            'end_arquivo' => $endArquivo,
+            'id_sol_sv' => $id_solicitacao,
+        ]);
+
+        app('flasher')->addSuccess('Aditivo adicionado com sucesso!');
+        return redirect('/gerenciar-aquisicao-servicos');
     }
 }

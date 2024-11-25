@@ -21,7 +21,8 @@ class SolServico extends Model
         'prioridade',
         'aut_usu_adm',
         'dt_usu_adm',
-        'id_resp_sv',
+        'id_setor_resp_sv',
+        'is_resp_sv',
     ];
 
     public function tipoClasse()
@@ -42,6 +43,10 @@ class SolServico extends Model
     public function setor()
     {
         return $this->belongsTo(Setor::class, 'id_setor');
+    }
+    public function respSetor()
+    {
+        return $this->belongsTo(Setor::class, 'id_setor_resp_sv');
     }
 
     public $timestamps = false;

@@ -51,9 +51,8 @@
                                 <div style="display: flex; gap: 20px; align-items: flex-end;">
                                     <div class="col-md-2 col-sm-12">Classe do Serviço
                                         <br>
-                                        <select class="form-select select2"
-                                            style="border: 1px solid #999999; padding: 5px;" id="classeServicoEditar"
-                                            name="classeSvEditar" required>
+                                        <select class="form-select select2" style="border: 1px solid #999999; padding: 5px;"
+                                            id="classeServicoEditar" name="classeSvEditar" required>
                                             @foreach ($classeAquisicao as $classe)
                                                 <option value="{{ $classe->id }}"
                                                     {{ $classe->id == $solicitacao->id_classe_sv ? 'selected' : '' }}>
@@ -64,7 +63,7 @@
                                     </div>
                                     <div class="col-md-2 col-sm-12">Tipo de Serviço
                                         <br>
-                                        <select class="js-example-responsive form-select"
+                                        <select class="js-example-responsive form-select select2"
                                             style="border: 1px solid #999999; padding: 5px;" id="servicos"
                                             name="tipoServicos" required>
                                             <option value="">Selecione um serviço</option>
@@ -151,6 +150,19 @@
                                                             disponível.</a>
                                                     @endif
                                                 </div>
+                                                <div class="form-check col-md-4 mb-3">
+                                                    <label for="garantiaBotao">Possui garantia?</label>
+                                                    <input type="checkbox"
+                                                        style="border: 1px solid #999999; padding: 5px;"
+                                                        class="form-check-input" id="garantiaBotao"
+                                                        name="garantiaBotao[]"
+                                                        @if (old('garantiaBotao')) checked @endif>
+                                                </div>
+                                                <div id="tempoGarantia" class="col-md-4 mb-3" style="display: none;">
+                                                    <label for="tempoGarantiaInput">Tempo de Garantia (em dias)</label>
+                                                    <input type="number" class="form-control" id="tempoGarantiaInput"
+                                                        name="tempoGarantia[]" placeholder="Digite o tempo de garantia">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -171,45 +183,8 @@
 
     <script>
         $(document).ready(function() {
-            // Inicializar select2
-            $('#servicos, #classeServico').select2({
-                theme: 'bootstrap-5',
-                width: '100%',
-            });
-
-            // Adicionar nova proposta comercial
-            $('#add-proposta').click(function() {
-                var newProposta = $('#template-proposta-comercial').html();
-                $('#form-propostas-comerciais').append(newProposta);
-            });
-
-            // Adicionar lógica de remoção de proposta
-            $(document).on('click', '.remove-proposta', function() {
-                $(this).closest('.proposta-comercial').remove();
-            });
-
-            // Inicializar valores do select de serviços com base no valor atual da classe de serviço
-            var classeServicoValue = $('#classeServico').val();
-            if (classeServicoValue) {
-                populateServicos($('#servicos'), classeServicoValue, '{{ $solicitacao->id_tp_sv }}');
-            }
-
-            // Evento change para o select de classe de serviço
-            $('#classeServico').change(function() {
-                var classeServicoValue = $(this).val();
-                var servicosSelect = $('#servicos');
-
-                if (!classeServicoValue) {
-                    servicosSelect.empty().append('<option value="">Selecione um serviço</option>');
-                    servicosSelect.prop('disabled', true);
-                    return;
-                }
-
-                populateServicos(servicosSelect, classeServicoValue);
-            });
-
-            // Função para popular o select de serviços
-            function populateServicos(selectElement, classeServicoValue, selectedServiceId = null) {
+            // Função para popular serviços com base na classe de serviço
+            function populateServicos(selectElement, classeServicoValue) {
                 $.ajax({
                     type: "GET",
                     url: "/retorna-nome-servicos/" + classeServicoValue,
@@ -218,17 +193,72 @@
                         selectElement.empty();
                         selectElement.append('<option value="">Selecione um serviço</option>');
                         $.each(response, function(index, item) {
-                            selectElement.append('<option value="' + item.id + '"' +
-                                (item.id == selectedServiceId ? ' selected' : '') + '>' +
-                                item.descricao + '</option>');
+                            selectElement.append(
+                                '<option value="' + item.id + '">' + item.descricao +
+                                "</option>"
+                            );
                         });
-                        selectElement.prop('disabled', false);
+                        selectElement.prop("disabled", false);
                     },
-                    error: function(error) {
-                        console.log("Erro ao buscar serviços:", error);
-                    }
+                    error: function(xhr, status, error) {
+                        console.error("Ocorreu um erro:", error);
+                        console.log(xhr.responseText);
+                    },
                 });
             }
+
+            // Atualiza os serviços ao alterar a classe de serviço
+            $(document).on("change", "#classeServicoEditar", function() {
+                const classeServicoValue = $(this).val();
+                const servicosSelect = $("#servicos");
+
+                if (!classeServicoValue) {
+                    servicosSelect.empty().append('<option value="">Selecione um serviço</option>');
+                    servicosSelect.prop("disabled", true);
+                    return;
+                }
+
+                populateServicos(servicosSelect, classeServicoValue);
+            });
+
+            // Adiciona nova proposta comercial
+            $("#add-proposta").click(function() {
+                const newProposta = $("#template-proposta-comercial").html();
+                $("#form-propostas-comerciais").append(newProposta);
+            });
+
+            // Remove proposta comercial
+            $(document).on("click", ".remove-proposta", function() {
+                $(this).closest(".proposta-comercial").remove();
+            });
+
+            // Alterna campo de tempo de garantia para formulários dinâmicos
+            $(document).on("change", ".form-check-input[name='garantiaBotao[]']", function() {
+                const garantiaCheckbox = $(this);
+                const tempoGarantiaDiv = garantiaCheckbox
+                    .closest(".form-group.row")
+                    .find("#tempoGarantia");
+
+                if (garantiaCheckbox.is(":checked")) {
+                    tempoGarantiaDiv.show();
+                } else {
+                    tempoGarantiaDiv.hide();
+                }
+            });
+
+            // Inicializa a visibilidade do campo de garantia com base no estado inicial
+            $(".form-check-input[name='garantiaBotao[]']").each(function() {
+                const garantiaCheckbox = $(this);
+                const tempoGarantiaDiv = garantiaCheckbox
+                    .closest(".form-group.row")
+                    .find("#tempoGarantia");
+
+                if (garantiaCheckbox.is(":checked")) {
+                    tempoGarantiaDiv.show();
+                } else {
+                    tempoGarantiaDiv.hide();
+                }
+            });
         });
     </script>
 
@@ -281,6 +311,17 @@
                             <label for="arquivo">Arquivo da Proposta</label>
                             <input type="file" class="form-control" name="arquivo[]"
                                 placeholder="Insira o arquivo da proposta" required>
+                        </div>
+                        <div class="form-check col-md-4 mb-3">
+                            <label for="garantiaBotao">Possui garantia?</label>
+                            <input type="checkbox" style="border: 1px solid #999999; padding: 5px;"
+                                class="form-check-input" id="garantiaBotao" name="garantiaBotao[]"
+                                @if (old('garantiaBotao')) checked @endif>
+                        </div>
+                        <div id="tempoGarantia" class="col-md-4 mb-3" style="display: none;">
+                            <label for="tempoGarantiaInput">Tempo de Garantia (em dias)</label>
+                            <input type="number" class="form-control" id="tempoGarantiaInput"
+                                name="tempoGarantia[]" placeholder="Digite o tempo de garantia">
                         </div>
                     </div>
                 </div>

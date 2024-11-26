@@ -139,7 +139,7 @@ class AquisicaoServicosController extends Controller
                     : null;
 
                 Documento::create([
-                    'numero' => $numero,
+                    'numero' => $request->numero[$index],
                     'dt_doc' => $request->dt_inicial[$index],
                     'id_tp_doc' => '14', // Considere alterar para uma constante ou buscar no banco
                     'valor' => $request->valor[$index],
@@ -148,6 +148,7 @@ class AquisicaoServicosController extends Controller
                     'dt_validade' => $request->dt_final[$index],
                     'end_arquivo' => $endArquivo,
                     'id_sol_sv' => $solicitacao->id,
+                    'tempo_garantia_dias' => $request->tempoGarantia[$index],
                 ]);
             }
 
@@ -252,6 +253,7 @@ class AquisicaoServicosController extends Controller
                             'dt_validade' => $request->input('dt_final')[$index],
                             'id_tp_doc' => '14',
                             'id_setor' => $setor,
+                            'tempo_garantia_dias' => $request->input('tempoGarantia')[$index],
                         ]);
                     }
                 }
@@ -667,6 +669,7 @@ class AquisicaoServicosController extends Controller
             'dt_validade' => $request->dt_finalAditivo,
             'end_arquivo' => $endArquivo,
             'id_sol_sv' => $id_solicitacao,
+            'tempo_garantia_dias' => $request->tempoGarantiaAditivo
         ]);
 
         app('flasher')->addSuccess('Aditivo adicionado com sucesso!');

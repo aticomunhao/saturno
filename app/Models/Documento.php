@@ -24,6 +24,7 @@ Documento extends Model
         'is_sol_mat',
         'dt_validade',
         'end_arquivo',
+        'tempo_garantia_dias',
     ];
 
     public $timestamps = false;

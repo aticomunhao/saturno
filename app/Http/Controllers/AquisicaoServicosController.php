@@ -118,7 +118,7 @@ class AquisicaoServicosController extends Controller
         }
 
         $today = Carbon::today()->format('Y-m-d');
-        dd($request->all());
+        //dd($request->all());
         DB::beginTransaction();
         try {
 
@@ -186,18 +186,6 @@ class AquisicaoServicosController extends Controller
 
     public function update(Request $request, $id)
     {
-        // Validação dos campos
-        $request->validate([
-            'classeSv' => 'required',
-            'tipoServicos' => 'required',
-            'motivo' => 'required|string',
-            'numero.*' => 'required|string',
-            'valor.*' => 'required|numeric',
-            'dt_inicial.*' => 'required|date',
-            'arquivo.*' => 'nullable|file|mimes:pdf,doc,docx',
-            'arquivoOld.*' => 'nullable|file|mimes:pdf,doc,docx',
-        ]);
-
         $setor = session()->get('usuario.setor')[0];
 
         DB::beginTransaction();
@@ -207,7 +195,7 @@ class AquisicaoServicosController extends Controller
 
             // Atualizar dados da solicitação
             $solicitacao->update([
-                'id_classe_sv' => $request->input('classeSv'),
+                'id_classe_sv' => $request->input('classeSvEditar'),
                 'id_tp_sv' => $request->input('tipoServicos'),
                 'motivo' => $request->input('motivo'),
             ]);
@@ -230,6 +218,12 @@ class AquisicaoServicosController extends Controller
                         // Atualizar o documento existente
                         $documento->update([
                             'end_arquivo' => $path,
+                            'numero' => $request->input('numero')[$index],
+                            'dt_doc' => $request->input('dt_inicial')[$index],
+                            'valor' => $request->input('valor')[$index],
+                            'id_empresa' => $request->input('razaoSocial')[$index],
+                            'dt_validade' => $request->input('dt_final')[$index],
+                            'tempo_garantia_dias' => $request->input('tempoGarantia')[$index],
                         ]);
                     }
                 }

@@ -4,8 +4,9 @@
     Editar Aquisição de Serviços
 @endsection
 @section('content')
-    <form method="PUT" action="/atualizar-aquisicao-servicos/{{ $solicitacao->id }}" enctype="multipart/form-data">
+    <form method="POST" action="/atualizar-aquisicao-servicos/{{ $solicitacao->id }}" enctype="multipart/form-data">
         @csrf
+        @method('PUT')
         <div class="container-fluid">
             <div class="justify-content-center">
                 <div class="col-12">
@@ -37,7 +38,7 @@
                                     <div class="col-md-3 col-sm-12">Setor
                                         <br>
                                         <select class="form-select" style="border: 1px solid #999999; padding: 5px;"
-                                            id="idSetor" name="idSetor" disabled>
+                                            id="idSetor" name="idSetor">
                                             <option></option>
                                             @foreach ($buscaSetor as $buscaSetors)
                                                 <option value="{{ $buscaSetors->id }}"
@@ -110,9 +111,17 @@
                                                 </div>
                                                 <div class="col-md-4 mb-3">
                                                     <label for="razaoSocial">Nome da Empresa</label>
-                                                    <input type="text" class="form-control" name="razaoSocialOld[]"
-                                                        placeholder="Digite a razão social da empresa proposta"
-                                                        value="{{ $documento->id_empresa }}" required>
+                                                    <select class="form-select"
+                                                        style="border: 1px solid #999999; padding: 5px;"
+                                                        name="razaoSocialOld[]" required>
+                                                        @foreach ($buscaEmpresa as $buscaEmpresas)
+                                                            <option value="{{ $buscaEmpresas->id }}"
+                                                                {{ $buscaEmpresas->id == $documento->id_empresa ? 'selected' : '' }}>
+                                                                {{ $buscaEmpresas->razaosocial }} -
+                                                                {{ $buscaEmpresas->nomefantasia }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
                                                 <div class="col-md-4 mb-3">
                                                     <label for="valor">Valor</label>
@@ -161,7 +170,8 @@
                                                 <div id="tempoGarantia" class="col-md-4 mb-3" style="display: none;">
                                                     <label for="tempoGarantiaInput">Tempo de Garantia (em dias)</label>
                                                     <input type="number" class="form-control" id="tempoGarantiaInput"
-                                                        name="tempoGarantia[]" placeholder="Digite o tempo de garantia">
+                                                        name="tempoGarantiaOld[]"
+                                                        placeholder="Digite o tempo de garantia">
                                                 </div>
                                             </div>
                                         </div>

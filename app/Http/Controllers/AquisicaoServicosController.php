@@ -168,6 +168,7 @@ class AquisicaoServicosController extends Controller
         $buscaEmpresa = Empresa::all();
         $solicitacao = SolServico::findOrFail($idS);
         $documentos = Documento::where('id_sol_sv', $idS)->get();
+        //dd($documentos);
         $tiposServico = CatalogoServico::where('id_cl_sv', $solicitacao->id_classe_sv)->get();
         // dd($tiposServico);
         $classeAquisicao = TipoClasseSv::all();
@@ -186,7 +187,6 @@ class AquisicaoServicosController extends Controller
 
     public function update(Request $request, $id)
     {
-        $setor = session()->get('usuario.setor')[0];
 
         DB::beginTransaction();
         try {
@@ -198,36 +198,76 @@ class AquisicaoServicosController extends Controller
                 'id_classe_sv' => $request->input('classeSvEditar'),
                 'id_tp_sv' => $request->input('tipoServicos'),
                 'motivo' => $request->input('motivo'),
+                'id_setor' => $request->input('idSetor')
             ]);
 
-            // Atualizar os documentos existentes com novos arquivos (arquivoOld)
-            if ($request->hasFile('arquivoOld')) {
-                foreach ($request->file('arquivoOld') as $index => $file) {
-                    if ($file) {
-                        // Obter o caminho do arquivo
-                        $path = $file->store('propostas', 'public');
 
-                        // Verificar se o documento existe
-                        $documento = Documento::find($request->input('documento_id')[$index]);
+            if ($request->has('documento_id')) {
+                foreach ($request->input('documento_id') as $index => $docId) {
+                    // Verificar se o documento existe
+                    $documento = Documento::find($docId);
 
-                        if (!$documento) {
-                            // Se o documento não existir, continue para o próximo
-                            continue; // Ignora essa iteração e vai para o próximo arquivo
+                    if (!$documento) {
+                        // Se o documento não existir, continue para o próximo
+                        continue;
+                    }
+
+                    // Inicializar um array de dados a serem atualizados
+                    $updateData = [];
+
+                    // Verificar o arquivo enviado
+                    if ($request->hasFile("arquivoOld.$index")) {
+                        $file = $request->file("arquivoOld.$index");
+
+                        // Obter hash do arquivo enviado
+                        $newFileHash = hash_file('md5', $file->getRealPath());
+
+                        // Verificar o hash do arquivo já armazenado
+                        if ($documento->end_arquivo && Storage::exists('public/' . $documento->end_arquivo)) {
+                            $currentFileHash = hash_file('md5', Storage::path('public/' . $documento->end_arquivo));
+
+                            // Atualizar somente se os arquivos forem diferentes
+                            if ($newFileHash !== $currentFileHash) {
+                                $updateData['end_arquivo'] = $file->store('propostas', 'public');
+                            }
+                        } else {
+                            // Se não existir arquivo armazenado, salvar o novo
+                            $updateData['end_arquivo'] = $file->store('propostas', 'public');
                         }
+                    }
 
-                        // Atualizar o documento existente
-                        $documento->update([
-                            'end_arquivo' => $path,
-                            'numero' => $request->input('numero')[$index],
-                            'dt_doc' => $request->input('dt_inicial')[$index],
-                            'valor' => $request->input('valor')[$index],
-                            'id_empresa' => $request->input('razaoSocial')[$index],
-                            'dt_validade' => $request->input('dt_final')[$index],
-                            'tempo_garantia_dias' => $request->input('tempoGarantia')[$index],
-                        ]);
+                    // Verificar e armazenar novos valores somente se forem diferentes
+                    if ($request->filled("numeroOld.$index") && $request->input("numeroOld.$index") != $documento->numero) {
+                        $updateData['numero'] = $request->input("numeroOld.$index");
+                    }
+
+                    if ($request->filled("dt_inicialOld.$index") && $request->input("dt_inicialOld.$index") != $documento->dt_doc) {
+                        $updateData['dt_doc'] = $request->input("dt_inicialOld.$index");
+                    }
+
+                    if ($request->filled("valorOld.$index") && $request->input("valorOld.$index") != $documento->valor) {
+                        $updateData['valor'] = $request->input("valorOld.$index");
+                    }
+
+                    if ($request->filled("razaoSocialOld.$index") && $request->input("razaoSocialOld.$index") != $documento->id_empresa) {
+                        $updateData['id_empresa'] = $request->input("razaoSocialOld.$index");
+                    }
+
+                    if ($request->filled("dt_finalOld.$index") && $request->input("dt_finalOld.$index") != $documento->dt_validade) {
+                        $updateData['dt_validade'] = $request->input("dt_finalOld.$index");
+                    }
+
+                    if ($request->filled("tempoGarantiaOld.$index") && $request->input("tempoGarantiaOld.$index") != $documento->tempo_garantia_dias) {
+                        $updateData['tempo_garantia_dias'] = $request->input("tempoGarantiaOld.$index");
+                    }
+
+                    // Se houver algo para atualizar, executa o update
+                    if (!empty($updateData)) {
+                        $documento->update($updateData);
                     }
                 }
             }
+
 
 
             // Adicionar novos documentos (arquivo)
@@ -246,7 +286,7 @@ class AquisicaoServicosController extends Controller
                             'id_empresa' => $request->input('razaoSocial')[$index],
                             'dt_validade' => $request->input('dt_final')[$index],
                             'id_tp_doc' => '14',
-                            'id_setor' => $setor,
+                            'id_setor' => $request->input('idSetor')[$index],
                             'tempo_garantia_dias' => $request->input('tempoGarantia')[$index],
                         ]);
                     }

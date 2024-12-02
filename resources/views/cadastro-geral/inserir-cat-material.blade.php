@@ -4,9 +4,8 @@
     Incluir de Categoria
 @endsection
 @section('content')
-    <form class="form-horizontal mt-4" method="POST" action="cad-cat-material/inserir">
+    <form class="form-horizontal mt-4" method="POST" action="/cad-cat-material/inserir">
         @csrf
-        @method('PUT')
         <div class="container-fluid"> {{-- Container completo da página  --}}
             <div class="justify-content-center">
                 <div class="col-12">

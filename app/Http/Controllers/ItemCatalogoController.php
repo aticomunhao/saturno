@@ -40,6 +40,7 @@ class ItemCatalogoController extends Controller
     public function index()
     {
         $result= $this->getListaItemMatAll();
+        
         return view('catalogo/gerenciar-item-catalogo',['result'=>$result]);
     }
 
@@ -93,7 +94,7 @@ class ItemCatalogoController extends Controller
     public function update(Request $request, $id)
     {
 
-        
+
         $ativo = isset($request->ativo) ? 1 : 0;
         $composicao = isset($request->composicao) ? 1 : 0;
 

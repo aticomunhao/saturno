@@ -78,13 +78,12 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div style="margin-right: 10px; margin-left: 10px">
+                            {{ $result->links('pagination::bootstrap-5') }}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        </div>
-        </div>
-        </div>
         </div>
         @include('cadastro-geral/popUp-alterar')
     @endsection

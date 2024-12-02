@@ -58,7 +58,7 @@ $setor = session()->get('usuario.setor');
                             {{-- @if (in_array(13, $acesso) or in_array(14, $acesso)) --}}
                             <li><a class="dropdown-item" href="/catalogo-empresa">Empresas</a>
                             </li>
-                            <li><a class="dropdown-item" href="/catalogo-material">Materiais</a>
+                            <li><a class="dropdown-item" href="/gerenciar-item-catalogo">Materiais</a>
                             </li>
                             <li><a class="dropdown-item" href="/catalogo-servico">Serviços</a>
                             </li>

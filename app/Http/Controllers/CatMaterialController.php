@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ModelCatMaterial;
 use Illuminate\Support\Facades\DB;
+use App\Models\tipoCategoriaMt;
+
 
 class CatMaterialController extends Controller
 {
@@ -16,9 +18,16 @@ class CatMaterialController extends Controller
         $this->objTpMat = new ModelCatMaterial();
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $result = $this->objTpMat->all();
+        $query = $this->objTpMat->query();
+
+        if ($request->razaoSocial) {
+            $query->where('nome', 'ilike', '%' . $request->razaoSocial . '%');        }
+
+        // Executando a consulta
+        $result = $query->orderBy('id')->paginate(30);
+
         return view('/cadastro-geral/cad-cat-material', ['result' => $result]);
     }
 
@@ -34,14 +43,23 @@ class CatMaterialController extends Controller
 
     public function store(Request $request)
     {
-        $tipoMat = $request->input('tipoMat');
-        DB::insert('insert into tipo_categoria_material (nome) values (?)', [$tipoMat]);
-        $result = $this->objTpMat->all();
 
-        return redirect()
-            ->route('cadcat.index')
-            ->with('message', 'sucesso ao criar a categoria');
+        try {
+            // Criação do registro no banco
+            tipoCategoriaMt::create([
+                'nome' => $request->categoria,
+            ]);
 
+            // Feedback de sucesso
+            app('flasher')->addSuccess('Categoria criada com sucesso!');
+        } catch (\Exception $e) {
+            // Feedback de erro
+            app('flasher')->addError('Erro ao criar a categoria. Por favor, tente novamente.');
+            return redirect()->back()->withInput();
+        }
+
+        // Redireciona após sucesso
+        return redirect('/cad-cat-material');
     }
 
     public function show($id)
@@ -58,27 +76,47 @@ class CatMaterialController extends Controller
 
     public function update(Request $request, $id)
     {
-        DB::table('tipo_categoria_material')
-            ->where('id', $id)
-            ->update([
-                'nome' => $request->input('categoria'),
-            ]);
+        try {
+            // Busca o registro pelo ID
+            $categoria = tipoCategoriaMt::findOrFail($id);
 
-        return redirect()
-            ->action('CatMaterialController@index')
-            ->with('message', 'a categoria foi alterada com sucesso');
+            // Verificar e armazenar novos valores somente se forem diferentes
+            if ($request->filled("categoria") && $categoria->nome !== $request->categoria) {
+                $categoria->update([
+                    'nome' => $request->categoria,
+                ]);
+            }
 
+            // Feedback de sucesso
+            app('flasher')->addSuccess('Categoria atualizada com sucesso!');
+        } catch (\Exception $e) {
+            // Feedback de erro
+            app('flasher')->addError('Erro ao atualizar a categoria. Por favor, tente novamente.');
+            return redirect()->back()->withInput();
+        }
+
+        // Redireciona após sucesso
+        return redirect('/cad-cat-material');
     }
 
     public function destroy($id)
     {
+        try {
+            // Busca o registro pelo ID
+            $categoria = tipoCategoriaMt::findOrFail($id);
 
-        $deleted = DB::delete('delete from tipo_categoria_material where id =?', [$id]);
-        $result = $this->objTpMat->all();
+            // Deleta o registro
+            $categoria->delete();
 
-        return redirect()
-            ->action('CatMaterialController@index')
-            ->with('message', 'sucesso ao excluir a categoria');
+            // Feedback de sucesso
+            app('flasher')->addSuccess('Categoria removida com sucesso!');
+        } catch (\Exception $e) {
+            // Feedback de erro
+            app('flasher')->addError('Erro ao remover a categoria. Por favor, tente novamente.');
+        }
+
+        // Redireciona para a página de gerenciamento
+        return redirect()->route('cadcat.index');
     }
 }
 

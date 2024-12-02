@@ -109,16 +109,29 @@
                                                 <input type="file" class="form-control" name="arquivo[]"
                                                     placeholder="Insira o arquivo da proposta" required>
                                             </div>
-                                            <div class="form-check col-md-4 mb-3">
-                                                <label for="garantiaBotao">Possui garantia?</label>
-                                                <input type="checkbox" style="border: 1px solid #999999; padding: 5px;"
-                                                    class="form-check-input" id="garantiaBotao" name="garantiaBotao[]"
-                                                    @if (old('garantiaBotao')) checked @endif>
+                                            <div class="col-md-4">
+                                                <div class="form-check col-md-4">
+                                                    <label for="garantiaBotao">Possui garantia?</label>
+                                                    <input type="checkbox" style="border: 1px solid #999999; padding: 5px;"
+                                                        class="form-check-input" id="garantiaBotao" name="garantiaBotao[]"
+                                                        @if (old('garantiaBotao')) checked @endif>
+                                                </div>
+                                                <div class="form-check col-md-4 mb-2">
+                                                    <label for="materialBotao">Possui material?</label>
+                                                    <input type="checkbox" style="border: 1px solid #999999; padding: 5px;"
+                                                        class="form-check-input" id="materialBotao" name="materialBotao[]"
+                                                        @if (old('materialBotao')) checked @endif>
+                                                </div>
                                             </div>
                                             <div id="tempoGarantia" class="col-md-4 mb-3" style="display: none;">
                                                 <label for="tempoGarantiaInput">Tempo de Garantia (em dias)</label>
                                                 <input type="number" class="form-control" id="tempoGarantiaInput"
                                                     name="tempoGarantia[]" placeholder="Digite o tempo de garantia">
+                                            </div>
+                                            <div id="nomeMaterial" class="col-md-4 mb-3" style="display: none;">
+                                                <label for="nomeMaterialInput">Nome do Material</label>
+                                                <input type="text" class="form-control" id="nomeMaterialInput"
+                                                    name="nomeMaterial[]" placeholder="Digite o nome do material">
                                             </div>
                                         </div>
                                     </div>
@@ -195,17 +208,29 @@
                         <input type="file" class="form-control" name="arquivo[]"
                             placeholder="Insira o arquivo da proposta">
                     </div>
-                    <div class="form-check col-md-4 mb-3">
-                        <input type="checkbox" style="border: 1px solid #999999; padding: 5px;" class="form-check-input"
-                            id="garantiaBotao" name="garantiaBotao[]" @if (old('garantiaBotao')) checked @endif>
-                        <label class="form-check-label" for="garantiaBotao">
-                            Possui garantia?
-                        </label>
+                    <div class="col-md-4">
+                        <div class="form-check col-md-4">
+                            <label for="garantiaBotao">Possui garantia?</label>
+                            <input type="checkbox" style="border: 1px solid #999999; padding: 5px;"
+                                class="form-check-input" id="garantiaBotao" name="garantiaBotao[]"
+                                @if (old('garantiaBotao')) checked @endif>
+                        </div>
+                        <div class="form-check col-md-4 mb-2">
+                            <label for="materialBotao">Possui material?</label>
+                            <input type="checkbox" style="border: 1px solid #999999; padding: 5px;"
+                                class="form-check-input" id="materialBotao" name="materialBotao[]"
+                                @if (old('materialBotao')) checked @endif>
+                        </div>
                     </div>
                     <div id="tempoGarantia" class="col-md-4 mb-3" style="display: none;">
                         <label for="tempoGarantiaInput">Tempo de Garantia (em dias)</label>
                         <input type="number" class="form-control" id="tempoGarantiaInput" name="tempoGarantia[]"
                             placeholder="Digite o tempo de garantia">
+                    </div>
+                    <div id="nomeMaterial" class="col-md-4 mb-3" style="display: none;">
+                        <label for="nomeMaterialInput">Nome do Material</label>
+                        <input type="text" class="form-control" id="nomeMaterialInput"
+                            name="nomeMaterial[]" placeholder="Digite o nome do material">
                     </div>
                 </div>
             </div>
@@ -277,8 +302,8 @@
                 }
             });
 
-            // Inicializa a visibilidade do campo de garantia com base no estado inicial
-            $(".form-check-input[name='garantiaBotao[]']").each(function() {
+             // Inicializa a visibilidade do campo de garantia com base no estado inicial
+             $(".form-check-input[name='garantiaBotao[]']").each(function() {
                 const garantiaCheckbox = $(this);
                 const tempoGarantiaDiv = garantiaCheckbox
                     .closest(".form-group.row")
@@ -288,6 +313,34 @@
                     tempoGarantiaDiv.show();
                 } else {
                     tempoGarantiaDiv.hide();
+                }
+            });
+
+            // Alterna campo de material para formulários dinâmicos
+            $(document).on("change", ".form-check-input[name='materialBotao[]']", function() {
+                const materialCheckbox = $(this);
+                const nomeMaterialDiv = materialCheckbox
+                    .closest(".form-group.row")
+                    .find("#nomeMaterial");
+
+                if (materialCheckbox.is(":checked")) {
+                    nomeMaterialDiv.show();
+                } else {
+                    nomeMaterialDiv.hide();
+                }
+            });
+
+            // Inicializa a visibilidade do campo de material com base no estado inicial
+            $(".form-check-input[name='materialBotao[]']").each(function() {
+                const materialCheckbox = $(this);
+                const nomeMaterialDiv = materialCheckbox
+                    .closest(".form-group.row")
+                    .find("#nomeMaterial");
+
+                if (materialCheckbox.is(":checked")) {
+                    nomeMaterialDiv.show();
+                } else {
+                    nomeMaterialDiv.hide();
                 }
             });
         });

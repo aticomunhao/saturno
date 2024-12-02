@@ -132,7 +132,7 @@ Route::name('entidade')->group(function () {
 
 
 
-Route::get('gerenciar-item-catalogo', [ItemCatalogoController::class, 'index']);
+Route::get('/gerenciar-item-catalogo', [ItemCatalogoController::class, 'index']);
 Route::get('item-catalogo-incluir', [ItemCatalogoController::class, 'create']);
 Route::post('cad-item-material/inserir', [ItemCatalogoController::class, 'store']);
 Route::get('/item-catalogo/alterar/{id}', [ItemCatalogoController::class, 'edit']);

@@ -4,7 +4,7 @@
     Editar Categoria
 @endsection
 @section('content')
-    <form class="form-horizontal mt-4" method="POST" action="cad-cat-material/atualizar/{{ $resultCatMaterial[0]->id }}">
+    <form class="form-horizontal mt-4" method="POST" action="/cad-cat-material/atualizar/{{ $resultCatMaterial[0]->id }}">
         @csrf
         @method('PUT')
         <div class="container-fluid"> {{-- Container completo da página  --}}

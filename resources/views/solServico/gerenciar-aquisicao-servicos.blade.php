@@ -197,7 +197,7 @@
                                                             <a href="" class="btn btn-sm btn-outline-danger"
                                                                 data-tt="tooltip" style="font-size: 1rem; color:#303030"
                                                                 data-placement="top" title="Excluir">
-                                                                <i class="bi bi-x-circle"></i>
+                                                                <i class="bi bi-trash"></i>
                                                             </a>
                                                         @endif
                                                     </td>

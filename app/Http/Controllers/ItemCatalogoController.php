@@ -19,28 +19,27 @@ class ItemCatalogoController extends Controller
     }
 
     private function getListaItemMatAll(){
-        $lista = DB::select("
-            select
-                i.id,
-                i.nome,
-                c.nome nome_categoria,
-                i.valor_minimo,
-                i.valor_medio,
-                i.valor_maximo,
-                i.valor_marca,
-                i.valor_etiqueta,
-                i.composicao,
-                i.ativo
-            from item_catalogo_material i
-            left join tipo_categoria_material c on i.id_categoria_material =c.id
-        ");
+        $lista = DB::table('item_catalogo_material as i')
+        ->leftJoin('tipo_categoria_material as c', 'i.id_categoria_material', '=', 'c.id')
+        ->select(
+            'i.id',
+            'i.nome',
+            'c.nome as nome_categoria',
+            'i.valor_minimo',
+            'i.valor_medio',
+            'i.valor_maximo',
+            'i.valor_marca',
+            'i.valor_etiqueta',
+            'i.composicao',
+            'i.ativo'
+        );
         return $lista;
     }
 
     public function index()
     {
-        $result= $this->getListaItemMatAll();
-        
+        $result= $this->getListaItemMatAll()->paginate(50);
+
         return view('catalogo/gerenciar-item-catalogo',['result'=>$result]);
     }
 

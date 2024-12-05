@@ -1,0 +1,24 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Cest extends Model
+{
+    use HasFactory;
+    protected $table = 'tipo_cest';
+
+    protected $fillable = [
+        'cest',
+        'ncm_sh',
+        'segmento_cest',
+        'item',
+        'descricao_cest',
+        'anexo_xxvii',
+    ];
+
+    public $timestamps = false;
+
+}

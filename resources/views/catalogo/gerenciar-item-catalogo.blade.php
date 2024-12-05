@@ -20,8 +20,9 @@
                     <div class="card-body">
                         <div class="ROW" style="margin-left:5px">
                             <div style="display: flex; gap: 20px; align-items: flex-end;">
-                                <a href="/item-catalogo-incluir">
-                                    <input class="btn btn-success" type="button" value="Incluir Item Catalogo">
+                                <a href="/item-catalogo-incluir" class="btn btn-success"
+                                    style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-left:5px">
+                                    Novo+
                                 </a>
                             </div>
                             <br>

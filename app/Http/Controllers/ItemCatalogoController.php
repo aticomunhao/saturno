@@ -5,6 +5,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\ModelItemCatalogo;
 use App\Models\ModelCatMaterial;
+use App\Models\Cest;
+use App\Models\Cfop;
+use App\Models\Ncm;
+
 use Illuminate\Support\Facades\Http;
 
 class ItemCatalogoController extends Controller
@@ -47,7 +51,12 @@ class ItemCatalogoController extends Controller
     public function create()
     {
         $resultCategoria = $this->objTipoMaterial->all();
-        return view('catalogo/incluir-item-catalogo', compact('resultCategoria'));
+
+        $cfop = Cfop::all();
+        $cest = Cest::all();
+        $ncm = Ncm::all();
+
+        return view('catalogo/incluir-item-catalogo', compact('resultCategoria', 'cfop', 'cest', 'ncm'));
     }
 
 

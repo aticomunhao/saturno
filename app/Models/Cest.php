@@ -11,7 +11,7 @@ class Cest extends Model
     protected $table = 'tipo_cest';
 
     protected $fillable = [
-        'cest',
+        'id',
         'ncm_sh',
         'segmento_cest',
         'item',

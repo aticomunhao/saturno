@@ -8,6 +8,9 @@ use App\Models\ModelCatMaterial;
 use App\Models\Cest;
 use App\Models\Cfop;
 use App\Models\Ncm;
+use App\Models\CsosnIcms;
+use App\Models\OrigemIcms;
+
 
 use Illuminate\Support\Facades\Http;
 
@@ -56,7 +59,11 @@ class ItemCatalogoController extends Controller
         $cest = Cest::all();
         $ncm = Ncm::all();
 
-        return view('catalogo/incluir-item-catalogo', compact('resultCategoria', 'cfop', 'cest', 'ncm'));
+        //ICMS
+        $csosn_icms = CsosnIcms::all();
+        $origem_icms = OrigemIcms::orderBy('id')->get();
+
+        return view('catalogo/incluir-item-catalogo', compact('resultCategoria', 'cfop', 'cest', 'ncm', 'csosn_icms', 'origem_icms'));
     }
 
 

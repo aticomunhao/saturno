@@ -138,9 +138,9 @@
                                                 style="border: 1px solid #999999; padding: 5px;" id="idNcm"
                                                 name="idNcm" required>
                                                 <option></option>
-                                                @foreach ($cest as $buscaCest)
-                                                    <option value="{{ $buscaCest->ncm_sh }}">
-                                                        {{ $buscaCest->ncm_sh }}
+                                                @foreach ($ncm as $buscaNcm)
+                                                    <option value="{{ $buscaNcm->ncm_codigo }}">
+                                                        {{ $buscaNcm->ncm_codigo }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -191,17 +191,29 @@
                                                     style="display: flex; flex-direction: column; padding: 5px;">
                                                     Origem da Mercadoria
                                                     <br>
-                                                    <input style="border: 1px solid #c9c6c6; padding: 6px; flex-grow: 1;"
-                                                        type="text" id="idCBenef" name="cBenef"
-                                                        placeholder="Digite o código do benefício fiscal">
+                                                    <select class="form-select select2"
+                                                        style="border: 1px solid #999999; padding: 5px;" id="idOrigem"
+                                                        name="idOrigem" required>
+                                                        @foreach ($origem_icms as $buscaOrigem)
+                                                            <option value="{{ $buscaOrigem->id }}">
+                                                                {{ $buscaOrigem->id }} - {{ $buscaOrigem->tipo }} - {{ $buscaOrigem->descricao }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
                                                 <div class="col-md-9 col-sm-12"
                                                     style="display: flex; flex-direction: column; padding: 5px;">
                                                     Código da Situação Simples Nacional (CSOSN)
                                                     <br>
-                                                    <input style="border: 1px solid #c9c6c6; padding: 6px; flex-grow: 1;"
-                                                        type="text" id="idCBenef" name="cBenef"
-                                                        placeholder="Digite o código do benefício fiscal">
+                                                    <select class="form-select select2"
+                                                        style="border: 1px solid #999999; padding: 5px;" id="idCsosn"
+                                                        name="idCsosn" required>
+                                                        @foreach ($csosn_icms as $buscaCsosn)
+                                                            <option value="{{ $buscaCsosn->id }}">
+                                                                {{ $buscaCsosn->id }} - {{ $buscaCsosn->nm_icms }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
                                                 <div class="col-md-5 col-sm-12"
                                                     style="display: flex; flex-direction: column; padding: 5px;">
@@ -408,5 +420,3 @@
         </div>
     </div>
 @endsection
-
-

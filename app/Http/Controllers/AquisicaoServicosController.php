@@ -13,6 +13,7 @@ use App\Models\TipoStatusSolSv;
 use App\Models\Setor;
 use App\Models\Documento;
 use App\Models\Empresa;
+use App\Models\TipoCategoriaMt;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Validator;
@@ -92,6 +93,7 @@ class AquisicaoServicosController extends Controller
         $classeAquisicao = TipoClasseSv::all();
         $empresas = Documento::all();
         $buscaEmpresa = Empresa::all();
+        $buscaCategoria = TipoCategoriaMt::all();
         //dd($classeAquisicao, $empresas, $servico, $buscaSetor);
 
         // Adiciona a URL completa do arquivo
@@ -101,7 +103,7 @@ class AquisicaoServicosController extends Controller
             }
         }
 
-        return view('solServico.incluir-aquisicao-servicos', compact('servico', 'classeAquisicao', 'setor', 'buscaSetor', 'buscaEmpresa', 'empresas'));
+        return view('solServico.incluir-aquisicao-servicos', compact('servico', 'classeAquisicao', 'setor', 'buscaSetor', 'buscaEmpresa', 'empresas', 'buscaCategoria'));
     }
 
     public function store(Request $request)

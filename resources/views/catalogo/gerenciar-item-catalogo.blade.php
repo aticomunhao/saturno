@@ -12,7 +12,7 @@
                     <div class="card-header">
                         <div class="ROW">
                             <h5 class="col-12" style="color: #355089">
-                                Gerenciar Aquisição de Serviços
+                                Gerenciar Item no Catálogo
                             </h5>
                         </div>
                     </div>

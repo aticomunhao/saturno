@@ -109,29 +109,25 @@
                                                 <input type="file" class="form-control" name="arquivo[]"
                                                     placeholder="Insira o arquivo da proposta" required>
                                             </div>
-                                            <div class="col-md-4">
-                                                <div class="form-check col-md-4">
-                                                    <label for="garantiaBotao">Possui garantia?</label>
-                                                    <input type="checkbox" style="border: 1px solid #999999; padding: 5px;"
-                                                        class="form-check-input" id="garantiaBotao" name="garantiaBotao[]"
-                                                        @if (old('garantiaBotao')) checked @endif>
-                                                </div>
-                                                <div class="form-check col-md-4 mb-2">
-                                                    <label for="materialBotao">Possui material?</label>
-                                                    <input type="checkbox" style="border: 1px solid #999999; padding: 5px;"
-                                                        class="form-check-input" id="materialBotao" name="materialBotao[]"
-                                                        @if (old('materialBotao')) checked @endif>
-                                                </div>
+                                            <div class="form-check col-md-4">
+                                                <label for="garantiaBotao">Possui garantia?</label>
+                                                <input type="checkbox" style="border: 1px solid #999999; padding: 5px;"
+                                                    class="form-check-input" id="garantiaBotao" name="garantiaBotao[]"
+                                                    @if (old('garantiaBotao')) checked @endif>
                                             </div>
                                             <div id="tempoGarantia" class="col-md-4 mb-3" style="display: none;">
                                                 <label for="tempoGarantiaInput">Tempo de Garantia (em dias)</label>
                                                 <input type="number" class="form-control" id="tempoGarantiaInput"
                                                     name="tempoGarantia[]" placeholder="Digite o tempo de garantia">
                                             </div>
-                                            <div id="nomeMaterial" class="col-md-4 mb-3" style="display: none;">
-                                                <label for="nomeMaterialInput">Nome do Material</label>
-                                                <input type="text" class="form-control" id="nomeMaterialInput"
-                                                    name="nomeMaterial[]" placeholder="Digite o nome do material">
+                                            <!-- Botão para adicionar nova proposta comercial -->
+                                            <div class="col-12 mt-4">
+                                                <button type="button" id="add-material-principal"
+                                                    class="btn btn-success">Adicionar Material à Proposta</button>
+                                            </div>
+                                            <!-- Container para os formulários de material -->
+                                            <div id="form-material-principal">
+                                                <!-- Formulários de materiais serão adicionados aqui -->
                                             </div>
                                         </div>
                                     </div>
@@ -208,35 +204,68 @@
                         <input type="file" class="form-control" name="arquivo[]"
                             placeholder="Insira o arquivo da proposta">
                     </div>
-                    <div class="col-md-4">
-                        <div class="form-check col-md-4">
-                            <label for="garantiaBotao">Possui garantia?</label>
-                            <input type="checkbox" style="border: 1px solid #999999; padding: 5px;"
-                                class="form-check-input" id="garantiaBotao" name="garantiaBotao[]"
-                                @if (old('garantiaBotao')) checked @endif>
-                        </div>
-                        <div class="form-check col-md-4 mb-2">
-                            <label for="materialBotao">Possui material?</label>
-                            <input type="checkbox" style="border: 1px solid #999999; padding: 5px;"
-                                class="form-check-input" id="materialBotao" name="materialBotao[]"
-                                @if (old('materialBotao')) checked @endif>
-                        </div>
+                    <div class="form-check col-md-4">
+                        <label for="garantiaBotao">Possui garantia?</label>
+                        <input type="checkbox" style="border: 1px solid #999999; padding: 5px;" class="form-check-input"
+                            id="garantiaBotao" name="garantiaBotao[]" @if (old('garantiaBotao')) checked @endif>
                     </div>
                     <div id="tempoGarantia" class="col-md-4 mb-3" style="display: none;">
                         <label for="tempoGarantiaInput">Tempo de Garantia (em dias)</label>
                         <input type="number" class="form-control" id="tempoGarantiaInput" name="tempoGarantia[]"
                             placeholder="Digite o tempo de garantia">
                     </div>
-                    <div id="nomeMaterial" class="col-md-4 mb-3" style="display: none;">
-                        <label for="nomeMaterialInput">Nome do Material</label>
-                        <input type="text" class="form-control" id="nomeMaterialInput"
-                            name="nomeMaterial[]" placeholder="Digite o nome do material">
+                    <div class="col-12 mt-4">
+                        <button type="button" id="add-material" class="btn btn-success">Adicionar Material à
+                            Proposta</button>
+                    </div>
+                    <!-- Container para os formulários de material -->
+                    <div id="form-material">
+                        <!-- Formulários de materiais serão adicionados aqui -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <!-- FIM do Template de formulário de proposta comercial -->
+    <!-- Template de formulário de material -->
+    <div id="template-material-principal" style="display: none;">
+        <div class="card material-principal" style="border-color: #355089; margin-top: 20px;">
+            <div class="form-group row" style="margin-left: 5px; margin-top: 5px;">
+                <div class="col-md-2">
+                    <label>Quantidade de material</label>
+                    <input type="text" class="form-control" name="quantidadeMaterialPrincipal[]"
+                        placeholder="Digite o valor da proposta">
+                </div>
+                <div class="col-md-3">
+                    <label>Nome do item material</label>
+                    <input type="text" class="form-control" name="nomeMaterialPrincipal[]"
+                        placeholder="Digite o valor da proposta">
+                </div>
+                <div class="col-md-4">
+                    <label>Categoria do material</label>
+                    <select class="form-select select2" style="border: 1px solid #999999; padding: 3px;"
+                        name="CategoriaMaterialPrincipal[]">
+                        <option></option>
+                        @foreach ($buscaCategoria as $buscaCategorias)
+                            <option value="{{ $buscaCategorias->id }}">
+                                {{ $buscaCategorias->nome }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label>Valor do material</label>
+                    <input type="number" class="form-control" name="valorMaterialPrincipal[]"
+                        placeholder="Digite o valor da proposta" style="margin-bottom: 10px">
+                </div>
+                <div class="col-md-1" style="display: flex; align-items: center; margin-top: 10px;">
+                    <button type="button" class="btn btn-danger btn-sm remove-material-principal">
+                        <i class="bi bi-x"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         $(document).ready(function() {
             // Função para popular serviços com base na classe de serviço
@@ -302,8 +331,8 @@
                 }
             });
 
-             // Inicializa a visibilidade do campo de garantia com base no estado inicial
-             $(".form-check-input[name='garantiaBotao[]']").each(function() {
+            // Inicializa a visibilidade do campo de garantia com base no estado inicial
+            $(".form-check-input[name='garantiaBotao[]']").each(function() {
                 const garantiaCheckbox = $(this);
                 const tempoGarantiaDiv = garantiaCheckbox
                     .closest(".form-group.row")
@@ -316,22 +345,19 @@
                 }
             });
 
-            // Alterna campo de material para formulários dinâmicos
-            $(document).on("change", ".form-check-input[name='materialBotao[]']", function() {
-                const materialCheckbox = $(this);
-                const nomeMaterialDiv = materialCheckbox
-                    .closest(".form-group.row")
-                    .find("#nomeMaterial");
-
-                if (materialCheckbox.is(":checked")) {
-                    nomeMaterialDiv.show();
-                } else {
-                    nomeMaterialDiv.hide();
-                }
+            // Adiciona novo material
+            $("#add-material-principal").click(function() {
+                const newProposta = $("#template-material-principal").html();
+                $("#form-material-principal").append(newProposta);
             });
 
-            // Inicializa a visibilidade do campo de material com base no estado inicial
-            $(".form-check-input[name='materialBotao[]']").each(function() {
+            // Remove material principal
+            $(document).on("click", ".remove-material-principal", function() {
+                $(this).closest(".material-principal").remove();
+            });
+
+            // Alterna campo de material para formulários dinâmicos
+            $(document).on("change", ".form-check-input[name='materialBotao[]']", function() {
                 const materialCheckbox = $(this);
                 const nomeMaterialDiv = materialCheckbox
                     .closest(".form-group.row")

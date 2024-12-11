@@ -63,23 +63,25 @@
                                 </div>
                             </div>
                             <div>
-                                <div class="card proposta-comercial" style="border-color: #355089; margin-top: 20px;">
+                                <div class="card proposta-comercial-principal"
+                                    style="border-color: #355089; margin-top: 20px;">
                                     <div class="card-header">
                                         <div style="display: flex; gap: 20px; align-items: flex-end;">
-                                            <h5 style="color: #355089">Proposta Comercial</h5>
+                                            <h5 style="color: #355089">Proposta Comercial Principal</h5>
                                         </div>
                                     </div>
                                     <div class="card-body">
                                         <div class=" form-group row" style="margin-left:5px">
                                             <div class="col-md-4 mb-3">
-                                                <label for="numero">Número da Proposta</label>
-                                                <input type="text" class="form-control" name="numero[]"
+                                                <label for="numero">Número da Proposta Principal</label>
+                                                <input type="text" class="form-control" name="numeroPrincipal"
                                                     placeholder="Digite o Número da proposta" required>
                                             </div>
                                             <div class="col-md-4 mb-3">
                                                 <label for="razaoSocial">Nome Empresa</label>
-                                                <select class="form-select" style="border: 1px solid #999999; padding: 5px;"
-                                                    name="razaoSocial[]" required>
+                                                <select class="form-select select2"
+                                                    style="border: 1px solid #999999; padding: 5px;"
+                                                    name="razaoSocialPrincipal" required>
                                                     <option></option>
                                                     @foreach ($buscaEmpresa as $buscaEmpresas)
                                                         <option value="{{ $buscaEmpresas->id }}">
@@ -90,34 +92,34 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-4 mb-3">
-                                                <label for="valor">Valor</label>
-                                                <input type="number" class="form-control" name="valor[]"
-                                                    placeholder="Digite o valor da proposta" required>
+                                                <label>Valor</label>
+                                                <input type="text" id="valorPrincipal" class="form-control"
+                                                    name="valorPrincipal" placeholder="Digite o valor da proposta" required>
                                             </div>
                                             <div class="col-md-4 mb-3">
                                                 <label for="dt_inicial">Data da Proposta</label>
-                                                <input type="date" class="form-control" name="dt_inicial[]"
+                                                <input type="date" class="form-control" name="dt_inicialPrincipal"
                                                     placeholder="Digite a data da proposta" required>
                                             </div>
                                             <div class="col-md-4 mb-3">
                                                 <label for="dt_final">Data Limite</label>
-                                                <input type="date" class="form-control" name="dt_final[]"
+                                                <input type="date" class="form-control" name="dt_finalPrincipal"
                                                     placeholder="Digite a data final do prazo da proposta" min="">
                                             </div>
                                             <div class="col-md-4 mb-3">
                                                 <label for="arquivo">Arquivo da Proposta</label>
-                                                <input type="file" class="form-control" name="arquivo[]"
+                                                <input type="file" class="form-control" name="arquivoPrincipal"
                                                     placeholder="Insira o arquivo da proposta" required>
                                             </div>
                                             <div class="form-check col-md-4">
-                                                <label for="garantiaBotao">Possui garantia?</label>
+                                                <label>Possui garantia?</label>
                                                 <input type="checkbox" style="border: 1px solid #999999; padding: 5px;"
                                                     class="form-check-input" id="garantiaBotao" name="garantiaBotao[]"
                                                     @if (old('garantiaBotao')) checked @endif>
                                             </div>
                                             <div id="tempoGarantia" class="col-md-4 mb-3" style="display: none;">
                                                 <label for="tempoGarantiaInput">Tempo de Garantia (em dias)</label>
-                                                <input type="number" class="form-control" id="tempoGarantiaInput"
+                                                <input type="number" class="form-control" id="tempoGarantiaInputPrincipal"
                                                     name="tempoGarantia[]" placeholder="Digite o tempo de garantia">
                                             </div>
                                             <!-- Botão para adicionar nova proposta comercial -->
@@ -174,8 +176,8 @@
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="razaoSocial">Nome Empresa</label>
-                        <select class="form-select" style="border: 1px solid #999999; padding: 5px;"
-                            name="razaoSocial[]">
+                        <select class="form-select js-nome-empresa"
+                            style="border: 1px solid #999999; padding: 5px;" name="razaoSocial[]">
                             <option></option>
                             @foreach ($buscaEmpresa as $buscaEmpresas)
                                 <option value="{{ $buscaEmpresas->id }}">
@@ -185,9 +187,9 @@
                         </select>
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label for="valor">Valor</label>
-                        <input type="number" class="form-control" name="valor[]"
-                            placeholder="Digite o valor da proposta">
+                        <label>Valor</label>
+                        <input type="text" class="form-control valor" name="valor[]"
+                            placeholder="Digite o valor da proposta" oninput="formatarValorMoeda(this)">
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="dt_inicial">Data da Proposta</label>
@@ -205,7 +207,7 @@
                             placeholder="Insira o arquivo da proposta">
                     </div>
                     <div class="form-check col-md-4">
-                        <label for="garantiaBotao">Possui garantia?</label>
+                        <label>Possui garantia?</label>
                         <input type="checkbox" style="border: 1px solid #999999; padding: 5px;" class="form-check-input"
                             id="garantiaBotao" name="garantiaBotao[]" @if (old('garantiaBotao')) checked @endif>
                     </div>
@@ -213,14 +215,6 @@
                         <label for="tempoGarantiaInput">Tempo de Garantia (em dias)</label>
                         <input type="number" class="form-control" id="tempoGarantiaInput" name="tempoGarantia[]"
                             placeholder="Digite o tempo de garantia">
-                    </div>
-                    <div class="col-12 mt-4">
-                        <button type="button" id="add-material" class="btn btn-success">Adicionar Material à
-                            Proposta</button>
-                    </div>
-                    <!-- Container para os formulários de material -->
-                    <div id="form-material">
-                        <!-- Formulários de materiais serão adicionados aqui -->
                     </div>
                 </div>
             </div>
@@ -243,7 +237,7 @@
                 </div>
                 <div class="col-md-4">
                     <label>Categoria do material</label>
-                    <select class="form-select select2" style="border: 1px solid #999999; padding: 3px;"
+                    <select class="form-select js-categoria-material" style="border: 1px solid #999999; padding: 3px;"
                         name="CategoriaMaterialPrincipal[]">
                         <option></option>
                         @foreach ($buscaCategoria as $buscaCategorias)
@@ -267,6 +261,14 @@
         </div>
     </div>
     <script>
+        document.getElementById('valorPrincipal').addEventListener('input', function(event) {
+            let value = event.target.value.replace(/\D/g, ''); // Remove tudo o que não for número
+            if (value) {
+                value = (parseInt(value) / 100).toFixed(2); // Converte para valor decimal
+                value = value.replace('.', ','); // Substitui ponto por vírgula
+                event.target.value = 'R$ ' + value; // Adiciona o "R$" antes do valor
+            }
+        });
         $(document).ready(function() {
             // Função para popular serviços com base na classe de serviço
             function populateServicos(selectElement, classeServicoValue) {
@@ -310,7 +312,14 @@
             $("#add-proposta").click(function() {
                 const newProposta = $("#template-proposta-comercial").html();
                 $("#form-propostas-comerciais").append(newProposta);
+                // Reaplica o Select2 a todos os selects após adicionar a nova proposta
+                $("#form-propostas-comerciais .js-nome-empresa").select2();
+                // Aumenta a altura da caixa de texto do select2
+                $("#form-propostas-comerciais .js-nome-empresa").next('.select2').find(
+                    '.select2-selection--single').css('height', '35px');
             });
+
+
 
             // Remove proposta comercial
             $(document).on("click", ".remove-proposta", function() {
@@ -349,25 +358,15 @@
             $("#add-material-principal").click(function() {
                 const newProposta = $("#template-material-principal").html();
                 $("#form-material-principal").append(newProposta);
+                $("#form-material-principal .js-categoria-material").select2();
+                // Aumenta a altura da caixa de texto do select2
+                $("#form-material-principal .js-categoria-material").next('.select2').find(
+                    '.select2-selection--single').css('height', '35px');
             });
 
             // Remove material principal
             $(document).on("click", ".remove-material-principal", function() {
                 $(this).closest(".material-principal").remove();
-            });
-
-            // Alterna campo de material para formulários dinâmicos
-            $(document).on("change", ".form-check-input[name='materialBotao[]']", function() {
-                const materialCheckbox = $(this);
-                const nomeMaterialDiv = materialCheckbox
-                    .closest(".form-group.row")
-                    .find("#nomeMaterial");
-
-                if (materialCheckbox.is(":checked")) {
-                    nomeMaterialDiv.show();
-                } else {
-                    nomeMaterialDiv.hide();
-                }
             });
         });
     </script>

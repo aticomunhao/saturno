@@ -14,6 +14,7 @@ use App\Models\Setor;
 use App\Models\Documento;
 use App\Models\Empresa;
 use App\Models\TipoCategoriaMt;
+use App\Models\SolMaterial;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Validator;
@@ -141,9 +142,23 @@ class AquisicaoServicosController extends Controller
                     : null;
 
                 Documento::create([
+                    'numero' => $request->numeroPrincipal[$index],
+                    'dt_doc' => $request->dt_inicialPrincipal[$index],
+                    'id_tp_doc' => '14',
+                    'valor' => $request->valorPrincipal[$index],
+                    'id_empresa' => $request->razaoSocialPrincipal[$index],
+                    'id_setor' => $request->input('idSetor'),
+                    'dt_validade' => $request->dt_finalPrincipal[$index],
+                    'end_arquivo' => $endArquivo,
+                    'id_sol_sv' => $solicitacao->id,
+                    'tempo_garantia_dias' => $request->tempoGarantiaPrincipal[$index],
+                    'vencedor' => true,
+                ]);
+
+                Documento::create([
                     'numero' => $request->numero[$index],
                     'dt_doc' => $request->dt_inicial[$index],
-                    'id_tp_doc' => '14', // Considere alterar para uma constante ou buscar no banco
+                    'id_tp_doc' => '14',
                     'valor' => $request->valor[$index],
                     'id_empresa' => $request->razaoSocial[$index],
                     'id_setor' => $request->input('idSetor'),

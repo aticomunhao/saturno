@@ -135,25 +135,45 @@ class AquisicaoServicosController extends Controller
                 'id_setor' => $request->idSetor,
             ]);
 
+            $endArquivoPrincipal = $request->hasFile('arquivoPrincipal')
+            ? $request->file('arquivoPrincipal')->store('documentos', 'public')
+            : null;
+
+            Documento::create([
+                'numero' => $request->numeroPrincipal,
+                'dt_doc' => $request->dt_inicialPrincipal,
+                'id_tp_doc' => '14',
+                'valor' => $request->valorPrincipal,
+                'id_empresa' => $request->razaoSocialPrincipal,
+                'id_setor' => $request->input('idSetor'),
+                'dt_validade' => $request->dt_finalPrincipal,
+                'end_arquivo' => $endArquivoPrincipal,
+                'id_sol_sv' => $solicitacao->id,
+                'tempo_garantia_dias' => $request->tempoGarantiaPrincipal,
+                'vencedor' => true,
+            ]);
+
+            if ($request->quantidadeMaterialPrincipal != null) {
+
+                $solicitacaoMat = SolServico::create([
+                    'id_cat_mt' => $request->CategoriaMaterialPrincipal,
+                    'id_tp_mt' => $request->tipoServicos,
+                    'motivo' => $request->motivo,
+                    'data' => $today,
+                    'status' => '1',
+                    'id_setor' => $request->idSetor,
+                ]);
+
+                foreach ($request->quantidadeMaterialPrincipal as $index => $quantidadeMaterialPrincipal){
+
+                }
+            }
+
             foreach ($request->numero as $index => $numero) {
                 // Armazena o arquivo se existir
                 $endArquivo = $request->hasFile('arquivo.' . $index)
                     ? $request->file('arquivo.' . $index)->store('documentos', 'public')
                     : null;
-
-                Documento::create([
-                    'numero' => $request->numeroPrincipal[$index],
-                    'dt_doc' => $request->dt_inicialPrincipal[$index],
-                    'id_tp_doc' => '14',
-                    'valor' => $request->valorPrincipal[$index],
-                    'id_empresa' => $request->razaoSocialPrincipal[$index],
-                    'id_setor' => $request->input('idSetor'),
-                    'dt_validade' => $request->dt_finalPrincipal[$index],
-                    'end_arquivo' => $endArquivo,
-                    'id_sol_sv' => $solicitacao->id,
-                    'tempo_garantia_dias' => $request->tempoGarantiaPrincipal[$index],
-                    'vencedor' => true,
-                ]);
 
                 Documento::create([
                     'numero' => $request->numero[$index],
@@ -167,6 +187,7 @@ class AquisicaoServicosController extends Controller
                     'id_sol_sv' => $solicitacao->id,
                     'tempo_garantia_dias' => $request->tempoGarantia[$index],
                 ]);
+
             }
 
             DB::commit();

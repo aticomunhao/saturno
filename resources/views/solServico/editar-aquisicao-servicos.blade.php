@@ -111,7 +111,7 @@
                                                 </div>
                                                 <div class="col-md-4 mb-3">
                                                     <label for="razaoSocial">Nome da Empresa</label>
-                                                    <select class="form-select"
+                                                    <select class="form-select select2"
                                                         style="border: 1px solid #999999; padding: 5px;"
                                                         name="razaoSocialOld[]" required>
                                                         @foreach ($buscaEmpresa as $buscaEmpresas)
@@ -184,7 +184,7 @@
             </div>
         </div>
         <div class="botões">
-            <a href="/gerenciar-aquisicao-servicos" type="button" value=""
+            <a href="javascript:history.back()" type="button" value=""
                 class="btn btn-danger col-md-3 col-2 mt-4 offset-md-2">Cancelar</a>
             <button type="submit" value="Confirmar" class="btn btn-primary col-md-3 col-1 mt-4 offset-md-2">Confirmar
             </button>
@@ -337,4 +337,45 @@
                 </div>
             </div>
     </script>
+    <!-- FIM Template para adicionar nova proposta comercial dinamicamente -->
+    {{-- <!-- Template de formulário de material -->
+    <div id="template-material-principal" style="display: none;">
+        <div class="card material-principal" style="border-color: #355089; margin-top: 20px;">
+            <div class="form-group row" style="margin-left: 5px; margin-top: 5px;">
+                <div class="col-md-2">
+                    <label>Quantidade de material</label>
+                    <input type="text" class="form-control" name="quantidadeMaterialPrincipal[]"
+                        placeholder="Digite o valor da proposta">
+                </div>
+                <div class="col-md-3">
+                    <label>Nome do item material</label>
+                    <input type="text" class="form-control" name="nomeMaterialPrincipal[]"
+                        placeholder="Digite o valor da proposta">
+                </div>
+                <div class="col-md-4">
+                    <label>Categoria do material</label>
+                    <select class="form-select js-categoria-material" style="border: 1px solid #999999; padding: 3px;"
+                        name="CategoriaMaterialPrincipal[]">
+                        <option></option>
+                        @foreach ($buscaCategoria as $buscaCategorias)
+                            <option value="{{ $buscaCategorias->id }}">
+                                {{ $buscaCategorias->nome }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label>Valor do material</label>
+                    <input type="number" class="form-control" name="valorMaterialPrincipal[]"
+                        placeholder="Digite o valor da proposta" style="margin-bottom: 10px">
+                </div>
+                <div class="col-md-1" style="display: flex; align-items: center; margin-top: 10px;">
+                    <button type="button" class="btn btn-danger btn-sm remove-material-principal">
+                        <i class="bi bi-x"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- FIM do Template de formulário de material --> --}}
 @endsection

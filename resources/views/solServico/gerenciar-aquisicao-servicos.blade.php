@@ -122,6 +122,7 @@
                                                 <th>SETOR</th>
                                                 <th>PRIORIDADE</th>
                                                 <th>STATUS</th>
+                                                <th>POSSUI MATERIAL?</th>
                                                 <th>AÇÕES</th>
                                             </tr>
                                         </thead>{{-- Fim do header da tabela --}}
@@ -143,6 +144,7 @@
                                                     <td>{{ $aquisicaos->setor->nome }} - {{ $aquisicaos->setor->sigla }}</td>
                                                     <td>{{ $aquisicaos->prioridade }}</td>
                                                     <td>{{ $aquisicaos->tipoStatus->nome }}</td>
+                                                    <td>Sim</td>
                                                     <td>
                                                         <a href="{{ route('visualizar.aquisicao.servicos', ['id' => $aquisicaos->id]) }}"
                                                             class="btn btn-sm btn-outline-primary" data-tt="tooltip"

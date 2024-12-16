@@ -45,7 +45,7 @@
                                     </div>
                                     <div class="col-md-3 col-sm-12">Selecione seu Setor
                                         <br>
-                                        <select class="form-select" style="border: 1px solid #999999; padding: 5px;"
+                                        <select class="form-select select2" style="border: 1px solid #999999; padding: 5px;"
                                             id="idSetor" name="idSetor" required>
                                             <option></option>
                                             @foreach ($buscaSetor as $buscaSetors)
@@ -176,8 +176,8 @@
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="razaoSocial">Nome Empresa</label>
-                        <select class="form-select js-nome-empresa"
-                            style="border: 1px solid #999999; padding: 5px;" name="razaoSocial[]">
+                        <select class="form-select js-nome-empresa" style="border: 1px solid #999999; padding: 5px;"
+                            name="razaoSocial[]">
                             <option></option>
                             @foreach ($buscaEmpresa as $buscaEmpresas)
                                 <option value="{{ $buscaEmpresas->id }}">
@@ -260,6 +260,7 @@
             </div>
         </div>
     </div>
+    <!-- FIM do Template de formulário de material -->
     <script>
         document.getElementById('valorPrincipal').addEventListener('input', function(event) {
             let value = event.target.value.replace(/\D/g, ''); // Remove tudo o que não for número

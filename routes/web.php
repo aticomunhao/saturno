@@ -379,6 +379,9 @@ Route::delete('/deletar-empresa/{id}', [CatalogoEmpresaController::class, 'delet
 
 //Gerenciar Aquisição de Material
 Route::get('/gerenciar-aquisicao-material', [AquisicaoMaterialController::class, 'index']);
+Route::get('/incluir-aquisicao-material', [AquisicaoMaterialController::class, 'create']);
+Route::post('/salvar-aquisicao-material', [AquisicaoMaterialController::class, 'store']);
+
 
 //Valor Mínimo de Compra
 Route::get('/valor-compra', [ValorCompraController::class, 'index']);

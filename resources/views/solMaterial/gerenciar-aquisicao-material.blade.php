@@ -122,6 +122,7 @@
                                                 <th>SETOR</th>
                                                 <th>PRIORIDADE</th>
                                                 <th>STATUS</th>
+                                                <th>POSSUI SERVIÇO?</th>
                                                 <th>AÇÕES</th>
                                             </tr>
                                         </thead>{{-- Fim do header da tabela --}}
@@ -143,6 +144,7 @@
                                                     <td>{{ $aquisicaos->setor->nome }}</td>
                                                     <td>{{ $aquisicaos->prioridade }}</td>
                                                     <td>{{ $aquisicaos->tipoStatus->nome }}</td>
+                                                    <td>NÃO</td>
                                                     <td>
                                                         <a href=""
                                                             class="btn btn-sm btn-outline-primary" data-tt="tooltip"

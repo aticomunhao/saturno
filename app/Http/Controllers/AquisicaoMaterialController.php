@@ -168,4 +168,12 @@ class AquisicaoMaterialController extends Controller
         // Reorganização das prioridades após as atualizações
         $this->reorganizarPrioridades();
     }
+    public function create(Request $request)
+    {
+        $setor = session('usuario.setor');
+        $buscaCategoria = TipoCategoriaMt::all();
+
+        $buscaSetor = Setor::whereIn('id', $setor)->get();
+        return view('solMaterial.incluir-aquisicao-material', compact('buscaSetor', 'buscaCategoria'));
+    }
 }

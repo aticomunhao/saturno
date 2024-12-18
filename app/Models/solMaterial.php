@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SolMaterial extends Model
+class solMaterial extends Model
 {
     use HasFactory;
     public $timestamps = false;

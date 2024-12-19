@@ -84,15 +84,43 @@
                                                 <input type="text" class="form-control" name="nomeMaterial[]"
                                                     placeholder="Digite o Nome do Material" required>
                                             </div>
-                                            <div class="col-md-3 mb-3">
-                                                <label for="arquivoProposta">Arquivo da Proposta</label>
-                                                <input type="file" class="form-control" name="arquivoProposta[]"
-                                                    accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" required>
+                                            <div>Primeira Proposta
+                                                <div class="col-md-1 mb-3">
+                                                    <label for="arquivoProposta">Arquivo da Proposta</label>
+                                                    <a type="file" class="btn" name="arquivoProposta1[]"
+                                                        accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" required><i class="bi bi-archive">
+                                                        </i>
+                                                    </a>
+                                                </div>
+                                                <div class="col-md-3 mb-3">
+                                                    <label for="linkProposta">Link da Proposta</label>
+                                                    <input type="url" class="form-control" name="linkProposta1[]"
+                                                        placeholder="Insira o link da proposta" required>
+                                                </div>
                                             </div>
-                                            <div class="col-md-3 mb-3">
-                                                <label for="linkProposta">Link da Proposta</label>
-                                                <input type="url" class="form-control" name="linkProposta[]"
-                                                    placeholder="Insira o link da proposta" required>
+                                            <div>Segunda Proposta
+                                                <div class="col-md-3 mb-3">
+                                                    <label for="arquivoProposta">Arquivo da Proposta</label>
+                                                    <input type="file" class="form-control" name="arquivoProposta2[]"
+                                                        accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" required>
+                                                </div>
+                                                <div class="col-md-3 mb-3">
+                                                    <label for="linkProposta">Link da Proposta</label>
+                                                    <input type="url" class="form-control" name="linkProposta2[]"
+                                                        placeholder="Insira o link da proposta" required>
+                                                </div>
+                                            </div>
+                                            <div>Terceira Propostas
+                                                <div class="col-md-3 mb-3">
+                                                    <label for="arquivoProposta">Arquivo da Proposta</label>
+                                                    <input type="file" class="form-control" name="arquivoProposta3[]"
+                                                        accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" required>
+                                                </div>
+                                                <div class="col-md-3 mb-3">
+                                                    <label for="linkProposta">Link da Proposta</label>
+                                                    <input type="url" class="form-control" name="linkProposta3[]"
+                                                        placeholder="Insira o link da proposta" required>
+                                                </div>
                                             </div>
                                             <div class="col-md-1 mb-3 d-flex align-items-center justify-content-center">
                                                 <button type="button" class="btn btn-danger btn-remove-material">X</button>

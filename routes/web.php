@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Http\Controllers\ContaContabilController;
 use App\Http\Controllers\DocumentoController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -48,8 +49,7 @@ use App\Http\Controllers\CatalogoEmpresaController;
 use App\Http\Controllers\CatalogoServicoController;
 use App\Http\Controllers\AquisicaoMaterialController;
 use App\Http\Controllers\ValorCompraController;
-
-
+use App\Models\ContaContabil;
 
 /*
 |--------------------------------------------------------------------------
@@ -385,3 +385,7 @@ Route::post('/salvar-aquisicao-material', [AquisicaoMaterialController::class, '
 
 //Valor Mínimo de Compra
 Route::get('/valor-compra', [ValorCompraController::class, 'index']);
+
+//Contas Contabeis
+
+Route::get('/conta-contabil',[ContaContabilController::class,'index'])->name('conta-contabil');

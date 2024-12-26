@@ -62,7 +62,7 @@ $setor = session()->get('usuario.setor');
                             </li>
                             <li><a class="dropdown-item" href="/catalogo-servico">Serviços</a>
                             </li>
-                            <li><a class="dropdown-item" href="/catalogo-conta">Contas</a>
+                            <li><a class="dropdown-item" href="{{ route('conta-contabil') }}">Contas Contabeis</a>
                             </li>
                             {{-- @endif --}}
                         </ul>

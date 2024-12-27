@@ -270,7 +270,7 @@ Route::get('/substituicao/buscaritem', [GerenciarDevolucoesController::class, 'b
 
 
 
-Route::name('pagamentos')->group(function () { });
+Route::name('pagamentos')->group(function () {});
 
 
 Route::get('/gerenciar-pagamentos/{id}', [GerenciarpagamentoController::class, 'show'])->name('pagamento.show');
@@ -388,4 +388,5 @@ Route::get('/valor-compra', [ValorCompraController::class, 'index']);
 
 //Contas Contabeis
 
-Route::get('/conta-contabil',[ContaContabilController::class,'index'])->name('conta-contabil');
+Route::get('/conta-contabil', [ContaContabilController::class, 'index'])->name('conta-contabil.index');
+Route::get('/conta-contabil/form', [ContaContabilController::class, 'create'])->name('conta-contabil.create');

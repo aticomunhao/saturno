@@ -21,6 +21,7 @@ class ContaContabil extends Model
         "nivel_4",
         "nivel_5",
         "nivel_6",
+        "grau"
     ];
     public $timestamps = false;
 

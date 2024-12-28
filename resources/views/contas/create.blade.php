@@ -32,12 +32,22 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-2 col-sm-12">
+                    <div class="col-md-1 col-sm-12">
                         <label for="idgrupocontabil">Grupo: </label>
                         <select name="grupo_contabil" id="idgrupocontabil" class="form-select">
                             @foreach ($grupo_conta_contabil as $grupo_contabil)
                                 <option value="{{ $grupo_contabil->id }}">{{ $grupo_contabil->nome }}</option>
                             @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-1 col-sm-12">
+                        <label for="idgrupocontabil">Grau: </label>
+                        <select name="grupo_contabil" id="idgrupocontabil" class="form-select">
+                            @for ($i = 1; $i <= 6; $i++)
+                                <option value="{{ $id }}">{{ $id }}</option>
+                            @endfor
+
+
                         </select>
                     </div>
                     <div class="col-md-2 col-sm-12">

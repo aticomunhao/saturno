@@ -100,7 +100,13 @@ class ContaContabilController extends Controller
      */
     public function edit($id)
     {
-        $contaContabil = ContaContabil::findOrFail($id);
+        $contaContabil = ContaContabil::with([
+            'natureza_contabil',
+            'catalogo_contabil',
+            'grupo_contabil',
+            'classe_contabil'
+        ])->findOrFail($id);
+        dd($contaContabil->first());
         return view('contas.edit', compact('contaContabil'));
     }
 

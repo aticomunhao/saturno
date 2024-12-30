@@ -58,7 +58,9 @@
                                 <td>{{ $conta_contabil->nivel_5 }}</td>
                                 <td>{{ $conta_contabil->nivel_6 }}</td>
 
-                                <td> <i class="fas fa-file-pen"></i> -Visualizar</td>
+                                <td> <a href="{{ route('conta-contabil.edit', $conta_contabil->id) }}"
+                                        class="btn btn-outline-warning"><i class="bi bi-pencil-square"></i></a> -Visualizar
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>

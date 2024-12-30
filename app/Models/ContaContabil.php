@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
 class ContaContabil extends Model
 {
@@ -83,5 +84,16 @@ class ContaContabil extends Model
         }
 
         return implode('.', $result);
+    }
+    public static function hasDuplicateLevels(Request $request): bool
+    {
+        return self::query()
+            ->where('nivel_1', $request->input('nivel_1'))
+            ->where('nivel_2', $request->input('nivel_2'))
+            ->where('nivel_3', $request->input('nivel_3'))
+            ->where('nivel_4', $request->input('nivel_4'))
+            ->where('nivel_5', $request->input('nivel_5'))
+            ->where('nivel_6', $request->input('nivel_6'))
+            ->exists();
     }
 }

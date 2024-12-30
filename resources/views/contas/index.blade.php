@@ -50,7 +50,7 @@
                                 <td>{{ $conta_contabil->descricao }}</td>
                                 <td>{{ $conta_contabil->natureza_contabil->sigla }}</td>
                                 <td>{{ $conta_contabil->grupo_contabil->nome }}</td>
-                                <td>{{  $conta_contabil->grau }}</td>
+                                <td>{{ $conta_contabil->grau }}</td>
                                 <td>{{ $conta_contabil->nivel_1 }}</td>
                                 <td>{{ $conta_contabil->nivel_2 }}</td>
                                 <td>{{ $conta_contabil->nivel_3 }}</td>
@@ -58,7 +58,7 @@
                                 <td>{{ $conta_contabil->nivel_5 }}</td>
                                 <td>{{ $conta_contabil->nivel_6 }}</td>
 
-                                <td>Editar-Visualizar</td>
+                                <td> <i class="fas fa-file-pen"></i> -Visualizar</td>
                             </tr>
                         @endforeach
                     </tbody>

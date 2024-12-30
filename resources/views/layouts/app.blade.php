@@ -41,7 +41,8 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     {{-- Import CSS --}}
     <link href="{{ asset('css/tooltips.css') }}" rel="stylesheet">
-
+    <!-- Font Awesome manualmente -->
+    <link rel="stylesheet" href="{{ asset('fontsawesome/css/all.min.css') }}">
 
 
     <!-- Estilo para o dropdown-->

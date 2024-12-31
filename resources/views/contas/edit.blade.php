@@ -1,93 +1,120 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h1>Editar Conta Contábil</h1>
-
-    <form action="{{ route('conta-contabil.update', $contaContabil->id) }}" method="POST">
-        @csrf
-        @method('PUT')
-
-        <div class="form-group">
-            <label for="data_inicio">Data Início</label>
-            <input type="date" name="data_inicio" id="data_inicio" class="form-control" value="{{ $contaContabil->data_inicio }}" required>
-        </div>
-
-        <div class="form-group">
-            <label for="data_fim">Data Fim</label>
-            <input type="date" name="data_fim" id="data_fim" class="form-control" value="{{ $contaContabil->data_fim }}">
-        </div>
-
-        <div class="form-group">
-            <label for="id_tipo_catalogo">Tipo de Catálogo</label>
-            <input type="number" name="id_tipo_catalogo" id="id_tipo_catalogo" class="form-control" value="{{ $contaContabil->id_tipo_catalogo }}" required>
-        </div>
-
-        <div class="form-group">
-            <label for="descricao">Descrição</label>
-            <input type="text" name="descricao" id="descricao" class="form-control" value="{{ $contaContabil->descricao }}" required>
-        </div>
-
-        <div class="form-group">
-            <label for="id_tipo_natureza_conta_contabil">Natureza Contábil</label>
-            <input type="number" name="id_tipo_natureza_conta_contabil" id="id_tipo_natureza_conta_contabil" class="form-control" value="{{ $contaContabil->id_tipo_natureza_conta_contabil }}" required>
-        </div>
-
-        <div class="form-group">
-            <label for="id_tipo_grupo_conta_contabil">Grupo Contábil</label>
-            <input type="number" name="id_tipo_grupo_conta_contabil" id="id_tipo_grupo_conta_contabil" class="form-control" value="{{ $contaContabil->id_tipo_grupo_conta_contabil }}" required>
-        </div>
-
-        <div class="form-group">
-            <label for="id_tipo_classe_conta_contabil">Classe Contábil</label>
-            <input type="number" name="id_tipo_classe_conta_contabil" id="id_tipo_classe_conta_contabil" class="form-control" value="{{ $contaContabil->id_tipo_classe_conta_contabil }}" required>
-        </div>
-
-        <div id="dynamic-fields">
-            @for ($i = 1; $i <= $contaContabil->grau; $i++)
-                <div class="col-md-2 col-sm-12 form-group">
-                    <label for="select-{{ $i }}">Selecione um número:</label>
-                    <div class="input-group">
-                        <select name="nivel_{{ $i }}" id="select-{{ $i }}" class="form-control dynamic-select">
-                            <option value="">Selecione</option>
-                            @for ($j = 1; $j <= 99; $j++)
-                                <option value="{{ $j }}" {{ $contaContabil->{'nivel_'.$i} == $j ? 'selected' : '' }}>{{ $j }}</option>
-                            @endfor
-                        </select>
-                        @if ($i > 1)
-                        <div class="input-group-append">
-                            <button type="button" class="btn btn-secondary remove-field">
-                                <i class="bi bi-x"></i>
-                            </button>
-                        </div>
-                        @endif
-                    </div>
+    <br>
+    <div class="container">
+        <form action="{{ route('conta-contabil.update', ['id' => $contaContabil->id]) }}" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="card" style="border-color: #355089;">
+                <div class="card-header">
+                    <h5 style="color: #355089;">Editar Conta Contábil</h5>
                 </div>
-            @endfor
-        </div>
+                <div class="card-body">
+                    <p class="card-text">
 
-        <div class="form-group">
-            <label for="grau">Grau</label>
-            <input type="number" name="grau" id="grau" class="form-control" value="{{ $contaContabil->grau }}" required>
-        </div>
+                    <fieldset class="mb-3">
+                        <div class="row g-3">
+                            <div class="col-md-2">
+                                <label for="idcatalogocontabil" class="form-label">Tipo Catálogo:</label>
+                                <select class="form-select" name="id_tipo_catalogo" id="idcatalogocontabil" required>
+                                    @foreach ($catalogo_conta_contabil as $conta_catalogo)
+                                        <option value="{{ $conta_catalogo->id }}"
+                                            {{ $conta_catalogo->id == $contaContabil->id_tipo_catalogo ? 'selected' : '' }}>
+                                            {{ $conta_catalogo->nome }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="iddescricao" class="form-label">Descrição:</label>
+                                <input type="text" name="descricao" id="iddescricao" class="form-control"
+                                    placeholder="Descrição Conta Contábil" value="{{ $contaContabil->descricao }}" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="idnaturezacontabil" class="form-label">Natureza:</label>
+                                <select name="id_tipo_natureza_conta_contabil" id="idnaturezacontabil" class="form-select"
+                                    required>
+                                    @foreach ($natureza_conta_contabil as $natureza_contabil)
+                                        <option value="{{ $natureza_contabil->id }}"
+                                            {{ $natureza_contabil->id == $contaContabil->id_tipo_natureza_conta_contabil ? 'selected' : '' }}>
+                                            {{ $natureza_contabil->nome }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="idgrupocontabil" class="form-label">Grupo:</label>
+                                <select name="id_tipo_grupo_conta_contabil" id="idgrupocontabil" class="form-select"
+                                    required>
+                                    @foreach ($grupo_conta_contabil as $grupo_contabil)
+                                        <option value="{{ $grupo_contabil->id }}"
+                                            {{ $grupo_contabil->id == $contaContabil->id_tipo_grupo_conta_contabil ? 'selected' : '' }}>
+                                            {{ $grupo_contabil->nome }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label for="idgrau" class="form-label">Grau:</label>
+                                <input type="text" name="grau" id="idgrau" class="form-control"
+                                    value="{{ $contaContabil->grau }}" readonly>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <h4>Níveis</h4>
+                    <div id="dynamic-fields" class="row">
+                        @for ($i = 1; $i <= $contaContabil->grau; $i++)
+                            <div class="col-md-2 col-sm-12 form-group">
+                                <label for="select-{{ $i }}">Selecione um número:</label>
+                                <div class="input-group">
+                                    <select name="nivel_{{ $i }}" id="select-{{ $i }}"
+                                        class="form-control dynamic-select" required>
+                                        <option value="">Selecione</option>
+                                        @for ($j = 1; $j <= 99; $j++)
+                                            <option value="{{ $j }}"
+                                                {{ $contaContabil->{'nivel_' . $i} == $j ? 'selected' : '' }}>
+                                                {{ $j }}</option>
+                                        @endfor
+                                    </select>
+                                    @if ($i > 1)
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-secondary remove-field">
+                                                <i class="bi bi-x"></i>
+                                            </button>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        @endfor
+                    </div>
 
-        <button type="submit" class="btn btn-primary">Salvar</button>
-    </form>
-</div>
+                    <div class="row g-3 justify-content-center">
+                        <div class="col-md-3">
+                            <a href="{{ url()->previous() }}" class="btn btn-danger w-100">Cancelar</a>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-primary w-100">Salvar</button>
+                        </div>
+                    </div>
+                    </p>
+                </div>
+                <br>
+            </div>
+        </form>
+    </div>
 
-<script>
-$(document).ready(function() {
-    var selectCount = parseInt($('#grau').val()) || 1; // Inicia com o valor de grau ou 1
-    $('#grau').val(selectCount);
-
-    // Função para adicionar selects com base no grau inicial
-    function addInitialSelects(count) {
-        for (var i = 2; i <= count; i++) {
-            var newSelect = `
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.js"></script>
+    <script>
+        $(document).ready(function() {
+            var selectCount = parseInt($('#idgrau').val()) || 1; // Inicia com o valor de grau ou 1
+            $('#idgrau').val(selectCount);
+            // Função para adicionar selects com base no grau inicial
+            function addInitialSelects(count) {
+                for (var i = 2; i <= count; i++) {
+                    var newSelect = `
                 <div class="col-md-2 col-sm-12 form-group">
                     <label for="select-${i}">Selecione um número:</label>
                     <div class="input-group">
-                        <select name="nivel_${i}" id="select-${i}" class="form-control dynamic-select">
+                        <select name="nivel_${i}" id="select-${i}" class="form-control dynamic-select" required>
                             <option value="">Selecione</option>
                             @for ($j = 1; $j <= 99; $j++)
                                 <option value="{{ $j }}">{{ $j }}</option>
@@ -101,23 +128,23 @@ $(document).ready(function() {
                     </div>
                 </div>
             `;
-            $('#dynamic-fields').append(newSelect);
-        }
-    }
+                    $('#dynamic-fields').append(newSelect);
+                }
+            }
 
-    // Adiciona os selects iniciais com base no grau
-    addInitialSelects(selectCount);
+            // Adiciona os selects iniciais com base no grau
+            addInitialSelects(selectCount - 1); // Ajusta para não adicionar um a mais
 
-    $(document).on('change', '.dynamic-select', function() {
-        var selectedValue = $(this).val();
-        if (selectedValue && selectCount < 6) {
-            selectCount++;
-            $('#grau').val(selectCount);
-            var newSelect = `
+            $(document).on('change', '.dynamic-select', function() {
+                var selectedValue =  $('#idgrau').val(selectCount);
+                if (selectedValue && selectCount <= 6) {
+                    selectCount++;
+                    $('#idgrau').val(selectCount);
+                    var newSelect = `
                 <div class="col-md-2 col-sm-12 form-group">
                     <label for="select-${selectCount}">Selecione um número:</label>
                     <div class="input-group">
-                        <select name="nivel_${selectCount}" id="select-${selectCount}" class="form-control dynamic-select">
+                        <select name="nivel_${selectCount}" id="select-${selectCount}" class="form-control dynamic-select" required>
                             <option value="">Selecione</option>
                             @for ($j = 1; $j <= 99; $j++)
                                 <option value="{{ $j }}">{{ $j }}</option>
@@ -131,17 +158,17 @@ $(document).ready(function() {
                     </div>
                 </div>
             `;
-            $('#dynamic-fields').append(newSelect);
-        }
-    });
+                    $('#dynamic-fields').append(newSelect);
+                }
+            });
 
-    $(document).on('click', '.remove-field', function() {
-        $(this).closest('.col-md-2').remove();
-        if (selectCount > 1) {
-            selectCount--;
-        }
-        $('#grau').val(selectCount);
-    });
-});
-</script>
+            $(document).on('click', '.remove-field', function() {
+                $(this).closest('.col-md-2').remove();
+                if (selectCount > 1) {
+                    selectCount--;
+                }
+                $('#idgrau').val(selectCount);
+            });
+        });
+    </script>
 @endsection

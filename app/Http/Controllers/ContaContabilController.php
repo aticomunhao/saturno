@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\ContaContabil;
 use App\Models\TipoCatalogoContaContabil;
 use App\Models\TipoNaturezaContaContabil;
+use Carbon\Carbon;
 
 class ContaContabilController extends Controller
 {
@@ -70,6 +71,7 @@ class ContaContabilController extends Controller
         }
 
         ContaContabil::create([
+            'data_inicio' => Carbon::now()->toDateString(),
             'id_tipo_catalogo' => $request->input('id_tipo_catalogo'),
             'descricao' => $request->input('descricao'),
             'id_tipo_natureza_conta_contabil' => $request->input('id_tipo_natureza_conta_contabil'),
@@ -100,14 +102,23 @@ class ContaContabilController extends Controller
      */
     public function edit($id)
     {
+
+        $numeros = [];
+        for ($i = 0; $i <= 100; $i++) {
+            $numeros[] = $i;
+        }
+        $catalogo_conta_contabil = TipoCatalogoContaContabil::all();
+        $natureza_conta_contabil = TipoNaturezaContaContabil::all();
+        $classe_conta_contabil = TipoClasseContaContabil::all();
+        $grupo_conta_contabil = TipoGrupoContaContabil::all();
         $contaContabil = ContaContabil::with([
             'natureza_contabil',
             'catalogo_contabil',
             'grupo_contabil',
             'classe_contabil'
         ])->findOrFail($id);
-        dd($contaContabil->first());
-        return view('contas.edit', compact('contaContabil'));
+
+        return view('contas.edit', compact('contaContabil', 'grupo_conta_contabil', 'classe_conta_contabil', 'natureza_conta_contabil', 'catalogo_conta_contabil'));
     }
 
     /**
@@ -145,7 +156,20 @@ class ContaContabilController extends Controller
         }
 
         $contaContabil = ContaContabil::findOrFail($id);
-        $contaContabil->update($validatedData);
+        $contaContabil->update([
+            'data_inicio' => Carbon::now()->toDateString(),
+            'id_tipo_catalogo' => $request->input('id_tipo_catalogo'),
+            'descricao' => $request->input('descricao'),
+            'id_tipo_natureza_conta_contabil' => $request->input('id_tipo_natureza_conta_contabil'),
+            'id_tipo_grupo_conta_contabil' => $request->input('id_tipo_grupo_conta_contabil'),
+            'grau' => $request->input('grau'),
+            'nivel_1' => $request->input('nivel_1'),
+            'nivel_2' => $request->input('nivel_2'),
+            'nivel_3' => $request->input('nivel_3'),
+            'nivel_4' => $request->input('nivel_4'),
+            'nivel_5' => $request->input('nivel_5'),
+            'nivel_6' => $request->input('nivel_6'),
+        ]);
 
         app('flasher')->addSaved("Conta Contabil atualizada com sucesso.");
         return redirect()->route('conta-contabil.index');

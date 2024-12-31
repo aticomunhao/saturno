@@ -86,6 +86,7 @@
                         @endfor
                     </div>
 
+                    <br>
                     <div class="row g-3 justify-content-center">
                         <div class="col-md-3">
                             <a href="{{ url()->previous() }}" class="btn btn-danger w-100">Cancelar</a>
@@ -105,63 +106,40 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.js"></script>
     <script>
         $(document).ready(function() {
-            var selectCount = parseInt($('#idgrau').val()) || 1; // Inicia com o valor de grau ou 1
-            $('#idgrau').val(selectCount);
-            // Função para adicionar selects com base no grau inicial
-            function addInitialSelects(count) {
-                for (var i = 2; i <= count; i++) {
-                    var newSelect = `
-                <div class="col-md-2 col-sm-12 form-group">
-                    <label for="select-${i}">Selecione um número:</label>
-                    <div class="input-group">
-                        <select name="nivel_${i}" id="select-${i}" class="form-control dynamic-select" required>
-                            <option value="">Selecione</option>
-                            @for ($j = 1; $j <= 99; $j++)
-                                <option value="{{ $j }}">{{ $j }}</option>
-                            @endfor
-                        </select>
-                        <div class="input-group-append">
-                            <button type="button" class="btn btn-secondary remove-field">
-                                <i class="bi bi-x"></i>
-                            </button>
-                        </div>
-                    </div>
+            var selectCount = parseInt($('#idgrau').val()) || 1; // Inicia com os selects existentes
+
+            // Função para adicionar um novo select
+            function addNewSelect(index) {
+                var newSelect = `
+        <div class="col-md-2 col-sm-12 form-group" id="select-group-${index}">
+            <label for="select-${index}">Selecione um número:</label>
+            <div class="input-group">
+                <select name="nivel_${index}" id="select-${index}" class="form-control dynamic-select" required>
+                    <option value="">Selecione</option>
+                    @for ($j = 1; $j <= 99; $j++)
+                        <option value="{{ $j }}">{{ $j }}</option>
+                    @endfor
+                </select>
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-secondary remove-field">
+                        <i class="bi bi-x"></i>
+                    </button>
                 </div>
-            `;
-                    $('#dynamic-fields').append(newSelect);
-                }
+            </div>
+        </div>`;
+                $('#dynamic-fields').append(newSelect);
             }
 
-            // Adiciona os selects iniciais com base no grau
-            addInitialSelects(selectCount - 1); // Ajusta para não adicionar um a mais
-
+            // Detecta mudança nos selects e adiciona novos
             $(document).on('change', '.dynamic-select', function() {
-                var selectedValue =  $('#idgrau').val(selectCount);
-                if (selectedValue && selectCount <= 6) {
+                if ($(this).val() && selectCount < 6) {
                     selectCount++;
                     $('#idgrau').val(selectCount);
-                    var newSelect = `
-                <div class="col-md-2 col-sm-12 form-group">
-                    <label for="select-${selectCount}">Selecione um número:</label>
-                    <div class="input-group">
-                        <select name="nivel_${selectCount}" id="select-${selectCount}" class="form-control dynamic-select" required>
-                            <option value="">Selecione</option>
-                            @for ($j = 1; $j <= 99; $j++)
-                                <option value="{{ $j }}">{{ $j }}</option>
-                            @endfor
-                        </select>
-                        <div class="input-group-append">
-                            <button type="button" class="btn btn-secondary remove-field">
-                                <i class="bi bi-x"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-                    $('#dynamic-fields').append(newSelect);
+                    addNewSelect(selectCount);
                 }
             });
 
+            // Remove o campo ao clicar no botão de exclusão
             $(document).on('click', '.remove-field', function() {
                 $(this).closest('.col-md-2').remove();
                 if (selectCount > 1) {

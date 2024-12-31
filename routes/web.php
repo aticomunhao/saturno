@@ -393,4 +393,5 @@ Route::get('/conta-contabil/form', [ContaContabilController::class, 'create'])->
 Route::post('/conta-contabil/store', [ContaContabilController::class, 'store'])->name('conta-contabil.store');
 Route::get('/conta-contabil/edit/{id}',[ContaContabilController::class,'edit'])->name('conta-contabil.edit');
 Route::put('/conta-contabil/update/{id}', [ContaContabilController::class,'update'])->name('conta-contabil.update');
+Route::any('/conta-contabil/inativar/{id}', [ContaContabilController::class,'inativar'])->name('conta-contabil.inativar');
 

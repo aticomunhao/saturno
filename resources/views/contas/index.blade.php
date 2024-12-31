@@ -58,8 +58,45 @@
                                 <td>{{ $conta_contabil->nivel_5 }}</td>
                                 <td>{{ $conta_contabil->nivel_6 }}</td>
 
-                                <td> <a href="{{ route('conta-contabil.edit', $conta_contabil->id) }}"
-                                        class="btn btn-outline-warning"><i class="bi bi-pencil-square"></i></a> -Visualizar
+                                <td>
+                                    <a href="{{ route('conta-contabil.edit', $conta_contabil->id) }}"
+                                        class="btn btn-outline-warning">
+                                        <i class="bi bi-pencil-square" style="color: #1B1e20"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+                                        data-bs-target="#staticBackdrop{{ $conta_contabil->id }}">
+                                        <i class="fa-solid fa-trash" style="color: #1B1e20"></i>
+                                    </button>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="staticBackdrop{{ $conta_contabil->id }}"
+                                        data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                        aria-labelledby="staticBackdropLabel{{ $conta_contabil->id }}" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header bg-danger text-white">
+                                                    <h1 class="modal-title fs-5"
+                                                        id="staticBackdropLabel{{ $conta_contabil->id }}">Confirmar
+                                                        Exclusão</h1>
+                                                    <button type="button" class="btn-close btn-close-white"
+                                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Tem certeza de que deseja inativar o item de classificação:
+                                                        <b>{{ $conta_contabil->getConcatenatedLevelsAttribute() }}</b>?
+                                                    </p>
+                                                    <p>Esta ação não pode ser desfeita.</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Cancelar</button>
+                                                    <a
+                                                        href="{{ route('conta-contabil.inativar', ['id' => $conta_contabil->id]) }}"><button
+                                                            type="button" class="btn btn-danger">Excluir</button></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach

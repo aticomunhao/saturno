@@ -182,4 +182,13 @@ class ContaContabilController extends Controller
     {
         //
     }
+
+    public function inativar(string $id)
+    {
+        $contaContabil = ContaContabil::findOrFail($id);
+        $contaContabil->update([
+            'data_fim' => Carbon::now()->toDateString(),
+        ]);
+        return redirect()->route('conta-contabil.index');
+    }
 }

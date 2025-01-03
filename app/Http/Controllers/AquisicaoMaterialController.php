@@ -11,7 +11,13 @@ use App\Models\SolMaterial;
 use App\Models\TipoCategoriaMt;
 use App\Models\TipoStatusSolMt;
 use App\Models\Setor;
+use App\Models\ModelCor;
 use App\Models\Documento;
+use App\Models\ModelFaseEtaria;
+use App\Models\ModelMarca;
+use App\Models\ModelSexo;
+use App\Models\ModelTamanho;
+use App\Models\Empresa;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Validator;
@@ -172,8 +178,14 @@ class AquisicaoMaterialController extends Controller
     {
         $setor = session('usuario.setor');
         $buscaCategoria = TipoCategoriaMt::all();
+        $buscaEmpresa = Empresa::all();
+        $buscaMarca = ModelMarca::all();
+        $buscaTamanho = ModelTamanho::all();
+        $buscaCor = ModelCor::all();
+        $buscaFaseEtaria = ModelFaseEtaria::all();
+        $buscaSexo = ModelSexo::all();
 
         $buscaSetor = Setor::whereIn('id', $setor)->get();
-        return view('solMaterial.incluir-aquisicao-material', compact('buscaSetor', 'buscaCategoria'));
+        return view('solMaterial.incluir-aquisicao-material', compact('buscaSetor', 'buscaCategoria', 'buscaMarca', 'buscaTamanho', 'buscaCor', 'buscaFaseEtaria', 'buscaSexo', 'buscaEmpresa'));
     }
 }

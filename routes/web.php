@@ -381,6 +381,12 @@ Route::delete('/deletar-empresa/{id}', [CatalogoEmpresaController::class, 'delet
 Route::get('/gerenciar-aquisicao-material', [AquisicaoMaterialController::class, 'index']);
 Route::get('/incluir-aquisicao-material', [AquisicaoMaterialController::class, 'create']);
 Route::post('/salvar-aquisicao-material', [AquisicaoMaterialController::class, 'store']);
+Route::get('/incluir-aquisicao-material-2/{id}', [AquisicaoMaterialController::class, 'create2']);
+Route::post('/incluir-material-solicitacao/{id}', [AquisicaoMaterialController::class, 'store2']);
+Route::get('/marcas/{categoriaId}', [AquisicaoMaterialController::class, 'getMarcas']);
+Route::get('/tamanhos/{categoriaId}', [AquisicaoMaterialController::class, 'getTamanhos']);
+Route::get('/cores/{categoriaId}', [AquisicaoMaterialController::class, 'getCores']);
+Route::get('/fases/{categoriaId}', [AquisicaoMaterialController::class, 'getFases']);
 
 
 //Valor Mínimo de Compra

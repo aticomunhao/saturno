@@ -140,10 +140,10 @@
                                                     </td>
                                                     <td>{{ $aquisicaos->id }}</td>
                                                     <td>{{ \Carbon\Carbon::parse($aquisicaos->data)->format('d/m/Y') }}</td>
-                                                    <td>{{ $aquisicaos->CatalogoMaterial->descricao }}</td>
-                                                    <td>{{ $aquisicaos->setor->nome }}</td>
-                                                    <td>{{ $aquisicaos->prioridade }}</td>
-                                                    <td>{{ $aquisicaos->tipoStatus->nome }}</td>
+                                                    <td>{{ $aquisicaos->CatalogoMaterial->descricao ?? 'N/A' }}</td>
+                                                    <td>{{ $aquisicaos->setor->nome ?? 'N/A'}}</td>
+                                                    <td>{{ $aquisicaos->prioridade ?? 'N/A'}}</td>
+                                                    <td>{{ $aquisicaos->tipoStatus->nome ?? 'N/A'}}</td>
                                                     <td>NÃO</td>
                                                     <td>
                                                         <a href=""

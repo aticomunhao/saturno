@@ -18,6 +18,8 @@ use App\Models\ModelMarca;
 use App\Models\ModelSexo;
 use App\Models\ModelTamanho;
 use App\Models\Empresa;
+use App\Models\MatProposta;
+use App\Models\ModelUnidadeMedida;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Validator;
@@ -177,6 +179,26 @@ class AquisicaoMaterialController extends Controller
     public function create(Request $request)
     {
         $setor = session('usuario.setor');
+        $buscaSetor = Setor::whereIn('id', $setor)->get();
+
+        return view('solMaterial.incluir-aquisicao-material', compact('buscaSetor'));
+    }
+    public function store(Request $request)
+    {
+
+        $solicitacaoMaterial = SolMaterial::create([
+            'id_setor' => $request->idSetor,
+            'motivo' => $request->motivo,
+        ]);
+
+        app('flasher')->addSuccess('Solicitação Criada com Sucesso, Adicione os materiais Necessários');
+        return redirect("/incluir-aquisicao-material-2/{$solicitacaoMaterial->id}");
+    }
+    public function create2($id)
+    {
+        $idSolicitacao = $id;
+
+        $setor = session('usuario.setor');
         $buscaCategoria = TipoCategoriaMt::all();
         $buscaEmpresa = Empresa::all();
         $buscaMarca = ModelMarca::all();
@@ -184,8 +206,55 @@ class AquisicaoMaterialController extends Controller
         $buscaCor = ModelCor::all();
         $buscaFaseEtaria = ModelFaseEtaria::all();
         $buscaSexo = ModelSexo::all();
+        $buscaUnidadeMedida = ModelUnidadeMedida::all();
+        $materiais = MatProposta::with('tipoUnidadeMedida', 'tipoCategoria', 'tipoMarca', 'tipoTamanho', 'tipoCor', 'tipoFaseEtaria', 'tipoSexo')->where('id_sol_mat', $id)->get();
+
 
         $buscaSetor = Setor::whereIn('id', $setor)->get();
-        return view('solMaterial.incluir-aquisicao-material', compact('buscaSetor', 'buscaCategoria', 'buscaMarca', 'buscaTamanho', 'buscaCor', 'buscaFaseEtaria', 'buscaSexo', 'buscaEmpresa'));
+        return view('solMaterial.incluir-aquisicao-material-2', compact('materiais', 'idSolicitacao', 'buscaSetor', 'buscaUnidadeMedida', 'buscaCategoria', 'buscaMarca', 'buscaTamanho', 'buscaCor', 'buscaFaseEtaria', 'buscaSexo', 'buscaEmpresa'));
+    }
+    public function store2(Request $request, $id)
+    {
+        $idSolicitacao = $id;
+
+        MatProposta::create([
+            'id_marca' => $request->marcaMaterial,
+            'id_tamanho' => $request->tamanhoMaterial,
+            'id_cor' => $request->corMaterial,
+            'id_fase_etaria' => $request->faseEtariaMaterial,
+            'id_sexo' => $request->sexoMaterial,
+            'dt_cadastro' => Carbon::now(),
+            'id_sol_mat' => $idSolicitacao,
+            'nome' => $request->nomeMaterial,
+            'id_cat_material' => $request->categoriaMaterial,
+            'id_tipo_unidade_medida' => $request->UnidadeMedidaMaterial,
+            'quantidade' => $request->quantidadeMaterial,
+        ]);
+
+        app('flasher')->addSuccess('Material Adicionado com Sucesso');
+        return redirect("/incluir-aquisicao-material-2/{$idSolicitacao}");
+    }
+    public function getMarcas($categoriaId)
+    {
+        $marcas = ModelMarca::where('id_categoria_material', $categoriaId)->get(['id', 'nome']);
+        return response()->json($marcas);
+    }
+
+    public function getTamanhos($categoriaId)
+    {
+        $tamanhos = ModelTamanho::where('id_categoria_material', $categoriaId)->get(['id', 'nome']);
+        return response()->json($tamanhos);
+    }
+
+    public function getCores($categoriaId)
+    {
+        $cores = ModelCor::where('id_categoria_material', $categoriaId)->get(['id', 'nome']);
+        return response()->json($cores);
+    }
+
+    public function getFases($categoriaId)
+    {
+        $fases = ModelFaseEtaria::where('id_categoria_material', $categoriaId)->get(['id', 'nome']);
+        return response()->json($fases);
     }
 }

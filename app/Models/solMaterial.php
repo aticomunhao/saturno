@@ -31,7 +31,7 @@ class solMaterial extends Model
         'dt_usu_dir',
         'dt_usu_fin',
     ];
-
+    
     public function catalogoMaterial()
     {
         return $this->belongsTo(CatalogoMaterial::class, 'id_tp_mt');

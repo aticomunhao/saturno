@@ -37,7 +37,7 @@ class AquisicaoMaterialController extends Controller
         $setor = session('usuario.setor');
 
         //dd($setor);
-        $query = solMaterial::with(['tipoClasse', 'catalogoMaterial', 'tipoStatus', 'setor']);
+        $query = solMaterial::with(['catalogoMaterial', 'tipoStatus', 'setor']);
 
         if ($request->status_material) {
             $query->where('status', $request->status_material);
@@ -208,9 +208,8 @@ class AquisicaoMaterialController extends Controller
         $buscaSexo = ModelSexo::all();
         $buscaUnidadeMedida = ModelUnidadeMedida::all();
         $materiais = MatProposta::with('tipoUnidadeMedida', 'tipoCategoria', 'tipoMarca', 'tipoTamanho', 'tipoCor', 'tipoFaseEtaria', 'tipoSexo')->where('id_sol_mat', $id)->get();
-
-
         $buscaSetor = Setor::whereIn('id', $setor)->get();
+
         return view('solMaterial.incluir-aquisicao-material-2', compact('materiais', 'idSolicitacao', 'buscaSetor', 'buscaUnidadeMedida', 'buscaCategoria', 'buscaMarca', 'buscaTamanho', 'buscaCor', 'buscaFaseEtaria', 'buscaSexo', 'buscaEmpresa'));
     }
     public function store2(Request $request, $id)
@@ -256,5 +255,60 @@ class AquisicaoMaterialController extends Controller
     {
         $fases = ModelFaseEtaria::where('id_categoria_material', $categoriaId)->get(['id', 'nome']);
         return response()->json($fases);
+    }
+    public function destroyMaterial(Request $request)
+    {
+        // Busca e exclusão do material
+        $material = MatProposta::find($request->material_id);
+
+        if ($material) {
+            $material->delete();
+
+            // Retorna sucesso
+            app('flasher')->addSuccess('Material excluído com sucesso!');
+            return redirect()->back();
+        }
+
+        // Caso o material não seja encontrado
+        app('flasher')->addError('Material não encontrado.');
+        return redirect()->back();
+    }
+    public function store3(Request $request, $id)
+    {
+        $idSolicitacoes = $id;
+        $materiais = MatProposta::where('id_sol_mat', $idSolicitacoes)->get('id');
+        $solicitacao = SolMaterial::find($idSolicitacoes);
+        dd($solicitacao, $materiais, $solicitacao);
+
+        foreach ($materiais as $index => $material) {
+            $endArquivo = $request->hasFile('arquivoProposta1.' . $index)
+                ? $request->file('arquivoProposta1.' . $index)->store('documentos', 'public')
+                : null;
+
+            $endArquivo = $request->hasFile('arquivoProposta2.' . $index)
+                ? $request->file('arquivoProposta2.' . $index)->store('documentos', 'public')
+                : null;
+
+            $endArquivo = $request->hasFile('arquivoProposta2.' . $index)
+                ? $request->file('arquivoProposta1.' . $index)->store('documentos', 'public')
+                : null;
+
+            Documento::create([
+                'dt_doc' => $request->dt_inicial,
+                'id_tp_doc' => 14,
+                'valor' => $request->valor,
+                'id_empresa' => $request->razaoSocial,
+                'id_setor' => $solicitacao->id_setor,
+                'mat_proposta' => $material->id,
+                'dt_validade' => $request->dt_final,
+                'end_arquivo' => $this->storeArquivo($request, 'arquivoProposta'),
+                'numero' => $request->numero,
+                'tempo_garantia_dias' => $request->tempoGarantia,
+                'vencedor_inicial' => 1,
+            ]);
+        }
+
+        app('flasher')->addSuccess('Materiais e Propostas Adicionados com Sucesso');
+        return redirect("/incluir-aquisicao-material-2/{$idSolicitacoes}");
     }
 }

@@ -387,7 +387,8 @@ Route::get('/marcas/{categoriaId}', [AquisicaoMaterialController::class, 'getMar
 Route::get('/tamanhos/{categoriaId}', [AquisicaoMaterialController::class, 'getTamanhos']);
 Route::get('/cores/{categoriaId}', [AquisicaoMaterialController::class, 'getCores']);
 Route::get('/fases/{categoriaId}', [AquisicaoMaterialController::class, 'getFases']);
-
+Route::delete('/excluir-material-solicitacao', [AquisicaoMaterialController::class, 'destroyMaterial']);
+Route::post('/salvar-proposta-material/{id}', [AquisicaoMaterialController::class, 'store3']);
 
 //Valor Mínimo de Compra
 Route::get('/valor-compra', [ValorCompraController::class, 'index']);

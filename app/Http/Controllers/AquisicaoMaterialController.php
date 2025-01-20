@@ -278,37 +278,70 @@ class AquisicaoMaterialController extends Controller
         $idSolicitacoes = $id;
         $materiais = MatProposta::where('id_sol_mat', $idSolicitacoes)->get('id');
         $solicitacao = SolMaterial::find($idSolicitacoes);
-        dd($solicitacao, $materiais, $solicitacao);
+        //dd($solicitacao, $materiais, $solicitacao);
 
         foreach ($materiais as $index => $material) {
-            $endArquivo = $request->hasFile('arquivoProposta1.' . $index)
+            $endArquivo1 = $request->hasFile('arquivoProposta1.' . $index)
                 ? $request->file('arquivoProposta1.' . $index)->store('documentos', 'public')
                 : null;
 
-            $endArquivo = $request->hasFile('arquivoProposta2.' . $index)
+            $endArquivo2 = $request->hasFile('arquivoProposta2.' . $index)
                 ? $request->file('arquivoProposta2.' . $index)->store('documentos', 'public')
                 : null;
 
-            $endArquivo = $request->hasFile('arquivoProposta2.' . $index)
-                ? $request->file('arquivoProposta1.' . $index)->store('documentos', 'public')
+            $endArquivo3 = $request->hasFile('arquivoProposta3.' . $index)
+                ? $request->file('arquivoProposta3.' . $index)->store('documentos', 'public')
                 : null;
 
+            //dd($material);
+
             Documento::create([
-                'dt_doc' => $request->dt_inicial,
-                'id_tp_doc' => 14,
-                'valor' => $request->valor,
-                'id_empresa' => $request->razaoSocial,
+                'dt_doc' => $request->dt_inicial1[$index],
+                'id_tp_doc' => '14',
+                'valor' => $request->valor1[$index],
+                'id_empresa' => $request->razaoSocial1[$index],
                 'id_setor' => $solicitacao->id_setor,
                 'mat_proposta' => $material->id,
-                'dt_validade' => $request->dt_final,
-                'end_arquivo' => $this->storeArquivo($request, 'arquivoProposta'),
-                'numero' => $request->numero,
-                'tempo_garantia_dias' => $request->tempoGarantia,
-                'vencedor_inicial' => 1,
+                'dt_validade' => $request->dt_final1[$index],
+                'end_arquivo' => $endArquivo1,
+                'numero' => $request->numero1[$index],
+                'tempo_garantia_dias' => $request->tempoGarantia1[$index],
+                'vencedor_inicial' => '1',
+                'link_proposta' => $request->linkProposta1[$index],
+            ]);
+
+            Documento::create([
+                'dt_doc' => $request->dt_inicial2[$index],
+                'id_tp_doc' => '14',
+                'valor' => $request->valor2[$index],
+                'id_empresa' => $request->razaoSocial2[$index],
+                'id_setor' => $solicitacao->id_setor,
+                'mat_proposta' => $material->id,
+                'dt_validade' => $request->dt_final2[$index],
+                'end_arquivo' => $endArquivo2,
+                'numero' => $request->numero2[$index],
+                'tempo_garantia_dias' => $request->tempoGarantia2[$index],
+                'vencedor_inicial' => '0',
+                'link_proposta' => $request->linkProposta2[$index],
+            ]);
+
+            Documento::create([
+                'dt_doc' => $request->dt_inicial3[$index],
+                'id_tp_doc' => '14',
+                'valor' => $request->valor3[$index],
+                'id_empresa' => $request->razaoSocial3[$index],
+                'id_setor' => $solicitacao->id_setor,
+                'mat_proposta' => $material->id,
+                'dt_validade' => $request->dt_final3[$index],
+                'end_arquivo' => $endArquivo3,
+                'numero' => $request->numero3[$index],
+                'tempo_garantia_dias' => $request->tempoGarantia3[$index],
+                'vencedor_inicial' => '0',
+                'link_proposta' => $request->linkProposta3[$index],
             ]);
         }
 
         app('flasher')->addSuccess('Materiais e Propostas Adicionados com Sucesso');
-        return redirect("/incluir-aquisicao-material-2/{$idSolicitacoes}");
+        return redirect("/gerenciar-aquisicao-material");
     }
 }

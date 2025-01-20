@@ -180,7 +180,7 @@
                                                                 <label>Arquivo da Proposta Principal</label>
                                                                 <input type="file" class="form-control"
                                                                     id="uploadProposta1" name="arquivoProposta1[]"
-                                                                    accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" required>
+                                                                    accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" >
                                                             </div>
                                                         </div>
 
@@ -199,7 +199,7 @@
                                                                 <label>Link da Proposta Principal</label>
                                                                 <input type="text" class="form-control mt-2"
                                                                     id="linkProposta1" name="linkProposta1[]"
-                                                                    placeholder="Link da Proposta" required>
+                                                                    placeholder="Link da Proposta" >
                                                             </div>
                                                         </div>
                                                     </div>
@@ -266,7 +266,7 @@
                                                                 <label>Arquivo da 2ª Proposta</label>
                                                                 <input type="file" class="form-control"
                                                                     id="uploadProposta2" name="arquivoProposta2[]"
-                                                                    accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" required>
+                                                                    accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" >
                                                             </div>
                                                         </div>
 
@@ -285,7 +285,7 @@
                                                                 <label>Link da 2ª Proposta</label>
                                                                 <input type="text" class="form-control mt-2"
                                                                     id="linkProposta2" name="linkProposta2[]"
-                                                                    placeholder="Link da Proposta" required>
+                                                                    placeholder="Link da Proposta" >
                                                             </div>
                                                         </div>
                                                     </div>
@@ -352,7 +352,7 @@
                                                                 <label>Arquivo da 3ª Proposta</label>
                                                                 <input type="file" class="form-control"
                                                                     id="uploadProposta3" name="arquivoProposta3[]"
-                                                                    accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" required>
+                                                                    accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" >
                                                             </div>
                                                         </div>
 
@@ -371,7 +371,7 @@
                                                                 <label>Link da 3ª Proposta</label>
                                                                 <input type="text" class="form-control mt-2"
                                                                     id="linkProposta3" name="linkProposta3[]"
-                                                                    placeholder="Link da Proposta" required>
+                                                                    placeholder="Link da Proposta" >
                                                             </div>
                                                         </div>
                                                     </div>
@@ -379,6 +379,13 @@
                                             </div>
                                         </div>
                                     @endforeach
+                                </div>
+                                <div class="col-12 mt-3" id="listaMateriais" style="display: block;">
+                                    <div class="col-md-4">
+                                        <label>Nome do Material</label>
+                                        <input type="text" class="form-control"
+                                            value="{{ $material->nome ?? 'Não especificado' }}" disabled>
+                                    </div> 
                                 </div>
                             </div>
                         </div>
@@ -412,7 +419,7 @@
                             <div class="col-md">
                                 <label>Categoria do Material</label>
                                 <select class="form-select  select2" id="categoriaMaterial"
-                                    style="border: 1px solid #999999; padding: 5px;" name="categoriaMaterial" required>
+                                    style="border: 1px solid #999999; padding: 5px;" name="categoriaMaterial" >
                                     <option value="" disabled selected>Selecione...
                                     </option>
                                     @foreach ($buscaCategoria as $buscaCategorias)
@@ -425,7 +432,7 @@
                             <div class="col-md">
                                 <label>Nome do Material</label>
                                 <input type="text" class="form-control" name="nomeMaterial"
-                                    placeholder="Digite o Nome do Material" required>
+                                    placeholder="Digite o Nome do Material" >
                             </div>
                             <div class="col-md-2">
                                 <label>Unid. Medida</label>
@@ -442,7 +449,7 @@
                             </div>
                             <div class="col-md-2">
                                 <label>Quantidade</label>
-                                <input type="number" class="form-control" name="quantidadeMaterial" required>
+                                <input type="number" class="form-control" name="quantidadeMaterial" >
                             </div>
                         </div>
                         <div class="row material-item" style="margin-top: 20px">
@@ -547,6 +554,8 @@
                     btnPorMaterial.setAttribute('aria-selected', 'false');
 
                     listaMateriais.style.display = 'none';
+                    listaEmpresa.style.display = 'block';
+
                 } else if (activeButton === 'material') {
                     btnPorMaterial.classList.add('btn-primary');
                     btnPorMaterial.classList.remove('btn-secondary');
@@ -557,6 +566,7 @@
                     btnPorEmpresa.setAttribute('aria-selected', 'false');
 
                     listaMateriais.style.display = 'block';
+                    listaEmpresa.style.display = 'none';
 
                     if (!materialAdicionado) {
                         addMaterial();

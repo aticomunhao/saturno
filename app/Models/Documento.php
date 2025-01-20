@@ -13,18 +13,20 @@ Documento extends Model
     protected $table = "documento";
 
     protected $fillable = [
-        'numero',
         'dt_doc',
         'id_tp_doc',
         'valor',
         'id_empresa',
         'id_setor',
-        'vencedor',
+        'vencedor_inicial',
         'id_sol_sv',
-        'is_sol_mat',
+        'mat_proposta',
         'dt_validade',
         'end_arquivo',
+        'numero',
         'tempo_garantia_dias',
+        'vencedor_geral',
+        'link_proposta',
     ];
 
     public $timestamps = false;

@@ -188,8 +188,8 @@
                     </div>
                     <div class="col-md-4 mb-3">
                         <label>Valor</label>
-                        <input type="text" class="form-control valor" name="valor[]"
-                            placeholder="Digite o valor da proposta" oninput="formatarValorMoeda(this)">
+                        <input type="text" class="form-control valor" name="valor[]" id="valorPrincipal"
+                            placeholder="Digite o valor da proposta" >
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="dt_inicial">Data da Proposta</label>

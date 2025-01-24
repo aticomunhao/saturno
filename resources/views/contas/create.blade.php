@@ -5,13 +5,12 @@
     <div class="container">
         <form action="{{ route('conta-contabil.store') }}" method="POST">
             @csrf
-            <div class="card" style="border-color: #355089;">
+            <div class="card shadow" style="border-color: #355089;">
                 <div class="card-header">
                     <h5 style="color: #355089;">Inserir Conta Contábil</h5>
                 </div>
                 <div class="card-body">
                     <p class="card-text">
-
                     <fieldset class="mb-3">
                         <div class="row g-3">
                             <div class="col-md-2">

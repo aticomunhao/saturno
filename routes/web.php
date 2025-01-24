@@ -49,7 +49,7 @@ use App\Http\Controllers\CatalogoEmpresaController;
 use App\Http\Controllers\CatalogoServicoController;
 use App\Http\Controllers\AquisicaoMaterialController;
 use App\Http\Controllers\ValorCompraController;
-use App\Models\ContaContabil;
+
 
 /*
 |--------------------------------------------------------------------------

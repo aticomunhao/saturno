@@ -15,17 +15,94 @@ class ContaContabilController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+
         $contas_contabeis = ContaContabil::with(
             'natureza_contabil',
             'catalogo_contabil',
             'grupo_contabil',
             'classe_contabil'
-        )->get();
-        $contador_contabil = ContaContabil::count();
+        );
 
-        return view("contas.index", compact("contas_contabeis"));
+        // Parte dos campos estrangeiros para pesquisa.
+        $grupos_contabeis = TipoGrupoContaContabil::all();
+        $naturezas_contabeis = TipoNaturezaContaContabil::all();
+        $catalogos_contabeis = TipoCatalogoContaContabil::all();
+        $classes_contabeis = TipoClasseContaContabil::all();
+
+        // Contador de Contas Contábeis
+        $contador_contabil_conta_contabil = ContaContabil::count();
+
+        // Campos para pesquisa
+        $pesquisa_descricao = $request->input('descricao');
+        $pesquisa_grupo_contabil = $request->input('grupo_contabil');
+        $pesquisa_natureza_contabil = $request->input('natureza_contabil');
+        $pesquisa_catalogo_contabil = $request->input('catalogo_contabil');
+        $pesquisa_classe_contabil = $request->input('classe_contabil');
+
+
+        // Pesquisa
+        if ($pesquisa_descricao !== null) {
+            $contas_contabeis->where('descricao', 'like', '%' . $pesquisa_descricao . '%');
+        }
+
+        if (!empty($pesquisa_grupo_contabil)) {
+            $contas_contabeis->where('id_tipo_grupo_conta_contabil', $pesquisa_grupo_contabil);
+        }
+
+        if (!empty($pesquisa_natureza_contabil)) {
+            $contas_contabeis->where('id_tipo_natureza_conta_contabil', $pesquisa_natureza_contabil);
+        }
+
+
+        if (!empty($pesquisa_catalogo_contabil)) {
+            $contas_contabeis->where('id_tipo_catalogo', $pesquisa_catalogo_contabil);
+        }
+
+        if (!empty($pesquisa_classe_contabil)) {
+            $contas_contabeis->where('id_tipo_classe_conta_contabil', $pesquisa_classe_contabil);
+        }
+
+        if (!empty($pesquisa_nivel_1)) {
+            $contas_contabeis->where('nivel_1', $pesquisa_nivel_1);
+        }
+
+        if (!empty($pesquisa_nivel_2)) {
+            $contas_contabeis->where('nivel_2', $pesquisa_nivel_2);
+        }
+
+        if (!empty($pesquisa_nivel_3)) {
+            $contas_contabeis->where('nivel_3', $pesquisa_nivel_3);
+        }
+
+
+        if (!empty($pesquisa_nivel_4)) {
+            $contas_contabeis->where('nivel_4', $pesquisa_nivel_4);
+        }
+
+        if (!empty($pesquisa_nivel_5)) {
+            $contas_contabeis->where('nivel_5', $pesquisa_nivel_5);
+        }
+
+        if (!empty($pesquisa_nivel_6)) {
+            $contas_contabeis->where('nivel_6', $pesquisa_nivel_6);
+        }
+
+        // Agora execute a consulta
+
+        $numeros = range(1, 100);
+        $contas_contabeis =  $contas_contabeis->get();
+        // Para debug:
+        // dd($contas_contabeis->toSql(), $contas_contabeis->getBindings());
+        return view("contas.index", compact(
+            "contas_contabeis",
+            "grupos_contabeis",
+            "naturezas_contabeis",
+            "catalogos_contabeis",
+            "classes_contabeis",
+            "numeros",
+        ));
     }
 
     /**

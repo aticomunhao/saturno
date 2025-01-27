@@ -18,8 +18,10 @@ use App\Models\ModelMarca;
 use App\Models\ModelSexo;
 use App\Models\ModelTamanho;
 use App\Models\Empresa;
+use App\Models\ItemCatalogoMaterial;
 use App\Models\MatProposta;
 use App\Models\ModelUnidadeMedida;
+use App\Models\ModelPessoa;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Validator;
@@ -178,17 +180,27 @@ class AquisicaoMaterialController extends Controller
     }
     public function create(Request $request)
     {
+
         $setor = session('usuario.setor');
+        $idPessoa = session('usuario.id_pessoa');
+
+        $buscaPessoa = ModelPessoa::find($idPessoa);
         $buscaSetor = Setor::whereIn('id', $setor)->get();
 
-        return view('solMaterial.incluir-aquisicao-material', compact('buscaSetor'));
+        return view('solMaterial.incluir-aquisicao-material', compact('buscaSetor', 'buscaPessoa'));
     }
     public function store(Request $request)
     {
 
+        $idUsuario = session('usuario.id_pessoa');
+        //dd($setor);
+
         $solicitacaoMaterial = SolMaterial::create([
+            'data' => Carbon::now(),
             'id_setor' => $request->idSetor,
             'motivo' => $request->motivo,
+            'status' => '1',
+            'id_resp_mt' => $idUsuario,
         ]);
 
         app('flasher')->addSuccess('Solicitação Criada com Sucesso, Adicione os materiais Necessários');
@@ -198,6 +210,7 @@ class AquisicaoMaterialController extends Controller
     {
         $idSolicitacao = $id;
 
+        $solicitacao = SolMaterial::with('modelPessoa', 'setor')->find($idSolicitacao);
         $setor = session('usuario.setor');
         $buscaCategoria = TipoCategoriaMt::all();
         $buscaEmpresa = Empresa::all();
@@ -206,11 +219,12 @@ class AquisicaoMaterialController extends Controller
         $buscaCor = ModelCor::all();
         $buscaFaseEtaria = ModelFaseEtaria::all();
         $buscaSexo = ModelSexo::all();
+        $bucaItemCatalogo = ItemCatalogoMaterial::all();
         $buscaUnidadeMedida = ModelUnidadeMedida::all();
-        $materiais = MatProposta::with('tipoUnidadeMedida', 'tipoCategoria', 'tipoMarca', 'tipoTamanho', 'tipoCor', 'tipoFaseEtaria', 'tipoSexo')->where('id_sol_mat', $id)->get();
+        $materiais = MatProposta::with('tipoUnidadeMedida', 'tipoItemCatalogoMaterial', 'tipoCategoria', 'tipoMarca', 'tipoTamanho', 'tipoCor', 'tipoFaseEtaria', 'tipoSexo')->where('id_sol_mat', $id)->get();
         $buscaSetor = Setor::whereIn('id', $setor)->get();
 
-        return view('solMaterial.incluir-aquisicao-material-2', compact('materiais', 'idSolicitacao', 'buscaSetor', 'buscaUnidadeMedida', 'buscaCategoria', 'buscaMarca', 'buscaTamanho', 'buscaCor', 'buscaFaseEtaria', 'buscaSexo', 'buscaEmpresa'));
+        return view('solMaterial.incluir-aquisicao-material-2', compact('solicitacao', 'bucaItemCatalogo', 'materiais', 'idSolicitacao', 'buscaSetor', 'buscaUnidadeMedida', 'buscaCategoria', 'buscaMarca', 'buscaTamanho', 'buscaCor', 'buscaFaseEtaria', 'buscaSexo', 'buscaEmpresa'));
     }
     public function store2(Request $request, $id)
     {
@@ -228,6 +242,7 @@ class AquisicaoMaterialController extends Controller
             'id_cat_material' => $request->categoriaMaterial,
             'id_tipo_unidade_medida' => $request->UnidadeMedidaMaterial,
             'quantidade' => $request->quantidadeMaterial,
+            'id_tipo_situcao' => '0',
         ]);
 
         app('flasher')->addSuccess('Material Adicionado com Sucesso');
@@ -279,69 +294,154 @@ class AquisicaoMaterialController extends Controller
         $materiais = MatProposta::where('id_sol_mat', $idSolicitacoes)->get('id');
         $solicitacao = SolMaterial::find($idSolicitacoes);
         //dd($solicitacao, $materiais, $solicitacao);
+        if ($request->botaoPorMaterial === 'selected') {
 
-        foreach ($materiais as $index => $material) {
-            $endArquivo1 = $request->hasFile('arquivoProposta1.' . $index)
-                ? $request->file('arquivoProposta1.' . $index)->store('documentos', 'public')
+            SolMaterial::where('id', $idSolicitacoes)->update([
+                'tipo_sol_material' => '2',
+            ]);
+
+            foreach ($materiais as $index => $material) {
+                $endArquivo1 = $request->hasFile('arquivoProposta1.' . $index)
+                    ? $request->file('arquivoProposta1.' . $index)->store('documentos', 'public')
+                    : null;
+
+                $endArquivo2 = $request->hasFile('arquivoProposta2.' . $index)
+                    ? $request->file('arquivoProposta2.' . $index)->store('documentos', 'public')
+                    : null;
+
+                $endArquivo3 = $request->hasFile('arquivoProposta3.' . $index)
+                    ? $request->file('arquivoProposta3.' . $index)->store('documentos', 'public')
+                    : null;
+                //dd($material);
+
+                MatProposta::where('id', $material->id)->update([
+                    'quantidade' => $request->quantidadeMaterial1[$index],
+                ]);
+
+                Documento::create([
+                    'dt_doc' => $request->dt_inicial1[$index],
+                    'id_tp_doc' => '14',
+                    'valor' => $request->valor1[$index],
+                    'id_empresa' => $request->razaoSocial1[$index],
+                    'id_setor' => $solicitacao->id_setor,
+                    'vencedor_inicial' => '1',
+                    'mat_sol_proposta' => $material->id,
+                    'dt_validade' => $request->dt_final1[$index],
+                    'end_arquivo' => $endArquivo1,
+                    'numero' => $request->numero1[$index],
+                    'tempo_garantia_dias' => $request->tempoGarantia1[$index],
+                    'vencedor_geral' => '0',
+                    'link_proposta' => $request->linkProposta1[$index],
+                ]);
+
+                Documento::create([
+                    'dt_doc' => $request->dt_inicial2[$index],
+                    'id_tp_doc' => '14',
+                    'valor' => $request->valor2[$index],
+                    'id_empresa' => $request->razaoSocial2[$index],
+                    'id_setor' => $solicitacao->id_setor,
+                    'vencedor_inicial' => '0',
+                    'mat_sol_proposta' => $material->id,
+                    'dt_validade' => $request->dt_final2[$index],
+                    'end_arquivo' => $endArquivo2,
+                    'numero' => $request->numero2[$index],
+                    'tempo_garantia_dias' => $request->tempoGarantia2[$index],
+                    'vencedor_geral' => '0',
+                    'link_proposta' => $request->linkProposta2[$index],
+                ]);
+
+                Documento::create([
+                    'dt_doc' => $request->dt_inicial3[$index],
+                    'id_tp_doc' => '14',
+                    'valor' => $request->valor3[$index],
+                    'id_empresa' => $request->razaoSocial3[$index],
+                    'id_setor' => $solicitacao->id_setor,
+                    'vencedor_inicial' => '0',
+                    'mat_sol_proposta' => $material->id,
+                    'dt_validade' => $request->dt_final3[$index],
+                    'end_arquivo' => $endArquivo3,
+                    'numero' => $request->numero3[$index],
+                    'tempo_garantia_dias' => $request->tempoGarantia3[$index],
+                    'vencedor_geral' => '0',
+                    'link_proposta' => $request->linkProposta3[$index],
+                ]);
+            }
+        } else {
+            foreach ($materiais as $index => $material) {
+                MatProposta::where('id', $material->id)->update([
+                    'valor1' => $request->valor1[$index],
+                    'valor2' => $request->valor2[$index],
+                    'valor3' => $request->valor3[$index],
+                    'quantidade' => $request->quantidadePorEmpresa[$index],
+                ]);
+            }
+
+            SolMaterial::where('id', $idSolicitacoes)->update([
+                'tipo_sol_material' => '1',
+            ]);
+
+            $endArquivo1 = $request->hasFile('arquivoProposta1.')
+                ? $request->file('arquivoProposta1.')->store('documentos', 'public')
                 : null;
 
-            $endArquivo2 = $request->hasFile('arquivoProposta2.' . $index)
-                ? $request->file('arquivoProposta2.' . $index)->store('documentos', 'public')
+            $endArquivo2 = $request->hasFile('arquivoProposta2.')
+                ? $request->file('arquivoProposta2.')->store('documentos', 'public')
                 : null;
 
-            $endArquivo3 = $request->hasFile('arquivoProposta3.' . $index)
-                ? $request->file('arquivoProposta3.' . $index)->store('documentos', 'public')
+            $endArquivo3 = $request->hasFile('arquivoProposta3.')
+                ? $request->file('arquivoProposta3.')->store('documentos', 'public')
                 : null;
-
-            //dd($material);
 
             Documento::create([
-                'dt_doc' => $request->dt_inicial1[$index],
+                'dt_doc' => $request->dt_inicial1,
                 'id_tp_doc' => '14',
-                'valor' => $request->valor1[$index],
-                'id_empresa' => $request->razaoSocial1[$index],
+                'valor' => $request->valor1,
+                'id_empresa' => $request->razaoSocial1,
                 'id_setor' => $solicitacao->id_setor,
-                'mat_proposta' => $material->id,
-                'dt_validade' => $request->dt_final1[$index],
-                'end_arquivo' => $endArquivo1,
-                'numero' => $request->numero1[$index],
-                'tempo_garantia_dias' => $request->tempoGarantia1[$index],
                 'vencedor_inicial' => '1',
-                'link_proposta' => $request->linkProposta1[$index],
+                'mat_sol_proposta' => $id,
+                'dt_validade' => $request->dt_final1,
+                'end_arquivo' => $endArquivo1,
+                'numero' => $request->numero1,
+                'tempo_garantia_dias' => $request->tempoGarantia1,
+                'vencedor_geral' => '0',
+                'link_proposta' => $request->linkProposta1,
             ]);
 
             Documento::create([
-                'dt_doc' => $request->dt_inicial2[$index],
+                'dt_doc' => $request->dt_inicial2,
                 'id_tp_doc' => '14',
-                'valor' => $request->valor2[$index],
-                'id_empresa' => $request->razaoSocial2[$index],
+                'valor' => $request->valor2,
+                'id_empresa' => $request->razaoSocial2,
                 'id_setor' => $solicitacao->id_setor,
-                'mat_proposta' => $material->id,
-                'dt_validade' => $request->dt_final2[$index],
+                'vencedor_inicial' => '0',
+                'mat_sol_proposta' => $id,
+                'dt_validade' => $request->dt_final2,
                 'end_arquivo' => $endArquivo2,
-                'numero' => $request->numero2[$index],
-                'tempo_garantia_dias' => $request->tempoGarantia2[$index],
-                'vencedor_inicial' => '0',
-                'link_proposta' => $request->linkProposta2[$index],
+                'numero' => $request->numero2,
+                'tempo_garantia_dias' => $request->tempoGarantia2,
+                'vencedor_geral' => '0',
+                'link_proposta' => $request->linkProposta2,
             ]);
 
             Documento::create([
-                'dt_doc' => $request->dt_inicial3[$index],
+                'dt_doc' => $request->dt_inicial3,
                 'id_tp_doc' => '14',
-                'valor' => $request->valor3[$index],
-                'id_empresa' => $request->razaoSocial3[$index],
+                'valor' => $request->valor3,
+                'id_empresa' => $request->razaoSocial3,
                 'id_setor' => $solicitacao->id_setor,
-                'mat_proposta' => $material->id,
-                'dt_validade' => $request->dt_final3[$index],
-                'end_arquivo' => $endArquivo3,
-                'numero' => $request->numero3[$index],
-                'tempo_garantia_dias' => $request->tempoGarantia3[$index],
                 'vencedor_inicial' => '0',
-                'link_proposta' => $request->linkProposta3[$index],
+                'mat_sol_proposta' => $id,
+                'dt_validade' => $request->dt_final3,
+                'end_arquivo' => $endArquivo3,
+                'numero' => $request->numero3,
+                'tempo_garantia_dias' => $request->tempoGarantia3,
+                'vencedor_geral' => '0',
+                'link_proposta' => $request->linkProposta3,
             ]);
         }
 
-        app('flasher')->addSuccess('Materiais e Propostas Adicionados com Sucesso');
+        app('flasher')->addSuccess('Propostas Adicionadas com Sucesso');
         return redirect("/gerenciar-aquisicao-material");
     }
 }

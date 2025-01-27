@@ -26,6 +26,9 @@ class MatProposta extends Model
         'id_sol_mat',
         'nome',
         'quantidade',
+        'valor1',
+        'valor2',
+        'valor3',
     ];
 
     public function tipoCategoria()
@@ -55,5 +58,9 @@ class MatProposta extends Model
     public function tipoUnidadeMedida()
     {
         return $this->belongsTo(ModelUnidadeMedida::class, 'id_tipo_unidade_medida');
+    }
+    public function tipoItemCatalogoMaterial()
+    {
+        return $this->belongsTo(ItemCatalogoMaterial::class, 'id_tipo_item_catalogo');
     }
 }

@@ -30,8 +30,9 @@ class solMaterial extends Model
         'dt_usu_daf',
         'dt_usu_dir',
         'dt_usu_fin',
+        'tipo_sol_material',
     ];
-    
+
     public function catalogoMaterial()
     {
         return $this->belongsTo(CatalogoMaterial::class, 'id_tp_mt');
@@ -45,5 +46,13 @@ class solMaterial extends Model
     public function setor()
     {
         return $this->belongsTo(Setor::class, 'id_setor');
+    }
+    public function modelPessoa()
+    {
+        return $this->belongsTo(ModelPessoa::class, 'id_resp_mt');
+    }
+    public function tipoSolMat()
+    {
+        return $this->belongsTo(tipoSolMat::class, 'tip_sol_mat');
     }
 }

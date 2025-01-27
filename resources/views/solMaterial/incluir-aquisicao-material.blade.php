@@ -25,6 +25,12 @@
                             <div class="row" style="margin-left: 5px;">
                                 <div style="display: flex; gap: 20px; align-items: flex-end;">
                                     <div class="col-md-3 col-sm-12">
+                                        <label>Nome do Solicitante</label>
+                                        <br>
+                                        <input type="text" class="form-control"
+                                            value="{{ $buscaPessoa->nome_completo ?? 'Não especificado' }}" disabled>
+                                    </div>
+                                    <div class="col-md-3 col-sm-12">
                                         <label>Selecione seu Setor</label>
                                         <br>
                                         <select class="form-select select2" style="border: 1px solid #999999; padding: 5px;"

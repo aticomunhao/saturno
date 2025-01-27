@@ -20,7 +20,7 @@ Documento extends Model
         'id_setor',
         'vencedor_inicial',
         'id_sol_sv',
-        'mat_proposta',
+        'mat_sol_proposta',
         'dt_validade',
         'end_arquivo',
         'numero',

@@ -6,5 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ModelPessoa extends Model
 {
-    protected $table ='pessoa';
+    protected $table ='pessoas';
+
+    protected $connection = 'pgsql2';
+
 }

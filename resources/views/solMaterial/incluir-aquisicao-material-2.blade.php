@@ -20,6 +20,32 @@
                             </div>
                         </div>
                         <div class="card-body">
+                            <h5>Identificação da Solicitação</h5>
+                            <hr>
+                            <div class="row">
+                                <div style="display: flex; gap: 20px; align-items: flex-end;">
+                                    <div class="col-md-3 col-sm-12">
+                                        <label>Nome do Solicitante</label>
+                                        <br>
+                                        <input type="text" class="form-control"
+                                            value="{{ $solicitacao->modelPessoa->nome_completo ?? 'Não especificado' }}"
+                                            disabled>
+                                    </div>
+                                    <div class="col-md-3 col-sm-12">
+                                        <label>Selecione seu Setor</label>
+                                        <br>
+                                        <input type="text" class="form-control"
+                                            value="{{ $solicitacao->setor->nome ?? 'Não especificado' }}" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-12 mt-3">
+                                    <label>Motivo</label>
+                                    <br>
+                                    <input type="text" class="form-control"
+                                            value="{{ $solicitacao->motivo ?? 'Não especificado' }}" disabled>
+                                </div>
+                            </div>
+                            <br>
                             <h5>Selecione o Tipo de Solicitação</h5>
                             <hr>
                             <div style="display: flex; justify-content: space-between; align-items: flex-end;">
@@ -27,11 +53,11 @@
                                 <div style="flex-grow: 1; display: flex; justify-content: center;">
                                     <div class="btn-group" role="group" aria-label="Tipo de Solicitação">
                                         <button type="button" class="btn btn-primary" id="btnPorMaterial"
-                                            aria-selected="true">
+                                            aria-selected="true" name="botaoPorMaterial">
                                             Por Material
                                         </button>
                                         <button type="button" class="btn btn-secondary" id="btnPorEmpresa"
-                                            aria-selected="false">
+                                            aria-selected="false" name="botaoPorEmpresa">
                                             Por Empresa
                                         </button>
                                     </div>
@@ -70,7 +96,7 @@
                                                     </div>
                                                     <div class="col-md-1">
                                                         <label>Quantidade</label>
-                                                        <input type="text" class="form-control"
+                                                        <input type="text" class="form-control" name="quantidadeMaterial1[]"
                                                             value="{{ $material->quantidade ?? 'Não especificado' }}">
                                                     </div>
                                                 </div>
@@ -402,13 +428,13 @@
                                                 <!-- Número da Proposta -->
                                                 <div class="col-md-4 mb-3">
                                                     <label>Número da Proposta Principal</label>
-                                                    <input type="text" class="form-control" name="numero1[]"
+                                                    <input type="text" class="form-control" name="numero1"
                                                         placeholder="Digite o Número da proposta">
                                                 </div>
                                                 <!-- Nome da Empresa -->
                                                 <div class="col-md-4 mb-3">
                                                     <label>Nome da Empresa Principal</label>
-                                                    <select class="form-select select2" name="razaoSocial1[]"
+                                                    <select class="form-select select2" name="razaoSocial1"
                                                         style="border: 1px solid #999999; padding: 5px;">
                                                         <option></option>
                                                         @foreach ($buscaEmpresa as $buscaEmpresas)
@@ -421,9 +447,9 @@
                                                 </div>
                                                 <!-- Valor -->
                                                 <div class="col-md-4 mb-3">
-                                                    <label>Valor da Proposta Principal</label>
+                                                    <label>Valor Total da Proposta Principal</label>
                                                     <input type="text" class="form-control valor valor-proposta"
-                                                        name="valor1[]" placeholder="Digite o valor da proposta">
+                                                        name="valor1" placeholder="Digite o valor da proposta">
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -431,14 +457,14 @@
                                                 <div class="col-md-4 mb-3">
                                                     <label>Data da Criação da
                                                         Proposta Principal</label>
-                                                    <input type="date" class="form-control" name="dt_inicial1[]"
+                                                    <input type="date" class="form-control" name="dt_inicial1"
                                                         placeholder="Digite a data da proposta">
                                                 </div>
 
                                                 <!-- Data Limite da Proposta -->
                                                 <div class="col-md-4 mb-3">
                                                     <label>Data Limite da Proposta Principal</label>
-                                                    <input type="date" class="form-control" name="dt_final1[]"
+                                                    <input type="date" class="form-control" name="dt_final1"
                                                         placeholder="Digite a data final do prazo da proposta">
                                                 </div>
 
@@ -446,8 +472,7 @@
                                                 <div class="col-md-4 mb-3">
                                                     <label>Arquivo da Proposta Principal</label>
                                                     <input type="file" class="form-control" id="uploadProposta1"
-                                                        name="arquivoProposta1[]"
-                                                        accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
+                                                        name="arquivoProposta1" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
                                                 </div>
                                             </div>
 
@@ -457,14 +482,14 @@
                                                     <label>Tempo de Garantia (em
                                                         dias)</label>
                                                     <input type="number" class="form-control" id="tempoGarantiaInput"
-                                                        name="tempoGarantia1[]" placeholder="Digite o tempo de garantia">
+                                                        name="tempoGarantia1" placeholder="Digite o tempo de garantia">
                                                 </div>
 
                                                 <!-- Link da Proposta -->
                                                 <div class="col-md-4 mb-3">
                                                     <label>Link da Proposta Principal</label>
                                                     <input type="text" class="form-control mt-2" id="linkProposta1"
-                                                        name="linkProposta1[]" placeholder="Link da Proposta">
+                                                        name="linkProposta1" placeholder="Link da Proposta">
                                                 </div>
                                             </div>
                                         </div>
@@ -487,14 +512,14 @@
                                                 <!-- Número da Proposta -->
                                                 <div class="col-md-4 mb-3">
                                                     <label>Número da 2ª Proposta</label>
-                                                    <input type="text" class="form-control" name="numero2[]"
+                                                    <input type="text" class="form-control" name="numero2"
                                                         placeholder="Digite o Número da proposta">
                                                 </div>
 
                                                 <!-- Nome da Empresa -->
                                                 <div class="col-md-4 mb-3">
                                                     <label>Nome 2ª Empresa</label>
-                                                    <select class="form-select select2" name="razaoSocial2[]"
+                                                    <select class="form-select select2" name="razaoSocial2"
                                                         style="border: 1px solid #999999; padding: 5px;">
                                                         <option></option>
                                                         @foreach ($buscaEmpresa as $buscaEmpresas)
@@ -508,9 +533,9 @@
 
                                                 <!-- Valor -->
                                                 <div class="col-md-4 mb-3">
-                                                    <label>Valor da 2ª Proposta</label>
+                                                    <label>Valor Total da 2ª Proposta</label>
                                                     <input type="text" class="form-control valor valor-proposta"
-                                                        name="valor2[]" placeholder="Digite o valor da proposta">
+                                                        name="valor2" placeholder="Digite o valor da proposta">
                                                 </div>
                                             </div>
 
@@ -519,14 +544,14 @@
                                                 <div class="col-md-4 mb-3">
                                                     <label>Data da Criação da 2ª
                                                         Proposta</label>
-                                                    <input type="date" class="form-control" name="dt_inicial2[]"
+                                                    <input type="date" class="form-control" name="dt_inicial2"
                                                         placeholder="Digite a data da proposta">
                                                 </div>
 
                                                 <!-- Data Limite da Proposta -->
                                                 <div class="col-md-4 mb-3">
                                                     <label>Data Limite da 2ª Proposta</label>
-                                                    <input type="date" class="form-control" name="dt_final2[]"
+                                                    <input type="date" class="form-control" name="dt_final2"
                                                         placeholder="Digite a data final do prazo da proposta">
                                                 </div>
 
@@ -534,8 +559,7 @@
                                                 <div class="col-md-4 mb-3">
                                                     <label>Arquivo da 2ª Proposta</label>
                                                     <input type="file" class="form-control" id="uploadProposta2"
-                                                        name="arquivoProposta2[]"
-                                                        accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
+                                                        name="arquivoProposta2" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
                                                 </div>
                                             </div>
 
@@ -545,14 +569,14 @@
                                                     <label>Tempo de Garantia (em
                                                         dias)</label>
                                                     <input type="number" class="form-control" id="tempoGarantiaInput2"
-                                                        name="tempoGarantia2[]" placeholder="Digite o tempo de garantia">
+                                                        name="tempoGarantia2" placeholder="Digite o tempo de garantia">
                                                 </div>
 
                                                 <!-- Link da Proposta -->
                                                 <div class="col-md-4 mb-3">
                                                     <label>Link da 2ª Proposta</label>
                                                     <input type="text" class="form-control mt-2" id="linkProposta2"
-                                                        name="linkProposta2[]" placeholder="Link da Proposta">
+                                                        name="linkProposta2" placeholder="Link da Proposta">
                                                 </div>
                                             </div>
                                         </div>
@@ -575,14 +599,14 @@
                                                 <!-- Número da Proposta -->
                                                 <div class="col-md-4 mb-3">
                                                     <label>Número da 3ª Proposta</label>
-                                                    <input type="text" class="form-control" name="numero3[]"
+                                                    <input type="text" class="form-control" name="numero3"
                                                         placeholder="Digite o Número da proposta">
                                                 </div>
 
                                                 <!-- Nome da Empresa -->
                                                 <div class="col-md-4 mb-3">
                                                     <label>Nome 3ª Empresa</label>
-                                                    <select class="form-select select2" name="razaoSocial3[]"
+                                                    <select class="form-select select2" name="razaoSocial3"
                                                         style="border: 1px solid #999999; padding: 5px;">
                                                         <option></option>
                                                         @foreach ($buscaEmpresa as $buscaEmpresas)
@@ -596,9 +620,9 @@
 
                                                 <!-- Valor -->
                                                 <div class="col-md-4 mb-3">
-                                                    <label>Valor da 3ª Proposta</label>
+                                                    <label>Valor Total da 3ª Proposta</label>
                                                     <input type="text" class="form-control valor valor-proposta"
-                                                        name="valor3[]" placeholder="Digite o valor da proposta">
+                                                        name="valor3" placeholder="Digite o valor da proposta">
                                                 </div>
                                             </div>
 
@@ -607,14 +631,14 @@
                                                 <div class="col-md-4 mb-3">
                                                     <label>Data da Criação da 3ª
                                                         Proposta</label>
-                                                    <input type="date" class="form-control" name="dt_inicial3[]"
+                                                    <input type="date" class="form-control" name="dt_inicial3"
                                                         placeholder="Digite a data da proposta">
                                                 </div>
 
                                                 <!-- Data Limite da Proposta -->
                                                 <div class="col-md-4 mb-3">
                                                     <label>Data Limite da 3ª Proposta</label>
-                                                    <input type="date" class="form-control" name="dt_final3[]"
+                                                    <input type="date" class="form-control" name="dt_final3"
                                                         placeholder="Digite a data final do prazo da proposta">
                                                 </div>
 
@@ -622,8 +646,7 @@
                                                 <div class="col-md-4 mb-3">
                                                     <label>Arquivo da 3ª Proposta</label>
                                                     <input type="file" class="form-control" id="uploadProposta3"
-                                                        name="arquivoProposta3[]"
-                                                        accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
+                                                        name="arquivoProposta3" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
                                                 </div>
                                             </div>
 
@@ -633,14 +656,14 @@
                                                     <label>Tempo de Garantia (em
                                                         dias)</label>
                                                     <input type="number" class="form-control" id="tempoGarantiaInput3"
-                                                        name="tempoGarantia3[]" placeholder="Digite o tempo de garantia">
+                                                        name="tempoGarantia3" placeholder="Digite o tempo de garantia">
                                                 </div>
 
                                                 <!-- Link da Proposta -->
                                                 <div class="col-md-4 mb-3">
                                                     <label>Link da 3ª Proposta</label>
                                                     <input type="text" class="form-control mt-2" id="linkProposta3"
-                                                        name="linkProposta3[]" placeholder="Link da Proposta">
+                                                        name="linkProposta3" placeholder="Link da Proposta">
                                                 </div>
                                             </div>
                                         </div>
@@ -694,7 +717,8 @@
                                                     </div>
                                                     <div class="col-md-1">
                                                         <label>Quantidade</label>
-                                                        <input type="text" class="form-control" name="quantidadePorEmpresa[]"
+                                                        <input type="text" class="form-control"
+                                                            name="quantidadePorEmpresa[]"
                                                             value="{{ $material->quantidade ?? 'Não especificado' }}">
                                                     </div>
                                                     <div class="col-md-1">
@@ -811,8 +835,16 @@
                             </div>
                             <div class="col-md">
                                 <label>Nome do Material</label>
-                                <input type="text" class="form-control" name="nomeMaterial"
-                                    placeholder="Digite o Nome do Material">
+                                <select class="form-select  select2" id="categoriaMaterial"
+                                    style="border: 1px solid #999999; padding: 5px;" name="categoriaMaterial">
+                                    <option value="" disabled selected>Selecione...
+                                    </option>
+                                    @foreach ($bucaItemCatalogo as $bucaItemCatalogos)
+                                        <option value="{{ $bucaItemCatalogos->id }}">
+                                            {{ $bucaItemCatalogos->nome }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="col-md-2">
                                 <label>Unid. Medida</label>

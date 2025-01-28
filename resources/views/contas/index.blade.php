@@ -22,9 +22,11 @@
                             <label for="idgrupocontabil" class="form-label">Grupo Contabil</label>
                             <div class="mb-3">
                                 <select class="form-select border-secondary" name="grupo_contabil" id="idgrupocontabil">
-                                    <option value=></option>
+                                    <option value=>Todos</option>
                                     @foreach ($grupos_contabeis as $grupo_contabil)
-                                        <option value="{{ $grupo_contabil->id }}">{{ $grupo_contabil->nome }}</option>
+                                        <option value="{{ $grupo_contabil->id }}"
+                                            {{ $grupo_contabil->id == request('grupo_contabil') ? 'selected' : '' }}>
+                                            {{ $grupo_contabil->nome }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -35,9 +37,11 @@
                                 <select class="form-select border-secondary" name="natureza_contabil"
                                     id="idnaturezacontabil">
                                     <option value="
-                                    "></option>
+                                    ">Todos</option>
                                     @foreach ($naturezas_contabeis as $natureza_contabil)
-                                        <option value="{{ $natureza_contabil->id }}">{{ $natureza_contabil->nome }}</option>
+                                        <option value="{{ $natureza_contabil->id }}"
+                                            {{ $natureza_contabil->id == request('natureza_contabil') ? 'selected' : '' }}>
+                                            {{ $natureza_contabil->nome }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -49,9 +53,11 @@
                                 <select class="form-select border-secondary" name="catalogo_contabil"
                                     id="idcatalogocontabil">
                                     <option value="
-                                    "></option>
+                                    ">Todos</option>
                                     @foreach ($catalogos_contabeis as $catalogo_contabil)
-                                        <option value="{{ $catalogo_contabil->id }}"  {{ $catalogo_contabil->id == request('catalogo_contabil') ? 'selected' : '' }}  >{{ $catalogo_contabil->nome }}</option>
+                                        <option value="{{ $catalogo_contabil->id }}"
+                                            {{ $catalogo_contabil->id == request('catalogo_contabil') ? 'selected' : '' }}>
+                                            {{ $catalogo_contabil->nome }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -61,9 +67,11 @@
                             <div class="mb-3">
                                 <select class="form-select border-secondary" name="classe_contabil" id="idclassecontabil">
                                     <option value="
-                                    "></option>
+                                    ">Todos</option>
                                     @foreach ($classes_contabeis as $classe_contabil)
-                                        <option value="{{ $classe_contabil->id }}">{{ $classe_contabil->nome }}</option>
+                                        <option value="{{ $classe_contabil->id }}"
+                                            {{ $catalogo_contabil->id == request('classe_contabil') ? 'selected' : '' }}>
+                                            {{ $classe_contabil->nome }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -73,86 +81,93 @@
                         </div>
                     </div>
                     <hr>
-                    <h4 class="text-black fw-bold border-bottom pb-2">Classificação</h4>
-                    <div class="row">
-                        <div class="col-md-2 col-sm-12">
-                            <label for="idcatalogocontabil" class="form-label">
-                                Nivel 1</label>
-                            <div class="mb-3">
-                                <select class="form-select border-secondary" name="nivel_1" id="idcatalogocontabil">
-                                    <option value="
-                                    "></option>
-                                    @foreach ($numeros as $numero)
-                                        <option value="{{ $numero }}">{{ $numero }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-2 col-sm-12">
-                            <label for="idcatalogocontabil" class="form-label">
-                                Nivel 2</label>
-                            <div class="mb-3">
-
-                                <select class="form-select border-secondary" name="nivel_2" id="idcatalogocontabil">
-                                    <option value=""></option>
-                                    @foreach ($numeros as $numero)
-                                        <option value="{{ $numero }}">{{ $numero }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-2 col-sm-12">
-                            <label for="idcatalogocontabil" class="form-label">
-                                Nivel 3</label>
-                            <div class="mb-3">
-                                <select class="form-select border-secondary" name="nivel_3" id="idcatalogocontabil">
-                                    <option value="
-                                    "></option>
-                                    @foreach ($numeros as $numero)
-                                        <option value="{{ $numero }}">{{ $numero }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-2 col-sm-12">
-                            <label for="idcatalogocontabil" class="form-label">
-                                Nivel 4</label>
-                            <div class="mb-3">
-                                <select class="form-select border-secondary" name="nivel_4" id="idcatalogocontabil">
-                                    <option value=""></option>
-                                    @foreach ($numeros as $numero)
-                                        <option value="{{ $numero }}">{{ $numero }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-2 col-sm-12">
-                            <label for="idcatalogocontabil" class="form-label">
-                                Nivel 5</label>
-                            <div class="mb-3">
-                                <select class="form-select border-secondary" name="nivel_5" id="idcatalogocontabil">
-                                    <option value=""></option>
-                                    @foreach ($numeros as $numero)
-                                        <option value="{{ $numero }}">{{ $numero }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-2 col-sm-12">
-                            <label for="idcatalogocontabil" class="form-label">
-                                Nivel 6</label>
-                            <div class="mb-3">
-                                <select class="form-select border-secondary" name="nivel_6" id="idcatalogocontabil">
-                                    <option value=""></option>
-                                    @foreach ($numeros as $numero)
-                                        <option value="{{ $numero }}">{{ $numero }}</option>
-                                    @endforeach
-                                </select>
+                    <div class="accordion" id="accordionExample">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Classificação
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                                data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <div class="col-md-2 col-sm-12">
+                                            <label for="idnivel1" class="form-label">Nivel 1</label>
+                                            <div class="mb-3">
+                                                <select class="form-select border-secondary" name="nivel_1" id="idnivel1">
+                                                    <option value="">Todos</option>
+                                                    @foreach ($numeros as $numero)
+                                                        <option value="{{ $numero }}">{{ $numero }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-12">
+                                            <label for="idnivel2" class="form-label">Nivel 2</label>
+                                            <div class="mb-3">
+                                                <select class="form-select border-secondary" name="nivel_2" id="idnivel2">
+                                                    <option value="">Todos</option>
+                                                    @foreach ($numeros as $numero)
+                                                        <option value="{{ $numero }}">{{ $numero }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-12">
+                                            <label for="idnivel3" class="form-label">Nivel 3</label>
+                                            <div class="mb-3">
+                                                <select class="form-select border-secondary" name="nivel_3" id="idnivel3">
+                                                    <option value="">Todos</option>
+                                                    @foreach ($numeros as $numero)
+                                                        <option value="{{ $numero }}">{{ $numero }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-12">
+                                            <label for="idnivel4" class="form-label">Nivel 4</label>
+                                            <div class="mb-3">
+                                                <select class="form-select border-secondary" name="nivel_4"
+                                                    id="idnivel4">
+                                                    <option value="">Todos</option>
+                                                    @foreach ($numeros as $numero)
+                                                        <option value="{{ $numero }}">{{ $numero }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-12">
+                                            <label for="idnivel5" class="form-label">Nivel 5</label>
+                                            <div class="mb-3">
+                                                <select class="form-select border-secondary" name="nivel_5"
+                                                    id="idnivel5">
+                                                    <option value="">Todos</option>
+                                                    @foreach ($numeros as $numero)
+                                                        <option value="{{ $numero }}">{{ $numero }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-12">
+                                            <label for="idnivel6" class="form-label">Nivel 6</label>
+                                            <div class="mb-3">
+                                                <select class="form-select border-secondary" name="nivel_6"
+                                                    id="idnivel6">
+                                                    <option value="">Todos</option>
+                                                    @foreach ($numeros as $numero)
+                                                        <option value="{{ $numero }}">{{ $numero }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </form>
-
                 <hr>
                 <h5 class="card-title">
                     <div class="row justify-content-end">

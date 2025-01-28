@@ -65,6 +65,7 @@ class ContaContabilController extends Controller
         }
 
         if (!empty($pesquisa_nivel_1)) {
+            dd($pesquisa_nivel_1);
             $contas_contabeis->where('nivel_1', $pesquisa_nivel_1);
         }
 

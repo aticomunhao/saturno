@@ -9,5 +9,5 @@ class TipoStatusSolSv extends Model
 {
     use HasFactory;
 
-    protected $table = 'tipo_status_sol_sv';
+    protected $table = 'tipo_status';
 }

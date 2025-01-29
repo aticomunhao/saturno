@@ -63,4 +63,8 @@ class MatProposta extends Model
     {
         return $this->belongsTo(ItemCatalogoMaterial::class, 'id_tipo_item_catalogo');
     }
+    public function solMaterial()
+    {
+        return $this->belongsTo( SolMaterial::class,'id_sol_mat');
+    }
 }

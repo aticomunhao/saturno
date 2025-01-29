@@ -118,7 +118,6 @@
                                                 </th>
                                                 <th>NÚMERO</th>
                                                 <th>DATA</th>
-                                                <th>TIPO MATERIAL</th>
                                                 <th>SETOR</th>
                                                 <th>PRIORIDADE</th>
                                                 <th>STATUS</th>
@@ -140,7 +139,6 @@
                                                     </td>
                                                     <td>{{ $aquisicaos->id }}</td>
                                                     <td>{{ \Carbon\Carbon::parse($aquisicaos->data)->format('d/m/Y') }}</td>
-                                                    <td>{{ $aquisicaos->CatalogoMaterial->descricao ?? 'N/A' }}</td>
                                                     <td>{{ $aquisicaos->setor->nome ?? 'N/A'}}</td>
                                                     <td>{{ $aquisicaos->prioridade ?? 'N/A'}}</td>
                                                     <td>{{ $aquisicaos->tipoStatus->nome ?? 'N/A'}}</td>

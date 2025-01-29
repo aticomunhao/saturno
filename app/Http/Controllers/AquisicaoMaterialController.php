@@ -39,7 +39,7 @@ class AquisicaoMaterialController extends Controller
         $setor = session('usuario.setor');
 
         //dd($setor);
-        $query = solMaterial::with(['catalogoMaterial', 'tipoStatus', 'setor']);
+        $query = solMaterial::with(['matProposta', 'tipoStatus', 'setor']);
 
         if ($request->status_material) {
             $query->where('status', $request->status_material);
@@ -238,7 +238,7 @@ class AquisicaoMaterialController extends Controller
             'id_sexo' => $request->sexoMaterial,
             'dt_cadastro' => Carbon::now(),
             'id_sol_mat' => $idSolicitacao,
-            'nome' => $request->nomeMaterial,
+            'id_tipo_item_catalogo' => $request->nomeMaterial,
             'id_cat_material' => $request->categoriaMaterial,
             'id_tipo_unidade_medida' => $request->UnidadeMedidaMaterial,
             'quantidade' => $request->quantidadeMaterial,
@@ -271,6 +271,11 @@ class AquisicaoMaterialController extends Controller
         $fases = ModelFaseEtaria::where('id_categoria_material', $categoriaId)->get(['id', 'nome']);
         return response()->json($fases);
     }
+    public function getNomes($categoriaId)
+    {
+        $nomes = itemCatalogoMaterial::where('id_categoria_material', $categoriaId)->get(['id', 'nome']);
+        return response()->json($nomes);
+    }
     public function destroyMaterial(Request $request)
     {
         // Busca e exclusão do material
@@ -290,13 +295,15 @@ class AquisicaoMaterialController extends Controller
     }
     public function store3(Request $request, $id)
     {
+        //dd($request->all());
         $idSolicitacoes = $id;
+        //dd($id);
         $materiais = MatProposta::where('id_sol_mat', $idSolicitacoes)->get('id');
         $solicitacao = SolMaterial::find($idSolicitacoes);
         //dd($solicitacao, $materiais, $solicitacao);
-        if ($request->botaoPorMaterial === 'selected') {
+        if ($request->activeButton === 'material') {
 
-            SolMaterial::where('id', $idSolicitacoes)->update([
+            SolMaterial::where('id', $id)->update([
                 'tipo_sol_material' => '2',
             ]);
 
@@ -321,7 +328,7 @@ class AquisicaoMaterialController extends Controller
                 Documento::create([
                     'dt_doc' => $request->dt_inicial1[$index],
                     'id_tp_doc' => '14',
-                    'valor' => $request->valor1[$index],
+                    'valor' => str_replace(['R$', ',', ' '], ['', '', ''], $request->valor1[$index]),
                     'id_empresa' => $request->razaoSocial1[$index],
                     'id_setor' => $solicitacao->id_setor,
                     'vencedor_inicial' => '1',
@@ -337,7 +344,7 @@ class AquisicaoMaterialController extends Controller
                 Documento::create([
                     'dt_doc' => $request->dt_inicial2[$index],
                     'id_tp_doc' => '14',
-                    'valor' => $request->valor2[$index],
+                    'valor' => str_replace(['R$', ',', ' '], ['', '', ''], $request->valor2[$index]),
                     'id_empresa' => $request->razaoSocial2[$index],
                     'id_setor' => $solicitacao->id_setor,
                     'vencedor_inicial' => '0',
@@ -353,7 +360,7 @@ class AquisicaoMaterialController extends Controller
                 Documento::create([
                     'dt_doc' => $request->dt_inicial3[$index],
                     'id_tp_doc' => '14',
-                    'valor' => $request->valor3[$index],
+                    'valor' => str_replace(['R$', ',', ' '], ['', '', ''], $request->valor3[$index]),
                     'id_empresa' => $request->razaoSocial3[$index],
                     'id_setor' => $solicitacao->id_setor,
                     'vencedor_inicial' => '0',
@@ -369,9 +376,9 @@ class AquisicaoMaterialController extends Controller
         } else {
             foreach ($materiais as $index => $material) {
                 MatProposta::where('id', $material->id)->update([
-                    'valor1' => $request->valor1[$index],
-                    'valor2' => $request->valor2[$index],
-                    'valor3' => $request->valor3[$index],
+                    'valor1' => str_replace(['R$', ',', ' '], ['', '', ''], $request->valorPorEmpresa1[$index]),
+                    'valor2' => str_replace(['R$', ',', ' '], ['', '', ''], $request->valorPorEmpresa2[$index]),
+                    'valor3' => str_replace(['R$', ',', ' '], ['', '', ''], $request->valorPorEmpresa3[$index]),
                     'quantidade' => $request->quantidadePorEmpresa[$index],
                 ]);
             }
@@ -380,64 +387,64 @@ class AquisicaoMaterialController extends Controller
                 'tipo_sol_material' => '1',
             ]);
 
-            $endArquivo1 = $request->hasFile('arquivoProposta1.')
-                ? $request->file('arquivoProposta1.')->store('documentos', 'public')
+            $endArquivoPorEmpresa1 = $request->hasFile('arquivoProposta1.')
+                ? $request->file('arquivoPropostaPorEmpresa1.')->store('documentos', 'public')
                 : null;
 
-            $endArquivo2 = $request->hasFile('arquivoProposta2.')
+            $endArquivoPorEmpresa2 = $request->hasFile('arquivoPropostaPorEmpresa2.')
                 ? $request->file('arquivoProposta2.')->store('documentos', 'public')
                 : null;
 
-            $endArquivo3 = $request->hasFile('arquivoProposta3.')
+            $endArquivoPorEmpresa3 = $request->hasFile('arquivoPropostaPorEmpresa3.')
                 ? $request->file('arquivoProposta3.')->store('documentos', 'public')
                 : null;
 
             Documento::create([
-                'dt_doc' => $request->dt_inicial1,
+                'dt_doc' => $request->dt_inicialPorEmpresa1,
                 'id_tp_doc' => '14',
-                'valor' => $request->valor1,
-                'id_empresa' => $request->razaoSocial1,
+                'valor' => $request->valorPorEmpresa1,
+                'id_empresa' => $request->razaoSocialPorEmpresa1,
                 'id_setor' => $solicitacao->id_setor,
                 'vencedor_inicial' => '1',
                 'mat_sol_proposta' => $id,
-                'dt_validade' => $request->dt_final1,
-                'end_arquivo' => $endArquivo1,
-                'numero' => $request->numero1,
-                'tempo_garantia_dias' => $request->tempoGarantia1,
+                'dt_validade' => $request->dt_finalPorEmpresa1,
+                'end_arquivo' => $endArquivoPorEmpresa1,
+                'numero' => $request->numeroPorEmpresa1,
+                'tempo_garantia_dias' => $request->tempoGarantiaPorEmpresa1,
                 'vencedor_geral' => '0',
-                'link_proposta' => $request->linkProposta1,
+                'link_proposta' => $request->linkPropostaPorEmpresa1,
             ]);
 
             Documento::create([
-                'dt_doc' => $request->dt_inicial2,
+                'dt_doc' => $request->dt_inicialPorEmpresa2,
                 'id_tp_doc' => '14',
-                'valor' => $request->valor2,
-                'id_empresa' => $request->razaoSocial2,
+                'valor' => $request->valorPorEmpresa2,
+                'id_empresa' => $request->razaoSocialPorEmpresa2,
                 'id_setor' => $solicitacao->id_setor,
                 'vencedor_inicial' => '0',
                 'mat_sol_proposta' => $id,
-                'dt_validade' => $request->dt_final2,
-                'end_arquivo' => $endArquivo2,
-                'numero' => $request->numero2,
-                'tempo_garantia_dias' => $request->tempoGarantia2,
+                'dt_validade' => $request->dt_finalPorEmpresa2,
+                'end_arquivo' => $endArquivoPorEmpresa2,
+                'numero' => $request->numeroPorEmpresa2,
+                'tempo_garantia_dias' => $request->tempoGarantiaPorEmpresa2,
                 'vencedor_geral' => '0',
-                'link_proposta' => $request->linkProposta2,
+                'link_proposta' => $request->linkPropostaPorEmpresa2,
             ]);
 
             Documento::create([
-                'dt_doc' => $request->dt_inicial3,
+                'dt_doc' => $request->dt_inicialPorEmpresa3,
                 'id_tp_doc' => '14',
-                'valor' => $request->valor3,
-                'id_empresa' => $request->razaoSocial3,
+                'valor' => $request->valorPorEmpresa3,
+                'id_empresa' => $request->razaoSocialPorEmpresa3,
                 'id_setor' => $solicitacao->id_setor,
                 'vencedor_inicial' => '0',
                 'mat_sol_proposta' => $id,
-                'dt_validade' => $request->dt_final3,
-                'end_arquivo' => $endArquivo3,
-                'numero' => $request->numero3,
-                'tempo_garantia_dias' => $request->tempoGarantia3,
+                'dt_validade' => $request->dt_finalPorEmpresa3,
+                'end_arquivo' => $endArquivoPorEmpresa3,
+                'numero' => $request->numeroPorEmpresa3,
+                'tempo_garantia_dias' => $request->tempoGarantiaPorEmpresa3,
                 'vencedor_geral' => '0',
-                'link_proposta' => $request->linkProposta3,
+                'link_proposta' => $request->linkPropostaPorEmpresa3,
             ]);
         }
 

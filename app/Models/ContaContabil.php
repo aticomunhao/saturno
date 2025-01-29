@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ContaContabil extends Model
 {
@@ -61,6 +62,35 @@ class ContaContabil extends Model
             'id'
         );
     }
+    public function nivel1()
+    {
+        return $this->belongsTo(ContaContabil::class, 'nivel_1');
+    }
+
+    public function nivel2()
+    {
+        return $this->belongsTo(ContaContabil::class, 'nivel_2');
+    }
+
+    public function nivel3()
+    {
+        return $this->belongsTo(ContaContabil::class, 'nivel_3');
+    }
+
+    public function nivel4()
+    {
+        return $this->belongsTo(ContaContabil::class, 'nivel_4');
+    }
+
+    public function nivel5()
+    {
+        return $this->belongsTo(ContaContabil::class, 'nivel_5');
+    }
+
+    public function nivel6()
+    {
+        return $this->belongsTo(ContaContabil::class, 'nivel_6');
+    }
     // Getters
 
     public function getConcatenatedLevelsAttribute()
@@ -85,6 +115,51 @@ class ContaContabil extends Model
 
         return implode('.', $result);
     }
+
+    /**
+     * Retrieve concatenated names of account levels for a given account ID.
+     *
+     * This method fetches the descriptions of up to six levels of an account
+     * from the 'conta_contabil' table and concatenates them into a single string.
+     * If a level description is not available, it will be replaced with an empty string.
+     *
+     * @param int $id The ID of the account to retrieve the concatenated names for.
+     * @return string|null The concatenated names of the account levels, separated by ' - ',
+     *                     or null if the account ID does not exist.
+     */
+    public function getNomesConcatenados($id)
+    {
+        // Recuperando o modelo da ContaContabil com os relacionamentos
+        $contaContabil = ContaContabil::with([
+            'nivel1',
+            'nivel2',
+            'nivel3',
+            'nivel4',
+            'nivel5',
+            'nivel6'
+        ])
+        ->where('id', $id)
+        ->first();
+
+        // Se algum valor foi retornado, concatena os campos
+        $nome_concatenado = null;
+        if ($contaContabil) {
+            // Usando os relacionamentos para acessar as descrições
+            $nome_concatenado = implode(' - ', [
+                $contaContabil->nivel1 ? $contaContabil->nivel1->descricao : '',
+                $contaContabil->nivel2 ? $contaContabil->nivel2->descricao : '',
+                $contaContabil->nivel3 ? $contaContabil->nivel3->descricao : '',
+                $contaContabil->nivel4 ? $contaContabil->nivel4->descricao : '',
+                $contaContabil->nivel5 ? $contaContabil->nivel5->descricao : '',
+                $contaContabil->nivel6 ? $contaContabil->nivel6->descricao : '',
+            ]);
+        }
+
+        return $nome_concatenado;
+    }
+
+
+
     public static function hasDuplicateLevels(Request $request): bool
     {
         return self::query()

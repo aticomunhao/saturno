@@ -40,55 +40,28 @@ class ContaContabilController extends Controller
         $pesquisa_natureza_contabil = $request->input('natureza_contabil');
         $pesquisa_catalogo_contabil = $request->input('catalogo_contabil');
         $pesquisa_classe_contabil = $request->input('classe_contabil');
+        //Campos de Niveis
+        $pesquisa_nivel_1 = $request->input('nivel_1');
+        $pesquisa_nivel_2 = $request->input('nivel_2');
+        $pesquisa_nivel_3 = $request->input('nivel_3');
+        $pesquisa_nivel_4 = $request->input('nivel_4');
+        $pesquisa_nivel_5 = $request->input('nivel_5');
+        $pesquisa_nivel_6 = $request->input('nivel_6');
 
 
         // Pesquisa
-        if ($pesquisa_descricao !== null) {
-            $contas_contabeis->where('descricao', 'like', '%' . $pesquisa_descricao . '%');
-        }
-
-        if (!empty($pesquisa_grupo_contabil)) {
-            $contas_contabeis->where('id_tipo_grupo_conta_contabil', $pesquisa_grupo_contabil);
-        }
-
-        if (!empty($pesquisa_natureza_contabil)) {
-            $contas_contabeis->where('id_tipo_natureza_conta_contabil', $pesquisa_natureza_contabil);
-        }
-
-
-        if (!empty($pesquisa_catalogo_contabil)) {
-            $contas_contabeis->where('id_tipo_catalogo', $pesquisa_catalogo_contabil);
-        }
-
-        if (!empty($pesquisa_classe_contabil)) {
-            $contas_contabeis->where('id_tipo_classe_conta_contabil', $pesquisa_classe_contabil);
-        }
-
-        if (!empty($pesquisa_nivel_1)) {
-            dd($pesquisa_nivel_1);
-            $contas_contabeis->where('nivel_1', $pesquisa_nivel_1);
-        }
-
-        if (!empty($pesquisa_nivel_2)) {
-            $contas_contabeis->where('nivel_2', $pesquisa_nivel_2);
-        }
-
-        if (!empty($pesquisa_nivel_3)) {
-            $contas_contabeis->where('nivel_3', $pesquisa_nivel_3);
-        }
-
-
-        if (!empty($pesquisa_nivel_4)) {
-            $contas_contabeis->where('nivel_4', $pesquisa_nivel_4);
-        }
-
-        if (!empty($pesquisa_nivel_5)) {
-            $contas_contabeis->where('nivel_5', $pesquisa_nivel_5);
-        }
-
-        if (!empty($pesquisa_nivel_6)) {
-            $contas_contabeis->where('nivel_6', $pesquisa_nivel_6);
-        }
+        $contas_contabeis = ContaContabil::with('natureza_contabil', 'catalogo_contabil', 'grupo_contabil', 'classe_contabil')
+            ->when($pesquisa_descricao, fn($query) => $query->where('descricao', 'like', '%' . $pesquisa_descricao . '%'))
+            ->when($pesquisa_grupo_contabil, fn($query) => $query->where('id_tipo_grupo_conta_contabil', $pesquisa_grupo_contabil))
+            ->when($pesquisa_natureza_contabil, fn($query) => $query->where('id_tipo_natureza_conta_contabil', $pesquisa_natureza_contabil))
+            ->when($pesquisa_catalogo_contabil, fn($query) => $query->where('id_tipo_catalogo', $pesquisa_catalogo_contabil))
+            ->when($pesquisa_classe_contabil, fn($query) => $query->where('id_tipo_classe_conta_contabil', $pesquisa_classe_contabil))
+            ->when($pesquisa_nivel_1, fn($query) => $query->where('nivel_1', $pesquisa_nivel_1))
+            ->when($pesquisa_nivel_2, fn($query) => $query->where('nivel_2', $pesquisa_nivel_2))
+            ->when($pesquisa_nivel_3, fn($query) => $query->where('nivel_3', $pesquisa_nivel_3))
+            ->when($pesquisa_nivel_4, fn($query) => $query->where('nivel_4', $pesquisa_nivel_4))
+            ->when($pesquisa_nivel_5, fn($query) => $query->where('nivel_5', $pesquisa_nivel_5))
+            ->when($pesquisa_nivel_6, fn($query) => $query->where('nivel_6', $pesquisa_nivel_6));
 
         // Agora execute a consulta
 
@@ -103,6 +76,12 @@ class ContaContabilController extends Controller
             "catalogos_contabeis",
             "classes_contabeis",
             "numeros",
+            "pesquisa_nivel_1",
+            "pesquisa_nivel_2",
+            "pesquisa_nivel_3",
+            "pesquisa_nivel_4",
+            "pesquisa_nivel_5",
+            "pesquisa_nivel_6",
         ));
     }
 

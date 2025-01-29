@@ -99,7 +99,10 @@
                                                 <select class="form-select border-secondary" name="nivel_1" id="idnivel1">
                                                     <option value="">Todos</option>
                                                     @foreach ($numeros as $numero)
-                                                        <option value="{{ $numero }}">{{ $numero }}</option>
+                                                        <option value="{{ $numero }}"
+                                                            {{ request('nivel_1') == $numero ? 'selected' : '' }}>
+                                                            {{ $numero }}
+                                                        </option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -110,7 +113,10 @@
                                                 <select class="form-select border-secondary" name="nivel_2" id="idnivel2">
                                                     <option value="">Todos</option>
                                                     @foreach ($numeros as $numero)
-                                                        <option value="{{ $numero }}">{{ $numero }}</option>
+                                                        <option value="{{ $numero }}"
+                                                            {{ request('nivel_2') == $numero ? 'selected' : '' }}>
+                                                            {{ $numero }}
+                                                        </option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -121,7 +127,10 @@
                                                 <select class="form-select border-secondary" name="nivel_3" id="idnivel3">
                                                     <option value="">Todos</option>
                                                     @foreach ($numeros as $numero)
-                                                        <option value="{{ $numero }}">{{ $numero }}</option>
+                                                        <option value="{{ $numero }}"
+                                                            {{ request('nivel_3') == $numero ? 'selected' : '' }}>
+                                                            {{ $numero }}
+                                                        </option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -133,7 +142,10 @@
                                                     id="idnivel4">
                                                     <option value="">Todos</option>
                                                     @foreach ($numeros as $numero)
-                                                        <option value="{{ $numero }}">{{ $numero }}</option>
+                                                        <option value="{{ $numero }}"
+                                                            {{ request('nivel_4') == $numero ? 'selected' : '' }}>
+                                                            {{ $numero }}
+                                                        </option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -145,7 +157,10 @@
                                                     id="idnivel5">
                                                     <option value="">Todos</option>
                                                     @foreach ($numeros as $numero)
-                                                        <option value="{{ $numero }}">{{ $numero }}</option>
+                                                        <option value="{{ $numero }}"
+                                                            {{ request('nivel_5') == $numero ? 'selected' : '' }}>
+                                                            {{ $numero }}
+                                                        </option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -157,7 +172,10 @@
                                                     id="idnivel6">
                                                     <option value="">Todos</option>
                                                     @foreach ($numeros as $numero)
-                                                        <option value="{{ $numero }}">{{ $numero }}</option>
+                                                        <option value="{{ $numero }}"
+                                                            {{ request('nivel_6') == $numero ? 'selected' : '' }}>
+                                                            {{ $numero }}
+                                                        </option>
                                                     @endforeach
                                                 </select>
                                             </div>

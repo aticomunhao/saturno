@@ -39,12 +39,12 @@ class ContaContabilController extends Controller
         $pesquisa_classe_contabil = $request->input('classe_contabil');
         $pesquisa_status_conta_contabil = $request->input('status_conta_contabil');
         //Campos de Niveis
-        $pesquisa_nivel_1 = $request->input('nivel_1');
-        $pesquisa_nivel_2 = $request->input('nivel_2');
-        $pesquisa_nivel_3 = $request->input('nivel_3');
-        $pesquisa_nivel_4 = $request->input('nivel_4');
-        $pesquisa_nivel_5 = $request->input('nivel_5');
-        $pesquisa_nivel_6 = $request->input('nivel_6');
+        $pesquisa_nivel_1 = $request->input('nivel_1', null);
+        $pesquisa_nivel_2 = $request->input('nivel_2', null);
+        $pesquisa_nivel_3 = $request->input('nivel_3', null);
+        $pesquisa_nivel_4 = $request->input('nivel_4', null);
+        $pesquisa_nivel_5 = $request->input('nivel_5', null);
+        $pesquisa_nivel_6 = $request->input('nivel_6', null);
 
 
         // Pesquisa
@@ -54,25 +54,133 @@ class ContaContabilController extends Controller
             'grupo_contabil',
             'classe_contabil'
         ])
-        ->selectRaw("*, CASE WHEN data_fim IS NULL THEN 'Ativo' ELSE 'Inativo' END as status")
-        ->when($pesquisa_descricao, fn($query) => $query->where('descricao', 'like', '%' . $pesquisa_descricao . '%'))
-        ->when($pesquisa_grupo_contabil, fn($query) => $query->where('id_tipo_grupo_conta_contabil', $pesquisa_grupo_contabil))
-        ->when($pesquisa_natureza_contabil, fn($query) => $query->where('id_tipo_natureza_conta_contabil', $pesquisa_natureza_contabil))
-        ->when($pesquisa_catalogo_contabil, fn($query) => $query->where('id_tipo_catalogo', $pesquisa_catalogo_contabil))
-        ->when($pesquisa_classe_contabil, fn($query) => $query->where('id_tipo_classe_conta_contabil', $pesquisa_classe_contabil))
-        ->when($pesquisa_nivel_1, fn($query) => $query->where('nivel_1', $pesquisa_nivel_1))
-        ->when($pesquisa_nivel_2, fn($query) => $query->where('nivel_2', $pesquisa_nivel_2))
-        ->when($pesquisa_nivel_3, fn($query) => $query->where('nivel_3', $pesquisa_nivel_3))
-        ->when($pesquisa_nivel_4, fn($query) => $query->where('nivel_4', $pesquisa_nivel_4))
-        ->when($pesquisa_nivel_5, fn($query) => $query->where('nivel_5', $pesquisa_nivel_5))
-        ->when($pesquisa_nivel_6, fn($query) => $query->where('nivel_6', $pesquisa_nivel_6))
-        ->when($pesquisa_status_conta_contabil == 1, fn($query) => $query->whereNull('data_fim'))
-        ->when($pesquisa_status_conta_contabil == 2, fn($query) => $query->whereNotNull('data_fim'))
-        ->get();
+            ->selectRaw("*, CASE WHEN data_fim IS NULL THEN 'Ativo' ELSE 'Inativo' END as status")
+            ->when($pesquisa_descricao, fn($query) => $query->where('descricao', 'like', '%' . $pesquisa_descricao . '%'))
+            ->when($pesquisa_grupo_contabil, fn($query) => $query->where('id_tipo_grupo_conta_contabil', $pesquisa_grupo_contabil))
+            ->when($pesquisa_natureza_contabil, fn($query) => $query->where('id_tipo_natureza_conta_contabil', $pesquisa_natureza_contabil))
+            ->when($pesquisa_catalogo_contabil, fn($query) => $query->where('id_tipo_catalogo', $pesquisa_catalogo_contabil))
+            ->when($pesquisa_classe_contabil, fn($query) => $query->where('id_tipo_classe_conta_contabil', $pesquisa_classe_contabil))
+            ->when($pesquisa_nivel_1, fn($query) => $query->where('nivel_1', $pesquisa_nivel_1))
+            ->when($pesquisa_nivel_2, fn($query) => $query->where('nivel_2', $pesquisa_nivel_2))
+            ->when($pesquisa_nivel_3, fn($query) => $query->where('nivel_3', $pesquisa_nivel_3))
+            ->when($pesquisa_nivel_4, fn($query) => $query->where('nivel_4', $pesquisa_nivel_4))
+            ->when($pesquisa_nivel_5, fn($query) => $query->where('nivel_5', $pesquisa_nivel_5))
+            ->when($pesquisa_nivel_6, fn($query) => $query->where('nivel_6', $pesquisa_nivel_6))
+            ->when($pesquisa_status_conta_contabil == 1, fn($query) => $query->whereNull('data_fim'))
+            ->when($pesquisa_status_conta_contabil == 2, fn($query) => $query->whereNotNull('data_fim'))
+            ->get();
+
+        //Recursivo para niveis
+
+        // foreach ($contas_contabeis as $conta) {
+        //     switch ($conta->grau) {
+        //         case 2:
+        //             $nomes_acumulados = $array_de_nomes = DB::table('conta_contabil')
+        //                 ->select('descricao')
+        //                 ->where('nivel_1', $conta->nivel_1)
+        //                 ->where('nivel_2', null)
+        //                 ->where('nivel_3', null)
+        //                 ->where('nivel_4', null)
+        //                 ->where('nivel_5', null)
+        //                 ->where('nivel_6', null)
+        //                 ->get();
 
 
+        //             $nomes = [];
+        //             foreach ($nomes_acumulados as $nome) {
+        //                 $nomes[]  = $nome->descricao;
+        //             }
+
+        //             $conta->nomes_acumulado =  implode(" > ",  $nomes);
+
+        //         case 3:
+        //             $nomes_acumulados = $array_de_nomes = DB::table('conta_contabil')
+        //                 ->select('descricao')
+        //                 ->where('nivel_1', $conta->nivel_1)
+        //                 ->where('nivel_2', $conta->nivel_2)
+        //                 ->where('nivel_3', null)
+        //                 ->where('nivel_4', null)
+        //                 ->where('nivel_5', null)
+        //                 ->where('nivel_6', null)
+        //                 ->get();
 
 
+        //             $nomes = [];
+        //             foreach ($nomes_acumulados as $nome) {
+        //                 $nomes[]  = $nome->descricao;
+        //             }
+
+        //             $conta->nomes_acumulado =  implode(" > ",  $nomes);
+        //         case 4:
+        //             $nomes_acumulados = $array_de_nomes = DB::table('conta_contabil')
+        //                 ->select('descricao')
+        //                 ->where('nivel_1', $conta->nivel_1)
+        //                 ->where('nivel_2', $conta->nivel_2)
+        //                 ->where('nivel_3', $conta->nivel_3)
+        //                 ->where('nivel_4', null)
+        //                 ->where('nivel_5', null)
+        //                 ->where('nivel_6', null)
+        //                 ->get();
+
+
+        //             $nomes = [];
+        //             foreach ($nomes_acumulados as $nome) {
+        //                 $nomes[]  = $nome->descricao;
+        //             }
+
+        //             $conta->nomes_acumulado =  implode(" >  ",  $nomes);
+        //         case 5:
+        //             $nomes_acumulados = $array_de_nomes = DB::table('conta_contabil')
+        //                 ->select('descricao')
+        //                 ->where('nivel_1', $conta->nivel_1)
+        //                 ->where('nivel_2', $conta->nivel_2)
+        //                 ->where('nivel_3', $conta->nivel_3)
+        //                 ->where('nivel_4', $conta->nivel_4)
+        //                 ->where('nivel_5', null)
+        //                 ->where('nivel_6', null)
+        //                 ->get();
+        //             $nomes = [];
+        //             foreach ($nomes_acumulados as $nome) {
+        //                 $nomes[]  = $nome->descricao;
+        //             }
+
+        //             $conta->nomes_acumulado =  implode(" > ",  $nomes);
+        //         case 6:
+        //             $nomes_acumulados = $array_de_nomes = DB::table('conta_contabil')
+        //                 ->select('descricao')
+        //                 ->where('nivel_1', $conta->nivel_1)
+        //                 ->where('nivel_2', $conta->nivel_2)
+        //                 ->where('nivel_3', $conta->nivel_3)
+        //                 ->where('nivel_4', $conta->nivel_4)
+        //                 ->where('nivel_5', $conta->nivel_5)
+        //                 ->where('nivel_6', null)
+        //                 ->get();
+        //             $nomes = [];
+        //             foreach ($nomes_acumulados as $nome) {
+        //                 $nomes[]  = $nome->descricao;
+        //             }
+
+        //             $conta->nomes_acumulado =  implode(" > ",  $nomes);
+
+        //         default:
+        //             break;
+        //     }
+        // }
+        foreach ($contas_contabeis as $conta) {
+            $nomes_acumulados = DB::table('conta_contabil')
+                ->select('descricao')
+                ->where('nivel_1', $conta->nivel_1)
+                ->where('nivel_2', $conta->nivel_2 ?? null)
+                ->where('nivel_3', $conta->nivel_3 ?? null)
+                ->where('nivel_4', $conta->nivel_4 ?? null)
+                ->where('nivel_5', $conta->nivel_5 ?? null)
+                ->where('nivel_6', $conta->nivel_6 ?? null)
+                ->get()
+                ->pluck('descricao')
+                ->toArray();
+
+            $conta->nomes_acumulado = implode(" > ", $nomes_acumulados);
+        }
 
 
         // Agora execute a consulta
@@ -121,6 +229,7 @@ class ContaContabilController extends Controller
      */
     public function store(Request $request)
     {
+
         $validatedData = $request->validate([
             'id_tipo_catalogo' => 'required|exists:tipo_catalogo_conta_contabil,id',
             'descricao' => 'required|string|max:255',

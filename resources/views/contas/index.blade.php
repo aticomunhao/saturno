@@ -238,10 +238,17 @@
                             @foreach ($contas_contabeis as $conta_contabil)
                                 <tr>
                                     <td>{{ $conta_contabil->id }}</td>
-                                    <th>{{ $conta_contabil->catalogo_contabil->nome }}</th>
+                                    <td>{{ $conta_contabil->catalogo_contabil->nome }}
+                                    </td>
                                     <td>{{ $conta_contabil->getConcatenatedLevelsAttribute() }}</td>
-                                    <td>{{ $conta_contabil->getNomesConcatenados($conta_contabil->id) }}</td>
+                                    <td>
+                                        @if ($conta_contabil->nomes_acumulado != null)
+                                            {{ $conta_contabil->nomes_acumulado }} >
+                                        @endif
+                                        {{ $conta_contabil->descricao }}
+                                    </td>
                                     <td>{{ $conta_contabil->natureza_contabil->sigla }}</td>
+                                    <td>{{ $conta_contabil->grau }}</td>
 
                                     <td>{{ $conta_contabil->grupo_contabil->nome }}</td>
                                     <td>{{ $conta_contabil->grau }}</td>
@@ -302,4 +309,6 @@
             </div>
         </div>
     </div>
+@endsection
+@section('footerScript')
 @endsection

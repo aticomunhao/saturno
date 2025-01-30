@@ -14,5 +14,8 @@ class ItemCatalogoMaterial extends Model
         'composicao',
         'ativo',
     ];
-
+    public function tipoCategoriaMt()
+    {
+        return $this->belongsTo(TipoCategoriaMt::class, 'id_cl_mt');
+    }
 }

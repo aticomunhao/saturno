@@ -7,6 +7,7 @@
 @section('content')
     <form method="POST" action="/salvar-proposta-material/{{ $idSolicitacao }}" enctype="multipart/form-data">
         @csrf
+        <input type="hidden" name="activeButton" id="activeButton" value="empresa">
         <div class="container-fluid">
             <div class="justify-content-center">
                 <div class="col-12">
@@ -42,7 +43,7 @@
                                     <label>Motivo</label>
                                     <br>
                                     <input type="text" class="form-control"
-                                            value="{{ $solicitacao->motivo ?? 'Não especificado' }}" disabled>
+                                        value="{{ $solicitacao->motivo ?? 'Não especificado' }}" disabled>
                                 </div>
                             </div>
                             <br>
@@ -86,7 +87,8 @@
                                                     <div class="col-md-4">
                                                         <label>Nome do Material</label>
                                                         <input type="text" class="form-control"
-                                                            value="{{ $material->nome ?? 'Não especificado' }}" disabled>
+                                                            value="{{ $material->tipoItemCatalogoMaterial->nome ?? 'Não especificado' }}"
+                                                            disabled>
                                                     </div>
                                                     <div class="col-md-2">
                                                         <label>Unid. Medida</label>
@@ -96,7 +98,8 @@
                                                     </div>
                                                     <div class="col-md-1">
                                                         <label>Quantidade</label>
-                                                        <input type="text" class="form-control" name="quantidadeMaterial1[]"
+                                                        <input type="text" class="form-control"
+                                                            name="quantidadeMaterial1[]"
                                                             value="{{ $material->quantidade ?? 'Não especificado' }}">
                                                     </div>
                                                 </div>
@@ -428,13 +431,13 @@
                                                 <!-- Número da Proposta -->
                                                 <div class="col-md-4 mb-3">
                                                     <label>Número da Proposta Principal</label>
-                                                    <input type="text" class="form-control" name="numero1"
+                                                    <input type="text" class="form-control" name="numeroPorEmpresa1" required
                                                         placeholder="Digite o Número da proposta">
                                                 </div>
                                                 <!-- Nome da Empresa -->
                                                 <div class="col-md-4 mb-3">
                                                     <label>Nome da Empresa Principal</label>
-                                                    <select class="form-select select2" name="razaoSocial1"
+                                                    <select class="form-select select2" name="razaoSocialPorEmpresa1" required
                                                         style="border: 1px solid #999999; padding: 5px;">
                                                         <option></option>
                                                         @foreach ($buscaEmpresa as $buscaEmpresas)
@@ -449,7 +452,7 @@
                                                 <div class="col-md-4 mb-3">
                                                     <label>Valor Total da Proposta Principal</label>
                                                     <input type="text" class="form-control valor valor-proposta"
-                                                        name="valor1" placeholder="Digite o valor da proposta">
+                                                        required name="valorPorEmpresa1" placeholder="Digite o valor da proposta">
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -457,14 +460,14 @@
                                                 <div class="col-md-4 mb-3">
                                                     <label>Data da Criação da
                                                         Proposta Principal</label>
-                                                    <input type="date" class="form-control" name="dt_inicial1"
-                                                        placeholder="Digite a data da proposta">
+                                                    <input type="date" class="form-control" name="dt_inicialPorEmpresa1"
+                                                        required placeholder="Digite a data da proposta">
                                                 </div>
 
                                                 <!-- Data Limite da Proposta -->
                                                 <div class="col-md-4 mb-3">
                                                     <label>Data Limite da Proposta Principal</label>
-                                                    <input type="date" class="form-control" name="dt_final1"
+                                                    <input type="date" class="form-control" name="dt_finalPorEmpresa1" required
                                                         placeholder="Digite a data final do prazo da proposta">
                                                 </div>
 
@@ -472,7 +475,8 @@
                                                 <div class="col-md-4 mb-3">
                                                     <label>Arquivo da Proposta Principal</label>
                                                     <input type="file" class="form-control" id="uploadProposta1"
-                                                        name="arquivoProposta1" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
+                                                        required name="arquivoPropostaPorEmpresa1"
+                                                        accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
                                                 </div>
                                             </div>
 
@@ -482,14 +486,15 @@
                                                     <label>Tempo de Garantia (em
                                                         dias)</label>
                                                     <input type="number" class="form-control" id="tempoGarantiaInput"
-                                                        name="tempoGarantia1" placeholder="Digite o tempo de garantia">
+                                                        required name="tempoGarantiaPorEmpresa1"
+                                                        placeholder="Digite o tempo de garantia">
                                                 </div>
 
                                                 <!-- Link da Proposta -->
                                                 <div class="col-md-4 mb-3">
                                                     <label>Link da Proposta Principal</label>
                                                     <input type="text" class="form-control mt-2" id="linkProposta1"
-                                                        name="linkProposta1" placeholder="Link da Proposta">
+                                                        required name="linkPropostaPorEmpresa1" placeholder="Link da Proposta">
                                                 </div>
                                             </div>
                                         </div>
@@ -512,14 +517,14 @@
                                                 <!-- Número da Proposta -->
                                                 <div class="col-md-4 mb-3">
                                                     <label>Número da 2ª Proposta</label>
-                                                    <input type="text" class="form-control" name="numero2"
+                                                    <input type="text" class="form-control" name="numeroPorEmpresa2" required
                                                         placeholder="Digite o Número da proposta">
                                                 </div>
 
                                                 <!-- Nome da Empresa -->
                                                 <div class="col-md-4 mb-3">
                                                     <label>Nome 2ª Empresa</label>
-                                                    <select class="form-select select2" name="razaoSocial2"
+                                                    <select class="form-select select2" name="razaoSocialPorEmpresa2" required
                                                         style="border: 1px solid #999999; padding: 5px;">
                                                         <option></option>
                                                         @foreach ($buscaEmpresa as $buscaEmpresas)
@@ -535,7 +540,7 @@
                                                 <div class="col-md-4 mb-3">
                                                     <label>Valor Total da 2ª Proposta</label>
                                                     <input type="text" class="form-control valor valor-proposta"
-                                                        name="valor2" placeholder="Digite o valor da proposta">
+                                                        required name="valorPorEmpresa2" placeholder="Digite o valor da proposta">
                                                 </div>
                                             </div>
 
@@ -544,14 +549,14 @@
                                                 <div class="col-md-4 mb-3">
                                                     <label>Data da Criação da 2ª
                                                         Proposta</label>
-                                                    <input type="date" class="form-control" name="dt_inicial2"
-                                                        placeholder="Digite a data da proposta">
+                                                    <input type="date" class="form-control" name="dt_inicialPorEmpresa2"
+                                                        required placeholder="Digite a data da proposta">
                                                 </div>
 
                                                 <!-- Data Limite da Proposta -->
                                                 <div class="col-md-4 mb-3">
                                                     <label>Data Limite da 2ª Proposta</label>
-                                                    <input type="date" class="form-control" name="dt_final2"
+                                                    <input type="date" class="form-control" name="dt_finalPorEmpresa2" required
                                                         placeholder="Digite a data final do prazo da proposta">
                                                 </div>
 
@@ -559,7 +564,8 @@
                                                 <div class="col-md-4 mb-3">
                                                     <label>Arquivo da 2ª Proposta</label>
                                                     <input type="file" class="form-control" id="uploadProposta2"
-                                                        name="arquivoProposta2" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
+                                                        required name="arquivoPropostaPorEmpresa2"
+                                                        accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
                                                 </div>
                                             </div>
 
@@ -569,14 +575,15 @@
                                                     <label>Tempo de Garantia (em
                                                         dias)</label>
                                                     <input type="number" class="form-control" id="tempoGarantiaInput2"
-                                                        name="tempoGarantia2" placeholder="Digite o tempo de garantia">
+                                                        required name="tempoGarantiaPorEmpresa2"
+                                                        placeholder="Digite o tempo de garantia">
                                                 </div>
 
                                                 <!-- Link da Proposta -->
                                                 <div class="col-md-4 mb-3">
                                                     <label>Link da 2ª Proposta</label>
                                                     <input type="text" class="form-control mt-2" id="linkProposta2"
-                                                        name="linkProposta2" placeholder="Link da Proposta">
+                                                        required name="linkPropostaPorEmpresa2" placeholder="Link da Proposta">
                                                 </div>
                                             </div>
                                         </div>
@@ -599,14 +606,14 @@
                                                 <!-- Número da Proposta -->
                                                 <div class="col-md-4 mb-3">
                                                     <label>Número da 3ª Proposta</label>
-                                                    <input type="text" class="form-control" name="numero3"
+                                                    <input type="text" class="form-control" name="numeroPorEmpresa3" required
                                                         placeholder="Digite o Número da proposta">
                                                 </div>
 
                                                 <!-- Nome da Empresa -->
                                                 <div class="col-md-4 mb-3">
                                                     <label>Nome 3ª Empresa</label>
-                                                    <select class="form-select select2" name="razaoSocial3"
+                                                    <select class="form-select select2" name="razaoSocialPorEmpresa3" required
                                                         style="border: 1px solid #999999; padding: 5px;">
                                                         <option></option>
                                                         @foreach ($buscaEmpresa as $buscaEmpresas)
@@ -622,7 +629,7 @@
                                                 <div class="col-md-4 mb-3">
                                                     <label>Valor Total da 3ª Proposta</label>
                                                     <input type="text" class="form-control valor valor-proposta"
-                                                        name="valor3" placeholder="Digite o valor da proposta">
+                                                        required name="valorPorEmpresa3" placeholder="Digite o valor da proposta">
                                                 </div>
                                             </div>
 
@@ -631,14 +638,14 @@
                                                 <div class="col-md-4 mb-3">
                                                     <label>Data da Criação da 3ª
                                                         Proposta</label>
-                                                    <input type="date" class="form-control" name="dt_inicial3"
-                                                        placeholder="Digite a data da proposta">
+                                                    <input type="date" class="form-control" name="dt_inicialPorEmpresa3"
+                                                        required placeholder="Digite a data da proposta">
                                                 </div>
 
                                                 <!-- Data Limite da Proposta -->
                                                 <div class="col-md-4 mb-3">
                                                     <label>Data Limite da 3ª Proposta</label>
-                                                    <input type="date" class="form-control" name="dt_final3"
+                                                    <input type="date" class="form-control" name="dt_finalPorEmpresa3" required
                                                         placeholder="Digite a data final do prazo da proposta">
                                                 </div>
 
@@ -646,7 +653,8 @@
                                                 <div class="col-md-4 mb-3">
                                                     <label>Arquivo da 3ª Proposta</label>
                                                     <input type="file" class="form-control" id="uploadProposta3"
-                                                        name="arquivoProposta3" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
+                                                        required name="arquivoPropostaPorEmpresa3"
+                                                        accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
                                                 </div>
                                             </div>
 
@@ -656,14 +664,15 @@
                                                     <label>Tempo de Garantia (em
                                                         dias)</label>
                                                     <input type="number" class="form-control" id="tempoGarantiaInput3"
-                                                        name="tempoGarantia3" placeholder="Digite o tempo de garantia">
+                                                        required name="tempoGarantiaPorEmpresa3"
+                                                        placeholder="Digite o tempo de garantia">
                                                 </div>
 
                                                 <!-- Link da Proposta -->
                                                 <div class="col-md-4 mb-3">
                                                     <label>Link da 3ª Proposta</label>
                                                     <input type="text" class="form-control mt-2" id="linkProposta3"
-                                                        name="linkProposta3" placeholder="Link da Proposta">
+                                                        required name="linkPropostaPorEmpresa3" placeholder="Link da Proposta">
                                                 </div>
                                             </div>
                                         </div>
@@ -707,7 +716,8 @@
                                                     <div class="col-md-3">
                                                         <label>Nome do Material</label>
                                                         <input type="text" class="form-control"
-                                                            value="{{ $material->nome ?? 'Não especificado' }}" disabled>
+                                                            value="{{ $material->tipoItemCatalogoMaterial->nome ?? 'Não especificado' }}"
+                                                            disabled>
                                                     </div>
                                                     <div class="col-md-2">
                                                         <label>Unid. Medida</label>
@@ -718,23 +728,26 @@
                                                     <div class="col-md-1">
                                                         <label>Quantidade</label>
                                                         <input type="text" class="form-control"
-                                                            name="quantidadePorEmpresa[]"
+                                                            name="quantidadePorEmpresa[]" required
                                                             value="{{ $material->quantidade ?? 'Não especificado' }}">
                                                     </div>
                                                     <div class="col-md-1">
                                                         <label>Valor Unitário</label>
                                                         <input type="text" class="form-control valor valor-proposta"
-                                                            name="valor1[]" placeholder="Digite o valor da proposta">
+                                                            required name="valorPorEmpresa1[]"
+                                                            placeholder="Digite o valor da proposta">
                                                     </div>
                                                     <div class="col-md-1">
                                                         <label>Valor Unitário</label>
                                                         <input type="text" class="form-control valor valor-proposta"
-                                                            name="valor2[]" placeholder="Digite o valor da proposta">
+                                                            required name="valorPorEmpresa2[]"
+                                                            placeholder="Digite o valor da proposta">
                                                     </div>
                                                     <div class="col-md-1">
                                                         <label>Valor Unitário</label>
                                                         <input type="text" class="form-control valor valor-proposta"
-                                                            name="valor3[]" placeholder="Digite o valor da proposta">
+                                                            required name="valorPorEmpresa3[]"
+                                                            placeholder="Digite o valor da proposta">
                                                     </div>
                                                 </div>
                                                 <!-- Botões de Minimizar e Fechar -->
@@ -835,15 +848,10 @@
                             </div>
                             <div class="col-md">
                                 <label>Nome do Material</label>
-                                <select class="form-select  select2" id="categoriaMaterial"
-                                    style="border: 1px solid #999999; padding: 5px;" name="categoriaMaterial">
+                                <select class="form-select js-nome-material select2" id="nomeMaterial"
+                                    style="border: 1px solid #999999; padding: 5px;" name="nomeMaterial">
                                     <option value="" disabled selected>Selecione...
                                     </option>
-                                    @foreach ($bucaItemCatalogo as $bucaItemCatalogos)
-                                        <option value="{{ $bucaItemCatalogos->id }}">
-                                            {{ $bucaItemCatalogos->nome }}
-                                        </option>
-                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-md-2">
@@ -958,18 +966,26 @@
             });
         });
 
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener('DOMContentLoaded', function() {
+            // Captura os elementos do DOM
             const btnPorEmpresa = document.getElementById('btnPorEmpresa');
             const btnPorMaterial = document.getElementById('btnPorMaterial');
-            const listaMateriais = document.getElementById('listaMateriais');
             const listaEmpresa = document.getElementById('listaEmpresa');
-            const btnAddMaterial = document.getElementById('addMaterial');
-            const templateMaterial = document.getElementById('templateMaterial');
+            const listaMateriais = document.getElementById('listaMateriais');
+            const inputActiveButton = document.getElementById('activeButton');
 
             let materialAdicionado = false;
 
-            function toggleList(activeButton) {
-                if (activeButton === 'empresa') {
+            // Obtém o estado salvo ou define 'empresa' como padrão
+            let activeButton = localStorage.getItem('activeButton') || 'empresa';
+            inputActiveButton.value = activeButton;
+
+            function toggleList(type) {
+                activeButton = type;
+                inputActiveButton.value = type;
+                localStorage.setItem('activeButton', type);
+
+                if (type === 'empresa') {
                     btnPorEmpresa.classList.add('btn-primary');
                     btnPorEmpresa.classList.remove('btn-secondary');
                     btnPorMaterial.classList.add('btn-secondary');
@@ -980,7 +996,10 @@
 
                     listaMateriais.style.display = 'none';
                     listaEmpresa.style.display = 'block';
-                } else if (activeButton === 'material') {
+
+                    toggleRequired(listaMateriais, false);
+                    toggleRequired(listaEmpresa, true);
+                } else if (type === 'material') {
                     btnPorMaterial.classList.add('btn-primary');
                     btnPorMaterial.classList.remove('btn-secondary');
                     btnPorEmpresa.classList.add('btn-secondary');
@@ -992,25 +1011,35 @@
                     listaMateriais.style.display = 'block';
                     listaEmpresa.style.display = 'none';
 
+                    toggleRequired(listaMateriais, true);
+                    toggleRequired(listaEmpresa, false);
+
                     if (!materialAdicionado) {
                         addMaterial();
                         materialAdicionado = true;
                     }
                 }
+            }
 
-                // Salva o estado no localStorage
-                localStorage.setItem('activeButton', activeButton);
+            function toggleRequired(container, isRequired) {
+                const inputs = container.querySelectorAll('input, select, textarea');
+                inputs.forEach(input => {
+                    if (isRequired) {
+                        input.setAttribute('required', 'required');
+                    } else {
+                        input.removeAttribute('required');
+                    }
+                });
             }
 
             function addMaterial() {
-                // Implementação do material dinâmico aqui, se necessário
                 console.log("Material adicionado dinamicamente.");
             }
 
-            // Restaura o estado do botão ativo do localStorage
-            const savedState = localStorage.getItem('activeButton') || 'empresa';
-            toggleList(savedState);
+            // Inicializa a interface com o estado salvo
+            toggleList(activeButton);
 
+            // Adiciona eventos aos botões
             btnPorEmpresa.addEventListener('click', () => toggleList('empresa'));
             btnPorMaterial.addEventListener('click', () => toggleList('material'));
         });
@@ -1054,51 +1083,31 @@
             // Função genérica para carregar opções via AJAX
             function carregarOpcoes(url, targetSelect, placeholder = "Selecione...") {
                 fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
+                    .then((response) => response.json())
+                    .then((data) => {
                         const select = $(targetSelect);
                         select.empty(); // Limpa as opções existentes
                         if (data.length > 0) {
                             select.append(`<option value="" disabled selected>${placeholder}</option>`);
-                            data.forEach(item => {
+                            data.forEach((item) => {
                                 select.append(`<option value="${item.id}">${item.nome}</option>`);
                             });
                         } else {
                             select.append(`<option value="" disabled selected>Não Possui</option>`);
                         }
                     })
-                    .catch(error => console.error("Erro ao carregar opções:", error));
+                    .catch((error) => console.error("Erro ao carregar opções:", error));
             }
 
-            // Filtro de Marca baseado na Categoria
+            // Filtro dinâmico com base na categoria
             $('#categoriaMaterial').on('change', function() {
                 const categoriaId = this.value;
                 if (categoriaId) {
                     carregarOpcoes(`/marcas/${categoriaId}`, '#marcaMaterial');
-                }
-            });
-
-            // Filtro de Tamanho baseado na Categoria
-            $('#categoriaMaterial').on('change', function() {
-                const categoriaId = this.value;
-                if (categoriaId) {
                     carregarOpcoes(`/tamanhos/${categoriaId}`, '#tamanhoMaterial');
-                }
-            });
-
-            // Filtro de Cor baseado na Categoria
-            $('#categoriaMaterial').on('change', function() {
-                const categoriaId = this.value;
-                if (categoriaId) {
                     carregarOpcoes(`/cores/${categoriaId}`, '#corMaterial');
-                }
-            });
-
-            // Filtro de Fase Etária baseado na Categoria
-            $('#categoriaMaterial').on('change', function() {
-                const categoriaId = this.value;
-                if (categoriaId) {
                     carregarOpcoes(`/fases/${categoriaId}`, '#faseEtariaMaterial');
+                    carregarOpcoes(`/nome/${categoriaId}`, '#nomeMaterial');
                 }
             });
         });

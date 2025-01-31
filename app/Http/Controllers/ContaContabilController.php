@@ -71,7 +71,6 @@ class ContaContabilController extends Controller
             ->get();
 
         //Recursivo para niveis
-
         // foreach ($contas_contabeis as $conta) {
         //     switch ($conta->grau) {
         //         case 2:

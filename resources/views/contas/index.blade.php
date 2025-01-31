@@ -248,10 +248,9 @@
                                         {{ $conta_contabil->descricao }}
                                     </td>
                                     <td>{{ $conta_contabil->natureza_contabil->sigla }}</td>
-                                    <td>{{ $conta_contabil->grau }}</td>
-
                                     <td>{{ $conta_contabil->grupo_contabil->nome }}</td>
                                     <td>{{ $conta_contabil->grau }}</td>
+                                    <td>{{ $conta_contabil->status }}</td>
                                     <td>{{ $conta_contabil->nivel_1 }}</td>
                                     <td>{{ $conta_contabil->nivel_2 }}</td>
                                     <td>{{ $conta_contabil->nivel_3 }}</td>
@@ -277,7 +276,7 @@
                                                     <div class="modal-header bg-danger text-white">
                                                         <h1 class="modal-title fs-5"
                                                             id="staticBackdropLabel{{ $conta_contabil->id }}">Confirmar
-                                                            Exclusão</h1>
+                                                            Inativação</h1>
                                                         <button type="button" class="btn-close btn-close-white"
                                                             data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
@@ -292,7 +291,8 @@
                                                             data-bs-dismiss="modal">Cancelar</button>
                                                         <a
                                                             href="{{ route('conta-contabil.inativar', ['id' => $conta_contabil->id]) }}"><button
-                                                                type="button" class="btn btn-danger">Excluir</button></a>
+                                                                type="button"
+                                                                class="btn btn-danger">Inativar</button></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -309,6 +309,4 @@
             </div>
         </div>
     </div>
-@endsection
-@section('footerScript')
 @endsection

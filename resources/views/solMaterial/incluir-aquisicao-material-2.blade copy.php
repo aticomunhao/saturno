@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    Gerenciar Solicitação de Material
+    Incluir Aquisição de Material
 @endsection
 
 @section('content')
@@ -16,7 +16,7 @@
                         <div class="card-header">
                             <div class="row">
                                 <h5 class="col-12" style="color: #355089">
-                                    Gerenciar Solicitação de Material
+                                    Incluir Solicitação de Material
                                 </h5>
                             </div>
                         </div>
@@ -28,18 +28,17 @@
                                     <div class="col-md-3 col-sm-12">
                                         <label>Nome do Solicitante</label>
                                         <br>
-                                        <input type="text" class="form-control"
+                                        <input type="text" class="form-control" style="border-color: gray;"
                                             value="{{ $solicitacao->modelPessoa->nome_completo ?? 'Não especificado' }}"
                                             disabled>
                                     </div>
-                                    <div class="col-md-3 col-sm-12">
+                                    <div class="col-md-4 col-sm-12">
                                         <label>Selecione seu Setor</label>
                                         <br>
                                         <select class="form-select select2" style="border: 1px solid #999999; padding: 5px;"
                                             id="idSetor" name="idSetor" required>
                                             <option value="{{ $solicitacao->setor->id ?? 'null' }}" selected>
-                                                {{ $solicitacao->setor->sigla ?? 'Não especificado' }} -
-                                                {{ $solicitacao->setor->nome ?? 'Não especificado' }}</option>
+                                                {{ $solicitacao->setor->sigla ?? 'Não especificado' }} - {{ $solicitacao->setor->nome ?? 'Não especificado' }}</option>
                                             @foreach ($buscaSetor as $buscaSetors)
                                                 <option value="{{ $buscaSetors->id }}">
                                                     {{ $buscaSetors->sigla }} - {{ $buscaSetors->nome }}
@@ -90,8 +89,8 @@
                                                 <div class="row material-item flex-grow-1">
                                                     <div class="col-md-4">
                                                         <label>Categoria do Material</label>
-                                                        <select class="form-select categoria-por-material select2"
-                                                            name="categoriaPorMaterial[{{ $index }}]"
+                                                        <select class="form-select categoria-material select2"
+                                                            name="categoriaMaterial[{{ $index }}]"
                                                             data-index="{{ $index }}">
                                                             <option value="{{ $material->tipoCategoria->id ?? 'null' }}"
                                                                 selected>
@@ -106,8 +105,8 @@
                                                     </div>
                                                     <div class="col-md-4">
                                                         <label>Nome do Material</label>
-                                                        <select class="form-select nome-por-material select2"
-                                                            name="nomePorMaterial[{{ $index }}]"
+                                                        <select class="form-select nome-material select2"
+                                                            name="nomeMaterial[{{ $index }}]"
                                                             data-index="{{ $index }}">
                                                             <option
                                                                 value="{{ $material->tipoItemCatalogoMaterial->id ?? 'null' }}"
@@ -120,7 +119,7 @@
                                                         <label>Unid. Medida</label>
                                                         <select class="form-select  select2"
                                                             style="border: 1px solid #999999; padding: 5px;"
-                                                            name="UnidadeMedidaPorMaterial[]">
+                                                            name="UnidadeMedidaMaterial">
                                                             <option
                                                                 value="{{ $material->tipoUnidadeMedida->id ?? 'null' }}"
                                                                 selected>
@@ -136,7 +135,7 @@
                                                     <div class="col-md-1">
                                                         <label>Quantidade</label>
                                                         <input type="text" class="form-control"
-                                                            name="quantidadePorMaterial1[]"
+                                                            name="quantidadeMaterial1[]"
                                                             style="background-color: white; border-color: gray;"
                                                             value="{{ $material->quantidade ?? 'Não especificado' }}">
                                                     </div>
@@ -152,8 +151,8 @@
                                                         class="btn btn-sm btn-outline-danger open-delete-modal"
                                                         data-bs-toggle="modal" data-bs-target="#modalExcluirMaterial"
                                                         data-material-id="{{ $material->id }}"
-                                                        data-material-name="{{ $material->nome }}" data-bs-toggle="tooltip"
-                                                        title="Excluir">
+                                                        data-material-name="{{ $material->nome }}"
+                                                        data-bs-toggle="tooltip" title="Excluir">
                                                         <i class="bi bi-x"></i>
                                                     </button>
                                                 </div>
@@ -162,9 +161,10 @@
                                                 <div class="row material-item">
                                                     <div class="col-md">
                                                         <label>Marca</label>
-                                                        <select class="form-select marca-por-material select2"
-                                                            name="marcaPorMaterial[{{ $index }}]"
-                                                            data-index="{{ $index }}">
+                                                        <select class="form-select js-marca-material select2"
+                                                            id="marcaMaterial"
+                                                            style="border: 1px solid #999999; padding: 5px;"
+                                                            name="marcaMaterial">
                                                             <option value="{{ $material->tipoMarca->id ?? 'null' }}"
                                                                 selected>
                                                                 {{ $material->tipoMarca->nome ?? 'Não especificado' }}
@@ -173,9 +173,10 @@
                                                     </div>
                                                     <div class="col-md">
                                                         <label>Tamanho</label>
-                                                        <select class="form-select tamanho-por-material select2"
-                                                            name="tamanhoPorMaterial[{{ $index }}]"
-                                                            data-index="{{ $index }}">
+                                                        <select class="form-select js-tamanho-material select2"
+                                                            id="tamanhoMaterial"
+                                                            style="border: 1px solid #999999; padding: 5px;"
+                                                            name="tamanhoMaterial">
                                                             <option value="{{ $material->tipoTamanho->id ?? 'null' }}"
                                                                 selected>
                                                                 {{ $material->tipoTamanho->nome ?? 'Não especificado' }}
@@ -184,9 +185,10 @@
                                                     </div>
                                                     <div class="col-md">
                                                         <label>Cor</label>
-                                                        <select class="form-select cor-por-material select2"
-                                                            name="corPorMaterial[{{ $index }}]"
-                                                            data-index="{{ $index }}">
+                                                        <select class="form-select js-cor-material select2"
+                                                            id="corMaterial"
+                                                            style="border: 1px solid #999999; padding: 5px;"
+                                                            name="corMaterial">
                                                             <option value="{{ $material->tipoCor->id ?? 'null' }}"
                                                                 selected>
                                                                 {{ $material->tipoCor->nome ?? 'Não especificado' }}
@@ -195,9 +197,10 @@
                                                     </div>
                                                     <div class="col-md">
                                                         <label>Fase Etária</label>
-                                                        <select class="form-select fase-etaria-por-material select2"
-                                                            name="faseEtariaPorMaterial[{{ $index }}]"
-                                                            data-index="{{ $index }}">
+                                                        <select class="form-select js-fase-material select2"
+                                                            id="faseEtariaMaterial"
+                                                            style="border: 1px solid #999999; padding: 5px;"
+                                                            name="faseEtariaMaterial">
                                                             <option value="{{ $material->tipoFaseEtaria->id ?? 'null' }}"
                                                                 selected>
                                                                 {{ $material->tipoFaseEtaria->nome ?? 'Não especificado' }}
@@ -206,9 +209,10 @@
                                                     </div>
                                                     <div class="col-md">
                                                         <label>Sexo</label>
-                                                        <select class="form-select sexo-por-material select2"
-                                                            name="sexoPorMaterial[{{ $index }}]"
-                                                            data-index="{{ $index }}">
+                                                        <select class="form-select js-sexo-material select2"
+                                                            id="sexoMaterial"
+                                                            style="border: 1px solid #999999; padding: 5px;"
+                                                            name="sexoMaterial">
                                                             <option value="{{ $material->tipoSexo->id ?? 'null' }}"
                                                                 selected>
                                                                 {{ $material->tipoSexo->nome ?? 'Não especificado' }}
@@ -303,7 +307,7 @@
                                                             <!-- Link da Proposta -->
                                                             <div class="col-md-4 mb-3">
                                                                 <label>Link da Proposta Principal</label>
-                                                                <input type="text" class="form-control"
+                                                                <input type="text" class="form-control mt-2"
                                                                     style="background-color: white; border-color: gray;"
                                                                     id="linkProposta1" name="linkProposta1[]"
                                                                     placeholder="Link da Proposta">
@@ -346,8 +350,8 @@
                                                                 <label>Valor da 2ª Proposta</label>
                                                                 <input type="text"
                                                                     class="form-control valor valor-proposta"
-                                                                    name="valor2[]"
                                                                     style="background-color: white; border-color: gray;"
+                                                                    name="valor2[]"
                                                                     placeholder="Digite o valor da proposta">
                                                             </div>
                                                         </div>
@@ -358,8 +362,8 @@
                                                                 <label>Data da Criação da 2ª
                                                                     Proposta</label>
                                                                 <input type="date" class="form-control"
-                                                                    name="dt_inicial2[]"
                                                                     style="background-color: white; border-color: gray;"
+                                                                    name="dt_inicial2[]"
                                                                     placeholder="Digite a data da proposta">
                                                             </div>
 
@@ -367,8 +371,8 @@
                                                             <div class="col-md-4 mb-3">
                                                                 <label>Data Limite da 2ª Proposta</label>
                                                                 <input type="date" class="form-control"
-                                                                    name="dt_final2[]"
                                                                     style="background-color: white; border-color: gray;"
+                                                                    name="dt_final2[]"
                                                                     placeholder="Digite a data final do prazo da proposta">
                                                             </div>
 
@@ -376,8 +380,8 @@
                                                             <div class="col-md-4 mb-3">
                                                                 <label>Arquivo da 2ª Proposta</label>
                                                                 <input type="file" class="form-control"
-                                                                    style="background-color: white; border-color: gray;"
                                                                     id="uploadProposta2" name="arquivoProposta2[]"
+                                                                    style="background-color: white; border-color: gray;"
                                                                     accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
                                                             </div>
                                                         </div>
@@ -396,7 +400,7 @@
                                                             <!-- Link da Proposta -->
                                                             <div class="col-md-4 mb-3">
                                                                 <label>Link da 2ª Proposta</label>
-                                                                <input type="text" class="form-control"
+                                                                <input type="text" class="form-control mt-2"
                                                                     style="background-color: white; border-color: gray;"
                                                                     id="linkProposta2" name="linkProposta2[]"
                                                                     placeholder="Link da Proposta">
@@ -469,8 +473,8 @@
                                                             <div class="col-md-4 mb-3">
                                                                 <label>Arquivo da 3ª Proposta</label>
                                                                 <input type="file" class="form-control"
-                                                                    style="background-color: white; border-color: gray;"
                                                                     id="uploadProposta3" name="arquivoProposta3[]"
+                                                                    style="background-color: white; border-color: gray;"
                                                                     accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
                                                             </div>
                                                         </div>
@@ -489,7 +493,7 @@
                                                             <!-- Link da Proposta -->
                                                             <div class="col-md-4 mb-3">
                                                                 <label>Link da 3ª Proposta</label>
-                                                                <input type="text" class="form-control"
+                                                                <input type="text" class="form-control mt-2"
                                                                     style="background-color: white; border-color: gray;"
                                                                     id="linkProposta3" name="linkProposta3[]"
                                                                     placeholder="Link da Proposta">
@@ -605,6 +609,7 @@
                                             <!-- Botões de Minimizar e Fechar -->
                                             <div class="card-actions position-absolute" style="top: 5px; right: 5px;">
                                                 <button type="button"
+                                                    style="background-color: white; border-color: gray;"
                                                     class="btn btn-sm btn-outline-secondary toggle-card-content"
                                                     data-bs-toggle="tooltip" title="Minimizar/Maximizar">
                                                     <i class="bi bi-plus"></i>
@@ -704,6 +709,7 @@
                                             <!-- Botões de Minimizar e Fechar -->
                                             <div class="card-actions position-absolute" style="top: 5px; right: 5px;">
                                                 <button type="button"
+                                                    style="background-color: white; border-color: gray;"
                                                     class="btn btn-sm btn-outline-secondary toggle-card-content"
                                                     data-bs-toggle="tooltip" title="Minimizar/Maximizar">
                                                     <i class="bi bi-plus"></i>
@@ -724,7 +730,8 @@
                                                 <div class="col-md-4 mb-3">
                                                     <label>Nome 3ª Empresa</label>
                                                     <select class="form-select select2" name="razaoSocialPorEmpresa3"
-                                                        required style="border: 1px solid #999999; padding: 5px;">
+                                                        style="background-color: white; border-color: gray;" required
+                                                        style="border: 1px solid #999999; padding: 5px;">
                                                         <option></option>
                                                         @foreach ($buscaEmpresa as $buscaEmpresas)
                                                             <option value="{{ $buscaEmpresas->id }}">
@@ -828,71 +835,48 @@
                                                 <div class="row material-item flex-grow-1">
                                                     <div class="col-md-2">
                                                         <label>Categoria do Material</label>
-                                                        <select class="form-select categoria-por-empresa select2"
-                                                            name="categoriaPorEmpresa[{{ $index }}]"
-                                                            data-index="{{ $index }}">
-                                                            <option value="{{ $material->tipoCategoria->id ?? 'null' }}"
-                                                                selected>
-                                                                {{ $material->tipoCategoria->nome ?? 'Não especificado' }}
-                                                            </option>
-                                                            @foreach ($buscaCategoria as $buscaCategorias)
-                                                                <option value="{{ $buscaCategorias->id }}">
-                                                                    {{ $buscaCategorias->nome }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
+                                                        <input type="text" class="form-control"
+                                                            value="{{ $material->tipoCategoria->nome ?? 'Não especificado' }}"
+                                                            disabled>
                                                     </div>
                                                     <div class="col-md-3">
                                                         <label>Nome do Material</label>
-                                                        <select class="form-select nome-por-empresa select2"
-                                                            name="nomePorEmpresa[{{ $index }}]"
-                                                            data-index="{{ $index }}">
-                                                            <option
-                                                                value="{{ $material->tipoItemCatalogoMaterial->id ?? 'null' }}"
-                                                                selected>
-                                                                {{ $material->tipoItemCatalogoMaterial->nome ?? 'Não especificado' }}
-                                                            </option>
-                                                        </select>
+                                                        <input type="text" class="form-control"
+                                                            value="{{ $material->tipoItemCatalogoMaterial->nome ?? 'Não especificado' }}"
+                                                            disabled>
                                                     </div>
                                                     <div class="col-md-2">
                                                         <label>Unid. Medida</label>
-                                                            <select class="form-select  select2"
-                                                            style="border: 1px solid #999999; padding: 5px;"
-                                                            name="UnidadeMedidaPorEmpresa[]">
-                                                            <option
-                                                                value="{{ $material->tipoUnidadeMedida->id ?? 'null' }}"
-                                                                selected>
-                                                                {{ $material->tipoUnidadeMedida->nome ?? 'Não especificado' }}
-                                                            </option>
-                                                            @foreach ($buscaUnidadeMedida as $buscaUnidadeMedidas)
-                                                                <option value="{{ $buscaUnidadeMedidas->id }}">
-                                                                    {{ $buscaUnidadeMedidas->nome }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
+                                                        <input type="text" class="form-control"
+                                                            value="{{ $material->tipoUnidadeMedida->nome ?? 'Não especificado' }}"
+                                                            disabled>
                                                     </div>
                                                     <div class="col-md-1">
                                                         <label>Quantidade</label>
-                                                        <input type="text" class="form-control" style="background-color: white; border-color: gray;"
+                                                        <input type="text" class="form-control"
+                                                            style="background-color: white; border-color: gray;"
                                                             name="quantidadePorEmpresa[]" required
                                                             value="{{ $material->quantidade ?? 'Não especificado' }}">
                                                     </div>
                                                     <div class="col-md-1">
                                                         <label>Valor Unitário</label>
                                                         <input type="text" class="form-control valor valor-proposta"
-                                                            required name="valorPorEmpresa1[]" style="background-color: white; border-color: gray;"
+                                                            required name="valorPorEmpresa1[]"
+                                                            style="background-color: white; border-color: gray;"
                                                             placeholder="Digite o valor da proposta">
                                                     </div>
                                                     <div class="col-md-1">
                                                         <label>Valor Unitário</label>
                                                         <input type="text" class="form-control valor valor-proposta"
-                                                            required name="valorPorEmpresa2[]" style="background-color: white; border-color: gray;"
+                                                            required name="valorPorEmpresa2[]"
+                                                            style="background-color: white; border-color: gray;"
                                                             placeholder="Digite o valor da proposta">
                                                     </div>
                                                     <div class="col-md-1">
                                                         <label>Valor Unitário</label>
                                                         <input type="text" class="form-control valor valor-proposta"
-                                                            required name="valorPorEmpresa3[]" style="background-color: white; border-color: gray;"
+                                                            required name="valorPorEmpresa3[]"
+                                                            style="background-color: white; border-color: gray;"
                                                             placeholder="Digite o valor da proposta">
                                                     </div>
                                                 </div>
@@ -917,63 +901,33 @@
                                                 <div class="row material-item">
                                                     <div class="col-md">
                                                         <label>Marca</label>
-                                                        <select class="form-select marca-por-empresa select2"
-                                                            name="marcaPorEmpresa[{{ $index }}]"
-                                                            data-index="{{ $index }}">
-                                                            <option value="{{ $material->tipoMarca->id ?? 'null' }}"
-                                                                selected>
-                                                                {{ $material->tipoMarca->nome ?? 'Não especificado' }}
-                                                            </option>
-                                                        </select>
+                                                        <input type="text" class="form-control"
+                                                            value="{{ $material->tipoMarca->nome ?? 'Não especificado' }}"
+                                                            disabled>
                                                     </div>
                                                     <div class="col-md">
                                                         <label>Tamanho</label>
-                                                        <select class="form-select tamanho-por-empresa select2"
-                                                            name="tamanhoPorEmpresa[{{ $index }}]"
-                                                            data-index="{{ $index }}">
-                                                            <option value="{{ $material->tipoTamanho->id ?? 'null' }}"
-                                                                selected>
-                                                                {{ $material->tipoTamanho->nome ?? 'Não especificado' }}
-                                                            </option>
-                                                        </select>
+                                                        <input type="text" class="form-control"
+                                                            value="{{ $material->tipoTamanho->nome ?? 'Não especificado' }}"
+                                                            disabled>
                                                     </div>
                                                     <div class="col-md">
                                                         <label>Cor</label>
-                                                        <select class="form-select cor-por-empresa select2"
-                                                            name="corPorEmpresa[{{ $index }}]"
-                                                            data-index="{{ $index }}">
-                                                            <option value="{{ $material->tipoCor->id ?? 'null' }}"
-                                                                selected>
-                                                                {{ $material->tipoCor->nome ?? 'Não especificado' }}
-                                                            </option>
-                                                        </select>
+                                                        <input type="text" class="form-control"
+                                                            value="{{ $material->tipoCor->nome ?? 'Não especificado' }}"
+                                                            disabled>
                                                     </div>
                                                     <div class="col-md">
                                                         <label>Fase Etária</label>
-                                                        <select class="form-select fase-etaria-por-empresa select2"
-                                                            name="faseEtariaPorEmpresa[{{ $index }}]"
-                                                            data-index="{{ $index }}">
-                                                            <option value="{{ $material->tipoFaseEtaria->id ?? 'null' }}"
-                                                                selected>
-                                                                {{ $material->tipoFaseEtaria->nome ?? 'Não especificado' }}
-                                                            </option>
-                                                        </select>
+                                                        <input type="text" class="form-control"
+                                                            value="{{ $material->tipoFaseEtaria->nome ?? 'Não especificado' }}"
+                                                            disabled>
                                                     </div>
                                                     <div class="col-md">
                                                         <label>Sexo</label>
-                                                        <select class="form-select sexo-por-empresa select2"
-                                                            name="sexoPorEmpresa[{{ $index }}]"
-                                                            data-index="{{ $index }}">
-                                                            <option value="{{ $material->tipoSexo->id ?? 'null' }}"
-                                                                selected>
-                                                                {{ $material->tipoSexo->nome ?? 'Não especificado' }}
-                                                            </option>
-                                                            @foreach ($buscaSexo as $buscaSexos)
-                                                                <option value="{{ $buscaSexos->id }}">
-                                                                    {{ $buscaSexos->nome }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
+                                                        <input type="text" class="form-control"
+                                                            value="{{ $material->tipoSexo->nome ?? 'Não especificado' }}"
+                                                            disabled>
                                                     </div>
                                                 </div>
                                             </div>
@@ -987,7 +941,7 @@
             </div>
         </div>
         <div class="botões">
-            <a href="/gerenciar-aquisicao-material" class="btn btn-danger col-md-3 col-2 mt-4 offset-md-2">Cancelar</a>
+            <a href="javascript:history.back()" class="btn btn-danger col-md-3 col-2 mt-4 offset-md-2">Cancelar</a>
             <button type="submit" value="Confirmar" class="btn btn-primary col-md-3 col-1 mt-4 offset-md-2">Confirmar
             </button>
         </div>
@@ -1045,7 +999,8 @@
                             </div>
                             <div class="col-md-2">
                                 <label>Quantidade</label>
-                                <input type="number" class="form-control" name="quantidadeMaterial">
+                                <input type="number" class="form-control" name="quantidadeMaterial"
+                                    style="background-color: white">
                             </div>
                         </div>
                         <div class="row material-item" style="margin-top: 20px">
@@ -1135,7 +1090,6 @@
             border-color: gray !important;
         }
     </style>
-    {{-- Script dos botao de alternar e adicionar --}}
     <script>
         // Selecione todos os campos com a classe 'proposta'
         document.querySelectorAll('.valor-proposta').forEach(function(input) {
@@ -1261,42 +1215,6 @@
             });
         });
     </script>
-    {{-- preencher select da modal --}}
-    <script>
-        $(document).ready(function() {
-            // Função genérica para carregar opções via AJAX
-            function carregarOpcoes(url, targetSelect, placeholder = "Selecione...") {
-                fetch(url)
-                    .then((response) => response.json())
-                    .then((data) => {
-                        const select = $(targetSelect);
-                        select.empty(); // Limpa as opções existentes
-                        if (data.length > 0) {
-                            select.append(`<option value="" disabled selected>${placeholder}</option>`);
-                            data.forEach((item) => {
-                                select.append(`<option value="${item.id}">${item.nome}</option>`);
-                            });
-                        } else {
-                            select.append(`<option value="" disabled selected>Não Possui</option>`);
-                        }
-                    })
-                    .catch((error) => console.error("Erro ao carregar opções:", error));
-            }
-
-            // Filtro dinâmico com base na categoria
-            $('#categoriaMaterial').on('change', function() {
-                const categoriaId = this.value;
-                if (categoriaId) {
-                    carregarOpcoes(`/nome/${categoriaId}`, '#nomeMaterial');
-                    carregarOpcoes(`/marcas/${categoriaId}`, '#marcaMaterial');
-                    carregarOpcoes(`/tamanhos/${categoriaId}`, '#tamanhoMaterial');
-                    carregarOpcoes(`/cores/${categoriaId}`, '#corMaterial');
-                    carregarOpcoes(`/fases/${categoriaId}`, '#faseEtariaMaterial');
-                }
-            });
-        });
-    </script>
-    {{-- preencher select da por material --}}
     <script>
         $(document).ready(function() {
             // Função para carregar opções via AJAX
@@ -1319,57 +1237,16 @@
             }
 
             // Aplicar evento de mudança a todas as categorias
-            $(document).on('change', '.categoria-por-material', function() {
+            $(document).on('change', '.categoria-material', function() {
                 let categoriaId = $(this).val();
                 let index = $(this).data('index'); // Obtém o índice do item
 
                 if (categoriaId) {
-                    carregarOpcoes(`/nome/${categoriaId}`, `select[name="nomePorMaterial[${index}]"]`);
-                    carregarOpcoes(`/marcas/${categoriaId}`, `select[name="marcaPorMaterial[${index}]"]`);
-                    carregarOpcoes(`/tamanhos/${categoriaId}`,
-                        `select[name="tamanhoPorMaterial[${index}]"]`);
-                    carregarOpcoes(`/cores/${categoriaId}`, `select[name="corPorMaterial[${index}]"]`);
-                    carregarOpcoes(`/fases/${categoriaId}`,
-                        `select[name="faseEtariaPorMaterial[${index}]"]`);
-                }
-            });
-        });
-    </script>
-    {{-- preencher select da por empresa --}}
-    <script>
-        $(document).ready(function() {
-            // Função para carregar opções via AJAX
-            function carregarOpcoes(url, targetSelect, placeholder = "Selecione...") {
-                fetch(url)
-                    .then((response) => response.json())
-                    .then((data) => {
-                        const select = $(targetSelect);
-                        select.empty(); // Limpa opções existentes
-                        if (data.length > 0) {
-                            select.append(`<option value="" disabled selected>${placeholder}</option>`);
-                            data.forEach((item) => {
-                                select.append(`<option value="${item.id}">${item.nome}</option>`);
-                            });
-                        } else {
-                            select.append(`<option value="" disabled selected>Não Possui</option>`);
-                        }
-                    })
-                    .catch((error) => console.error("Erro ao carregar opções:", error));
-            }
-
-            // Aplicar evento de mudança a todas as categorias
-            $(document).on('change', '.categoria-por-empresa', function() {
-                let categoriaId = $(this).val();
-                let index = $(this).data('index'); // Obtém o índice do item
-
-                if (categoriaId) {
-                    carregarOpcoes(`/nome/${categoriaId}`, `select[name="nomePorEmpresa[${index}]"]`);
-                    carregarOpcoes(`/marcas/${categoriaId}`, `select[name="marcaPorEmpresa[${index}]"]`);
-                    carregarOpcoes(`/tamanhos/${categoriaId}`,
-                        `select[name="tamanhoPorEmpresa[${index}]"]`);
-                    carregarOpcoes(`/cores/${categoriaId}`, `select[name="corPorEmpresa[${index}]"]`);
-                    carregarOpcoes(`/fases/${categoriaId}`,
-                        `select[name="faseEtariaPorEmpresa[${index}]"]`);
+                    carregarOpcoes(`/marcas/${categoriaId}`, `select[name="marcaMaterial[${index}]"]`);
+                    carregarOpcoes(`/tamanhos/${categoriaId}`, `select[name="tamanhoMaterial[${index}]"]`);
+                    carregarOpcoes(`/cores/${categoriaId}`, `select[name="corMaterial[${index}]"]`);
+                    carregarOpcoes(`/fases/${categoriaId}`, `select[name="faseEtariaMaterial[${index}]"]`);
+                    carregarOpcoes(`/nome/${categoriaId}`, `select[name="nomeMaterial[${index}]"]`);
                 }
             });
         });

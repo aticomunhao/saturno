@@ -180,7 +180,6 @@ class AquisicaoMaterialController extends Controller
     }
     public function create(Request $request)
     {
-
         $setor = session('usuario.setor');
         $idPessoa = session('usuario.id_pessoa');
 
@@ -242,7 +241,8 @@ class AquisicaoMaterialController extends Controller
             'id_cat_material' => $request->categoriaMaterial,
             'id_tipo_unidade_medida' => $request->UnidadeMedidaMaterial,
             'quantidade' => $request->quantidadeMaterial,
-            'id_tipo_situcao' => '0',
+            'id_tipo_situacao' => '0',
+            'nome' => $request->nomeMaterial,
         ]);
 
         app('flasher')->addSuccess('Material Adicionado com Sucesso');
@@ -308,22 +308,53 @@ class AquisicaoMaterialController extends Controller
             ]);
 
             foreach ($materiais as $index => $material) {
-                $endArquivo1 = $request->hasFile('arquivoProposta1.' . $index)
-                    ? $request->file('arquivoProposta1.' . $index)->store('documentos', 'public')
-                    : null;
+                // Verifica se o arquivo foi enviado e armazena-o
+                $endArquivo1 = $request->hasFile("arquivoProposta1.$index")
+                    ? $request->file("arquivoProposta1.$index")->store('documentos', 'public')
+                    : $material->arquivo_proposta_1 ?? null;
 
-                $endArquivo2 = $request->hasFile('arquivoProposta2.' . $index)
-                    ? $request->file('arquivoProposta2.' . $index)->store('documentos', 'public')
-                    : null;
+                $endArquivo2 = $request->hasFile("arquivoProposta2.$index")
+                    ? $request->file("arquivoProposta2.$index")->store('documentos', 'public')
+                    : $material->arquivo_proposta_2 ?? null;
 
-                $endArquivo3 = $request->hasFile('arquivoProposta3.' . $index)
-                    ? $request->file('arquivoProposta3.' . $index)->store('documentos', 'public')
-                    : null;
+                $endArquivo3 = $request->hasFile("arquivoProposta3.$index")
+                    ? $request->file("arquivoProposta3.$index")->store('documentos', 'public')
+                    : $material->arquivo_proposta_3 ?? null;
                 //dd($material);
+                // Verifica se os índices existem no request antes de atualizar
+                $data = [];
+                if (isset($request->quantidadePorMaterial1[$index])) {
+                    $data['quantidade'] = $request->quantidadePorMaterial1[$index];
+                }
+                if (isset($request->marcaPorMaterial[$index])) {
+                    $data['id_marca'] = $request->marcaPorMaterial[$index];
+                }
+                if (isset($request->tamanhoPorMaterial[$index])) {
+                    $data['id_tamanho'] = $request->tamanhoPorMaterial[$index];
+                }
+                if (isset($request->corPorMaterial[$index])) {
+                    $data['id_cor'] = $request->corPorMaterial[$index];
+                }
+                if (isset($request->faseEtariaPorMaterial[$index])) {
+                    $data['id_fase_etaria'] = $request->faseEtariaPorMaterial[$index];
+                }
+                if (isset($request->sexoPorMaterial[$index])) {
+                    $data['id_sexo'] = $request->sexoPorMaterial[$index];
+                }
+                if (isset($request->categoriaPorMaterial[$index])) {
+                    $data['id_cat_material'] = $request->categoriaPorMaterial[$index];
+                }
+                if (isset($request->nomePorMaterial[$index])) {
+                    $data['nome'] = $request->nomePorMaterial[$index];
+                }
+                if (isset($request->UnidadeMedidaPorMaterial[$index])) {
+                    $data['id_tipo_unidade_medida'] = $request->UnidadeMedidaPorMaterial[$index];
+                }
 
-                MatProposta::where('id', $material->id)->update([
-                    'quantidade' => $request->quantidadeMaterial1[$index],
-                ]);
+                // Atualiza apenas se houver dados a modificar
+                if (!empty($data)) {
+                    MatProposta::where('id', $material->id)->update($data);
+                }
 
                 Documento::create([
                     'dt_doc' => $request->dt_inicial1[$index],
@@ -375,28 +406,72 @@ class AquisicaoMaterialController extends Controller
             }
         } else {
             foreach ($materiais as $index => $material) {
-                MatProposta::where('id', $material->id)->update([
-                    'valor1' => str_replace(['R$', ',', ' '], ['', '', ''], $request->valorPorEmpresa1[$index]),
-                    'valor2' => str_replace(['R$', ',', ' '], ['', '', ''], $request->valorPorEmpresa2[$index]),
-                    'valor3' => str_replace(['R$', ',', ' '], ['', '', ''], $request->valorPorEmpresa3[$index]),
-                    'quantidade' => $request->quantidadePorEmpresa[$index],
-                ]);
+                // Função para limpar o valor monetário
+                function limparValor($valor)
+                {
+                    return $valor !== null ? str_replace(['R$', ',', ' '], ['', '', ''], $valor) : null;
+                }
+
+                // Construção do array de atualização verificando a existência dos índices
+                $data = [];
+
+                if (isset($request->valorPorEmpresa1[$index])) {
+                    $data['valor1'] = limparValor($request->valorPorEmpresa1[$index]);
+                }
+                if (isset($request->valorPorEmpresa2[$index])) {
+                    $data['valor2'] = limparValor($request->valorPorEmpresa2[$index]);
+                }
+                if (isset($request->valorPorEmpresa3[$index])) {
+                    $data['valor3'] = limparValor($request->valorPorEmpresa3[$index]);
+                }
+                if (isset($request->quantidadePorEmpresa[$index])) {
+                    $data['quantidade'] = $request->quantidadePorEmpresa[$index];
+                }
+                if (isset($request->marcaPorMaterial[$index])) {
+                    $data['id_marca'] = $request->marcaPorMaterial[$index];
+                }
+                if (isset($request->tamanhoPorMaterial[$index])) {
+                    $data['id_tamanho'] = $request->tamanhoPorMaterial[$index];
+                }
+                if (isset($request->corPorMaterial[$index])) {
+                    $data['id_cor'] = $request->corPorMaterial[$index];
+                }
+                if (isset($request->faseEtariaPorMaterial[$index])) {
+                    $data['id_fase_etaria'] = $request->faseEtariaPorMaterial[$index];
+                }
+                if (isset($request->sexoPorMaterial[$index])) {
+                    $data['id_sexo'] = $request->sexoPorMaterial[$index];
+                }
+                if (isset($request->categoriaPorMaterial[$index])) {
+                    $data['id_cat_material'] = $request->categoriaPorMaterial[$index];
+                }
+                if (isset($request->nomePorMaterial[$index])) {
+                    $data['nome'] = $request->nomePorMaterial[$index];
+                }
+                if (isset($request->UnidadeMedidaPorMaterial[$index])) {
+                    $data['id_tipo_unidade_medida'] = $request->UnidadeMedidaPorMaterial[$index];
+                }
+
+                // Atualiza apenas se houver dados a modificar
+                if (!empty($data)) {
+                    MatProposta::where('id', $material->id)->update($data);
+                }
             }
 
             SolMaterial::where('id', $idSolicitacoes)->update([
                 'tipo_sol_material' => '1',
             ]);
 
-            $endArquivoPorEmpresa1 = $request->hasFile('arquivoProposta1.')
+            $endArquivoPorEmpresa1 = $request->hasFile('arquivoPropostaPorEmpresa1.')
                 ? $request->file('arquivoPropostaPorEmpresa1.')->store('documentos', 'public')
                 : null;
 
             $endArquivoPorEmpresa2 = $request->hasFile('arquivoPropostaPorEmpresa2.')
-                ? $request->file('arquivoProposta2.')->store('documentos', 'public')
+                ? $request->file('arquivoPropostaPorEmpresa2.')->store('documentos', 'public')
                 : null;
 
             $endArquivoPorEmpresa3 = $request->hasFile('arquivoPropostaPorEmpresa3.')
-                ? $request->file('arquivoProposta3.')->store('documentos', 'public')
+                ? $request->file('arquivoPropostaPorEmpresa3.')->store('documentos', 'public')
                 : null;
 
             Documento::create([

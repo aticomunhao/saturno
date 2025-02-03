@@ -138,8 +138,8 @@
                                                         </div>
                                                     </td>
                                                     <td>{{ $aquisicaos->id }}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($aquisicaos->data)->format('d/m/Y') }}</td>
-                                                    <td>{{ $aquisicaos->setor->nome ?? 'N/A'}}</td>
+                                                    <td>{{ $aquisicaos->data ? \Carbon\Carbon::parse($aquisicaos->data)->format('d/m/Y') : 'N/A' }}</td>
+                                                    <td>{{ $aquisicaos->setor->sigla ?? 'N/A'}} - {{ $aquisicaos->setor->nome ?? 'N/A'}}</td>
                                                     <td>{{ $aquisicaos->prioridade ?? 'N/A'}}</td>
                                                     <td>{{ $aquisicaos->tipoStatus->nome ?? 'N/A'}}</td>
                                                     <td>NÃO</td>
@@ -167,7 +167,7 @@
                                                             </a>
                                                         {{-- @endif --}}
                                                         {{-- @if ($aquisicaos->tipoStatus->id == '1') --}}
-                                                            <a href=""
+                                                            <a href="/incluir-aquisicao-material-2/{{$aquisicaos->id}}"
                                                                 class="btn btn-sm btn-outline-warning" data-tt="tooltip"
                                                                 style="font-size: 1rem; color:#303030"
                                                                 data-placement="top" title="Editar">

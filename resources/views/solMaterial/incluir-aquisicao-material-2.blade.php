@@ -37,7 +37,7 @@
                                         <br>
                                         <select class="form-select select2" style="border: 1px solid #999999; padding: 5px;"
                                             id="idSetor" name="idSetor" required>
-                                            <option value="{{ $solicitacao->setor->id ?? 'null' }}" selected>
+                                            <option value="{{ $solicitacao->setor->id ?? '' }}" selected>
                                                 {{ $solicitacao->setor->sigla ?? 'Não especificado' }} -
                                                 {{ $solicitacao->setor->nome ?? 'Não especificado' }}</option>
                                             @foreach ($buscaSetor as $buscaSetors)
@@ -82,8 +82,8 @@
                                 </div>
                             </div>
                             <div>
+                                {{-- card por material --}}
                                 <div class="col-12 mt-3" id="listaMateriais" style="display: none;">
-                                    {{-- card por material --}}
                                     @foreach ($materiais as $index => $material)
                                         <div class="card" id="card-material" style="margin-bottom: 10px">
                                             <div class="card-header d-flex align-items-center justify-content-between">
@@ -93,7 +93,7 @@
                                                         <select class="form-select categoria-por-material select2"
                                                             name="categoriaPorMaterial[{{ $index }}]"
                                                             data-index="{{ $index }}">
-                                                            <option value="{{ $material->tipoCategoria->id ?? 'null' }}"
+                                                            <option value="{{ $material->tipoCategoria->id ?? '' }}"
                                                                 selected>
                                                                 {{ $material->tipoCategoria->nome ?? 'Não especificado' }}
                                                             </option>
@@ -110,7 +110,7 @@
                                                             name="nomePorMaterial[{{ $index }}]"
                                                             data-index="{{ $index }}">
                                                             <option
-                                                                value="{{ $material->tipoItemCatalogoMaterial->id ?? 'null' }}"
+                                                                value="{{ $material->tipoItemCatalogoMaterial->id ?? '' }}"
                                                                 selected>
                                                                 {{ $material->tipoItemCatalogoMaterial->nome ?? 'Não especificado' }}
                                                             </option>
@@ -120,9 +120,9 @@
                                                         <label>Unid. Medida</label>
                                                         <select class="form-select  select2"
                                                             style="border: 1px solid #999999; padding: 5px;"
-                                                            name="UnidadeMedidaPorMaterial[]">
+                                                            name="UnidadeMedidaPorMaterial[{{ $index }}]" data-index="{{ $index }}">
                                                             <option
-                                                                value="{{ $material->tipoUnidadeMedida->id ?? 'null' }}"
+                                                                value="{{ $material->tipoUnidadeMedida->id ?? '' }}"
                                                                 selected>
                                                                 {{ $material->tipoUnidadeMedida->nome ?? 'Não especificado' }}
                                                             </option>
@@ -136,8 +136,8 @@
                                                     <div class="col-md-1">
                                                         <label>Quantidade</label>
                                                         <input type="text" class="form-control"
-                                                            name="quantidadePorMaterial1[]"
-                                                            style="background-color: white; border-color: gray;"
+                                                            name="quantidadePorMaterial1[{{ $index }}]"
+                                                            style="background-color: white; border-color: gray;" data-index="{{ $index }}"
                                                             value="{{ $material->quantidade ?? 'Não especificado' }}">
                                                     </div>
                                                 </div>
@@ -165,7 +165,7 @@
                                                         <select class="form-select marca-por-material select2"
                                                             name="marcaPorMaterial[{{ $index }}]"
                                                             data-index="{{ $index }}">
-                                                            <option value="{{ $material->tipoMarca->id ?? 'null' }}"
+                                                            <option value="{{ $material->tipoMarca->id ?? '' }}"
                                                                 selected>
                                                                 {{ $material->tipoMarca->nome ?? 'Não especificado' }}
                                                             </option>
@@ -176,7 +176,7 @@
                                                         <select class="form-select tamanho-por-material select2"
                                                             name="tamanhoPorMaterial[{{ $index }}]"
                                                             data-index="{{ $index }}">
-                                                            <option value="{{ $material->tipoTamanho->id ?? 'null' }}"
+                                                            <option value="{{ $material->tipoTamanho->id ?? '' }}"
                                                                 selected>
                                                                 {{ $material->tipoTamanho->nome ?? 'Não especificado' }}
                                                             </option>
@@ -187,7 +187,7 @@
                                                         <select class="form-select cor-por-material select2"
                                                             name="corPorMaterial[{{ $index }}]"
                                                             data-index="{{ $index }}">
-                                                            <option value="{{ $material->tipoCor->id ?? 'null' }}"
+                                                            <option value="{{ $material->tipoCor->id ?? '' }}"
                                                                 selected>
                                                                 {{ $material->tipoCor->nome ?? 'Não especificado' }}
                                                             </option>
@@ -198,7 +198,7 @@
                                                         <select class="form-select fase-etaria-por-material select2"
                                                             name="faseEtariaPorMaterial[{{ $index }}]"
                                                             data-index="{{ $index }}">
-                                                            <option value="{{ $material->tipoFaseEtaria->id ?? 'null' }}"
+                                                            <option value="{{ $material->tipoFaseEtaria->id ?? '' }}"
                                                                 selected>
                                                                 {{ $material->tipoFaseEtaria->nome ?? 'Não especificado' }}
                                                             </option>
@@ -209,7 +209,7 @@
                                                         <select class="form-select sexo-por-material select2"
                                                             name="sexoPorMaterial[{{ $index }}]"
                                                             data-index="{{ $index }}">
-                                                            <option value="{{ $material->tipoSexo->id ?? 'null' }}"
+                                                            <option value="{{ $material->tipoSexo->id ?? '' }}"
                                                                 selected>
                                                                 {{ $material->tipoSexo->nome ?? 'Não especificado' }}
                                                             </option>
@@ -288,7 +288,7 @@
                                                                     accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
                                                             </div>
                                                         </div>
-
+                                                        
                                                         <div class="row">
                                                             <!-- Tempo de Garantia -->
                                                             <div id="tempoGarantia" class="col-md-4 mb-3">
@@ -797,6 +797,7 @@
                                         </div>
                                     </div>
                                     <br>
+                                    {{--Nomes em cima da tabela --}}
                                     <div class="row">
                                         <div class="col-md-2">
                                             {{-- <label>Categoria do Material</label> --}}
@@ -831,7 +832,7 @@
                                                         <select class="form-select categoria-por-empresa select2"
                                                             name="categoriaPorEmpresa[{{ $index }}]"
                                                             data-index="{{ $index }}">
-                                                            <option value="{{ $material->tipoCategoria->id ?? 'null' }}"
+                                                            <option value="{{ $material->tipoCategoria->id ?? '' }}"
                                                                 selected>
                                                                 {{ $material->tipoCategoria->nome ?? 'Não especificado' }}
                                                             </option>
@@ -848,7 +849,7 @@
                                                             name="nomePorEmpresa[{{ $index }}]"
                                                             data-index="{{ $index }}">
                                                             <option
-                                                                value="{{ $material->tipoItemCatalogoMaterial->id ?? 'null' }}"
+                                                                value="{{ $material->tipoItemCatalogoMaterial->id ?? '' }}"
                                                                 selected>
                                                                 {{ $material->tipoItemCatalogoMaterial->nome ?? 'Não especificado' }}
                                                             </option>
@@ -856,11 +857,12 @@
                                                     </div>
                                                     <div class="col-md-2">
                                                         <label>Unid. Medida</label>
-                                                            <select class="form-select  select2"
+                                                        <select class="form-select  select2"
                                                             style="border: 1px solid #999999; padding: 5px;"
-                                                            name="UnidadeMedidaPorEmpresa[]">
+                                                            name="UnidadeMedidaPorEmpresa[{{ $index }}]"
+                                                            data-index="{{ $index }}">
                                                             <option
-                                                                value="{{ $material->tipoUnidadeMedida->id ?? 'null' }}"
+                                                                value="{{ $material->tipoUnidadeMedida->id ?? '' }}"
                                                                 selected>
                                                                 {{ $material->tipoUnidadeMedida->nome ?? 'Não especificado' }}
                                                             </option>
@@ -873,27 +875,35 @@
                                                     </div>
                                                     <div class="col-md-1">
                                                         <label>Quantidade</label>
-                                                        <input type="text" class="form-control" style="background-color: white; border-color: gray;"
-                                                            name="quantidadePorEmpresa[]" required
+                                                        <input type="text" class="form-control"
+                                                            style="background-color: white; border-color: gray;"
+                                                            name="quantidadePorEmpresa[{{ $index }}]" required
+                                                            data-index="{{ $index }}"
                                                             value="{{ $material->quantidade ?? 'Não especificado' }}">
                                                     </div>
                                                     <div class="col-md-1">
                                                         <label>Valor Unitário</label>
                                                         <input type="text" class="form-control valor valor-proposta"
-                                                            required name="valorPorEmpresa1[]" style="background-color: white; border-color: gray;"
-                                                            placeholder="Digite o valor da proposta">
+                                                            required name="valorPorEmpresa1[{{ $index }}]"
+                                                            style="background-color: white; border-color: gray;"
+                                                            placeholder="Digite o valor da proposta"
+                                                            data-index="{{ $index }}">
                                                     </div>
                                                     <div class="col-md-1">
                                                         <label>Valor Unitário</label>
                                                         <input type="text" class="form-control valor valor-proposta"
-                                                            required name="valorPorEmpresa2[]" style="background-color: white; border-color: gray;"
-                                                            placeholder="Digite o valor da proposta">
+                                                            required name="valorPorEmpresa2[{{ $index }}]"
+                                                            style="background-color: white; border-color: gray;"
+                                                            placeholder="Digite o valor da proposta"
+                                                            data-index="{{ $index }}">
                                                     </div>
                                                     <div class="col-md-1">
                                                         <label>Valor Unitário</label>
                                                         <input type="text" class="form-control valor valor-proposta"
-                                                            required name="valorPorEmpresa3[]" style="background-color: white; border-color: gray;"
-                                                            placeholder="Digite o valor da proposta">
+                                                            required name="valorPorEmpresa3[{{ $index }}]"
+                                                            style="background-color: white; border-color: gray;"
+                                                            placeholder="Digite o valor da proposta"
+                                                            data-index="{{ $index }}">
                                                     </div>
                                                 </div>
                                                 <!-- Botões de Minimizar e Fechar -->
@@ -920,7 +930,7 @@
                                                         <select class="form-select marca-por-empresa select2"
                                                             name="marcaPorEmpresa[{{ $index }}]"
                                                             data-index="{{ $index }}">
-                                                            <option value="{{ $material->tipoMarca->id ?? 'null' }}"
+                                                            <option value="{{ $material->tipoMarca->id ?? '' }}"
                                                                 selected>
                                                                 {{ $material->tipoMarca->nome ?? 'Não especificado' }}
                                                             </option>
@@ -931,7 +941,7 @@
                                                         <select class="form-select tamanho-por-empresa select2"
                                                             name="tamanhoPorEmpresa[{{ $index }}]"
                                                             data-index="{{ $index }}">
-                                                            <option value="{{ $material->tipoTamanho->id ?? 'null' }}"
+                                                            <option value="{{ $material->tipoTamanho->id ?? '' }}"
                                                                 selected>
                                                                 {{ $material->tipoTamanho->nome ?? 'Não especificado' }}
                                                             </option>
@@ -942,7 +952,7 @@
                                                         <select class="form-select cor-por-empresa select2"
                                                             name="corPorEmpresa[{{ $index }}]"
                                                             data-index="{{ $index }}">
-                                                            <option value="{{ $material->tipoCor->id ?? 'null' }}"
+                                                            <option value="{{ $material->tipoCor->id ?? '' }}"
                                                                 selected>
                                                                 {{ $material->tipoCor->nome ?? 'Não especificado' }}
                                                             </option>
@@ -953,7 +963,7 @@
                                                         <select class="form-select fase-etaria-por-empresa select2"
                                                             name="faseEtariaPorEmpresa[{{ $index }}]"
                                                             data-index="{{ $index }}">
-                                                            <option value="{{ $material->tipoFaseEtaria->id ?? 'null' }}"
+                                                            <option value="{{ $material->tipoFaseEtaria->id ?? '' }}"
                                                                 selected>
                                                                 {{ $material->tipoFaseEtaria->nome ?? 'Não especificado' }}
                                                             </option>
@@ -964,7 +974,7 @@
                                                         <select class="form-select sexo-por-empresa select2"
                                                             name="sexoPorEmpresa[{{ $index }}]"
                                                             data-index="{{ $index }}">
-                                                            <option value="{{ $material->tipoSexo->id ?? 'null' }}"
+                                                            <option value="{{ $material->tipoSexo->id ?? '' }}"
                                                                 selected>
                                                                 {{ $material->tipoSexo->nome ?? 'Não especificado' }}
                                                             </option>
@@ -986,11 +996,11 @@
                 </div>
             </div>
         </div>
+        {{-- Botões Confirmar e Cancelar --}}
         <div class="botões">
             <a href="/gerenciar-aquisicao-material" class="btn btn-danger col-md-3 col-2 mt-4 offset-md-2">Cancelar</a>
             <button type="submit" value="Confirmar" class="btn btn-primary col-md-3 col-1 mt-4 offset-md-2">Confirmar
             </button>
-        </div>
         </div>
     </form>
     <!-- Modal Incluir Material -->
@@ -1104,7 +1114,6 @@
             </form>
         </div>
     </div>
-    <!-- FIM da Modal Incluir Material -->
     <!-- Modal Excluir Material -->
     <div class="modal fade" id="modalExcluirMaterial" tabindex="-1" aria-labelledby="modalExcluirMaterialLabel"
         aria-hidden="true">
@@ -1128,7 +1137,7 @@
             </form>
         </div>
     </div>
-    <!-- FIM da Modal Excluir Material -->
+    {{-- Style do Select2 --}}
     <style>
         .select2-container--bootstrap-5 .select2-selection {
             background-color: white !important;
@@ -1205,7 +1214,7 @@
             }
 
             function toggleRequired(container, isRequired) {
-                const inputs = container.querySelectorAll('input, select, textarea');
+                const inputs = container.querySelectorAll('input, textarea');
                 inputs.forEach(input => {
                     if (isRequired) {
                         input.setAttribute('required', 'required');

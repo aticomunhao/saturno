@@ -390,6 +390,7 @@ Route::get('/fases/{categoriaId}', [AquisicaoMaterialController::class, 'getFase
 Route::get('/nome/{categoriaId}', [AquisicaoMaterialController::class, 'getNomes']);
 Route::delete('/excluir-material-solicitacao', [AquisicaoMaterialController::class, 'destroyMaterial']);
 Route::post('/salvar-proposta-material/{id}', [AquisicaoMaterialController::class, 'store3']);
+Route::delete('/deletar-aquisicao-material/{id}', [AquisicaoMaterialController::class, 'delete']);
 
 //Valor Mínimo de Compra
 Route::get('/valor-compra', [ValorCompraController::class, 'index']);

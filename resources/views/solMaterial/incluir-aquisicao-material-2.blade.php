@@ -8,6 +8,7 @@
     <form method="POST" action="/salvar-proposta-material/{{ $idSolicitacao }}" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="activeButton" id="activeButton" value="empresa">
+        <input type="hidden" name="idSolicitacao" value="{{ $solicitacao->tipo_sol_material }}">
         <div class="container-fluid">
             <div class="justify-content-center">
                 <div class="col-12">
@@ -120,9 +121,9 @@
                                                         <label>Unid. Medida</label>
                                                         <select class="form-select  select2"
                                                             style="border: 1px solid #999999; padding: 5px;"
-                                                            name="UnidadeMedidaPorMaterial[{{ $index }}]" data-index="{{ $index }}">
-                                                            <option
-                                                                value="{{ $material->tipoUnidadeMedida->id ?? '' }}"
+                                                            name="UnidadeMedidaPorMaterial[{{ $index }}]"
+                                                            data-index="{{ $index }}">
+                                                            <option value="{{ $material->tipoUnidadeMedida->id ?? '' }}"
                                                                 selected>
                                                                 {{ $material->tipoUnidadeMedida->nome ?? 'Não especificado' }}
                                                             </option>
@@ -137,7 +138,8 @@
                                                         <label>Quantidade</label>
                                                         <input type="text" class="form-control"
                                                             name="quantidadePorMaterial1[{{ $index }}]"
-                                                            style="background-color: white; border-color: gray;" data-index="{{ $index }}"
+                                                            style="background-color: white; border-color: gray;"
+                                                            data-index="{{ $index }}"
                                                             value="{{ $material->quantidade ?? 'Não especificado' }}">
                                                     </div>
                                                 </div>
@@ -152,8 +154,8 @@
                                                         class="btn btn-sm btn-outline-danger open-delete-modal"
                                                         data-bs-toggle="modal" data-bs-target="#modalExcluirMaterial"
                                                         data-material-id="{{ $material->id }}"
-                                                        data-material-name="{{ $material->nome }}" data-bs-toggle="tooltip"
-                                                        title="Excluir">
+                                                        data-material-name="{{ $material->nome }}"
+                                                        data-bs-toggle="tooltip" title="Excluir">
                                                         <i class="bi bi-x"></i>
                                                     </button>
                                                 </div>
@@ -165,8 +167,7 @@
                                                         <select class="form-select marca-por-material select2"
                                                             name="marcaPorMaterial[{{ $index }}]"
                                                             data-index="{{ $index }}">
-                                                            <option value="{{ $material->tipoMarca->id ?? '' }}"
-                                                                selected>
+                                                            <option value="{{ $material->tipoMarca->id ?? '' }}" selected>
                                                                 {{ $material->tipoMarca->nome ?? 'Não especificado' }}
                                                             </option>
                                                         </select>
@@ -187,8 +188,7 @@
                                                         <select class="form-select cor-por-material select2"
                                                             name="corPorMaterial[{{ $index }}]"
                                                             data-index="{{ $index }}">
-                                                            <option value="{{ $material->tipoCor->id ?? '' }}"
-                                                                selected>
+                                                            <option value="{{ $material->tipoCor->id ?? '' }}" selected>
                                                                 {{ $material->tipoCor->nome ?? 'Não especificado' }}
                                                             </option>
                                                         </select>
@@ -209,8 +209,7 @@
                                                         <select class="form-select sexo-por-material select2"
                                                             name="sexoPorMaterial[{{ $index }}]"
                                                             data-index="{{ $index }}">
-                                                            <option value="{{ $material->tipoSexo->id ?? '' }}"
-                                                                selected>
+                                                            <option value="{{ $material->tipoSexo->id ?? '' }}" selected>
                                                                 {{ $material->tipoSexo->nome ?? 'Não especificado' }}
                                                             </option>
                                                             @foreach ($buscaSexo as $buscaSexos)
@@ -288,7 +287,7 @@
                                                                     accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
                                                             </div>
                                                         </div>
-                                                        
+
                                                         <div class="row">
                                                             <!-- Tempo de Garantia -->
                                                             <div id="tempoGarantia" class="col-md-4 mb-3">
@@ -502,302 +501,370 @@
                                     @endforeach
                                 </div>
                                 <div class="col-12 mt-3" id="listaEmpresa" style="display: block;">
-                                    {{-- card primeira proposta --}}
-                                    <div class="card mt-3">
-                                        <div class="card-header">
-                                            <h5 class="card-title mb-0">Proposta Preferida</h5>
-                                            <!-- Botões de Minimizar e Fechar -->
-                                            <div class="card-actions position-absolute" style="top: 5px; right: 5px;">
-                                                <button type="button"
-                                                    class="btn btn-sm btn-outline-secondary toggle-card-content"
-                                                    data-bs-toggle="tooltip" title="Minimizar/Maximizar">
-                                                    <i class="bi bi-plus"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div class="card-body d-none">
-                                            <div class="row">
-                                                <!-- Número da Proposta -->
-                                                <div class="col-md-4 mb-3">
-                                                    <label>Número da Proposta Principal</label>
-                                                    <input type="text" class="form-control" name="numeroPorEmpresa1"
-                                                        style="background-color: white; border-color: gray;" required
-                                                        placeholder="Digite o Número da proposta">
+                                    {{-- Contador --}}
+                                    @php
+                                        $requiredProposals = 3;
+                                        $actualProposals = count($documentos);
+                                        $missingProposals = $requiredProposals - $actualProposals;
+                                        $counter = 1;
+                                    @endphp
+                                    {{-- Propostas Preenchidas (3) --}}
+                                    @foreach ($documentos as $documento)
+                                        {{-- card proposta por empresa --}}
+                                        <div class="card mt-3">
+                                            <div class="card-header">
+                                                {{-- Nome da Proposta --}}
+                                                <h5 class="card-title mb-0">
+                                                    @if ($counter == 1)
+                                                        Proposta Preferida
+                                                    @else
+                                                        Proposta {{ $counter }}
+                                                    @endif
+                                                </h5>
+                                                <!-- Botões de Minimizar -->
+                                                <div class="card-actions position-absolute" style="top: 5px; right: 5px;">
+                                                    <button type="button"
+                                                        class="btn btn-sm btn-outline-secondary toggle-card-content"
+                                                        data-bs-toggle="tooltip" title="Minimizar/Maximizar">
+                                                        <i class="bi bi-plus"></i>
+                                                    </button>
                                                 </div>
-                                                <!-- Nome da Empresa -->
-                                                <div class="col-md-4 mb-3">
-                                                    <label>Nome da Empresa Principal</label>
-                                                    <select class="form-select select2" name="razaoSocialPorEmpresa1"
-                                                        required style="border: 1px solid #999999; padding: 5px;">
-                                                        <option></option>
-                                                        @foreach ($buscaEmpresa as $buscaEmpresas)
-                                                            <option value="{{ $buscaEmpresas->id }}">
-                                                                {{ $buscaEmpresas->razaosocial }} -
-                                                                {{ $buscaEmpresas->nomefantasia }}
+                                            </div>
+                                            <div class="card-body d-none">
+                                                <div class="row">
+                                                    <!-- Número da Proposta -->
+                                                    <div class="col-md-4 mb-3">
+                                                        <label>
+                                                            @if ($counter == 1)
+                                                                Número da Proposta Principal
+                                                            @else
+                                                                Número da Proposta {{ $counter }}
+                                                            @endif
+                                                        </label>
+                                                        <input type="text" class="form-control"
+                                                            name="numeroPorEmpresa[{{ $counter }}]"
+                                                            style="background-color: white; border-color: gray;" required
+                                                            placeholder="Digite o Número da proposta"
+                                                            value="{{ $documento->numero }}">
+                                                            value="{{ $documento->numero }}">
+                                                    </div>
+                                                    <!-- Nome da Empresa -->
+                                                    <div class="col-md-4 mb-3">
+                                                        <label>
+                                                            @if ($counter == 1)
+                                                                Nome da Empresa Principal
+                                                            @else
+                                                                Nome da Proposta {{ $counter }}
+                                                            @endif
+                                                        </label>
+                                                        <select class="form-select select2"
+                                                            name="razaoSocialPorEmpresa[{{ $counter }}]" required
+                                                            style="border: 1px solid #999999; padding: 5px;"
+                                                            data-index="{{ $index }}">
+                                                            <option value="{{ $documento->empresa->id }}" selected>
+                                                                {{ $documento->empresa->razaosocial ?? 'Não especificado' }}
+                                                                -
+                                                                {{ $documento->empresa->nomefantasia ?? 'Não especificado' }}
                                                             </option>
-                                                        @endforeach
-                                                    </select>
+                                                            @foreach ($buscaEmpresa as $buscaEmpresas)
+                                                                <option value="{{ $buscaEmpresas->id }}">
+                                                                    {{ $buscaEmpresas->razaosocial }} -
+                                                                    {{ $buscaEmpresas->nomefantasia }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <!-- Valor -->
+                                                    <div class="col-md-4 mb-3">
+                                                        <label>
+                                                            @if ($counter == 1)
+                                                                Valor Total da Proposta Principal
+                                                            @else
+                                                                Valor Total da Proposta {{ $counter }}
+                                                            @endif
+                                                        </label>
+                                                        <input type="text" class="form-control valor valor-proposta"
+                                                            required name="valorPorEmpresa[{{ $counter }}]"
+                                                            data-index="{{ $index }}"
+                                                            style="background-color: white; border-color: gray;"
+                                                            placeholder="Digite o valor da proposta"
+                                                            value="{{ $documento->valor }}">
+                                                    </div>
                                                 </div>
-                                                <!-- Valor -->
-                                                <div class="col-md-4 mb-3">
-                                                    <label>Valor Total da Proposta Principal</label>
-                                                    <input type="text" class="form-control valor valor-proposta"
-                                                        required name="valorPorEmpresa1"
-                                                        style="background-color: white; border-color: gray;"
-                                                        placeholder="Digite o valor da proposta">
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <!-- Data da Criação da Proposta -->
-                                                <div class="col-md-4 mb-3">
-                                                    <label>Data da Criação da
-                                                        Proposta Principal</label>
-                                                    <input type="date" class="form-control"
-                                                        style="background-color: white; border-color: gray;"
-                                                        name="dt_inicialPorEmpresa1" required
-                                                        placeholder="Digite a data da proposta">
+                                                <div class="row">
+                                                    <!-- Data da Criação da Proposta -->
+                                                    <div class="col-md-4 mb-3">
+                                                        <label>
+                                                            @if ($counter == 1)
+                                                                Data da Criação da
+                                                                Proposta Principal
+                                                            @else
+                                                                Data da Criação da Proposta {{ $counter }}
+                                                            @endif
+                                                        </label>
+                                                        <input type="date" class="form-control"
+                                                            style="background-color: white; border-color: gray;"
+                                                            name="dt_inicialPorEmpresa[{{ $counter }}]" required
+                                                            data-index="{{ $index }}"
+                                                            placeholder="Digite a data da proposta"
+                                                            value="{{ $documento->dt_doc }}">
+                                                    </div>
+
+                                                    <!-- Data Limite da Proposta -->
+                                                    <div class="col-md-4 mb-3">
+                                                        <label>
+                                                            @if ($counter == 1)
+                                                                Data Limite da Proposta Principal
+                                                            @else
+                                                                Data Limite da Proposta {{ $counter }}
+                                                            @endif
+                                                        </label>
+                                                        <input type="date" class="form-control"
+                                                            name="dt_finalPorEmpresa[{{ $counter }}]"
+                                                            data-index="{{ $index }}"
+                                                            style="background-color: white; border-color: gray;" required
+                                                            placeholder="Digite a data final do prazo da proposta"
+                                                            value="{{ $documento->dt_validade }}">
+                                                    </div>
+
+                                                    <!-- Arquivo da Proposta -->
+                                                    <div class="col-md-4 mb-3">
+                                                        <label>
+                                                            @if ($counter == 1)
+                                                                Inserir Arquivo na Proposta Principal
+                                                            @else
+                                                                Inserir Arquivo na Proposta {{ $counter }}
+                                                            @endif
+                                                        </label>
+                                                        <input type="file" class="form-control"
+                                                            id="uploadProposta{{ $counter }}" required
+                                                            name="arquivoPropostaPorEmpresa[{{ $counter }}]"
+                                                            data-index="{{ $index }}"
+                                                            style="background-color: white; border-color: gray;"
+                                                            accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
+
+                                                    </div>
                                                 </div>
 
-                                                <!-- Data Limite da Proposta -->
-                                                <div class="col-md-4 mb-3">
-                                                    <label>Data Limite da Proposta Principal</label>
-                                                    <input type="date" class="form-control" name="dt_finalPorEmpresa1"
-                                                        style="background-color: white; border-color: gray;" required
-                                                        placeholder="Digite a data final do prazo da proposta">
-                                                </div>
+                                                <div class="row">
+                                                    <!-- Tempo de Garantia -->
+                                                    <div id="tempoGarantia" class="col-md-4 mb-3">
+                                                        <label>
+                                                            @if ($counter == 1)
+                                                                Tempo de Garantia (em
+                                                                dias) da Proposta Principal
+                                                            @else
+                                                                Tempo de Garantia (em
+                                                                dias) da Proposta {{ $counter }}
+                                                            @endif
+                                                        </label>
+                                                        <input type="number" class="form-control"
+                                                            id="tempoGarantiaInput" required
+                                                            name="tempoGarantiaPorEmpresa[{{ $counter }}]"
+                                                            data-index="{{ $index }}"
+                                                            style="background-color: white; border-color: gray;"
+                                                            placeholder="Digite o tempo de garantia"
+                                                            value="{{ $documento->tempo_garantia_dias }}">
+                                                    </div>
 
-                                                <!-- Arquivo da Proposta -->
-                                                <div class="col-md-4 mb-3">
-                                                    <label>Arquivo da Proposta Principal</label>
-                                                    <input type="file" class="form-control" id="uploadProposta1"
-                                                        required name="arquivoPropostaPorEmpresa1"
-                                                        style="background-color: white; border-color: gray;"
-                                                        accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
-                                                </div>
-                                            </div>
+                                                    <!-- Link da Proposta -->
+                                                    <div class="col-md-4 mb-3">
+                                                        <label>
+                                                            @if ($counter == 1)
+                                                                Link da Proposta Principal
+                                                            @else
+                                                                Link da Proposta {{ $counter }}
+                                                            @endif
+                                                        </label>
+                                                        <input type="text" class="form-control mt-2"
+                                                            id="linkProposta1" required
+                                                            name="linkPropostaPorEmpresa[{{ $counter }}]"
+                                                            style="background-color: white; border-color: gray;"
+                                                            placeholder="Link da Proposta"
+                                                            data-index="{{ $index }}"
+                                                            value="{{ $documento->link_proposta }}">
+                                                    </div>
 
-                                            <div class="row">
-                                                <!-- Tempo de Garantia -->
-                                                <div id="tempoGarantia" class="col-md-4 mb-3">
-                                                    <label>Tempo de Garantia (em
-                                                        dias)</label>
-                                                    <input type="number" class="form-control" id="tempoGarantiaInput"
-                                                        required name="tempoGarantiaPorEmpresa1"
-                                                        style="background-color: white; border-color: gray;"
-                                                        placeholder="Digite o tempo de garantia">
-                                                </div>
-
-                                                <!-- Link da Proposta -->
-                                                <div class="col-md-4 mb-3">
-                                                    <label>Link da Proposta Principal</label>
-                                                    <input type="text" class="form-control mt-2" id="linkProposta1"
-                                                        required name="linkPropostaPorEmpresa1"
-                                                        style="background-color: white; border-color: gray;"
-                                                        placeholder="Link da Proposta">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {{-- card segunda proposta --}}
-                                    <div class="card mt-3">
-                                        <div class="card-header">
-                                            <h5 class="card-title mb-0">Segunda Proposta</h5>
-                                            <!-- Botões de Minimizar e Fechar -->
-                                            <div class="card-actions position-absolute" style="top: 5px; right: 5px;">
-                                                <button type="button"
-                                                    class="btn btn-sm btn-outline-secondary toggle-card-content"
-                                                    data-bs-toggle="tooltip" title="Minimizar/Maximizar">
-                                                    <i class="bi bi-plus"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div class="card-body d-none">
-                                            <div class="row">
-                                                <!-- Número da Proposta -->
-                                                <div class="col-md-4 mb-3">
-                                                    <label>Número da 2ª Proposta</label>
-                                                    <input type="text" class="form-control" name="numeroPorEmpresa2"
-                                                        style="background-color: white; border-color: gray;" required
-                                                        placeholder="Digite o Número da proposta">
-                                                </div>
-
-                                                <!-- Nome da Empresa -->
-                                                <div class="col-md-4 mb-3">
-                                                    <label>Nome 2ª Empresa</label>
-                                                    <select class="form-select select2" name="razaoSocialPorEmpresa2"
-                                                        required style="border: 1px solid #999999; padding: 5px;">
-                                                        <option></option>
-                                                        @foreach ($buscaEmpresa as $buscaEmpresas)
-                                                            <option value="{{ $buscaEmpresas->id }}">
-                                                                {{ $buscaEmpresas->razaosocial }} -
-                                                                {{ $buscaEmpresas->nomefantasia }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-
-                                                <!-- Valor -->
-                                                <div class="col-md-4 mb-3">
-                                                    <label>Valor Total da 2ª Proposta</label>
-                                                    <input type="text" class="form-control valor valor-proposta"
-                                                        required name="valorPorEmpresa2"
-                                                        style="background-color: white; border-color: gray;"
-                                                        placeholder="Digite o valor da proposta">
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <!-- Data da Criação da Proposta -->
-                                                <div class="col-md-4 mb-3">
-                                                    <label>Data da Criação da 2ª
-                                                        Proposta</label>
-                                                    <input type="date" class="form-control"
-                                                        style="background-color: white; border-color: gray;"
-                                                        name="dt_inicialPorEmpresa2" required
-                                                        placeholder="Digite a data da proposta">
-                                                </div>
-
-                                                <!-- Data Limite da Proposta -->
-                                                <div class="col-md-4 mb-3">
-                                                    <label>Data Limite da 2ª Proposta</label>
-                                                    <input type="date" class="form-control" name="dt_finalPorEmpresa2"
-                                                        style="background-color: white; border-color: gray;" required
-                                                        placeholder="Digite a data final do prazo da proposta">
-                                                </div>
-
-                                                <!-- Arquivo da Proposta -->
-                                                <div class="col-md-4 mb-3">
-                                                    <label>Arquivo da 2ª Proposta</label>
-                                                    <input type="file" class="form-control" id="uploadProposta2"
-                                                        required name="arquivoPropostaPorEmpresa2"
-                                                        style="background-color: white; border-color: gray;"
-                                                        accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <!-- Tempo de Garantia -->
-                                                <div id="tempoGarantia" class="col-md-4 mb-3">
-                                                    <label>Tempo de Garantia (em
-                                                        dias)</label>
-                                                    <input type="number" class="form-control" id="tempoGarantiaInput2"
-                                                        required name="tempoGarantiaPorEmpresa2"
-                                                        style="background-color: white; border-color: gray;"
-                                                        placeholder="Digite o tempo de garantia">
-                                                </div>
-
-                                                <!-- Link da Proposta -->
-                                                <div class="col-md-4 mb-3">
-                                                    <label>Link da 2ª Proposta</label>
-                                                    <input type="text" class="form-control mt-2" id="linkProposta2"
-                                                        required name="linkPropostaPorEmpresa2"
-                                                        style="background-color: white; border-color: gray;"
-                                                        placeholder="Link da Proposta">
+                                                    <!-- Arquivo atual da Proposta -->
+                                                    <div class="col-md-4 mb-3 row">
+                                                        <label for="arquivo">Arquivo da Salvo</label>
+                                                        @if ($documento->end_arquivo)
+                                                            <a href="{{ $documento->end_arquivo }}" target="_blank"
+                                                                class="btn btn-primary">
+                                                                Ver Arquivo
+                                                            </a>
+                                                        @else
+                                                            <a class="btn btn-secondary" disabled>Nenhum arquivo
+                                                                disponível.</a>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    {{-- card terceira proposta --}}
-                                    <div class="card mt-3">
-                                        <div class="card-header">
-                                            <h5 class="card-title mb-0">Terceira Proposta</h5>
-                                            <!-- Botões de Minimizar e Fechar -->
-                                            <div class="card-actions position-absolute" style="top: 5px; right: 5px;">
-                                                <button type="button"
-                                                    class="btn btn-sm btn-outline-secondary toggle-card-content"
-                                                    data-bs-toggle="tooltip" title="Minimizar/Maximizar">
-                                                    <i class="bi bi-plus"></i>
-                                                </button>
+                                        @php $counter++; @endphp
+                                    @endforeach
+                                    {{-- Propostas vazias para preencher as que faltam --}}
+                                    @for ($i = 0; $i < $missingProposals; $i++)
+                                        {{-- card proposta por empresa --}}
+                                        <div class="card mt-3">
+                                            <div class="card-header">
+                                                {{-- Nome da Proposta --}}
+                                                <h5 class="card-title mb-0">
+                                                    @if ($counter == 1)
+                                                        Proposta Preferida
+                                                    @else
+                                                        Proposta {{ $counter }}
+                                                    @endif
+                                                </h5>
+                                                <!-- Botões de Minimizar e Fechar -->
+                                                <div class="card-actions position-absolute" style="top: 5px; right: 5px;">
+                                                    <button type="button"
+                                                        class="btn btn-sm btn-outline-secondary toggle-card-content"
+                                                        data-bs-toggle="tooltip" title="Minimizar/Maximizar">
+                                                        <i class="bi bi-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="card-body d-none">
+                                                <div class="row">
+                                                    <!-- Número da Proposta -->
+                                                    <div class="col-md-4 mb-3">
+                                                        <label>
+                                                            @if ($counter == 1)
+                                                                Número da Proposta Principal
+                                                            @else
+                                                                Número da Proposta {{ $counter }}
+                                                            @endif
+                                                        </label>
+                                                        <input type="text" class="form-control"
+                                                            name="numeroPorEmpresa[]"
+                                                            style="background-color: white; border-color: gray;" required
+                                                            placeholder="Digite o Número da proposta" value="">
+                                                    </div>
+                                                    <!-- Nome da Empresa -->
+                                                    <div class="col-md-4 mb-3">
+                                                        <label>
+                                                            @if ($counter == 1)
+                                                                Nome da Empresa Principal
+                                                            @else
+                                                                Nome da Proposta {{ $counter }}
+                                                            @endif
+                                                        </label>
+                                                        <select class="form-select select2" name="razaoSocialPorEmpresa[]"
+                                                            required style="border: 1px solid #999999; padding: 5px;">
+                                                            <option value="" selected> </option>
+                                                            @foreach ($buscaEmpresa as $buscaEmpresas)
+                                                                <option value="{{ $buscaEmpresas->id }}">
+                                                                    {{ $buscaEmpresas->razaosocial }} -
+                                                                    {{ $buscaEmpresas->nomefantasia }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <!-- Valor -->
+                                                    <div class="col-md-4 mb-3">
+                                                        <label>
+                                                            @if ($counter == 1)
+                                                                Valor Total da Proposta Principal
+                                                            @else
+                                                                Valor Total da Proposta {{ $counter }}
+                                                            @endif
+                                                        </label>
+                                                        <input type="text" class="form-control valor valor-proposta"
+                                                            required name="valorPorEmpresa[]"
+                                                            style="background-color: white; border-color: gray;"
+                                                            placeholder="Digite o valor da proposta" value="">
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <!-- Data da Criação da Proposta -->
+                                                    <div class="col-md-4 mb-3">
+                                                        <label>
+                                                            @if ($counter == 1)
+                                                                Data da Criação da
+                                                                Proposta Principal
+                                                            @else
+                                                                Data da Criação da Proposta {{ $counter }}
+                                                            @endif
+                                                        </label>
+                                                        <input type="date" class="form-control"
+                                                            style="background-color: white; border-color: gray;"
+                                                            name="dt_inicialPorEmpresa[]" required
+                                                            placeholder="Digite a data da proposta" value="">
+                                                    </div>
+
+                                                    <!-- Data Limite da Proposta -->
+                                                    <div class="col-md-4 mb-3">
+                                                        <label>
+                                                            @if ($counter == 1)
+                                                                Data Limite da Proposta Principal
+                                                            @else
+                                                                Data Limite da Proposta {{ $counter }}
+                                                            @endif
+                                                        </label>
+                                                        <input type="date" class="form-control"
+                                                            name="dt_finalPorEmpresa[]"
+                                                            style="background-color: white; border-color: gray;" required
+                                                            placeholder="Digite a data final do prazo da proposta"
+                                                            value="">
+                                                    </div>
+
+                                                    <!-- Arquivo da Proposta -->
+                                                    <div class="col-md-4 mb-3">
+                                                        <label>
+                                                            @if ($counter == 1)
+                                                                Inserir Arquivo na Proposta Principal
+                                                            @else
+                                                                Inserir Arquivo na Proposta {{ $counter }}
+                                                            @endif
+                                                        </label>
+                                                        <input type="file" class="form-control" id="uploadProposta1"
+                                                            required name="arquivoPropostaPorEmpresa[]"
+                                                            style="background-color: white; border-color: gray;"
+                                                            accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" value="">
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <!-- Tempo de Garantia -->
+                                                    <div id="tempoGarantia" class="col-md-4 mb-3">
+                                                        <label>
+                                                            @if ($counter == 1)
+                                                                Tempo de Garantia (em
+                                                                dias) da Proposta Principal
+                                                            @else
+                                                                Tempo de Garantia (em
+                                                                dias) da Proposta {{ $counter }}
+                                                            @endif
+                                                        </label>
+                                                        <input type="number" class="form-control"
+                                                            id="tempoGarantiaInput" required
+                                                            name="tempoGarantiaPorEmpresa[]"
+                                                            style="background-color: white; border-color: gray;"
+                                                            placeholder="Digite o tempo de garantia" value="">
+                                                    </div>
+
+                                                    <!-- Link da Proposta -->
+                                                    <div class="col-md-4 mb-3">
+                                                        <label>
+                                                            @if ($counter == 1)
+                                                                Link da Proposta Principal
+                                                            @else
+                                                                Link da Proposta {{ $counter }}
+                                                            @endif
+                                                        </label>
+                                                        <input type="text" class="form-control mt-2"
+                                                            id="linkProposta1" required name="linkPropostaPorEmpresa[]"
+                                                            style="background-color: white; border-color: gray;"
+                                                            placeholder="Link da Proposta" value="">
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="card-body d-none">
-                                            <div class="row">
-                                                <!-- Número da Proposta -->
-                                                <div class="col-md-4 mb-3">
-                                                    <label>Número da 3ª Proposta</label>
-                                                    <input type="text" class="form-control" name="numeroPorEmpresa3"
-                                                        style="background-color: white; border-color: gray;" required
-                                                        placeholder="Digite o Número da proposta">
-                                                </div>
-
-                                                <!-- Nome da Empresa -->
-                                                <div class="col-md-4 mb-3">
-                                                    <label>Nome 3ª Empresa</label>
-                                                    <select class="form-select select2" name="razaoSocialPorEmpresa3"
-                                                        required style="border: 1px solid #999999; padding: 5px;">
-                                                        <option></option>
-                                                        @foreach ($buscaEmpresa as $buscaEmpresas)
-                                                            <option value="{{ $buscaEmpresas->id }}">
-                                                                {{ $buscaEmpresas->razaosocial }} -
-                                                                {{ $buscaEmpresas->nomefantasia }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-
-                                                <!-- Valor -->
-                                                <div class="col-md-4 mb-3">
-                                                    <label>Valor Total da 3ª Proposta</label>
-                                                    <input type="text" class="form-control valor valor-proposta"
-                                                        required name="valorPorEmpresa3"
-                                                        style="background-color: white; border-color: gray;"
-                                                        placeholder="Digite o valor da proposta">
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <!-- Data da Criação da Proposta -->
-                                                <div class="col-md-4 mb-3">
-                                                    <label>Data da Criação da 3ª
-                                                        Proposta</label>
-                                                    <input type="date" class="form-control"
-                                                        style="background-color: white; border-color: gray;"
-                                                        name="dt_inicialPorEmpresa3" required
-                                                        placeholder="Digite a data da proposta">
-                                                </div>
-
-                                                <!-- Data Limite da Proposta -->
-                                                <div class="col-md-4 mb-3">
-                                                    <label>Data Limite da 3ª Proposta</label>
-                                                    <input type="date" class="form-control" name="dt_finalPorEmpresa3"
-                                                        style="background-color: white; border-color: gray;" required
-                                                        placeholder="Digite a data final do prazo da proposta">
-                                                </div>
-
-                                                <!-- Arquivo da Proposta -->
-                                                <div class="col-md-4 mb-3">
-                                                    <label>Arquivo da 3ª Proposta</label>
-                                                    <input type="file" class="form-control" id="uploadProposta3"
-                                                        required name="arquivoPropostaPorEmpresa3"
-                                                        style="background-color: white; border-color: gray;"
-                                                        accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <!-- Tempo de Garantia -->
-                                                <div id="tempoGarantia" class="col-md-4 mb-3">
-                                                    <label>Tempo de Garantia (em
-                                                        dias)</label>
-                                                    <input type="number" class="form-control" id="tempoGarantiaInput3"
-                                                        required name="tempoGarantiaPorEmpresa3"
-                                                        style="background-color: white; border-color: gray;"
-                                                        placeholder="Digite o tempo de garantia">
-                                                </div>
-
-                                                <!-- Link da Proposta -->
-                                                <div class="col-md-4 mb-3">
-                                                    <label>Link da 3ª Proposta</label>
-                                                    <input type="text" class="form-control mt-2" id="linkProposta3"
-                                                        required name="linkPropostaPorEmpresa3"
-                                                        style="background-color: white; border-color: gray;"
-                                                        placeholder="Link da Proposta">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                        @php $counter++; @endphp
+                                    @endfor
                                     <br>
-                                    {{--Nomes em cima da tabela --}}
+                                    {{-- Nomes em cima da tabela --}}
                                     <div class="row">
                                         <div class="col-md-2">
                                             {{-- <label>Categoria do Material</label> --}}
@@ -822,7 +889,7 @@
                                             <label>3ª Empresa</label>
                                         </div>
                                     </div>
-                                    {{-- card materiais por empresa --}}
+                                    {{-- card por empresa --}}
                                     @foreach ($materiais as $index => $material)
                                         <div class="card" id="card-material" style="margin-bottom: 10px">
                                             <div class="card-header d-flex align-items-center justify-content-between">
@@ -861,8 +928,7 @@
                                                             style="border: 1px solid #999999; padding: 5px;"
                                                             name="UnidadeMedidaPorEmpresa[{{ $index }}]"
                                                             data-index="{{ $index }}">
-                                                            <option
-                                                                value="{{ $material->tipoUnidadeMedida->id ?? '' }}"
+                                                            <option value="{{ $material->tipoUnidadeMedida->id ?? '' }}"
                                                                 selected>
                                                                 {{ $material->tipoUnidadeMedida->nome ?? 'Não especificado' }}
                                                             </option>
@@ -884,26 +950,29 @@
                                                     <div class="col-md-1">
                                                         <label>Valor Unitário</label>
                                                         <input type="text" class="form-control valor valor-proposta"
-                                                            required name="valorPorEmpresa1[{{ $index }}]"
+                                                            required name="valorUnitarioEmpresa1[{{ $index }}]"
                                                             style="background-color: white; border-color: gray;"
                                                             placeholder="Digite o valor da proposta"
-                                                            data-index="{{ $index }}">
+                                                            data-index="{{ $index }}"
+                                                            value="{{ $material->valor1 }}">
                                                     </div>
                                                     <div class="col-md-1">
                                                         <label>Valor Unitário</label>
                                                         <input type="text" class="form-control valor valor-proposta"
-                                                            required name="valorPorEmpresa2[{{ $index }}]"
+                                                            required name="valorUnitarioEmpresa2[{{ $index }}]"
                                                             style="background-color: white; border-color: gray;"
                                                             placeholder="Digite o valor da proposta"
-                                                            data-index="{{ $index }}">
+                                                            data-index="{{ $index }}"
+                                                            value="{{ $material->valor2 }}">
                                                     </div>
                                                     <div class="col-md-1">
                                                         <label>Valor Unitário</label>
                                                         <input type="text" class="form-control valor valor-proposta"
-                                                            required name="valorPorEmpresa3[{{ $index }}]"
+                                                            required name="valorUnitarioEmpresa3[{{ $index }}]"
                                                             style="background-color: white; border-color: gray;"
                                                             placeholder="Digite o valor da proposta"
-                                                            data-index="{{ $index }}">
+                                                            data-index="{{ $index }}"
+                                                            value="{{ $material->valor3 }}">
                                                     </div>
                                                 </div>
                                                 <!-- Botões de Minimizar e Fechar -->
@@ -952,8 +1021,7 @@
                                                         <select class="form-select cor-por-empresa select2"
                                                             name="corPorEmpresa[{{ $index }}]"
                                                             data-index="{{ $index }}">
-                                                            <option value="{{ $material->tipoCor->id ?? '' }}"
-                                                                selected>
+                                                            <option value="{{ $material->tipoCor->id ?? '' }}" selected>
                                                                 {{ $material->tipoCor->nome ?? 'Não especificado' }}
                                                             </option>
                                                         </select>
@@ -974,8 +1042,7 @@
                                                         <select class="form-select sexo-por-empresa select2"
                                                             name="sexoPorEmpresa[{{ $index }}]"
                                                             data-index="{{ $index }}">
-                                                            <option value="{{ $material->tipoSexo->id ?? '' }}"
-                                                                selected>
+                                                            <option value="{{ $material->tipoSexo->id ?? '' }}" selected>
                                                                 {{ $material->tipoSexo->nome ?? 'Não especificado' }}
                                                             </option>
                                                             @foreach ($buscaSexo as $buscaSexos)
@@ -1159,6 +1226,16 @@
         });
 
         document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.valor-proposta').forEach(function(input) {
+                let value = input.value.replace(/\D/g, ''); // Remove tudo o que não for número
+                if (value) {
+                    value = (parseInt(value) / 100).toFixed(2).replace('.',
+                        ','); // Converte para valor decimal
+                    input.value = 'R$ ' + value;
+                }
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
             // Captura os elementos do DOM
             const btnPorEmpresa = document.getElementById('btnPorEmpresa');
             const btnPorMaterial = document.getElementById('btnPorMaterial');
@@ -1280,17 +1357,35 @@
                     .then((data) => {
                         const select = $(targetSelect);
                         select.empty(); // Limpa as opções existentes
+                        select.append(`<option value="" disabled selected>${placeholder}</option>`);
+
                         if (data.length > 0) {
-                            select.append(`<option value="" disabled selected>${placeholder}</option>`);
                             data.forEach((item) => {
                                 select.append(`<option value="${item.id}">${item.nome}</option>`);
                             });
                         } else {
-                            select.append(`<option value="" disabled selected>Não Possui</option>`);
+                            // Exibe "Não Possui", mas com value vazio
+                            select.append(`<option value="">Não Possui</option>`);
                         }
                     })
                     .catch((error) => console.error("Erro ao carregar opções:", error));
             }
+
+            // Antes de enviar o formulário, converte "" para null
+            document.querySelector("form").addEventListener("submit", function(event) {
+                const selects = document.querySelectorAll("select");
+                selects.forEach((select) => {
+                    if (select.value === "") {
+                        const hiddenInput = document.createElement("input");
+                        hiddenInput.type = "hidden";
+                        hiddenInput.name = select.name;
+                        hiddenInput.value = "null"; // Laravel tratará como NULL
+                        select.disabled = true; // Evita que o select envie o valor vazio
+                        select.closest("form").appendChild(hiddenInput);
+                    }
+                });
+            });
+
 
             // Filtro dinâmico com base na categoria
             $('#categoriaMaterial').on('change', function() {

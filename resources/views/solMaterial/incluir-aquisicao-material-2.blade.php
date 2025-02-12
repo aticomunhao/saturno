@@ -7,8 +7,8 @@
 @section('content')
     <form method="POST" action="/salvar-proposta-material/{{ $idSolicitacao }}" enctype="multipart/form-data">
         @csrf
-        <input type="hidden" name="activeButton" id="activeButton" value="empresa">
-        <input type="hidden" name="idSolicitacao" value="{{ $solicitacao->tipo_sol_material }}">
+        <input type="hidden" name="activeButton" id="activeButton"
+            value="{{ $solicitacao->tipo_sol_material == 1 ? 'empresa' : 'material' }}">
         <div class="container-fluid">
             <div class="justify-content-center">
                 <div class="col-12">
@@ -37,7 +37,7 @@
                                         <label>Selecione seu Setor</label>
                                         <br>
                                         <select class="form-select select2" style="border: 1px solid #999999; padding: 5px;"
-                                            id="idSetor" name="idSetor" required>
+                                            id="idSetor" name="idSetor" >
                                             <option value="{{ $solicitacao->setor->id ?? '' }}" selected>
                                                 {{ $solicitacao->setor->sigla ?? 'Não especificado' }} -
                                                 {{ $solicitacao->setor->nome ?? 'Não especificado' }}</option>
@@ -543,10 +543,10 @@
                                                         </label>
                                                         <input type="text" class="form-control"
                                                             name="numeroPorEmpresa[{{ $counter }}]"
-                                                            style="background-color: white; border-color: gray;" required
+                                                            style="background-color: white; border-color: gray;"
                                                             placeholder="Digite o Número da proposta"
                                                             value="{{ $documento->numero }}">
-                                                            value="{{ $documento->numero }}">
+                                                        value="{{ $documento->numero }}">
                                                     </div>
                                                     <!-- Nome da Empresa -->
                                                     <div class="col-md-4 mb-3">
@@ -558,7 +558,7 @@
                                                             @endif
                                                         </label>
                                                         <select class="form-select select2"
-                                                            name="razaoSocialPorEmpresa[{{ $counter }}]" required
+                                                            name="razaoSocialPorEmpresa[{{ $counter }}]"
                                                             style="border: 1px solid #999999; padding: 5px;"
                                                             data-index="{{ $index }}">
                                                             <option value="{{ $documento->empresa->id }}" selected>
@@ -584,7 +584,7 @@
                                                             @endif
                                                         </label>
                                                         <input type="text" class="form-control valor valor-proposta"
-                                                            required name="valorPorEmpresa[{{ $counter }}]"
+                                                             name="valorPorEmpresa[{{ $counter }}]"
                                                             data-index="{{ $index }}"
                                                             style="background-color: white; border-color: gray;"
                                                             placeholder="Digite o valor da proposta"
@@ -604,7 +604,7 @@
                                                         </label>
                                                         <input type="date" class="form-control"
                                                             style="background-color: white; border-color: gray;"
-                                                            name="dt_inicialPorEmpresa[{{ $counter }}]" required
+                                                            name="dt_inicialPorEmpresa[{{ $counter }}]"
                                                             data-index="{{ $index }}"
                                                             placeholder="Digite a data da proposta"
                                                             value="{{ $documento->dt_doc }}">
@@ -622,7 +622,7 @@
                                                         <input type="date" class="form-control"
                                                             name="dt_finalPorEmpresa[{{ $counter }}]"
                                                             data-index="{{ $index }}"
-                                                            style="background-color: white; border-color: gray;" required
+                                                            style="background-color: white; border-color: gray;"
                                                             placeholder="Digite a data final do prazo da proposta"
                                                             value="{{ $documento->dt_validade }}">
                                                     </div>
@@ -637,7 +637,7 @@
                                                             @endif
                                                         </label>
                                                         <input type="file" class="form-control"
-                                                            id="uploadProposta{{ $counter }}" required
+                                                            id="uploadProposta{{ $counter }}"
                                                             name="arquivoPropostaPorEmpresa[{{ $counter }}]"
                                                             data-index="{{ $index }}"
                                                             style="background-color: white; border-color: gray;"
@@ -659,7 +659,7 @@
                                                             @endif
                                                         </label>
                                                         <input type="number" class="form-control"
-                                                            id="tempoGarantiaInput" required
+                                                            id="tempoGarantiaInput"
                                                             name="tempoGarantiaPorEmpresa[{{ $counter }}]"
                                                             data-index="{{ $index }}"
                                                             style="background-color: white; border-color: gray;"
@@ -677,7 +677,7 @@
                                                             @endif
                                                         </label>
                                                         <input type="text" class="form-control mt-2"
-                                                            id="linkProposta1" required
+                                                            id="linkProposta1"
                                                             name="linkPropostaPorEmpresa[{{ $counter }}]"
                                                             style="background-color: white; border-color: gray;"
                                                             placeholder="Link da Proposta"
@@ -738,7 +738,7 @@
                                                         </label>
                                                         <input type="text" class="form-control"
                                                             name="numeroPorEmpresa[]"
-                                                            style="background-color: white; border-color: gray;" required
+                                                            style="background-color: white; border-color: gray;"
                                                             placeholder="Digite o Número da proposta" value="">
                                                     </div>
                                                     <!-- Nome da Empresa -->
@@ -751,7 +751,7 @@
                                                             @endif
                                                         </label>
                                                         <select class="form-select select2" name="razaoSocialPorEmpresa[]"
-                                                            required style="border: 1px solid #999999; padding: 5px;">
+                                                             style="border: 1px solid #999999; padding: 5px;">
                                                             <option value="" selected> </option>
                                                             @foreach ($buscaEmpresa as $buscaEmpresas)
                                                                 <option value="{{ $buscaEmpresas->id }}">
@@ -771,7 +771,7 @@
                                                             @endif
                                                         </label>
                                                         <input type="text" class="form-control valor valor-proposta"
-                                                            required name="valorPorEmpresa[]"
+                                                             name="valorPorEmpresa[]"
                                                             style="background-color: white; border-color: gray;"
                                                             placeholder="Digite o valor da proposta" value="">
                                                     </div>
@@ -789,7 +789,7 @@
                                                         </label>
                                                         <input type="date" class="form-control"
                                                             style="background-color: white; border-color: gray;"
-                                                            name="dt_inicialPorEmpresa[]" required
+                                                            name="dt_inicialPorEmpresa[]"
                                                             placeholder="Digite a data da proposta" value="">
                                                     </div>
 
@@ -804,7 +804,7 @@
                                                         </label>
                                                         <input type="date" class="form-control"
                                                             name="dt_finalPorEmpresa[]"
-                                                            style="background-color: white; border-color: gray;" required
+                                                            style="background-color: white; border-color: gray;"
                                                             placeholder="Digite a data final do prazo da proposta"
                                                             value="">
                                                     </div>
@@ -819,7 +819,7 @@
                                                             @endif
                                                         </label>
                                                         <input type="file" class="form-control" id="uploadProposta1"
-                                                            required name="arquivoPropostaPorEmpresa[]"
+                                                             name="arquivoPropostaPorEmpresa[]"
                                                             style="background-color: white; border-color: gray;"
                                                             accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" value="">
                                                     </div>
@@ -838,7 +838,7 @@
                                                             @endif
                                                         </label>
                                                         <input type="number" class="form-control"
-                                                            id="tempoGarantiaInput" required
+                                                            id="tempoGarantiaInput"
                                                             name="tempoGarantiaPorEmpresa[]"
                                                             style="background-color: white; border-color: gray;"
                                                             placeholder="Digite o tempo de garantia" value="">
@@ -854,7 +854,7 @@
                                                             @endif
                                                         </label>
                                                         <input type="text" class="form-control mt-2"
-                                                            id="linkProposta1" required name="linkPropostaPorEmpresa[]"
+                                                            id="linkProposta1"  name="linkPropostaPorEmpresa[]"
                                                             style="background-color: white; border-color: gray;"
                                                             placeholder="Link da Proposta" value="">
                                                     </div>
@@ -943,14 +943,14 @@
                                                         <label>Quantidade</label>
                                                         <input type="text" class="form-control"
                                                             style="background-color: white; border-color: gray;"
-                                                            name="quantidadePorEmpresa[{{ $index }}]" required
+                                                            name="quantidadePorEmpresa[{{ $index }}]"
                                                             data-index="{{ $index }}"
                                                             value="{{ $material->quantidade ?? 'Não especificado' }}">
                                                     </div>
                                                     <div class="col-md-1">
                                                         <label>Valor Unitário</label>
                                                         <input type="text" class="form-control valor valor-proposta"
-                                                            required name="valorUnitarioEmpresa1[{{ $index }}]"
+                                                             name="valorUnitarioEmpresa1[{{ $index }}]"
                                                             style="background-color: white; border-color: gray;"
                                                             placeholder="Digite o valor da proposta"
                                                             data-index="{{ $index }}"
@@ -959,7 +959,7 @@
                                                     <div class="col-md-1">
                                                         <label>Valor Unitário</label>
                                                         <input type="text" class="form-control valor valor-proposta"
-                                                            required name="valorUnitarioEmpresa2[{{ $index }}]"
+                                                             name="valorUnitarioEmpresa2[{{ $index }}]"
                                                             style="background-color: white; border-color: gray;"
                                                             placeholder="Digite o valor da proposta"
                                                             data-index="{{ $index }}"
@@ -968,7 +968,7 @@
                                                     <div class="col-md-1">
                                                         <label>Valor Unitário</label>
                                                         <input type="text" class="form-control valor valor-proposta"
-                                                            required name="valorUnitarioEmpresa3[{{ $index }}]"
+                                                             name="valorUnitarioEmpresa3[{{ $index }}]"
                                                             style="background-color: white; border-color: gray;"
                                                             placeholder="Digite o valor da proposta"
                                                             data-index="{{ $index }}"
@@ -1246,7 +1246,8 @@
             let materialAdicionado = false;
 
             // Obtém o estado salvo ou define 'empresa' como padrão
-            let activeButton = localStorage.getItem('activeButton') || 'empresa';
+            let activeButton = document.getElementById('activeButton').value || localStorage.getItem(
+                'activeButton') || 'empresa';
             inputActiveButton.value = activeButton;
 
             function toggleList(type) {
@@ -1293,10 +1294,12 @@
             function toggleRequired(container, isRequired) {
                 const inputs = container.querySelectorAll('input, textarea');
                 inputs.forEach(input => {
-                    if (isRequired) {
-                        input.setAttribute('required', 'required');
-                    } else {
-                        input.removeAttribute('required');
+                    if (input.type !== 'file') {
+                        if (isRequired) {
+                            input.setAttribute('required', 'required');
+                        } else {
+                            input.removeAttribute('required');
+                        }
                     }
                 });
             }
@@ -1357,35 +1360,17 @@
                     .then((data) => {
                         const select = $(targetSelect);
                         select.empty(); // Limpa as opções existentes
-                        select.append(`<option value="" disabled selected>${placeholder}</option>`);
-
                         if (data.length > 0) {
+                            select.append(`<option value="" disabled selected>${placeholder}</option>`);
                             data.forEach((item) => {
                                 select.append(`<option value="${item.id}">${item.nome}</option>`);
                             });
                         } else {
-                            // Exibe "Não Possui", mas com value vazio
-                            select.append(`<option value="">Não Possui</option>`);
+                            select.append(`<option value="" selected>Não Possui</option>`);
                         }
                     })
                     .catch((error) => console.error("Erro ao carregar opções:", error));
             }
-
-            // Antes de enviar o formulário, converte "" para null
-            document.querySelector("form").addEventListener("submit", function(event) {
-                const selects = document.querySelectorAll("select");
-                selects.forEach((select) => {
-                    if (select.value === "") {
-                        const hiddenInput = document.createElement("input");
-                        hiddenInput.type = "hidden";
-                        hiddenInput.name = select.name;
-                        hiddenInput.value = "null"; // Laravel tratará como NULL
-                        select.disabled = true; // Evita que o select envie o valor vazio
-                        select.closest("form").appendChild(hiddenInput);
-                    }
-                });
-            });
-
 
             // Filtro dinâmico com base na categoria
             $('#categoriaMaterial').on('change', function() {
@@ -1398,10 +1383,42 @@
                     carregarOpcoes(`/fases/${categoriaId}`, '#faseEtariaMaterial');
                 }
             });
+
+            // Aplicar evento de mudança a todas as categorias por Material
+            $(document).on('change', '.categoria-por-material', function() {
+                let categoriaId = $(this).val();
+                let index = $(this).data('index'); // Obtém o índice do item
+
+                if (categoriaId) {
+                    carregarOpcoes(`/nome/${categoriaId}`, `select[name="nomePorMaterial[${index}]"]`);
+                    carregarOpcoes(`/marcas/${categoriaId}`, `select[name="marcaPorMaterial[${index}]"]`);
+                    carregarOpcoes(`/tamanhos/${categoriaId}`,
+                        `select[name="tamanhoPorMaterial[${index}]"]`);
+                    carregarOpcoes(`/cores/${categoriaId}`, `select[name="corPorMaterial[${index}]"]`);
+                    carregarOpcoes(`/fases/${categoriaId}`,
+                        `select[name="faseEtariaPorMaterial[${index}]"]`);
+                }
+            });
+
+            // Aplicar evento de mudança a todas as categorias por Empresa
+            $(document).on('change', '.categoria-por-empresa', function() {
+                let categoriaId = $(this).val();
+                let index = $(this).data('index'); // Obtém o índice do item
+
+                if (categoriaId) {
+                    carregarOpcoes(`/nome/${categoriaId}`, `select[name="nomePorEmpresa[${index}]"]`);
+                    carregarOpcoes(`/marcas/${categoriaId}`, `select[name="marcaPorEmpresa[${index}]"]`);
+                    carregarOpcoes(`/tamanhos/${categoriaId}`,
+                        `select[name="tamanhoPorEmpresa[${index}]"]`);
+                    carregarOpcoes(`/cores/${categoriaId}`, `select[name="corPorEmpresa[${index}]"]`);
+                    carregarOpcoes(`/fases/${categoriaId}`,
+                        `select[name="faseEtariaPorEmpresa[${index}]"]`);
+                }
+            });
         });
     </script>
     {{-- preencher select da por material --}}
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             // Função para carregar opções via AJAX
             function carregarOpcoes(url, targetSelect, placeholder = "Selecione...") {
@@ -1438,9 +1455,9 @@
                 }
             });
         });
-    </script>
+    </script> --}}
     {{-- preencher select da por empresa --}}
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             // Função para carregar opções via AJAX
             function carregarOpcoes(url, targetSelect, placeholder = "Selecione...") {
@@ -1477,5 +1494,5 @@
                 }
             });
         });
-    </script>
+    </script> --}}
 @endsection

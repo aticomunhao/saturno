@@ -56,11 +56,12 @@ class AquisicaoMaterialController extends Controller
             $query->where('id_setor', $request->setor);
         }
 
-        $aquisicao = $query->orderBy('prioridade')->paginate(20);
+        $aquisicao = $query->orderBy('prioridade', 'asc')->orderBy('id', 'asc')->paginate(20);
 
         //dd($aquisicao);
 
         $status = TipoStatusSolMt::all();
+        
         $categoriaAquisicao = TipoCategoriaMt::all();
         $todosSetor = Setor::orderBy('nome')->get();
 

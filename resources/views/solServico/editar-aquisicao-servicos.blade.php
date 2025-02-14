@@ -148,7 +148,7 @@
                                                         placeholder="Insira o arquivo da proposta">
                                                 </div>
                                                 <div class="col-md-3 mb-3 row">
-                                                    <label for="arquivo">Arquivo da Atual</label>
+                                                    <label for="arquivo">Arquivo Atual</label>
                                                     @if ($documento->arquivo_url)
                                                         <a href="{{ $documento->arquivo_url }}" target="_blank"
                                                             class="btn btn-primary">

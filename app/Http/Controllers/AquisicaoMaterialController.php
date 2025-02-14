@@ -61,7 +61,7 @@ class AquisicaoMaterialController extends Controller
         //dd($aquisicao);
 
         $status = TipoStatusSolMt::all();
-        
+
         $categoriaAquisicao = TipoCategoriaMt::all();
         $todosSetor = Setor::orderBy('nome')->get();
 
@@ -301,7 +301,7 @@ class AquisicaoMaterialController extends Controller
     }
     public function store3(Request $request, $id)
     {
-        dd($request->all());
+        //dd($request->all());
         $idSolicitacoes = $id;
         //dd($id);
         $materiais = MatProposta::where('id_sol_mat', $idSolicitacoes)->get('id');
@@ -328,35 +328,18 @@ class AquisicaoMaterialController extends Controller
                     : $material->arquivo_proposta_3 ?? null;
                 //dd($material);
                 // Verifica se os índices existem no request antes de atualizar
-                $data = [];
-                if (isset($request->categoriaPorMaterial[$index])) {
-                    $data['id_cat_material'] = $request->categoriaPorMaterial[$index];
-                }
-                if (isset($request->nomePorMaterial[$index])) {
-                    $data['nome'] = $request->nomePorMaterial[$index];
-                }
-                if (isset($request->UnidadeMedidaPorMaterial[$index])) {
-                    $data['id_tipo_unidade_medida'] = $request->UnidadeMedidaPorMaterial[$index];
-                }
-                if (isset($request->quantidadePorMaterial1[$index])) {
-                    $data['quantidade'] = $request->quantidadePorMaterial1[$index];
-                }
-                if (isset($request->marcaPorMaterial[$index])) {
-                    $data['id_marca'] = $request->marcaPorMaterial[$index];
-                }
-                if (isset($request->tamanhoPorMaterial[$index])) {
-                    $data['id_tamanho'] = $request->tamanhoPorMaterial[$index];
-                }
-                if (isset($request->corPorMaterial[$index])) {
-                    $data['id_cor'] = $request->corPorMaterial[$index];
-                }
-                if (isset($request->faseEtariaPorMaterial[$index])) {
-                    $data['id_fase_etaria'] = $request->faseEtariaPorMaterial[$index];
-                }
-                if (isset($request->sexoPorMaterial[$index])) {
-                    $data['id_sexo'] = $request->sexoPorMaterial[$index];
-                }
-                // Atualiza apenas se houver dados a modificar
+                $data = [
+                    'id_cat_material' => $request->categoriaPorMaterial[$index],
+                    'nome' => $request->nomePorMaterial[$index],
+                    'id_tipo_unidade_medida' => $request->UnidadeMedidaPorMaterial[$index],
+                    'quantidade' => $request->quantidadePorMaterial1[$index],
+                    'id_marca' => $request->marcaPorMaterial[$index],
+                    'id_tamanho' => $request->tamanhoPorMaterial[$index],
+                    'id_cor' => $request->corPorMaterial[$index],
+                    'id_fase_etaria' => $request->faseEtariaPorMaterial[$index],
+                    'id_sexo' => $request->sexoPorMaterial[$index]];
+
+                    // Atualiza apenas se houver dados a modificar
                 if (!empty($data)) {
                     MatProposta::where('id', $material->id)->update($data);
                 }
@@ -422,43 +405,20 @@ class AquisicaoMaterialController extends Controller
             }
             foreach ($materiais as $index => $material) {
                 // Construção do array de atualização verificando a existência dos índices
-                $data = [];
-                if (isset($request->categoriaPorMaterial[$index])) {
-                    $data['id_cat_material'] = $request->categoriaPorMaterial[$index];
-                }
-                if (isset($request->nomePorMaterial[$index])) {
-                    $data['nome'] = $request->nomePorMaterial[$index];
-                }
-                if (isset($request->UnidadeMedidaPorMaterial[$index])) {
-                    $data['id_tipo_unidade_medida'] = $request->UnidadeMedidaPorMaterial[$index];
-                }
-                if (isset($request->quantidadePorEmpresa[$index])) {
-                    $data['quantidade'] = $request->quantidadePorEmpresa[$index];
-                }
-                if (isset($request->valorUnitarioEmpresa1[$index])) {
-                    $data['valor1'] = limparValor($request->valorUnitarioEmpresa1[$index]);
-                }
-                if (isset($request->valorUnitarioEmpresa2[$index])) {
-                    $data['valor2'] = limparValor($request->valorUnitarioEmpresa2[$index]);
-                }
-                if (isset($request->valorUnitarioEmpresa3[$index])) {
-                    $data['valor3'] = limparValor($request->valorUnitarioEmpresa3[$index]);
-                }
-                if (isset($request->marcaPorEmpresa[$index])) {
-                    $data['id_marca'] = $request->marcaPorEmpresa[$index];
-                }
-                if (isset($request->tamanhoPorEmpresa[$index])) {
-                    $data['id_tamanho'] = $request->tamanhoPorEmpresa[$index];
-                }
-                if (isset($request->corPorEmpresa[$index])) {
-                    $data['id_cor'] = $request->corPorEmpresa[$index];
-                }
-                if (isset($request->faseEtariaPorEmpresa[$index])) {
-                    $data['id_fase_etaria'] = $request->faseEtariaPorEmpresa[$index];
-                }
-                if (isset($request->sexoPorEmpresa[$index])) {
-                    $data['id_sexo'] = $request->sexoPorEmpresa[$index];
-                }
+                $data = [
+                    'id_cat_material' => $request->categoriaPorEmpresa[$index],
+                    'nome' => $request->nomePorEmpresa[$index],
+                    'id_tipo_unidade_medida' => $request->UnidadeMedidaPorEmpresa[$index],
+                    'quantidade' => $request->quantidadePorEmpresa[$index],
+                    'valor1' => limparValor($request->valorUnitarioEmpresa1[$index]),
+                    'valor2' => limparValor($request->valorUnitarioEmpresa2[$index]),
+                    'valor3' => limparValor($request->valorUnitarioEmpresa3[$index]),
+                    'id_marca' => $request->marcaPorEmpresa[$index],
+                    'id_tamanho' => $request->tamanhoPorEmpresa[$index],
+                    'id_cor' => $request->corPorEmpresa[$index],
+                    'id_fase_etaria' => $request->faseEtariaPorEmpresa[$index],
+                    'id_sexo' => $request->sexoPorEmpresa[$index]];
+
                 // Atualiza apenas se houver dados a modificar
                 if (!empty($data)) {
                     MatProposta::where('id', $material->id)->update($data);
@@ -466,49 +426,52 @@ class AquisicaoMaterialController extends Controller
             }
 
             $documentos = Documento::where('mat_sol_proposta', $idSolicitacoes)->get();
-            $arquivos = $request->file("arquivoPropostaPorEmpresa");
 
             foreach ($documentos as $index => $documento) {
-                $endArquivoPorEmpresa = isset($arquivos[$index])
-                    ? $arquivos[$index]->store("documentos", "public")
-                    : null;
+                $realIndex = $index + 1;
+
+                $endArquivoPorEmpresa = $request->hasFile("arquivoPropostaPorEmpresa.$realIndex")
+                ? $request->file("arquivoPropostaPorEmpresa.$realIndex")->store('documentos', 'public')
+                : $documento->end_arquivo ?? null;
 
                 $dadosDocumento = [];
 
-                if (!empty($request->dt_inicialPorEmpresa[$index])) {
-                    $dadosDocumento['dt_doc'] = $request->dt_inicialPorEmpresa[$index];
+                if (!empty($request->dt_inicialPorEmpresa[$realIndex])) {
+                    $dadosDocumento['dt_doc'] = $request->dt_inicialPorEmpresa[$realIndex];
                 }
-                if (!empty($request->valorPorEmpresa[$index])) {
-                    $dadosDocumento['valor'] = limparValor($request->valorPorEmpresa[$index]);
+                if (!empty($request->valorPorEmpresa[$realIndex])) {
+                    $dadosDocumento['valor'] = limparValor($request->valorPorEmpresa[$realIndex]);
                 }
-                if (!empty($request->razaoSocialPorEmpresa[$index])) {
-                    $dadosDocumento['id_empresa'] = $request->razaoSocialPorEmpresa[$index];
+                if (!empty($request->razaoSocialPorEmpresa[$realIndex])) {
+                    $dadosDocumento['id_empresa'] = $request->razaoSocialPorEmpresa[$realIndex];
                 }
-                if (!empty($request->dt_finalPorEmpresa[$index])) {
-                    $dadosDocumento['dt_validade'] = $request->dt_finalPorEmpresa[$index];
+                if (!empty($request->dt_finalPorEmpresa[$realIndex])) {
+                    $dadosDocumento['dt_validade'] = $request->dt_finalPorEmpresa[$realIndex];
                 }
-                if (!empty($request->numeroPorEmpresa[$index])) {
-                    $dadosDocumento['numero'] = $request->numeroPorEmpresa[$index];
+                if (!empty($request->numeroPorEmpresa[$realIndex])) {
+                    $dadosDocumento['numero'] = $request->numeroPorEmpresa[$realIndex];
                 }
-                if (!empty($request->tempoGarantiaPorEmpresa[$index])) {
-                    $dadosDocumento['tempo_garantia_dias'] = $request->tempoGarantiaPorEmpresa[$index];
+                if (!empty($request->tempoGarantiaPorEmpresa[$realIndex])) {
+                    $dadosDocumento['tempo_garantia_dias'] = $request->tempoGarantiaPorEmpresa[$realIndex];
                 }
-                if (!empty($request->linkPropostaPorEmpresa[$index])) {
-                    $dadosDocumento['link_proposta'] = $request->linkPropostaPorEmpresa[$index];
+                if (!empty($request->linkPropostaPorEmpresa[$realIndex])) {
+                    $dadosDocumento['link_proposta'] = $request->linkPropostaPorEmpresa[$realIndex];
+                }
+                if (!empty($endArquivoPorEmpresa)) {
+                    $dadosDocumento['end_arquivo'] = $endArquivoPorEmpresa;
                 }
 
-                $dadosComuns = [
+                $dadosComuns = array_merge([
                     'id_tp_doc' => '14',
                     'id_setor' => $solicitacao->id_setor,
                     'vencedor_inicial' => '1',
-                    'mat_sol_proposta' => $id,
-                    'end_arquivo' => $endArquivoPorEmpresa,
+                    'mat_sol_proposta' => $idSolicitacoes,
                     'vencedor_geral' => '0',
-                    ...$dadosDocumento,
-                ];
+                ], $dadosDocumento);
 
+                // Se houver documentos, faz update. Se não houver, cria um novo.
                 if ($documentos->count() > 0) {
-                    Documento::where('mat_sol_proposta', $documento)->update($dadosComuns);
+                    Documento::where('id', $documento->id)->update($dadosComuns);
                 } else {
                     Documento::create($dadosComuns);
                 }

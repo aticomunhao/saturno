@@ -306,8 +306,6 @@ class AquisicaoServicosController extends Controller
                 }
             }
 
-
-
             // Adicionar novos documentos (arquivo)
             if ($request->hasFile('arquivo') && is_array($request->file('arquivo'))) {
                 foreach ($request->file('arquivo') as $index => $file) {

@@ -12,7 +12,6 @@ class MatProposta extends Model
 
     protected $fillable = [
         'id_cat_material',
-        'id_valor',
         'id_marca',
         'id_tamanho',
         'id_cor',
@@ -26,6 +25,7 @@ class MatProposta extends Model
         'id_sol_mat',
         'nome',
         'quantidade',
+        'dt_cadastro',
         'valor1',
         'valor2',
         'valor3',

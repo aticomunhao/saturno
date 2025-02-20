@@ -213,7 +213,7 @@ class AquisicaoMaterialController extends Controller
     {
         $idSolicitacao = $id;
 
-        $documentos = Documento::where('mat_sol_proposta', $idSolicitacao)->with('empresa')->get();
+        $documentos = Documento::where('id_sol_mat', $idSolicitacao)->with('empresa')->get();
         //dd($documentos);
         $solicitacao = SolMaterial::with('modelPessoa', 'setor')->find($idSolicitacao);
         $setor = session('usuario.setor');
@@ -227,9 +227,13 @@ class AquisicaoMaterialController extends Controller
         $bucaItemCatalogo = ItemCatalogoMaterial::all();
         $buscaUnidadeMedida = ModelUnidadeMedida::all();
         $materiais = MatProposta::with('tipoUnidadeMedida', 'tipoItemCatalogoMaterial', 'tipoCategoria', 'tipoMarca', 'tipoTamanho', 'tipoCor', 'tipoFaseEtaria', 'tipoSexo')->where('id_sol_mat', $id)->get();
+        //dd($materiais[0]->id_sol_mat);
         $buscaSetor = Setor::whereIn('id', $setor)->get();
+        $documentoMaterial = Documento::where('mat_sol_proposta', $materiais[0]->id)->get();
+        //dd($documentoMaterial);
 
-        return view('solMaterial.incluir-aquisicao-material-2', compact('documentos', 'solicitacao', 'bucaItemCatalogo', 'materiais', 'idSolicitacao', 'buscaSetor', 'buscaUnidadeMedida', 'buscaCategoria', 'buscaMarca', 'buscaTamanho', 'buscaCor', 'buscaFaseEtaria', 'buscaSexo', 'buscaEmpresa'));
+
+        return view('solMaterial.incluir-aquisicao-material-2', compact('documentoMaterial', 'documentos', 'solicitacao', 'bucaItemCatalogo', 'materiais', 'idSolicitacao', 'buscaSetor', 'buscaUnidadeMedida', 'buscaCategoria', 'buscaMarca', 'buscaTamanho', 'buscaCor', 'buscaFaseEtaria', 'buscaSexo', 'buscaEmpresa'));
     }
     public function store2(Request $request, $id)
     {
@@ -301,6 +305,12 @@ class AquisicaoMaterialController extends Controller
     }
     public function store3(Request $request, $id)
     {
+        // Função para limpar o valor monetário
+        function limparValor($valor)
+        {
+            return $valor !== null ? str_replace(['R$', ',', ' '], ['', '', ''], $valor) : null;
+        }
+
         //dd($request->all());
         $idSolicitacoes = $id;
         //dd($id);
@@ -314,19 +324,6 @@ class AquisicaoMaterialController extends Controller
             ]);
 
             foreach ($materiais as $index => $material) {
-                // Verifica se o arquivo foi enviado e armazena-o
-                $endArquivo1 = $request->hasFile("arquivoProposta1.$index")
-                    ? $request->file("arquivoProposta1.$index")->store('documentos', 'public')
-                    : $material->arquivo_proposta_1 ?? null;
-
-                $endArquivo2 = $request->hasFile("arquivoProposta2.$index")
-                    ? $request->file("arquivoProposta2.$index")->store('documentos', 'public')
-                    : $material->arquivo_proposta_2 ?? null;
-
-                $endArquivo3 = $request->hasFile("arquivoProposta3.$index")
-                    ? $request->file("arquivoProposta3.$index")->store('documentos', 'public')
-                    : $material->arquivo_proposta_3 ?? null;
-                //dd($material);
                 // Verifica se os índices existem no request antes de atualizar
                 $data = [
                     'id_cat_material' => $request->categoriaPorMaterial[$index],
@@ -337,72 +334,82 @@ class AquisicaoMaterialController extends Controller
                     'id_tamanho' => $request->tamanhoPorMaterial[$index],
                     'id_cor' => $request->corPorMaterial[$index],
                     'id_fase_etaria' => $request->faseEtariaPorMaterial[$index],
-                    'id_sexo' => $request->sexoPorMaterial[$index]];
+                    'id_sexo' => $request->sexoPorMaterial[$index]
+                ];
 
-                    // Atualiza apenas se houver dados a modificar
+                // Atualiza apenas se houver dados a modificar
                 if (!empty($data)) {
                     MatProposta::where('id', $material->id)->update($data);
                 }
 
-                Documento::create([
-                    'dt_doc' => $request->dt_inicial1[$index],
-                    'id_tp_doc' => '14',
-                    'valor' => str_replace(['R$', ',', ' '], ['', '', ''], $request->valor1[$index]),
-                    'id_empresa' => $request->razaoSocial1[$index],
-                    'id_setor' => $solicitacao->id_setor,
-                    'vencedor_inicial' => '1',
-                    'mat_sol_proposta' => $material->id,
-                    'dt_validade' => $request->dt_final1[$index],
-                    'end_arquivo' => $endArquivo1,
-                    'numero' => $request->numero1[$index],
-                    'tempo_garantia_dias' => $request->tempoGarantia1[$index],
-                    'vencedor_geral' => '0',
-                    'link_proposta' => $request->linkProposta1[$index],
-                ]);
+                // Itera sobre os três documentos para o material
+                for ($docIndex = 1; $docIndex <= 3; $docIndex++) {
+                    // Verifica se o arquivo foi enviado e armazena-o
+                    $endArquivo1 = $request->hasFile("arquivoProposta1.$index")
+                        ? $request->file("arquivoProposta1.$index")->store('documentos', 'public')
+                        : $material->arquivo_proposta_1 ?? null;
 
-                Documento::create([
-                    'dt_doc' => $request->dt_inicial2[$index],
-                    'id_tp_doc' => '14',
-                    'valor' => str_replace(['R$', ',', ' '], ['', '', ''], $request->valor2[$index]),
-                    'id_empresa' => $request->razaoSocial2[$index],
-                    'id_setor' => $solicitacao->id_setor,
-                    'vencedor_inicial' => '0',
-                    'mat_sol_proposta' => $material->id,
-                    'dt_validade' => $request->dt_final2[$index],
-                    'end_arquivo' => $endArquivo2,
-                    'numero' => $request->numero2[$index],
-                    'tempo_garantia_dias' => $request->tempoGarantia2[$index],
-                    'vencedor_geral' => '0',
-                    'link_proposta' => $request->linkProposta2[$index],
-                ]);
+                    $dadosComunsMaterial1 = [];
 
-                Documento::create([
-                    'dt_doc' => $request->dt_inicial3[$index],
-                    'id_tp_doc' => '14',
-                    'valor' => str_replace(['R$', ',', ' '], ['', '', ''], $request->valor3[$index]),
-                    'id_empresa' => $request->razaoSocial3[$index],
-                    'id_setor' => $solicitacao->id_setor,
-                    'vencedor_inicial' => '0',
-                    'mat_sol_proposta' => $material->id,
-                    'dt_validade' => $request->dt_final3[$index],
-                    'end_arquivo' => $endArquivo3,
-                    'numero' => $request->numero3[$index],
-                    'tempo_garantia_dias' => $request->tempoGarantia3[$index],
-                    'vencedor_geral' => '0',
-                    'link_proposta' => $request->linkProposta3[$index],
-                ]);
+                    if (!empty($request->dt_inicial1[$index])) {
+                        $dadosComunsMaterial1['dt_doc'] = $request->dt_inicial1[$index];
+                    }
+                    if (!empty($request->valor1[$index])) {
+                        $dadosComunsMaterial1['valor'] = limparValor($request->valor1[$index]);
+                    }
+                    if (!empty($request->razaoSocial1[$index])) {
+                        $dadosComunsMaterial1['id_empresa'] = $request->razaoSocial1[$index];
+                    }
+                    if (!empty($request->dt_final1[$index])) {
+                        $dadosComunsMaterial1['dt_validade'] = $request->dt_final1[$index];
+                    }
+                    if (!empty($request->numero1[$index])) {
+                        $dadosComunsMaterial1['numero'] = $request->numero1[$index];
+                    }
+                    if (!empty($request->tempoGarantia1[$index])) {
+                        $dadosComunsMaterial1['tempo_garantia_dias'] = $request->tempoGarantia1[$index];
+                    }
+                    if (!empty($request->linkProposta1[$index])) {
+                        $dadosComunsMaterial1['link_proposta'] = $request->linkProposta1[$index];
+                    }
+                    if (!empty($endArquivo1)) {
+                        $dadosComunsMaterial1['end_arquivo'] = $endArquivo1;
+                    }
+
+                    $dadosComuns = array_merge([
+                        'id_tp_doc' => '14',
+                        'id_setor' => $solicitacao->id_setor,
+                        'vencedor_inicial' => '1',
+                        'mat_sol_proposta' => $material->id,
+                        'vencedor_geral' => '0',
+                    ], $dadosComunsMaterial1);
+
+                    // Busca documento existente considerando a empresa e o número
+                    $documentoQuery = Documento::where('mat_sol_proposta', $material->id)
+                        ->where('id_tp_doc', '14');
+
+                    if (!empty($dadosComuns['numero'])) {
+                        $documentoQuery->where('numero', $dadosComuns['numero']);
+                    }
+
+                    if (!empty($dadosComuns['id_empresa'])) {
+                        $documentoQuery->where('id_empresa', $dadosComuns['id_empresa']);
+                    }
+
+                    $documento = $documentoQuery->first();
+
+                    if ($documento) {
+                        $documento->update($dadosComuns);
+                    } else {
+                        Documento::create($dadosComuns);
+                    }
+                }
             }
         } else if ($request->activeButton === 'empresa') {
 
             SolMaterial::where('id', $idSolicitacoes)->update([
                 'tipo_sol_material' => '1',
             ]);
-
-            // Função para limpar o valor monetário
-            function limparValor($valor)
-            {
-                return $valor !== null ? str_replace(['R$', ',', ' '], ['', '', ''], $valor) : null;
-            }
             foreach ($materiais as $index => $material) {
                 // Construção do array de atualização verificando a existência dos índices
                 $data = [
@@ -417,7 +424,8 @@ class AquisicaoMaterialController extends Controller
                     'id_tamanho' => $request->tamanhoPorEmpresa[$index],
                     'id_cor' => $request->corPorEmpresa[$index],
                     'id_fase_etaria' => $request->faseEtariaPorEmpresa[$index],
-                    'id_sexo' => $request->sexoPorEmpresa[$index]];
+                    'id_sexo' => $request->sexoPorEmpresa[$index]
+                ];
 
                 // Atualiza apenas se houver dados a modificar
                 if (!empty($data)) {
@@ -431,8 +439,8 @@ class AquisicaoMaterialController extends Controller
                 $realIndex = $index + 1;
 
                 $endArquivoPorEmpresa = $request->hasFile("arquivoPropostaPorEmpresa.$realIndex")
-                ? $request->file("arquivoPropostaPorEmpresa.$realIndex")->store('documentos', 'public')
-                : $documento->end_arquivo ?? null;
+                    ? $request->file("arquivoPropostaPorEmpresa.$realIndex")->store('documentos', 'public')
+                    : $documento->end_arquivo ?? null;
 
                 $dadosDocumento = [];
 
@@ -465,7 +473,7 @@ class AquisicaoMaterialController extends Controller
                     'id_tp_doc' => '14',
                     'id_setor' => $solicitacao->id_setor,
                     'vencedor_inicial' => '1',
-                    'mat_sol_proposta' => $idSolicitacoes,
+                    'id_sol_mat' => $idSolicitacoes,
                     'vencedor_geral' => '0',
                 ], $dadosDocumento);
 
@@ -478,7 +486,7 @@ class AquisicaoMaterialController extends Controller
             }
         }
 
-        app('flasher')->addSuccess('Propostas Adicionadas com Sucesso');
+        app('flasher')->addSuccess('Propostas Realizadas com Sucesso');
         return redirect("/gerenciar-aquisicao-material");
     }
     public function delete($id)

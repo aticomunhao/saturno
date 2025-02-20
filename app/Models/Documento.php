@@ -27,6 +27,7 @@ Documento extends Model
         'tempo_garantia_dias',
         'vencedor_geral',
         'link_proposta',
+        'id_sol_mat',
     ];
 
     public $timestamps = false;

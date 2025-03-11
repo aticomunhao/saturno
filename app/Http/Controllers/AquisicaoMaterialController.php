@@ -213,7 +213,7 @@ class AquisicaoMaterialController extends Controller
     {
         $idSolicitacao = $id;
 
-        $documentos = Documento::where('id_sol_mat', $idSolicitacao)->with('empresa')->get();
+        $documentos = Documento::where('mat_sol_proposta', $idSolicitacao)->with('empresa')->get();
         //dd($documentos);
         $solicitacao = SolMaterial::with('modelPessoa', 'setor')->find($idSolicitacao);
         $setor = session('usuario.setor');
@@ -473,7 +473,7 @@ class AquisicaoMaterialController extends Controller
                     'id_tp_doc' => '14',
                     'id_setor' => $solicitacao->id_setor,
                     'vencedor_inicial' => '1',
-                    'id_sol_mat' => $idSolicitacoes,
+                    'mat_sol_proposta' => $idSolicitacoes,
                     'vencedor_geral' => '0',
                 ], $dadosDocumento);
 

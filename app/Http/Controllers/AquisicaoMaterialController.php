@@ -228,10 +228,12 @@ class AquisicaoMaterialController extends Controller
         $buscaUnidadeMedida = ModelUnidadeMedida::all();
         $materiais = MatProposta::with('tipoUnidadeMedida', 'tipoItemCatalogoMaterial', 'tipoCategoria', 'tipoMarca', 'tipoTamanho', 'tipoCor', 'tipoFaseEtaria', 'tipoSexo')->where('id_sol_mat', $id)->get();
         //dd($materiais[0]->id_sol_mat);
-        $buscaSetor = Setor::whereIn('id', $setor)->get();
-        $documentoMaterial = Documento::where('mat_sol_proposta', $materiais[0]->id)->get();
+        if (!empty($materiais) && isset($materiais[0])) {
+            $documentoMaterial = Documento::where('mat_sol_proposta', $materiais[0]->id)->get();
+        } else {
+            $documentoMaterial = collect();
+        }
         //dd($documentoMaterial);
-
 
         return view('solMaterial.incluir-aquisicao-material-2', compact('documentoMaterial', 'documentos', 'solicitacao', 'bucaItemCatalogo', 'materiais', 'idSolicitacao', 'buscaSetor', 'buscaUnidadeMedida', 'buscaCategoria', 'buscaMarca', 'buscaTamanho', 'buscaCor', 'buscaFaseEtaria', 'buscaSexo', 'buscaEmpresa'));
     }

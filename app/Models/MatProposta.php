@@ -67,4 +67,8 @@ class MatProposta extends Model
     {
         return $this->belongsTo( SolMaterial::class,'id_sol_mat');
     }
+    public function documentoMaterial()
+{
+    return $this->hasMany(Documento::class, 'mat_proposta');
+}
 }

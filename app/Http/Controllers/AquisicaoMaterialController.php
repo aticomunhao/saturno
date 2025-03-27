@@ -213,7 +213,7 @@ class AquisicaoMaterialController extends Controller
     {
         $idSolicitacao = $id;
 
-        $documentos = Documento::where('mat_sol_proposta', $idSolicitacao)->with('empresa')->get();
+        $documentos = Documento::where('id_sol_mat', $idSolicitacao)->with('empresa')->get();
         //dd($documentos);
         $solicitacao = SolMaterial::with('modelPessoa', 'setor')->find($idSolicitacao);
         $setor = session('usuario.setor');
@@ -226,16 +226,13 @@ class AquisicaoMaterialController extends Controller
         $buscaSexo = ModelSexo::all();
         $bucaItemCatalogo = ItemCatalogoMaterial::all();
         $buscaUnidadeMedida = ModelUnidadeMedida::all();
-        $materiais = MatProposta::with('tipoUnidadeMedida', 'tipoItemCatalogoMaterial', 'tipoCategoria', 'tipoMarca', 'tipoTamanho', 'tipoCor', 'tipoFaseEtaria', 'tipoSexo')->where('id_sol_mat', $id)->get();
-        //dd($materiais[0]->id_sol_mat);
-        if (!empty($materiais) && isset($materiais[0])) {
-            $documentoMaterial = Documento::where('mat_sol_proposta', $materiais[0]->id)->get();
-        } else {
-            $documentoMaterial = collect();
-        }
+        $buscaSetor = Setor::whereIn('id', $setor)->get();
+        $materiais = MatProposta::with('documentoMaterial', 'tipoUnidadeMedida', 'tipoItemCatalogoMaterial', 'tipoCategoria', 'tipoMarca', 'tipoTamanho', 'tipoCor', 'tipoFaseEtaria', 'tipoSexo')->where('id_sol_mat', $id)->get();
+        //dd($materiais);
+
         //dd($documentoMaterial);
 
-        return view('solMaterial.incluir-aquisicao-material-2', compact('documentoMaterial', 'documentos', 'solicitacao', 'bucaItemCatalogo', 'materiais', 'idSolicitacao', 'buscaSetor', 'buscaUnidadeMedida', 'buscaCategoria', 'buscaMarca', 'buscaTamanho', 'buscaCor', 'buscaFaseEtaria', 'buscaSexo', 'buscaEmpresa'));
+        return view('solMaterial.incluir-aquisicao-material-2', compact('documentos', 'solicitacao', 'bucaItemCatalogo', 'materiais', 'idSolicitacao', 'buscaSetor', 'buscaUnidadeMedida', 'buscaCategoria', 'buscaMarca', 'buscaTamanho', 'buscaCor', 'buscaFaseEtaria', 'buscaSexo', 'buscaEmpresa'));
     }
     public function store2(Request $request, $id)
     {
@@ -316,7 +313,9 @@ class AquisicaoMaterialController extends Controller
         //dd($request->all());
         $idSolicitacoes = $id;
         //dd($id);
-        $materiais = MatProposta::where('id_sol_mat', $idSolicitacoes)->get('id');
+        $materiais = MatProposta::where('id_sol_mat', $idSolicitacoes)->get();
+        $materiaisIds = $materiais->pluck('id');
+        $documentoMaterial = Documento::whereIn('mat_proposta', $materiaisIds)->get();
         $solicitacao = SolMaterial::find($idSolicitacoes);
         //dd($solicitacao, $materiais, $solicitacao);
         if ($request->activeButton === 'material') {
@@ -344,8 +343,13 @@ class AquisicaoMaterialController extends Controller
                     MatProposta::where('id', $material->id)->update($data);
                 }
 
+                $documentosFiltrados = array_filter($request->razaoSocial1, function ($doc, $index) use ($request, $material) {
+                    return $request->numMat[$index] == $material->id;
+                }, ARRAY_FILTER_USE_BOTH);
+
                 // Itera sobre os três documentos para o material
-                for ($docIndex = 1; $docIndex <= 3; $docIndex++) {
+                foreach ($documentosFiltrados as $index => $documento) {
+                    //dd($request->all());
                     // Verifica se o arquivo foi enviado e armazena-o
                     $endArquivo1 = $request->hasFile("arquivoProposta1.$index")
                         ? $request->file("arquivoProposta1.$index")->store('documentos', 'public')
@@ -382,12 +386,13 @@ class AquisicaoMaterialController extends Controller
                         'id_tp_doc' => '14',
                         'id_setor' => $solicitacao->id_setor,
                         'vencedor_inicial' => '1',
-                        'mat_sol_proposta' => $material->id,
+                        'mat_proposta' => $material->id,
                         'vencedor_geral' => '0',
+                        'id_sol_mat' => $id,
                     ], $dadosComunsMaterial1);
 
                     // Busca documento existente considerando a empresa e o número
-                    $documentoQuery = Documento::where('mat_sol_proposta', $material->id)
+                    $documentoQuery = Documento::where('mat_proposta', $material->id)
                         ->where('id_tp_doc', '14');
 
                     if (!empty($dadosComuns['numero'])) {
@@ -435,7 +440,7 @@ class AquisicaoMaterialController extends Controller
                 }
             }
 
-            $documentos = Documento::where('mat_sol_proposta', $idSolicitacoes)->get();
+            $documentos = Documento::where('id_sol_mat', $idSolicitacoes)->get();
 
             foreach ($documentos as $index => $documento) {
                 $realIndex = $index + 1;
@@ -475,7 +480,7 @@ class AquisicaoMaterialController extends Controller
                     'id_tp_doc' => '14',
                     'id_setor' => $solicitacao->id_setor,
                     'vencedor_inicial' => '1',
-                    'mat_sol_proposta' => $idSolicitacoes,
+                    'id_sol_mat' => $idSolicitacoes,
                     'vencedor_geral' => '0',
                 ], $dadosDocumento);
 

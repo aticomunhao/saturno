@@ -20,7 +20,7 @@ Documento extends Model
         'id_setor',
         'vencedor_inicial',
         'id_sol_sv',
-        'mat_sol_proposta',
+        'mat_proposta',
         'dt_validade',
         'end_arquivo',
         'numero',
@@ -39,5 +39,9 @@ Documento extends Model
     public function tipoDocumento()
     {
         return $this->belongsTo(TipoDocumento::class, 'id_tp_doc');
+    }
+    public function matProposta()
+    {
+        return $this->belongsTo( MatProposta::class,'mat_proposta');
     }
 }

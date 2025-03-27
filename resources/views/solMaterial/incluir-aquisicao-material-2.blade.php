@@ -224,332 +224,353 @@
                                                 @php
                                                     $requiredMaterialsProposals = 3;
                                                     $counterMaterials = 1;
-                                                    $actualMaterialsProposals = count($documentoMaterial);
+                                                    $actualMaterialsProposals = count($material->documentoMaterial);
                                                     $missingMaterialsProposals = max(
                                                         0,
                                                         $requiredMaterialsProposals - $actualMaterialsProposals,
                                                     );
                                                 @endphp
                                                 {{-- Propostas Preenchidas por material (3) --}}
-                                                @foreach ($documentoMaterial as $documentoMaterials)
-                                                    <div class="card mt-3">
-                                                        <div class="card-header">
-                                                            <h5 class="card-title mb-0">
-                                                                @if ($counterMaterials == 1)
-                                                                    Proposta Preferida
-                                                                @else
-                                                                    {{ $counterMaterials }}ª Proposta
-                                                                @endif
-                                                            </h5>
-                                                        </div>
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <!-- Número da Proposta -->
-                                                                <div class="col-md-4 mb-3">
-                                                                    <label>
-                                                                        @if ($counterMaterials == 1)
-                                                                            Número da Proposta Principal
-                                                                        @else
-                                                                            Número da {{ $counterMaterials }}ª Proposta
-                                                                        @endif
-                                                                    </label>
-                                                                    <input type="text" class="form-control"
-                                                                        name="numero1[{{ $index }}]"
-                                                                        style="background-color: white; border-color: gray;"
-                                                                        placeholder="Digite o Número da proposta"
-                                                                        value="{{ $material->numero }}"
-                                                                        data-index="{{ $index }}">
-                                                                </div>
-                                                                <!-- Nome da Empresa -->
-                                                                <div class="col-md-4 mb-3">
-                                                                    <label>
-                                                                        @if ($counterMaterials == 1)
-                                                                            Nome da Empresa Principal
-                                                                        @else
-                                                                            Nome da {{ $counterMaterials }}ª Empresa
-                                                                        @endif
-                                                                    </label>
-                                                                    <select class="form-select select2"
-                                                                        name="razaoSocial1[{{ $index }}]"
-                                                                        data-index="{{ $index }}"
-                                                                        style="border: 1px solid #999999; padding: 5px;">
-                                                                        <option value="{{ $material->id_empresa }}">
-                                                                            {{ $material->empresa->razaosocial ?? 'Não especificado' }}
-                                                                            -
-                                                                            {{ $material->empresa->nomefantasia ?? 'Não especificado' }}
-                                                                        </option>
-                                                                        @foreach ($buscaEmpresa as $buscaEmpresas)
-                                                                            <option value="{{ $buscaEmpresas->id }}">
-                                                                                {{ $buscaEmpresas->razaosocial }} -
-                                                                                {{ $buscaEmpresas->nomefantasia }}
-                                                                            </option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div>
-                                                                <!-- Valor -->
-                                                                <div class="col-md-4 mb-3">
-                                                                    <label>
-                                                                        @if ($counterMaterials == 1)
-                                                                            Valor da Proposta Principal
-                                                                        @else
-                                                                            Valor da {{ $counterMaterials }}ª Proposta
-                                                                        @endif
-                                                                    </label>
-                                                                    <input type="text"
-                                                                        class="form-control valor valor-proposta"
-                                                                        data-index="{{ $index }}"
-                                                                        name="valor1[{{ $index }}]"
-                                                                        value="{{ $material->valor }}"
-                                                                        style="background-color: white; border-color: gray;"
-                                                                        placeholder="Digite o valor da proposta">
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <!-- Data da Criação da Proposta -->
-                                                                <div class="col-md-4 mb-3">
-                                                                    <label>
-                                                                        @if ($counterMaterials == 1)
-                                                                            Data da Criação da
-                                                                            Proposta Principal
-                                                                        @else
-                                                                            Data da Criação da {{ $counterMaterials }}ª
-                                                                            Proposta
-                                                                        @endif
-                                                                    </label>
-                                                                    <input type="date" class="form-control"
-                                                                        name="dt_inicial1[{{ $index }}]"
-                                                                        data-index="{{ $index }}"
-                                                                        value="{{ $material->dt_doc }}"
-                                                                        style="background-color: white; border-color: gray;"
-                                                                        placeholder="Digite a data da proposta">
-                                                                </div>
-
-                                                                <!-- Data Limite da Proposta -->
-                                                                <div class="col-md-4 mb-3">
-                                                                    <label>
-                                                                        @if ($counterMaterials == 1)
-                                                                            Data Limite da Proposta Principal
-                                                                        @else
-                                                                            Data Limite da {{ $counterMaterials }}ª
-                                                                            Proposta
-                                                                        @endif
-                                                                    </label>
-                                                                    <input type="date" class="form-control"
-                                                                        name="dt_final1[{{ $index }}]"
-                                                                        data-index="{{ $index }}"
-                                                                        value="{{ $material->dt_validade }}"
-                                                                        style="background-color: white; border-color: gray;"
-                                                                        placeholder="Digite a data final do prazo da proposta">
-                                                                </div>
-
-                                                                <!-- Arquivo da Proposta -->
-                                                                <div class="col-md-4 mb-3">
-                                                                    <label>Arquivo da Proposta Principal</label>
-                                                                    <input type="file" class="form-control"
-                                                                        data-index="{{ $index }}"
-                                                                        style="background-color: white; border-color: gray;"
-                                                                        id="uploadProposta1"
-                                                                        name="arquivoProposta1[{{ $index }}]"
-                                                                        accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="row">
-                                                                <!-- Tempo de Garantia -->
-                                                                <div id="tempoGarantia" class="col-md-4 mb-3">
-                                                                    <label>Tempo de Garantia (em
-                                                                        dias)</label>
-                                                                    <input type="number" class="form-control"
-                                                                        value="{{ $material->tempo_garantia_dias }}"
-                                                                        style="background-color: white; border-color: gray;"
-                                                                        id="tempoGarantiaInput"
-                                                                        name="tempoGarantia1[{{ $index }}]"
-                                                                        data-index="{{ $index }}"
-                                                                        placeholder="Digite o tempo de garantia">
-                                                                </div>
-
-                                                                <!-- Link da Proposta -->
-                                                                <div class="col-md-4 mb-3">
-                                                                    <label>
-                                                                        @if ($counterMaterials == 1)
-                                                                            Link da Proposta Principal
-                                                                        @else
-                                                                            Link da {{ $counterMaterials }}ª
-                                                                            Proposta
-                                                                        @endif
-                                                                    </label>
-                                                                    <input type="text" class="form-control"
-                                                                        value="{{ $material->link_proposta }}"
-                                                                        style="background-color: white; border-color: gray;"
-                                                                        id="linkProposta1"
-                                                                        name="linkProposta1[{{ $index }}]"
-                                                                        data-index="{{ $index }}"
-                                                                        placeholder="Link da Proposta">
-                                                                </div>
-
-                                                                <!-- Arquivo atual da Proposta -->
-                                                                <div class="col-md-4 mb-3 row">
-                                                                    <label for="arquivo">Arquivo Salvo</label>
-                                                                    @if ($material->end_arquivo)
-                                                                        <a href="{{ Storage::url($material->end_arquivo) }}"
-                                                                            target="_blank" class="btn btn-primary">
-                                                                            Ver Arquivo
-                                                                        </a>
+                                                @if ($material->documentoMaterial->isNotEmpty())
+                                                    @foreach ($material->documentoMaterial as $documentoMaterials)
+                                                        <input type="hidden" name="numMat[]"
+                                                            value="{{ $material->id }}">
+                                                        <div class="card mt-3">
+                                                            <div class="card-header">
+                                                                <h5 class="card-title mb-0">
+                                                                    @if ($counterMaterials == 1)
+                                                                        Proposta Preferida
                                                                     @else
-                                                                        <a class="btn btn-secondary" disabled>Nenhum
-                                                                            arquivo
-                                                                            disponível.</a>
+                                                                        {{ $counterMaterials }}ª Proposta
                                                                     @endif
-                                                                </div>
+                                                                </h5>
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                    @php $counterMaterials++; @endphp
-                                                @endforeach
-                                                {{-- Propostas vazias para preencher as que faltam na por material --}}
-                                                @for ($i = 0; $i < $missingMaterialsProposals; $i++)
-                                                    <div class="card mt-3">
-                                                        <div class="card-header">
-                                                            <h5 class="card-title mb-0">
-                                                                @if ($counterMaterials == 1)
-                                                                    Proposta Preferida
-                                                                @else
-                                                                    {{ $counterMaterials }}ª Proposta
-                                                                @endif
-                                                            </h5>
-                                                        </div>
-                                                        <div class="card-body">
-                                                            <div class="row">
-                                                                <!-- Número da Proposta -->
-                                                                <div class="col-md-4 mb-3">
-                                                                    <label>
-                                                                        @if ($counterMaterials == 1)
-                                                                            Número da Proposta Principal
-                                                                        @else
-                                                                            Número da {{ $counterMaterials }}ª Proposta
-                                                                        @endif
-                                                                    </label>
-                                                                    <input type="text" class="form-control"
-                                                                        name="numero1[]"
-                                                                        style="background-color: white; border-color: gray;"
-                                                                        placeholder="Digite o Número da proposta"
-                                                                        value="">
-                                                                </div>
-                                                                <!-- Nome da Empresa -->
-                                                                <div class="col-md-4 mb-3">
-                                                                    <label>
-                                                                        @if ($counterMaterials == 1)
-                                                                            Nome da Empresa Principal
-                                                                        @else
-                                                                            Nome da {{ $counterMaterials }}ª Empresa
-                                                                        @endif
-                                                                    </label>
-                                                                    <select class="form-select select2"
-                                                                        name="razaoSocial1[]"
-                                                                        style="border: 1px solid #999999; padding: 5px;">
-                                                                        <option value="">
-                                                                        </option>
-                                                                        @foreach ($buscaEmpresa as $buscaEmpresas)
-                                                                            <option value="{{ $buscaEmpresas->id }}">
-                                                                                {{ $buscaEmpresas->razaosocial }} -
-                                                                                {{ $buscaEmpresas->nomefantasia }}
+                                                            <div class="card-body">
+                                                                <div class="row">
+                                                                    <!-- Número da Proposta -->
+                                                                    <div class="col-md-4 mb-3">
+                                                                        <label>
+                                                                            @if ($counterMaterials == 1)
+                                                                                Número da Proposta Principal
+                                                                            @else
+                                                                                Número da {{ $counterMaterials }}ª Proposta
+                                                                            @endif
+                                                                        </label>
+                                                                        <input type="text" class="form-control"
+                                                                            name="numero1[]"
+                                                                            style="background-color: white; border-color: gray;"
+                                                                            placeholder="Digite o Número da proposta"
+                                                                            value="{{ $documentoMaterials->numero }}"
+                                                                            data-index="{{ $index }}">
+                                                                    </div>
+                                                                    <!-- Nome da Empresa -->
+                                                                    <div class="col-md-4 mb-3">
+                                                                        <label>
+                                                                            @if ($counterMaterials == 1)
+                                                                                Nome da Empresa Principal
+                                                                            @else
+                                                                                Nome da {{ $counterMaterials }}ª Empresa
+                                                                            @endif
+                                                                        </label>
+                                                                        <select class="form-select select2"
+                                                                            name="razaoSocial1[]"
+                                                                            data-index="{{ $index }}"
+                                                                            style="border: 1px solid #999999; padding: 5px;">
+                                                                            <option value="{{ $material->id_empresa }}">
+                                                                                {{ $documentoMaterials->empresa->razaosocial ?? 'Não especificado' }}
+                                                                                -
+                                                                                {{ $documentoMaterials->empresa->nomefantasia ?? 'Não especificado' }}
                                                                             </option>
-                                                                        @endforeach
-                                                                    </select>
+                                                                            @foreach ($buscaEmpresa as $buscaEmpresas)
+                                                                                <option value="{{ $buscaEmpresas->id }}">
+                                                                                    {{ $buscaEmpresas->razaosocial }} -
+                                                                                    {{ $buscaEmpresas->nomefantasia }}
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                    <!-- Valor -->
+                                                                    <div class="col-md-4 mb-3">
+                                                                        <label>
+                                                                            @if ($counterMaterials == 1)
+                                                                                Valor da Proposta Principal
+                                                                            @else
+                                                                                Valor da {{ $counterMaterials }}ª Proposta
+                                                                            @endif
+                                                                        </label>
+                                                                        <input type="text"
+                                                                            class="form-control valor valor-proposta"
+                                                                            data-index="{{ $index }}"
+                                                                            name="valor1[]"
+                                                                            value="{{ $documentoMaterials->valor }}"
+                                                                            style="background-color: white; border-color: gray;"
+                                                                            placeholder="Digite o valor da proposta">
+                                                                    </div>
                                                                 </div>
-                                                                <!-- Valor -->
-                                                                <div class="col-md-4 mb-3">
-                                                                    <label>
-                                                                        @if ($counterMaterials == 1)
-                                                                            Valor da Proposta Principal
-                                                                        @else
-                                                                            Valor da {{ $counterMaterials }}ª Proposta
-                                                                        @endif
-                                                                    </label>
-                                                                    <input type="text"
-                                                                        class="form-control valor valor-proposta"
-                                                                        name="valor1[]" value=""
-                                                                        style="background-color: white; border-color: gray;"
-                                                                        placeholder="Digite o valor da proposta">
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <!-- Data da Criação da Proposta -->
-                                                                <div class="col-md-4 mb-3">
-                                                                    <label>
-                                                                        @if ($counterMaterials == 1)
-                                                                            Data da Criação da
-                                                                            Proposta Principal
-                                                                        @else
-                                                                            Data da Criação da {{ $counterMaterials }}ª
-                                                                            Proposta
-                                                                        @endif
-                                                                    </label>
-                                                                    <input type="date" class="form-control"
-                                                                        name="dt_inicial1[]" value=""
-                                                                        style="background-color: white; border-color: gray;"
-                                                                        placeholder="Digite a data da proposta">
+                                                                <div class="row">
+                                                                    <!-- Data da Criação da Proposta -->
+                                                                    <div class="col-md-4 mb-3">
+                                                                        <label>
+                                                                            @if ($counterMaterials == 1)
+                                                                                Data da Criação da
+                                                                                Proposta Principal
+                                                                            @else
+                                                                                Data da Criação da {{ $counterMaterials }}ª
+                                                                                Proposta
+                                                                            @endif
+                                                                        </label>
+                                                                        <input type="date" class="form-control"
+                                                                            name="dt_inicial1[]"
+                                                                            data-index="{{ $index }}"
+                                                                            value="{{ $documentoMaterials->dt_doc }}"
+                                                                            style="background-color: white; border-color: gray;"
+                                                                            placeholder="Digite a data da proposta">
+                                                                    </div>
+
+                                                                    <!-- Data Limite da Proposta -->
+                                                                    <div class="col-md-4 mb-3">
+                                                                        <label>
+                                                                            @if ($counterMaterials == 1)
+                                                                                Data Limite da Proposta Principal
+                                                                            @else
+                                                                                Data Limite da {{ $counterMaterials }}ª
+                                                                                Proposta
+                                                                            @endif
+                                                                        </label>
+                                                                        <input type="date" class="form-control"
+                                                                            name="dt_final1[]"
+                                                                            data-index="{{ $index }}"
+                                                                            value="{{ $documentoMaterials->dt_validade }}"
+                                                                            style="background-color: white; border-color: gray;"
+                                                                            placeholder="Digite a data final do prazo da proposta">
+                                                                    </div>
+
+                                                                    <!-- Arquivo da Proposta -->
+                                                                    <div class="col-md-4 mb-3">
+                                                                        <label>Arquivo da Proposta Principal</label>
+                                                                        <input type="file" class="form-control"
+                                                                            data-index="{{ $index }}"
+                                                                            style="background-color: white; border-color: gray;"
+                                                                            id="uploadProposta1" name="arquivoProposta1[]"
+                                                                            accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
+                                                                    </div>
                                                                 </div>
 
-                                                                <!-- Data Limite da Proposta -->
-                                                                <div class="col-md-4 mb-3">
-                                                                    <label>
-                                                                        @if ($counterMaterials == 1)
-                                                                            Data Limite da Proposta Principal
+                                                                <div class="row">
+                                                                    <!-- Tempo de Garantia -->
+                                                                    <div id="tempoGarantia" class="col-md-4 mb-3">
+                                                                        <label>Tempo de Garantia (em
+                                                                            dias)</label>
+                                                                        <input type="number" class="form-control"
+                                                                            value="{{ $documentoMaterials->tempo_garantia_dias }}"
+                                                                            style="background-color: white; border-color: gray;"
+                                                                            id="tempoGarantiaInput"
+                                                                            name="tempoGarantia1[]"
+                                                                            data-index="{{ $index }}"
+                                                                            placeholder="Digite o tempo de garantia">
+                                                                    </div>
+
+                                                                    <!-- Link da Proposta -->
+                                                                    <div class="col-md-4 mb-3">
+                                                                        <label>
+                                                                            @if ($counterMaterials == 1)
+                                                                                Link da Proposta Principal
+                                                                            @else
+                                                                                Link da {{ $counterMaterials }}ª
+                                                                                Proposta
+                                                                            @endif
+                                                                        </label>
+                                                                        <input type="text" class="form-control"
+                                                                            value="{{ $documentoMaterials->link_proposta }}"
+                                                                            style="background-color: white; border-color: gray;"
+                                                                            id="linkProposta1" name="linkProposta1[]"
+                                                                            data-index="{{ $index }}"
+                                                                            placeholder="Link da Proposta">
+                                                                    </div>
+
+                                                                    <!-- Arquivo atual da Proposta -->
+                                                                    <div class="col-md-4 mb-3 row">
+                                                                        <label for="arquivo">Arquivo Salvo</label>
+                                                                        @if ($documentoMaterials->end_arquivo)
+                                                                            <a href="{{ Storage::url($documentoMaterials->end_arquivo) }}"
+                                                                                target="_blank" class="btn btn-primary">
+                                                                                Ver Arquivo
+                                                                            </a>
                                                                         @else
-                                                                            Data Limite da {{ $counterMaterials }}ª
-                                                                            Proposta
+                                                                            <a class="btn btn-secondary" disabled>Nenhum
+                                                                                arquivo
+                                                                                disponível.</a>
                                                                         @endif
-                                                                    </label>
-                                                                    <input type="date" class="form-control"
-                                                                        name="dt_final1[]" value=""
-                                                                        style="background-color: white; border-color: gray;"
-                                                                        placeholder="Digite a data final do prazo da proposta">
-                                                                </div>
-
-                                                                <!-- Arquivo da Proposta -->
-                                                                <div class="col-md-4 mb-3">
-                                                                    <label>Arquivo da Proposta Principal</label>
-                                                                    <input type="file" class="form-control"
-                                                                        style="background-color: white; border-color: gray;"
-                                                                        id="uploadProposta1" name="arquivoProposta1[]"
-                                                                        accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="row">
-                                                                <!-- Tempo de Garantia -->
-                                                                <div id="tempoGarantia" class="col-md-4 mb-3">
-                                                                    <label>Tempo de Garantia (em
-                                                                        dias)</label>
-                                                                    <input type="number" class="form-control"
-                                                                        value=""
-                                                                        style="background-color: white; border-color: gray;"
-                                                                        id="tempoGarantiaInput" name="tempoGarantia1[]"
-                                                                        placeholder="Digite o tempo de garantia">
-                                                                </div>
-
-                                                                <!-- Link da Proposta -->
-                                                                <div class="col-md-4 mb-3">
-                                                                    <label>
-                                                                        @if ($counterMaterials == 1)
-                                                                            Link da Proposta Principal
-                                                                        @else
-                                                                            Link da {{ $counterMaterials }}ª
-                                                                            Proposta
-                                                                        @endif
-                                                                    </label>
-                                                                    <input type="text" class="form-control"
-                                                                        value=""
-                                                                        style="background-color: white; border-color: gray;"
-                                                                        id="linkProposta1" name="linkProposta1[]"
-                                                                        placeholder="Link da Proposta">
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    @php $counterMaterials++; @endphp
-                                                @endfor
+                                                        @php $counterMaterials++; @endphp
+                                                    @endforeach
+                                                @else
+                                                    {{-- Propostas vazias para preencher as que faltam na por material --}}
+                                                    @for ($i = 0; $i < $missingMaterialsProposals; $i++)
+                                                        <input type="hidden" name="numMat[]"
+                                                            value="{{ $material->id }}">
+                                                        <div class="card mt-3">
+                                                            <div class="card-header">
+                                                                <h5 class="card-title mb-0">
+                                                                    @if ($counterMaterials == 1)
+                                                                        Proposta Preferida
+                                                                    @else
+                                                                        {{ $counterMaterials }}ª Proposta
+                                                                    @endif
+                                                                </h5>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <div class="row">
+                                                                    <!-- Número da Proposta -->
+                                                                    <div class="col-md-4 mb-3">
+                                                                        <label>
+                                                                            @if ($counterMaterials == 1)
+                                                                                Número da Proposta Principal
+                                                                            @else
+                                                                                Número da {{ $counterMaterials }}ª Proposta
+                                                                            @endif
+                                                                        </label>
+                                                                        <input type="text" class="form-control"
+                                                                            name="numero1[]"
+                                                                            style="background-color: white; border-color: gray;"
+                                                                            placeholder="Digite o Número da proposta"
+                                                                            value=""
+                                                                            data-index="{{ $index }}">
+                                                                    </div>
+                                                                    <!-- Nome da Empresa -->
+                                                                    <div class="col-md-4 mb-3">
+                                                                        <label>
+                                                                            @if ($counterMaterials == 1)
+                                                                                Nome da Empresa Principal
+                                                                            @else
+                                                                                Nome da {{ $counterMaterials }}ª Empresa
+                                                                            @endif
+                                                                        </label>
+                                                                        <select class="form-select select2"
+                                                                            name="razaoSocial1[]"
+                                                                            style="border: 1px solid #999999; padding: 5px;">
+                                                                            <option value=""
+                                                                                data-index="{{ $index }}">
+                                                                            </option>
+                                                                            @foreach ($buscaEmpresa as $buscaEmpresas)
+                                                                                <option value="{{ $buscaEmpresas->id }}">
+                                                                                    {{ $buscaEmpresas->razaosocial }} -
+                                                                                    {{ $buscaEmpresas->nomefantasia }}
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                    <!-- Valor -->
+                                                                    <div class="col-md-4 mb-3">
+                                                                        <label>
+                                                                            @if ($counterMaterials == 1)
+                                                                                Valor da Proposta Principal
+                                                                            @else
+                                                                                Valor da {{ $counterMaterials }}ª Proposta
+                                                                            @endif
+                                                                        </label>
+                                                                        <input type="text"
+                                                                            class="form-control valor valor-proposta"
+                                                                            name="valor1[]" value=""
+                                                                            style="background-color: white; border-color: gray;"
+                                                                            placeholder="Digite o valor da proposta"
+                                                                            data-index="{{ $index }}">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <!-- Data da Criação da Proposta -->
+                                                                    <div class="col-md-4 mb-3">
+                                                                        <label>
+                                                                            @if ($counterMaterials == 1)
+                                                                                Data da Criação da
+                                                                                Proposta Principal
+                                                                            @else
+                                                                                Data da Criação da {{ $counterMaterials }}ª
+                                                                                Proposta
+                                                                            @endif
+                                                                        </label>
+                                                                        <input type="date" class="form-control"
+                                                                            name="dt_inicial1[]" value=""
+                                                                            style="background-color: white; border-color: gray;"
+                                                                            placeholder="Digite a data da proposta"
+                                                                            data-index="{{ $index }}">
+                                                                    </div>
+
+                                                                    <!-- Data Limite da Proposta -->
+                                                                    <div class="col-md-4 mb-3">
+                                                                        <label>
+                                                                            @if ($counterMaterials == 1)
+                                                                                Data Limite da Proposta Principal
+                                                                            @else
+                                                                                Data Limite da {{ $counterMaterials }}ª
+                                                                                Proposta
+                                                                            @endif
+                                                                        </label>
+                                                                        <input type="date" class="form-control"
+                                                                            name="dt_final1[]" value=""
+                                                                            style="background-color: white; border-color: gray;"
+                                                                            placeholder="Digite a data final do prazo da proposta"
+                                                                            data-index="{{ $index }}">
+                                                                    </div>
+
+                                                                    <!-- Arquivo da Proposta -->
+                                                                    <div class="col-md-4 mb-3">
+                                                                        <label>
+                                                                            @if ($counterMaterials == 1)
+                                                                                Arquivo da Proposta Principal
+                                                                            @else
+                                                                                Arquivo da {{ $counterMaterials }}ª
+                                                                                Proposta
+                                                                            @endif
+                                                                        </label>
+                                                                        <input type="file" class="form-control"
+                                                                            style="background-color: white; border-color: gray;"
+                                                                            id="uploadProposta1" name="arquivoProposta1[]"
+                                                                            accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
+                                                                            data-index="{{ $index }}">
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="row">
+                                                                    <!-- Tempo de Garantia -->
+                                                                    <div id="tempoGarantia" class="col-md-4 mb-3">
+                                                                        <label>Tempo de Garantia (em
+                                                                            dias)</label>
+                                                                        <input type="number" class="form-control"
+                                                                            value=""
+                                                                            style="background-color: white; border-color: gray;"
+                                                                            id="tempoGarantiaInput"
+                                                                            name="tempoGarantia1[]"
+                                                                            placeholder="Digite o tempo de garantia"
+                                                                            data-index="{{ $index }}">
+                                                                    </div>
+
+                                                                    <!-- Link da Proposta -->
+                                                                    <div class="col-md-4 mb-3">
+                                                                        <label>
+                                                                            @if ($counterMaterials == 1)
+                                                                                Link da Proposta Principal
+                                                                            @else
+                                                                                Link da {{ $counterMaterials }}ª
+                                                                                Proposta
+                                                                            @endif
+                                                                        </label>
+                                                                        <input type="text" class="form-control"
+                                                                            value=""
+                                                                            style="background-color: white; border-color: gray;"
+                                                                            id="linkProposta1" name="linkProposta1[]"
+                                                                            placeholder="Link da Proposta"
+                                                                            data-index="{{ $index }}">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        @php $counterMaterials++; @endphp
+                                                    @endfor
+                                                @endif
                                             </div>
                                         </div>
                                     @endforeach

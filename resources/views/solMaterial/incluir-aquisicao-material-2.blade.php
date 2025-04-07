@@ -37,7 +37,7 @@
                                         <label>Selecione seu Setor</label>
                                         <br>
                                         <select class="form-select select2" style="border: 1px solid #999999; padding: 5px;"
-                                            id="idSetor" name="idSetor">
+                                            id="idSetor" name="idSetorSolicitacao" required>
                                             <option value="{{ $solicitacao->setor->id ?? '' }}" selected>
                                                 {{ $solicitacao->setor->sigla ?? 'Não especificado' }} -
                                                 {{ $solicitacao->setor->nome ?? 'Não especificado' }}</option>
@@ -52,9 +52,10 @@
                                 <div class="col-12 mt-3">
                                     <label>Motivo</label>
                                     <br>
-                                    <input type="text" class="form-control"
+                                    <input type="text" class="form-control" name="motivoSolicitacao"
+                                        placeholder="Digite o motivo da solicitação"
                                         style="background-color: white; border-color: gray;"
-                                        value="{{ $solicitacao->motivo ?? 'Não especificado' }}">
+                                        value="{{ $solicitacao->motivo ?? '' }}" required>
                                 </div>
                             </div>
                             <br>
@@ -584,352 +585,360 @@
                                         $counter = 1;
                                     @endphp
                                     {{-- Propostas Preenchidas por empresa (3) --}}
-                                    @foreach ($documentos as $documento)
-                                        {{-- card proposta por empresa --}}
-                                        <div class="card mt-3">
-                                            <div class="card-header">
-                                                {{-- Nome da Proposta --}}
-                                                <h5 class="card-title mb-0">
-                                                    @if ($counter == 1)
-                                                        Proposta Preferida
-                                                    @else
-                                                        Proposta {{ $counter }}
-                                                    @endif
-                                                </h5>
-                                                <!-- Botões de Minimizar -->
-                                                <div class="card-actions position-absolute" style="top: 5px; right: 5px;">
-                                                    <button type="button"
-                                                        class="btn btn-sm btn-outline-secondary toggle-card-content"
-                                                        data-bs-toggle="tooltip" title="Minimizar/Maximizar">
-                                                        <i class="bi bi-plus"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="card-body d-none">
-                                                <div class="row">
-                                                    <!-- Número da Proposta -->
-                                                    <div class="col-md-4 mb-3">
-                                                        <label>
-                                                            @if ($counter == 1)
-                                                                Número da Proposta Principal
-                                                            @else
-                                                                Número da Proposta {{ $counter }}
-                                                            @endif
-                                                        </label>
-                                                        <input type="text" class="form-control"
-                                                            name="numeroPorEmpresa[{{ $counter }}]"
-                                                            style="background-color: white; border-color: gray;"
-                                                            placeholder="Digite o Número da proposta"
-                                                            value="{{ $documento->numero }}">
-                                                    </div>
-                                                    <!-- Nome da Empresa -->
-                                                    <div class="col-md-4 mb-3">
-                                                        <label>
-                                                            @if ($counter == 1)
-                                                                Nome da Empresa Principal
-                                                            @else
-                                                                Nome da Proposta {{ $counter }}
-                                                            @endif
-                                                        </label>
-                                                        <select class="form-select select2"
-                                                            name="razaoSocialPorEmpresa[{{ $counter }}]"
-                                                            style="border: 1px solid #999999; padding: 5px;">
-                                                            <option value="{{ $documento->empresa->id }}" selected>
-                                                                {{ $documento->empresa->razaosocial ?? 'Não especificado' }}
-                                                                -
-                                                                {{ $documento->empresa->nomefantasia ?? 'Não especificado' }}
-                                                            </option>
-                                                            @foreach ($buscaEmpresa as $buscaEmpresas)
-                                                                <option value="{{ $buscaEmpresas->id }}">
-                                                                    {{ $buscaEmpresas->razaosocial }} -
-                                                                    {{ $buscaEmpresas->nomefantasia }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                    <!-- Valor -->
-                                                    <div class="col-md-4 mb-3">
-                                                        <label>
-                                                            @if ($counter == 1)
-                                                                Valor Total da Proposta Principal
-                                                            @else
-                                                                Valor Total da Proposta {{ $counter }}
-                                                            @endif
-                                                        </label>
-                                                        <input type="text" class="form-control valor valor-proposta"
-                                                            name="valorPorEmpresa[{{ $counter }}]"
-                                                            style="background-color: white; border-color: gray;"
-                                                            placeholder="Digite o valor da proposta"
-                                                            value="{{ $documento->valor }}">
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <!-- Data da Criação da Proposta -->
-                                                    <div class="col-md-4 mb-3">
-                                                        <label>
-                                                            @if ($counter == 1)
-                                                                Data da Criação da
-                                                                Proposta Principal
-                                                            @else
-                                                                Data da Criação da Proposta {{ $counter }}
-                                                            @endif
-                                                        </label>
-                                                        <input type="date" class="form-control"
-                                                            style="background-color: white; border-color: gray;"
-                                                            name="dt_inicialPorEmpresa[{{ $counter }}]"
-                                                            placeholder="Digite a data da proposta"
-                                                            value="{{ $documento->dt_doc }}">
-                                                    </div>
-
-                                                    <!-- Data Limite da Proposta -->
-                                                    <div class="col-md-4 mb-3">
-                                                        <label>
-                                                            @if ($counter == 1)
-                                                                Data Limite da Proposta Principal
-                                                            @else
-                                                                Data Limite da Proposta {{ $counter }}
-                                                            @endif
-                                                        </label>
-                                                        <input type="date" class="form-control"
-                                                            name="dt_finalPorEmpresa[{{ $counter }}]"
-                                                            style="background-color: white; border-color: gray;"
-                                                            placeholder="Digite a data final do prazo da proposta"
-                                                            value="{{ $documento->dt_validade }}">
-                                                    </div>
-
-                                                    <!-- Arquivo da Proposta -->
-                                                    <div class="col-md-4 mb-3">
-                                                        <label>
-                                                            @if ($counter == 1)
-                                                                Inserir Arquivo na Proposta Principal
-                                                            @else
-                                                                Inserir Arquivo na Proposta {{ $counter }}
-                                                            @endif
-                                                        </label>
-                                                        <input type="file" class="form-control"
-                                                            id="uploadProposta{{ $counter }}"
-                                                            name="arquivoPropostaPorEmpresa[{{ $counter }}]"
-                                                            style="background-color: white; border-color: gray;"
-                                                            accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
-
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <!-- Tempo de Garantia -->
-                                                    <div id="tempoGarantia" class="col-md-4 mb-3">
-                                                        <label>
-                                                            @if ($counter == 1)
-                                                                Tempo de Garantia (em
-                                                                dias) da Proposta Principal
-                                                            @else
-                                                                Tempo de Garantia (em
-                                                                dias) da Proposta {{ $counter }}
-                                                            @endif
-                                                        </label>
-                                                        <input type="number" class="form-control"
-                                                            id="tempoGarantiaInput"
-                                                            name="tempoGarantiaPorEmpresa[{{ $counter }}]"
-                                                            data-index="{{ $index }}"
-                                                            style="background-color: white; border-color: gray;"
-                                                            placeholder="Digite o tempo de garantia"
-                                                            value="{{ $documento->tempo_garantia_dias }}">
-                                                    </div>
-
-                                                    <!-- Link da Proposta -->
-                                                    <div class="col-md-4 mb-3">
-                                                        <label>
-                                                            @if ($counter == 1)
-                                                                Link da Proposta Principal
-                                                            @else
-                                                                Link da Proposta {{ $counter }}
-                                                            @endif
-                                                        </label>
-                                                        <input type="text" class="form-control" id="linkProposta1"
-                                                            name="linkPropostaPorEmpresa[{{ $counter }}]"
-                                                            style="background-color: white; border-color: gray;"
-                                                            placeholder="Link da Proposta"
-                                                            data-index="{{ $index }}"
-                                                            value="{{ $documento->link_proposta }}">
-                                                    </div>
-
-                                                    <!-- Arquivo atual da Proposta -->
-                                                    <div class="col-md-4 mb-3 row">
-                                                        <label for="arquivo">Arquivo Salvo</label>
-                                                        @if ($documento->end_arquivo)
-                                                            <a href="{{ Storage::url($documento->end_arquivo) }}"
-                                                                target="_blank" class="btn btn-primary">
-                                                                Ver Arquivo
-                                                            </a>
+                                    @if ($documentos->isNotEmpty())
+                                        @foreach ($documentos as $documento)
+                                            <input type="hidden" name="docEmp[]" value="{{ $documento->id }}">
+                                            {{-- card proposta por empresa --}}
+                                            <div class="card mt-3">
+                                                <div class="card-header">
+                                                    {{-- Nome da Proposta --}}
+                                                    <h5 class="card-title mb-0">
+                                                        @if ($counter == 1)
+                                                            Proposta Preferida
                                                         @else
-                                                            <a class="btn btn-secondary" disabled>Nenhum arquivo
-                                                                disponível.</a>
+                                                            Proposta {{ $counter }}
                                                         @endif
+                                                    </h5>
+                                                    <!-- Botões de Minimizar -->
+                                                    <div class="card-actions position-absolute"
+                                                        style="top: 5px; right: 5px;">
+                                                        <button type="button"
+                                                            class="btn btn-sm btn-outline-secondary toggle-card-content"
+                                                            data-bs-toggle="tooltip" title="Minimizar/Maximizar">
+                                                            <i class="bi bi-plus"></i>
+                                                        </button>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        @php $counter++; @endphp
-                                    @endforeach
-                                    {{-- Propostas vazias para preencher as que faltam na por empresa --}}
-                                    @for ($i = 0; $i < $missingProposals; $i++)
-                                        {{-- card proposta por empresa --}}
-                                        <div class="card mt-3">
-                                            <div class="card-header">
-                                                {{-- Nome da Proposta --}}
-                                                <h5 class="card-title mb-0">
-                                                    @if ($counter == 1)
-                                                        Proposta Preferida
-                                                    @else
-                                                        Proposta {{ $counter }}
-                                                    @endif
-                                                </h5>
-                                                <!-- Botões de Minimizar e Fechar -->
-                                                <div class="card-actions position-absolute" style="top: 5px; right: 5px;">
-                                                    <button type="button"
-                                                        class="btn btn-sm btn-outline-secondary toggle-card-content"
-                                                        data-bs-toggle="tooltip" title="Minimizar/Maximizar">
-                                                        <i class="bi bi-plus"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="card-body d-none">
-                                                <div class="row">
-                                                    <!-- Número da Proposta -->
-                                                    <div class="col-md-4 mb-3">
-                                                        <label>
-                                                            @if ($counter == 1)
-                                                                Número da Proposta Principal
-                                                            @else
-                                                                Número da Proposta {{ $counter }}
-                                                            @endif
-                                                        </label>
-                                                        <input type="text" class="form-control"
-                                                            name="numeroPorEmpresa[]"
-                                                            style="background-color: white; border-color: gray;"
-                                                            placeholder="Digite o Número da proposta" value="">
-                                                    </div>
-                                                    <!-- Nome da Empresa -->
-                                                    <div class="col-md-4 mb-3">
-                                                        <label>
-                                                            @if ($counter == 1)
-                                                                Nome da Empresa Principal
-                                                            @else
-                                                                Nome da Proposta {{ $counter }}
-                                                            @endif
-                                                        </label>
-                                                        <select class="form-select select2" name="razaoSocialPorEmpresa[]"
-                                                            style="border: 1px solid #999999; padding: 5px;">
-                                                            <option value="" selected> </option>
-                                                            @foreach ($buscaEmpresa as $buscaEmpresas)
-                                                                <option value="{{ $buscaEmpresas->id }}">
-                                                                    {{ $buscaEmpresas->razaosocial }} -
-                                                                    {{ $buscaEmpresas->nomefantasia }}
+                                                <div class="card-body d-none">
+                                                    <div class="row">
+                                                        <!-- Número da Proposta -->
+                                                        <div class="col-md-4 mb-3">
+                                                            <label>
+                                                                @if ($counter == 1)
+                                                                    Número da Proposta Principal
+                                                                @else
+                                                                    Número da Proposta {{ $counter }}
+                                                                @endif
+                                                            </label>
+                                                            <input type="text" class="form-control"
+                                                                name="numeroPorEmpresa[{{ $counter }}]"
+                                                                style="background-color: white; border-color: gray;"
+                                                                placeholder="Digite o Número da proposta"
+                                                                value="{{ $documento->numero }}">
+                                                        </div>
+                                                        <!-- Nome da Empresa -->
+                                                        <div class="col-md-4 mb-3">
+                                                            <label>
+                                                                @if ($counter == 1)
+                                                                    Nome da Empresa Principal
+                                                                @else
+                                                                    Nome da Proposta {{ $counter }}
+                                                                @endif
+                                                            </label>
+                                                            <select class="form-select select2"
+                                                                name="razaoSocialPorEmpresa[{{ $counter }}]"
+                                                                style="border: 1px solid #999999; padding: 5px;">
+                                                                <option value="{{ $documento->empresa->id }}" selected>
+                                                                    {{ $documento->empresa->razaosocial ?? 'Não especificado' }}
+                                                                    -
+                                                                    {{ $documento->empresa->nomefantasia ?? 'Não especificado' }}
                                                                 </option>
-                                                            @endforeach
-                                                        </select>
+                                                                @foreach ($buscaEmpresa as $buscaEmpresas)
+                                                                    <option value="{{ $buscaEmpresas->id }}">
+                                                                        {{ $buscaEmpresas->razaosocial }} -
+                                                                        {{ $buscaEmpresas->nomefantasia }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <!-- Valor -->
+                                                        <div class="col-md-4 mb-3">
+                                                            <label>
+                                                                @if ($counter == 1)
+                                                                    Valor Total da Proposta Principal
+                                                                @else
+                                                                    Valor Total da Proposta {{ $counter }}
+                                                                @endif
+                                                            </label>
+                                                            <input type="text"
+                                                                class="form-control valor valor-proposta"
+                                                                name="valorPorEmpresa[{{ $counter }}]"
+                                                                style="background-color: white; border-color: gray;"
+                                                                placeholder="Digite o valor da proposta"
+                                                                value="{{ $documento->valor }}">
+                                                        </div>
                                                     </div>
-                                                    <!-- Valor -->
-                                                    <div class="col-md-4 mb-3">
-                                                        <label>
-                                                            @if ($counter == 1)
-                                                                Valor Total da Proposta Principal
-                                                            @else
-                                                                Valor Total da Proposta {{ $counter }}
-                                                            @endif
-                                                        </label>
-                                                        <input type="text" class="form-control valor valor-proposta"
-                                                            name="valorPorEmpresa[]"
-                                                            style="background-color: white; border-color: gray;"
-                                                            placeholder="Digite o valor da proposta" value="">
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <!-- Data da Criação da Proposta -->
-                                                    <div class="col-md-4 mb-3">
-                                                        <label>
-                                                            @if ($counter == 1)
-                                                                Data da Criação da
-                                                                Proposta Principal
-                                                            @else
-                                                                Data da Criação da Proposta {{ $counter }}
-                                                            @endif
-                                                        </label>
-                                                        <input type="date" class="form-control"
-                                                            style="background-color: white; border-color: gray;"
-                                                            name="dt_inicialPorEmpresa[]"
-                                                            placeholder="Digite a data da proposta" value="">
+                                                    <div class="row">
+                                                        <!-- Data da Criação da Proposta -->
+                                                        <div class="col-md-4 mb-3">
+                                                            <label>
+                                                                @if ($counter == 1)
+                                                                    Data da Criação da
+                                                                    Proposta Principal
+                                                                @else
+                                                                    Data da Criação da Proposta {{ $counter }}
+                                                                @endif
+                                                            </label>
+                                                            <input type="date" class="form-control"
+                                                                style="background-color: white; border-color: gray;"
+                                                                name="dt_inicialPorEmpresa[{{ $counter }}]"
+                                                                placeholder="Digite a data da proposta"
+                                                                value="{{ $documento->dt_doc }}">
+                                                        </div>
+
+                                                        <!-- Data Limite da Proposta -->
+                                                        <div class="col-md-4 mb-3">
+                                                            <label>
+                                                                @if ($counter == 1)
+                                                                    Data Limite da Proposta Principal
+                                                                @else
+                                                                    Data Limite da Proposta {{ $counter }}
+                                                                @endif
+                                                            </label>
+                                                            <input type="date" class="form-control"
+                                                                name="dt_finalPorEmpresa[{{ $counter }}]"
+                                                                style="background-color: white; border-color: gray;"
+                                                                placeholder="Digite a data final do prazo da proposta"
+                                                                value="{{ $documento->dt_validade }}">
+                                                        </div>
+
+                                                        <!-- Arquivo da Proposta -->
+                                                        <div class="col-md-4 mb-3">
+                                                            <label>
+                                                                @if ($counter == 1)
+                                                                    Inserir Arquivo na Proposta Principal
+                                                                @else
+                                                                    Inserir Arquivo na Proposta {{ $counter }}
+                                                                @endif
+                                                            </label>
+                                                            <input type="file" class="form-control"
+                                                                id="uploadProposta{{ $counter }}"
+                                                                name="arquivoPropostaPorEmpresa[{{ $counter }}]"
+                                                                style="background-color: white; border-color: gray;"
+                                                                accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
+
+                                                        </div>
                                                     </div>
 
-                                                    <!-- Data Limite da Proposta -->
-                                                    <div class="col-md-4 mb-3">
-                                                        <label>
-                                                            @if ($counter == 1)
-                                                                Data Limite da Proposta Principal
-                                                            @else
-                                                                Data Limite da Proposta {{ $counter }}
-                                                            @endif
-                                                        </label>
-                                                        <input type="date" class="form-control"
-                                                            name="dt_finalPorEmpresa[]"
-                                                            style="background-color: white; border-color: gray;"
-                                                            placeholder="Digite a data final do prazo da proposta"
-                                                            value="">
-                                                    </div>
+                                                    <div class="row">
+                                                        <!-- Tempo de Garantia -->
+                                                        <div id="tempoGarantia" class="col-md-4 mb-3">
+                                                            <label>
+                                                                @if ($counter == 1)
+                                                                    Tempo de Garantia (em
+                                                                    dias) da Proposta Principal
+                                                                @else
+                                                                    Tempo de Garantia (em
+                                                                    dias) da Proposta {{ $counter }}
+                                                                @endif
+                                                            </label>
+                                                            <input type="number" class="form-control"
+                                                                id="tempoGarantiaInput"
+                                                                name="tempoGarantiaPorEmpresa[{{ $counter }}]"
+                                                                data-index="{{ $index }}"
+                                                                style="background-color: white; border-color: gray;"
+                                                                placeholder="Digite o tempo de garantia"
+                                                                value="{{ $documento->tempo_garantia_dias }}">
+                                                        </div>
 
-                                                    <!-- Arquivo da Proposta -->
-                                                    <div class="col-md-4 mb-3">
-                                                        <label>
-                                                            @if ($counter == 1)
-                                                                Inserir Arquivo na Proposta Principal
-                                                            @else
-                                                                Inserir Arquivo na Proposta {{ $counter }}
-                                                            @endif
-                                                        </label>
-                                                        <input type="file" class="form-control" id="uploadProposta1"
-                                                            name="arquivoPropostaPorEmpresa[]"
-                                                            style="background-color: white; border-color: gray;"
-                                                            accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" value="">
-                                                    </div>
-                                                </div>
+                                                        <!-- Link da Proposta -->
+                                                        <div class="col-md-4 mb-3">
+                                                            <label>
+                                                                @if ($counter == 1)
+                                                                    Link da Proposta Principal
+                                                                @else
+                                                                    Link da Proposta {{ $counter }}
+                                                                @endif
+                                                            </label>
+                                                            <input type="text" class="form-control" id="linkProposta1"
+                                                                name="linkPropostaPorEmpresa[{{ $counter }}]"
+                                                                style="background-color: white; border-color: gray;"
+                                                                placeholder="Link da Proposta"
+                                                                data-index="{{ $index }}"
+                                                                value="{{ $documento->link_proposta }}">
+                                                        </div>
 
-                                                <div class="row">
-                                                    <!-- Tempo de Garantia -->
-                                                    <div id="tempoGarantia" class="col-md-4 mb-3">
-                                                        <label>
-                                                            @if ($counter == 1)
-                                                                Tempo de Garantia (em
-                                                                dias) da Proposta Principal
+                                                        <!-- Arquivo atual da Proposta -->
+                                                        <div class="col-md-4 mb-3 row">
+                                                            <label for="arquivo">Arquivo Salvo</label>
+                                                            @if ($documento->end_arquivo)
+                                                                <a href="{{ Storage::url($documento->end_arquivo) }}"
+                                                                    target="_blank" class="btn btn-primary">
+                                                                    Ver Arquivo
+                                                                </a>
                                                             @else
-                                                                Tempo de Garantia (em
-                                                                dias) da Proposta {{ $counter }}
+                                                                <a class="btn btn-secondary" disabled>Nenhum arquivo
+                                                                    disponível.</a>
                                                             @endif
-                                                        </label>
-                                                        <input type="number" class="form-control"
-                                                            id="tempoGarantiaInput" name="tempoGarantiaPorEmpresa[]"
-                                                            style="background-color: white; border-color: gray;"
-                                                            placeholder="Digite o tempo de garantia" value="">
-                                                    </div>
-
-                                                    <!-- Link da Proposta -->
-                                                    <div class="col-md-4 mb-3">
-                                                        <label>
-                                                            @if ($counter == 1)
-                                                                Link da Proposta Principal
-                                                            @else
-                                                                Link da Proposta {{ $counter }}
-                                                            @endif
-                                                        </label>
-                                                        <input type="text" class="form-control" id="linkProposta1"
-                                                            name="linkPropostaPorEmpresa[]"
-                                                            style="background-color: white; border-color: gray;"
-                                                            placeholder="Link da Proposta" value="">
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        @php $counter++; @endphp
-                                    @endfor
+                                            @php $counter++; @endphp
+                                        @endforeach
+                                    @else
+                                        {{-- Propostas vazias para preencher as que faltam na por empresa --}}
+                                        @for ($i = 0; $i < $missingProposals; $i++)
+                                            <div class="card mt-3">
+                                                <div class="card-header">
+                                                    {{-- Nome da Proposta --}}
+                                                    <h5 class="card-title mb-0">
+                                                        @if ($counter == 1)
+                                                            Proposta Preferida
+                                                        @else
+                                                            Proposta {{ $counter }}
+                                                        @endif
+                                                    </h5>
+                                                    <!-- Botões de Minimizar e Fechar -->
+                                                    <div class="card-actions position-absolute"
+                                                        style="top: 5px; right: 5px;">
+                                                        <button type="button"
+                                                            class="btn btn-sm btn-outline-secondary toggle-card-content"
+                                                            data-bs-toggle="tooltip" title="Minimizar/Maximizar">
+                                                            <i class="bi bi-plus"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body d-none">
+                                                    <div class="row">
+                                                        <!-- Número da Proposta -->
+                                                        <div class="col-md-4 mb-3">
+                                                            <label>
+                                                                @if ($counter == 1)
+                                                                    Número da Proposta Principal
+                                                                @else
+                                                                    Número da Proposta {{ $counter }}
+                                                                @endif
+                                                            </label>
+                                                            <input type="text" class="form-control"
+                                                                name="numeroPorEmpresa[]"
+                                                                style="background-color: white; border-color: gray;"
+                                                                placeholder="Digite o Número da proposta" value="">
+                                                        </div>
+                                                        <!-- Nome da Empresa -->
+                                                        <div class="col-md-4 mb-3">
+                                                            <label>
+                                                                @if ($counter == 1)
+                                                                    Nome da Empresa Principal
+                                                                @else
+                                                                    Nome da Proposta {{ $counter }}
+                                                                @endif
+                                                            </label>
+                                                            <select class="form-select select2"
+                                                                name="razaoSocialPorEmpresa[]"
+                                                                style="border: 1px solid #999999; padding: 5px;">
+                                                                <option value="" selected> </option>
+                                                                @foreach ($buscaEmpresa as $buscaEmpresas)
+                                                                    <option value="{{ $buscaEmpresas->id }}">
+                                                                        {{ $buscaEmpresas->razaosocial }} -
+                                                                        {{ $buscaEmpresas->nomefantasia }}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <!-- Valor -->
+                                                        <div class="col-md-4 mb-3">
+                                                            <label>
+                                                                @if ($counter == 1)
+                                                                    Valor Total da Proposta Principal
+                                                                @else
+                                                                    Valor Total da Proposta {{ $counter }}
+                                                                @endif
+                                                            </label>
+                                                            <input type="text"
+                                                                class="form-control valor valor-proposta"
+                                                                name="valorPorEmpresa[]"
+                                                                style="background-color: white; border-color: gray;"
+                                                                placeholder="Digite o valor da proposta" value="">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <!-- Data da Criação da Proposta -->
+                                                        <div class="col-md-4 mb-3">
+                                                            <label>
+                                                                @if ($counter == 1)
+                                                                    Data da Criação da
+                                                                    Proposta Principal
+                                                                @else
+                                                                    Data da Criação da Proposta {{ $counter }}
+                                                                @endif
+                                                            </label>
+                                                            <input type="date" class="form-control"
+                                                                style="background-color: white; border-color: gray;"
+                                                                name="dt_inicialPorEmpresa[]"
+                                                                placeholder="Digite a data da proposta" value="">
+                                                        </div>
+
+                                                        <!-- Data Limite da Proposta -->
+                                                        <div class="col-md-4 mb-3">
+                                                            <label>
+                                                                @if ($counter == 1)
+                                                                    Data Limite da Proposta Principal
+                                                                @else
+                                                                    Data Limite da Proposta {{ $counter }}
+                                                                @endif
+                                                            </label>
+                                                            <input type="date" class="form-control"
+                                                                name="dt_finalPorEmpresa[]"
+                                                                style="background-color: white; border-color: gray;"
+                                                                placeholder="Digite a data final do prazo da proposta"
+                                                                value="">
+                                                        </div>
+
+                                                        <!-- Arquivo da Proposta -->
+                                                        <div class="col-md-4 mb-3">
+                                                            <label>
+                                                                @if ($counter == 1)
+                                                                    Inserir Arquivo na Proposta Principal
+                                                                @else
+                                                                    Inserir Arquivo na Proposta {{ $counter }}
+                                                                @endif
+                                                            </label>
+                                                            <input type="file" class="form-control"
+                                                                id="uploadProposta1" name="arquivoPropostaPorEmpresa[]"
+                                                                style="background-color: white; border-color: gray;"
+                                                                accept=".pdf,.doc,.docx,.png,.jpg,.jpeg" value="">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <!-- Tempo de Garantia -->
+                                                        <div id="tempoGarantia" class="col-md-4 mb-3">
+                                                            <label>
+                                                                @if ($counter == 1)
+                                                                    Tempo de Garantia (em
+                                                                    dias) da Proposta Principal
+                                                                @else
+                                                                    Tempo de Garantia (em
+                                                                    dias) da Proposta {{ $counter }}
+                                                                @endif
+                                                            </label>
+                                                            <input type="number" class="form-control"
+                                                                id="tempoGarantiaInput" name="tempoGarantiaPorEmpresa[]"
+                                                                style="background-color: white; border-color: gray;"
+                                                                placeholder="Digite o tempo de garantia" value="">
+                                                        </div>
+
+                                                        <!-- Link da Proposta -->
+                                                        <div class="col-md-4 mb-3">
+                                                            <label>
+                                                                @if ($counter == 1)
+                                                                    Link da Proposta Principal
+                                                                @else
+                                                                    Link da Proposta {{ $counter }}
+                                                                @endif
+                                                            </label>
+                                                            <input type="text" class="form-control" id="linkProposta1"
+                                                                name="linkPropostaPorEmpresa[]"
+                                                                style="background-color: white; border-color: gray;"
+                                                                placeholder="Link da Proposta" value="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @php $counter++; @endphp
+                                        @endfor
+                                    @endif
                                     <br>
                                     {{-- Nomes em cima da tabela --}}
                                     <div class="row">

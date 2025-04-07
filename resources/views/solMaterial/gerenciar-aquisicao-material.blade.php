@@ -74,7 +74,7 @@
                                         <a href="/gerenciar-aquisicao-material" type="button" class="btn btn-light btn-sm"
                                             style="box-shadow: 1px 2px 5px #000000; font-size: 1rem"
                                             value="">Limpar</a>
-                                        <a href="/incluir-aquisicao-material" class="btn btn-success"
+                                        <a href="/salvar-aquisicao-material" class="btn btn-success"
                                             style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-left:5px">
                                             Novo+
                                         </a>
@@ -149,7 +149,7 @@
                                                     <i class="bi bi-search"></i>
                                                 </a>
                                                 {{-- @if (in_array($aquisicaos->tipoStatus->id, ['3', '2'])) --}}
-                                                <a href="" class="btn btn-sm btn-outline-primary" data-tt="tooltip"
+                                                <a href="/aprovar-aquisicao-material/{{ $aquisicaos->id }}" class="btn btn-sm btn-outline-primary" data-tt="tooltip"
                                                     style="font-size: 1rem; color:#303030" data-placement="top"
                                                     title="Aprovar">
                                                     <i class="bi bi-check-lg"></i>

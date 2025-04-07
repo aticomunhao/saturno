@@ -181,16 +181,6 @@ class AquisicaoMaterialController extends Controller
         // Reorganização das prioridades após as atualizações
         $this->reorganizarPrioridades();
     }
-    public function create(Request $request)
-    {
-        $setor = session('usuario.setor');
-        $idPessoa = session('usuario.id_pessoa');
-
-        $buscaPessoa = ModelPessoa::find($idPessoa);
-        $buscaSetor = Setor::whereIn('id', $setor)->get();
-
-        return view('solMaterial.incluir-aquisicao-material', compact('buscaSetor', 'buscaPessoa'));
-    }
     public function store(Request $request)
     {
 
@@ -199,8 +189,6 @@ class AquisicaoMaterialController extends Controller
 
         $solicitacaoMaterial = SolMaterial::create([
             'data' => Carbon::now(),
-            'id_setor' => $request->idSetor,
-            'motivo' => $request->motivo,
             'status' => '1',
             'id_resp_mt' => $idUsuario,
             'tipo_sol_material' => '1',
@@ -209,7 +197,7 @@ class AquisicaoMaterialController extends Controller
         app('flasher')->addSuccess('Solicitação Criada com Sucesso, Adicione os materiais Necessários');
         return redirect("/incluir-aquisicao-material-2/{$solicitacaoMaterial->id}");
     }
-    public function create2($id)
+    public function create($id)
     {
         $idSolicitacao = $id;
 
@@ -309,7 +297,6 @@ class AquisicaoMaterialController extends Controller
         {
             return $valor !== null ? str_replace(['R$', ',', ' '], ['', '', ''], $valor) : null;
         }
-
         //dd($request->all());
         $idSolicitacoes = $id;
         //dd($id);
@@ -318,6 +305,12 @@ class AquisicaoMaterialController extends Controller
         $documentoMaterial = Documento::whereIn('mat_proposta', $materiaisIds)->get();
         $solicitacao = SolMaterial::find($idSolicitacoes);
         //dd($solicitacao, $materiais, $solicitacao);
+
+        SolMaterial::where('id', $id)->update([
+            'motivo' => $request->motivoSolicitacao,
+            'id_setor' => $request->idSetorSolicitacao,
+        ]);
+
         if ($request->activeButton === 'material') {
 
             SolMaterial::where('id', $id)->update([
@@ -440,9 +433,11 @@ class AquisicaoMaterialController extends Controller
                 }
             }
 
-            $documentos = Documento::where('id_sol_mat', $idSolicitacoes)->get();
+            $documentosFiltrados2 = array_filter($request->razaoSocial1, function ($doc, $index) use ($request, $material) {
+                return $request->numMat[$index] == $material->id;
+            }, ARRAY_FILTER_USE_BOTH);
 
-            foreach ($documentos as $index => $documento) {
+            foreach ($documentosFiltrados2 as $index => $documento) {
                 $realIndex = $index + 1;
 
                 $endArquivoPorEmpresa = $request->hasFile("arquivoPropostaPorEmpresa.$realIndex")
@@ -484,17 +479,54 @@ class AquisicaoMaterialController extends Controller
                     'vencedor_geral' => '0',
                 ], $dadosDocumento);
 
-                // Se houver documentos, faz update. Se não houver, cria um novo.
-                if ($documentos->count() > 0) {
-                    Documento::where('id', $documento->id)->update($dadosComuns);
-                } else {
-                    Documento::create($dadosComuns);
-                }
+                $documentoQuery = Documento::where('id_sol_mat', $idSolicitacoes)
+                        ->where('id_tp_doc', '14');
+
+                    if (!empty($dadosComuns['numero'])) {
+                        $documentoQuery->where('numero', $dadosComuns['numero']);
+                    }
+
+                    if (!empty($dadosComuns['id_empresa'])) {
+                        $documentoQuery->where('id_empresa', $dadosComuns['id_empresa']);
+                    }
+
+                    $documento = $documentoQuery->first();
+
+                    if ($documento) {
+                        $documento->update($dadosComuns);
+                    } else {
+                        Documento::create($dadosComuns);
+                    }
             }
         }
 
         app('flasher')->addSuccess('Propostas Realizadas com Sucesso');
         return redirect("/gerenciar-aquisicao-material");
+    }
+    public function aprovar($id)
+    {
+        $idSolicitacao = $id;
+
+        $documentos = Documento::where('id_sol_mat', $idSolicitacao)->with('empresa')->get();
+        //dd($documentos);
+        $solicitacao = SolMaterial::with('modelPessoa', 'setor')->find($idSolicitacao);
+        $setor = session('usuario.setor');
+        $buscaCategoria = TipoCategoriaMt::all();
+        $buscaEmpresa = Empresa::all();
+        $buscaMarca = ModelMarca::all();
+        $buscaTamanho = ModelTamanho::all();
+        $buscaCor = ModelCor::all();
+        $buscaFaseEtaria = ModelFaseEtaria::all();
+        $buscaSexo = ModelSexo::all();
+        $bucaItemCatalogo = ItemCatalogoMaterial::all();
+        $buscaUnidadeMedida = ModelUnidadeMedida::all();
+        $buscaSetor = Setor::whereIn('id', $setor)->get();
+        $materiais = MatProposta::with('documentoMaterial', 'tipoUnidadeMedida', 'tipoItemCatalogoMaterial', 'tipoCategoria', 'tipoMarca', 'tipoTamanho', 'tipoCor', 'tipoFaseEtaria', 'tipoSexo')->where('id_sol_mat', $id)->get();
+        //dd($materiais);
+
+        //dd($documentoMaterial);
+
+        return view('solMaterial.aprovar-aquisicao-material', compact('documentos', 'solicitacao', 'bucaItemCatalogo', 'materiais', 'idSolicitacao', 'buscaSetor', 'buscaUnidadeMedida', 'buscaCategoria', 'buscaMarca', 'buscaTamanho', 'buscaCor', 'buscaFaseEtaria', 'buscaSexo', 'buscaEmpresa'));
     }
     public function delete($id)
     {

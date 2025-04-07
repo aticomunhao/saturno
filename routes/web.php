@@ -379,9 +379,8 @@ Route::delete('/deletar-empresa/{id}', [CatalogoEmpresaController::class, 'delet
 
 //Gerenciar Aquisição de Material
 Route::get('/gerenciar-aquisicao-material', [AquisicaoMaterialController::class, 'index']);
-Route::get('/incluir-aquisicao-material', [AquisicaoMaterialController::class, 'create']);
-Route::post('/salvar-aquisicao-material', [AquisicaoMaterialController::class, 'store']);
-Route::get('/incluir-aquisicao-material-2/{id}', [AquisicaoMaterialController::class, 'create2']);
+Route::any('/salvar-aquisicao-material', [AquisicaoMaterialController::class, 'store']);
+Route::get('/incluir-aquisicao-material-2/{id}', [AquisicaoMaterialController::class, 'create']);
 Route::post('/incluir-material-solicitacao/{id}', [AquisicaoMaterialController::class, 'store2']);
 Route::get('/marcas/{categoriaId}', [AquisicaoMaterialController::class, 'getMarcas']);
 Route::get('/tamanhos/{categoriaId}', [AquisicaoMaterialController::class, 'getTamanhos']);
@@ -391,6 +390,7 @@ Route::get('/nome/{categoriaId}', [AquisicaoMaterialController::class, 'getNomes
 Route::delete('/excluir-material-solicitacao', [AquisicaoMaterialController::class, 'destroyMaterial']);
 Route::post('/salvar-proposta-material/{id}', [AquisicaoMaterialController::class, 'store3']);
 Route::delete('/deletar-aquisicao-material/{id}', [AquisicaoMaterialController::class, 'delete']);
+Route::get('/aprovar-aquisicao-material/{id}', [AquisicaoMaterialController::class, 'aprovar']);
 
 //Valor Mínimo de Compra
 Route::get('/valor-compra', [ValorCompraController::class, 'index']);

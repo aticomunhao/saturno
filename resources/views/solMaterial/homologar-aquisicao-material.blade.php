@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <form method="POST" action="/Homologar-store-proposta-material/{{ $idSolicitacao }}" enctype="multipart/form-data">
+    <form method="POST" action="/homologar-store-proposta-material/{{ $idSolicitacao }}" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="activeButton" id="activeButton"
             value="{{ $solicitacao->tipo_sol_material == 1 ? 'empresa' : 'material' }}">
@@ -39,6 +39,30 @@
                                         <input type="text" class="form-control"
                                             value=" {{ $solicitacao->setor->sigla ?? 'Não especificado' }} - {{ $solicitacao->setor->nome ?? 'Não especificado' }}"
                                             disabled>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>Prioridade</label>
+                                        <br>
+                                        <select id="cargoSelect" class="form-select status select2 pesquisa-select"
+                                            style="" name="prioridade" required>
+                                            @foreach ($numeros as $number)
+                                                <option value="{{ $number }}">{{ $number }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label>Setor Responsável por Acompanhar</label>
+                                        <br>
+                                        <select id="idSetorResponsavel" class="form-select status select2 pesquisa-select"
+                                            style="" name="setorResponsavel" required>
+                                            <option></option>
+                                            @foreach ($todosSetor as $setor)
+                                                <option value="{{ $setor->id }}"
+                                                    {{ $setor->id == $solicitacao->id_resp_mt ? 'selected' : '' }}>
+                                                    {{ $setor->nome }} - {{ $setor->sigla }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-12 mt-3">
@@ -607,6 +631,7 @@
                             <hr>
                             <h5>Decisão</h5>
 
+                            <input type="hidden" name="solicitacao_id" value="{{ $solicitacao->id }}">
 
                             <div class="d-flex gap-5 align-items-end">
                                 <div class="form-check">

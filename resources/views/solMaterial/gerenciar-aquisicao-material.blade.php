@@ -156,7 +156,7 @@
                                                 </a>
                                                 {{-- @endif --}}
                                                 {{-- @if ($aquisicaos->tipoStatus->id == '3') --}}
-                                                <a href="" class="btn btn-sm btn-outline-success"
+                                                <a href="/homologar-aquisicao-material/{{ $aquisicaos->id }}" class="btn btn-sm btn-outline-success"
                                                     data-tt="tooltip" style="font-size: 1rem; color:#303030"
                                                     data-placement="top" title="Homologar">
                                                     <i class="bi bi-clipboard-check"></i>

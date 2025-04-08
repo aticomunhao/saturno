@@ -190,7 +190,7 @@ class AquisicaoMaterialController extends Controller
         $solicitacaoMaterial = SolMaterial::create([
             'data' => Carbon::now(),
             'status' => '1',
-            'id_resp_mt' => $idUsuario,
+            'id_setor' => $idUsuario,
             'tipo_sol_material' => '1',
         ]);
 
@@ -522,11 +522,206 @@ class AquisicaoMaterialController extends Controller
         $buscaUnidadeMedida = ModelUnidadeMedida::all();
         $buscaSetor = Setor::whereIn('id', $setor)->get();
         $materiais = MatProposta::with('documentoMaterial', 'tipoUnidadeMedida', 'tipoItemCatalogoMaterial', 'tipoCategoria', 'tipoMarca', 'tipoTamanho', 'tipoCor', 'tipoFaseEtaria', 'tipoSexo')->where('id_sol_mat', $id)->get();
+        $todosSetor = Setor::orderBy('nome')->get();
         //dd($materiais);
+
+         // Recupera todas as prioridades existentes
+         $prioridadesExistentes = SolMaterial::pluck('prioridade')->unique()->toArray();
+
+         // Se existirem prioridades, encontra a maior e adiciona 1
+         if (!empty($prioridadesExistentes)) {
+             $maiorPrioridade = max($prioridadesExistentes);
+             $numeros = range(1, $maiorPrioridade + 1); // Gera uma lista de 1 até a maior prioridade + 1
+         } else {
+             // Se não houver prioridades, você pode definir o range inicial como desejado, por exemplo, 1
+             $numeros = range(1, 1);
+         }
 
         //dd($documentoMaterial);
 
-        return view('solMaterial.aprovar-aquisicao-material', compact('documentos', 'solicitacao', 'bucaItemCatalogo', 'materiais', 'idSolicitacao', 'buscaSetor', 'buscaUnidadeMedida', 'buscaCategoria', 'buscaMarca', 'buscaTamanho', 'buscaCor', 'buscaFaseEtaria', 'buscaSexo', 'buscaEmpresa'));
+        return view('solMaterial.aprovar-aquisicao-material', compact('documentos', 'todosSetor', 'numeros', 'solicitacao', 'bucaItemCatalogo', 'materiais', 'idSolicitacao', 'buscaSetor', 'buscaUnidadeMedida', 'buscaCategoria', 'buscaMarca', 'buscaTamanho', 'buscaCor', 'buscaFaseEtaria', 'buscaSexo', 'buscaEmpresa'));
+    }
+    public function aprovarStore(Request $request, $id)
+    {
+        $usuario = session('usuario.id_usuario');
+        // Obtém o valor do ID da solicitação
+        $aquisicaoId = $request->input('solicitacao_id');
+
+        // Busca a aquisição no banco de dados
+        $aquisicao = SolMaterial::find($aquisicaoId);
+
+        $novaPrioridade = $aquisicao->aut_usu_pres ?? $request->input('prioridade');
+
+        // Verifica se a aquisição foi encontrada
+        if (!$aquisicao) {
+            app('flasher')->addError('Solicitação não encontrada.');
+            return redirect('/gerenciar-aquisicao-servicos');
+        }
+
+        // Obtém o status enviado pelo formulário
+        $status = $request->input('status');
+
+        // Atualiza o status
+        $aquisicao->status = $status;
+
+        // Verifica o status e trata cada caso
+        if ($status == '3') { // Aprovado
+
+            $prioridadeAtual = $aquisicao->prioridade;
+
+            if ($novaPrioridade > $prioridadeAtual) {
+                // Desce as prioridades entre a atual e a nova prioridade
+                SolMaterial::whereBetween('prioridade', [$prioridadeAtual + 1, $novaPrioridade])
+                    ->decrement('prioridade');
+            } elseif ($novaPrioridade < $prioridadeAtual) {
+                // Sobe as prioridades entre a nova e a atual prioridade
+                SolMaterial::whereBetween('prioridade', [$novaPrioridade, $prioridadeAtual - 1])
+                    ->increment('prioridade');
+            }
+
+            // Define a nova prioridade da solicitação
+            $aquisicao->id_resp_mt = $request->input('setorResponsavel');
+            $aquisicao->prioridade = $novaPrioridade;
+
+            // Impede que a prioridade fique abaixo de 1
+            if ($aquisicao->prioridade < 1) {
+                $aquisicao->prioridade = 1;
+            }
+
+            // Salva a solicitação
+            $aquisicao->aut_usu_adm = $usuario;
+            $aquisicao->dt_usu_adm = now();
+            $aquisicao->motivo_recusa = null;
+            $aquisicao->save();
+
+            // Reorganiza as prioridades para garantir que não haja lacunas
+            $this->reorganizarPrioridades();
+
+            app('flasher')->addSuccess('A solicitação foi aprovada.');
+        } elseif ($status == '1' || $status == '7') { // Devolver ou Cancelar
+
+            $aquisicao->aut_usu_adm = $usuario;
+            $aquisicao->dt_usu_adm = now();
+            $aquisicao->id_setor_resp_sv = null;
+            $aquisicao->prioridade = null;
+            $aquisicao->motivo_recusa = $request->input('motivoRejeicao');
+            $aquisicao->save();
+
+            $message = ($status == '1') ? 'A solicitação foi devolvida.' : 'A solicitação foi cancelada.';
+            app('flasher')->addWarning($message);
+        }
+
+        return redirect("/gerenciar-aquisicao-material");
+    }
+    public function homologar($id)
+    {
+        $idSolicitacao = $id;
+
+        $documentos = Documento::where('id_sol_mat', $idSolicitacao)->with('empresa')->get();
+        //dd($documentos);
+        $solicitacao = SolMaterial::with('modelPessoa', 'setor')->find($idSolicitacao);
+        $setor = session('usuario.setor');
+        $buscaCategoria = TipoCategoriaMt::all();
+        $buscaEmpresa = Empresa::all();
+        $buscaMarca = ModelMarca::all();
+        $buscaTamanho = ModelTamanho::all();
+        $buscaCor = ModelCor::all();
+        $buscaFaseEtaria = ModelFaseEtaria::all();
+        $buscaSexo = ModelSexo::all();
+        $bucaItemCatalogo = ItemCatalogoMaterial::all();
+        $buscaUnidadeMedida = ModelUnidadeMedida::all();
+        $buscaSetor = Setor::whereIn('id', $setor)->get();
+        $materiais = MatProposta::with('documentoMaterial', 'tipoUnidadeMedida', 'tipoItemCatalogoMaterial', 'tipoCategoria', 'tipoMarca', 'tipoTamanho', 'tipoCor', 'tipoFaseEtaria', 'tipoSexo')->where('id_sol_mat', $id)->get();
+        $todosSetor = Setor::orderBy('nome')->get();
+        //dd($materiais);
+
+         // Recupera todas as prioridades existentes
+         $prioridadesExistentes = SolMaterial::pluck('prioridade')->unique()->toArray();
+
+         // Se existirem prioridades, encontra a maior e adiciona 1
+         if (!empty($prioridadesExistentes)) {
+             $maiorPrioridade = max($prioridadesExistentes);
+             $numeros = range(1, $maiorPrioridade + 1); // Gera uma lista de 1 até a maior prioridade + 1
+         } else {
+             // Se não houver prioridades, você pode definir o range inicial como desejado, por exemplo, 1
+             $numeros = range(1, 1);
+         }
+        //dd($documentoMaterial);
+
+        return view('solMaterial.homologar-aquisicao-material', compact('documentos', 'todosSetor', 'numeros', 'todosSetor', 'solicitacao', 'bucaItemCatalogo', 'materiais', 'idSolicitacao', 'buscaSetor', 'buscaUnidadeMedida', 'buscaCategoria', 'buscaMarca', 'buscaTamanho', 'buscaCor', 'buscaFaseEtaria', 'buscaSexo', 'buscaEmpresa'));
+    }
+    public function homologarStore(Request $request, $id)
+    {
+        dd($id);
+        $usuario = session('usuario.id_usuario');
+        // Obtém o valor do ID da solicitação
+        $aquisicaoId = $request->input('solicitacao_id');
+
+        // Busca a aquisição no banco de dados
+        $aquisicao = SolMaterial::find($aquisicaoId);
+
+        $novaPrioridade = $aquisicao->aut_usu_pres ?? $request->input('prioridade');
+
+        // Verifica se a aquisição foi encontrada
+        if (!$aquisicao) {
+            app('flasher')->addError('Solicitação não encontrada.');
+            return redirect('/gerenciar-aquisicao-servicos');
+        }
+
+        // Obtém o status enviado pelo formulário
+        $status = $request->input('status');
+
+        // Atualiza o status
+        $aquisicao->status = $status;
+
+        // Verifica o status e trata cada caso
+        if ($status == '3') { // Aprovado
+
+            $prioridadeAtual = $aquisicao->prioridade;
+
+            if ($novaPrioridade > $prioridadeAtual) {
+                // Desce as prioridades entre a atual e a nova prioridade
+                SolMaterial::whereBetween('prioridade', [$prioridadeAtual + 1, $novaPrioridade])
+                    ->decrement('prioridade');
+            } elseif ($novaPrioridade < $prioridadeAtual) {
+                // Sobe as prioridades entre a nova e a atual prioridade
+                SolMaterial::whereBetween('prioridade', [$novaPrioridade, $prioridadeAtual - 1])
+                    ->increment('prioridade');
+            }
+
+            // Define a nova prioridade da solicitação
+            $aquisicao->id_setor_resp_sv = $request->input('setorResponsavel');
+            $aquisicao->prioridade = $novaPrioridade;
+
+            // Impede que a prioridade fique abaixo de 1
+            if ($aquisicao->prioridade < 1) {
+                $aquisicao->prioridade = 1;
+            }
+
+            // Salva a solicitação
+            $aquisicao->aut_usu_adm = $usuario;
+            $aquisicao->dt_usu_adm = now();
+            $aquisicao->motivo_recusa = null;
+            $aquisicao->save();
+
+            // Reorganiza as prioridades para garantir que não haja lacunas
+            $this->reorganizarPrioridades();
+
+            app('flasher')->addSuccess('A solicitação foi aprovada.');
+        } elseif ($status == '1' || $status == '7') { // Devolver ou Cancelar
+
+            $aquisicao->aut_usu_adm = $usuario;
+            $aquisicao->dt_usu_adm = now();
+            $aquisicao->id_setor_resp_sv = null;
+            $aquisicao->prioridade = null;
+            $aquisicao->motivo_recusa = $request->input('motivoRejeicao');
+            $aquisicao->save();
+
+            $message = ($status == '1') ? 'A solicitação foi devolvida.' : 'A solicitação foi cancelada.';
+            app('flasher')->addWarning($message);
+        }
+
+        return redirect("/gerenciar-aquisicao-material");
     }
     public function delete($id)
     {

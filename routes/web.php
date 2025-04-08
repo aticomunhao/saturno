@@ -391,6 +391,9 @@ Route::delete('/excluir-material-solicitacao', [AquisicaoMaterialController::cla
 Route::post('/salvar-proposta-material/{id}', [AquisicaoMaterialController::class, 'store3']);
 Route::delete('/deletar-aquisicao-material/{id}', [AquisicaoMaterialController::class, 'delete']);
 Route::get('/aprovar-aquisicao-material/{id}', [AquisicaoMaterialController::class, 'aprovar']);
+Route::post('/aprovar-store-proposta-material/{id}', [AquisicaoMaterialController::class, 'aprovarStore']);
+Route::get('/homologar-aquisicao-material/{id}', [AquisicaoMaterialController::class, 'homologar']);
+Route::post('/homologar-store-proposta-material/{id}', [AquisicaoMaterialController::class, 'homologarStore']);
 
 //Valor Mínimo de Compra
 Route::get('/valor-compra', [ValorCompraController::class, 'index']);

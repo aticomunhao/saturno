@@ -340,6 +340,9 @@ class AquisicaoMaterialController extends Controller
                     return $request->numMat[$index] == $material->id;
                 }, ARRAY_FILTER_USE_BOTH);
 
+                // Reinicializa o contador de propostas por material
+                $contadorProposta = 0;
+
                 // Itera sobre os três documentos para o material
                 foreach ($documentosFiltrados as $index => $documento) {
                     //dd($request->all());
@@ -378,7 +381,7 @@ class AquisicaoMaterialController extends Controller
                     $dadosComuns = array_merge([
                         'id_tp_doc' => '14',
                         'id_setor' => $solicitacao->id_setor,
-                        'vencedor_inicial' => '1',
+                        'vencedor_inicial' => $contadorProposta === 0 ? '1' : '0',
                         'mat_proposta' => $material->id,
                         'vencedor_geral' => '0',
                         'id_sol_mat' => $id,
@@ -403,6 +406,9 @@ class AquisicaoMaterialController extends Controller
                     } else {
                         Documento::create($dadosComuns);
                     }
+
+                    // Incrementa o contador
+                    $contadorProposta++;
                 }
             }
         } else if ($request->activeButton === 'empresa') {
@@ -474,29 +480,29 @@ class AquisicaoMaterialController extends Controller
                 $dadosComuns = array_merge([
                     'id_tp_doc' => '14',
                     'id_setor' => $solicitacao->id_setor,
-                    'vencedor_inicial' => '1',
+                    'vencedor_inicial' => $index === 0 ? '1' : '0',
                     'id_sol_mat' => $idSolicitacoes,
                     'vencedor_geral' => '0',
                 ], $dadosDocumento);
 
                 $documentoQuery = Documento::where('id_sol_mat', $idSolicitacoes)
-                        ->where('id_tp_doc', '14');
+                    ->where('id_tp_doc', '14');
 
-                    if (!empty($dadosComuns['numero'])) {
-                        $documentoQuery->where('numero', $dadosComuns['numero']);
-                    }
+                if (!empty($dadosComuns['numero'])) {
+                    $documentoQuery->where('numero', $dadosComuns['numero']);
+                }
 
-                    if (!empty($dadosComuns['id_empresa'])) {
-                        $documentoQuery->where('id_empresa', $dadosComuns['id_empresa']);
-                    }
+                if (!empty($dadosComuns['id_empresa'])) {
+                    $documentoQuery->where('id_empresa', $dadosComuns['id_empresa']);
+                }
 
-                    $documento = $documentoQuery->first();
+                $documento = $documentoQuery->first();
 
-                    if ($documento) {
-                        $documento->update($dadosComuns);
-                    } else {
-                        Documento::create($dadosComuns);
-                    }
+                if ($documento) {
+                    $documento->update($dadosComuns);
+                } else {
+                    Documento::create($dadosComuns);
+                }
             }
         }
 
@@ -525,17 +531,17 @@ class AquisicaoMaterialController extends Controller
         $todosSetor = Setor::orderBy('nome')->get();
         //dd($materiais);
 
-         // Recupera todas as prioridades existentes
-         $prioridadesExistentes = SolMaterial::pluck('prioridade')->unique()->toArray();
+        // Recupera todas as prioridades existentes
+        $prioridadesExistentes = SolMaterial::pluck('prioridade')->unique()->toArray();
 
-         // Se existirem prioridades, encontra a maior e adiciona 1
-         if (!empty($prioridadesExistentes)) {
-             $maiorPrioridade = max($prioridadesExistentes);
-             $numeros = range(1, $maiorPrioridade + 1); // Gera uma lista de 1 até a maior prioridade + 1
-         } else {
-             // Se não houver prioridades, você pode definir o range inicial como desejado, por exemplo, 1
-             $numeros = range(1, 1);
-         }
+        // Se existirem prioridades, encontra a maior e adiciona 1
+        if (!empty($prioridadesExistentes)) {
+            $maiorPrioridade = max($prioridadesExistentes);
+            $numeros = range(1, $maiorPrioridade + 1); // Gera uma lista de 1 até a maior prioridade + 1
+        } else {
+            // Se não houver prioridades, você pode definir o range inicial como desejado, por exemplo, 1
+            $numeros = range(1, 1);
+        }
 
         //dd($documentoMaterial);
 
@@ -635,17 +641,17 @@ class AquisicaoMaterialController extends Controller
         $todosSetor = Setor::orderBy('nome')->get();
         //dd($materiais);
 
-         // Recupera todas as prioridades existentes
-         $prioridadesExistentes = SolMaterial::pluck('prioridade')->unique()->toArray();
+        // Recupera todas as prioridades existentes
+        $prioridadesExistentes = SolMaterial::pluck('prioridade')->unique()->toArray();
 
-         // Se existirem prioridades, encontra a maior e adiciona 1
-         if (!empty($prioridadesExistentes)) {
-             $maiorPrioridade = max($prioridadesExistentes);
-             $numeros = range(1, $maiorPrioridade + 1); // Gera uma lista de 1 até a maior prioridade + 1
-         } else {
-             // Se não houver prioridades, você pode definir o range inicial como desejado, por exemplo, 1
-             $numeros = range(1, 1);
-         }
+        // Se existirem prioridades, encontra a maior e adiciona 1
+        if (!empty($prioridadesExistentes)) {
+            $maiorPrioridade = max($prioridadesExistentes);
+            $numeros = range(1, $maiorPrioridade + 1); // Gera uma lista de 1 até a maior prioridade + 1
+        } else {
+            // Se não houver prioridades, você pode definir o range inicial como desejado, por exemplo, 1
+            $numeros = range(1, 1);
+        }
         //dd($documentoMaterial);
 
         return view('solMaterial.homologar-aquisicao-material', compact('documentos', 'todosSetor', 'numeros', 'todosSetor', 'solicitacao', 'bucaItemCatalogo', 'materiais', 'idSolicitacao', 'buscaSetor', 'buscaUnidadeMedida', 'buscaCategoria', 'buscaMarca', 'buscaTamanho', 'buscaCor', 'buscaFaseEtaria', 'buscaSexo', 'buscaEmpresa'));

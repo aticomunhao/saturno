@@ -6,12 +6,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use App\Models\ModelCadastroInicial;
-use App\Models\ModelItemCatalogo;
+use App\Models\SolMaterial;
+use App\Models\DepositoMaterial;
+use App\Models\Destinacao;
+use App\Models\Setor;
+use App\Models\CadastroInicial;
+use App\Models\Documento;
+use App\Models\Empresa;
+use App\Models\ItemCatalogoMaterial;
 use App\Models\ModelCatMaterial;
-use App\Models\ModelItemMaterial;
-use App\Models\ModelCor;
-use App\Models\ModelTamanho;
-use App\Models\ModelMarca;
+use App\Models\ModelTipoMaterial;
+use App\Models\StatusCadastroInicial;
+use App\Models\TipoDocumento;
+use Illuminate\Database\Eloquent\Model;
 
 class CadastroInicialController extends Controller
 {
@@ -49,69 +56,68 @@ class CadastroInicialController extends Controller
 
 
     public function index(Request $request)
-    {        
+    {
 
-        $resultCat = DB::select ('select id, nome from tipo_categoria_material order by nome');
+        $usuario = session('usuario.id_usuario');
+        $setor = session('usuario.setor');
+        $excluirSol = $request->excluirSol;
+        $sol = SolMaterial::find($excluirSol);
+        $deposito = DepositoMaterial::all();
+        $destinacao = Destinacao::all();
+        $categoriaMaterial = ModelCatMaterial::all();
+        $empresa = Empresa::all();
+        $nomeMaterial = ItemCatalogoMaterial::all();
+        $tipoDocumento = TipoDocumento::all();
+        $tipoMaterial = ModelTipoMaterial::all();
+        $solMat = SolMaterial::all();
+        $status = StatusCadastroInicial::all();
 
-        //$result = $this->getListaItens();
-        $result = DB::table('item_material AS im')
-                            ->select('im.data_cadastro','im.id', 'im.ref_fabricante AS ref_fab', 'im.observacao AS obs', 'im.adquirido', 'im.valor_venda', 'im.id_tipo_situacao', 'icm.id_categoria_material AS cat',  'icm.nome AS n1', 'm.nome AS n2', 't.nome AS n3', 'c.nome AS n4', 'tcm.nome AS n5',  'tcm.id AS id_cat','tcm.nome AS nome_cat')
-                            //->where('id_tipo_situacao', '1')
-                            ->leftjoin('item_catalogo_material AS icm', 'icm.id' , '=', 'im.id_item_catalogo_material')
-                            ->leftjoin('tipo_categoria_material AS tcm', 'icm.id_categoria_material' , '=', 'tcm.id')
-                            ->leftjoin('marca AS m', 'm.id' , '=', 'im.id_marca')
-                            ->leftjoin('tamanho AS t', 't.id' , '=', 'im.id_tamanho')
-                            ->leftjoin('cor AS c', 'c.id', '=', 'im.id_cor');
-        //$resultCategoria = DB::select ('select id, nome from tipo_categoria_material');
-        //$resultSitMat = DB::select ('select id, nome from tipo_situacao_item_material');
 
+        //dd($setor);
+        $query = CadastroInicial::with('Status', 'SolOrigem', 'DocOrigem', 'Deposito', 'Destinacao', 'CategoriaMaterial', 'TipoMaterial');
 
-        $data_inicio = $request->data_inicio;
-        $data_fim = $request->data_fim;
-        if ($request->data_inicio){
-
-            $result->where('im.data_cadastro','>=' , $request->data_inicio);
+        if ($request->pesquisaDeposito) {
+            $query->where('id_deposito', $request->pesquisaDeposito);
         }
-        if ($request->data_fim){
-            $result->where('im.data_cadastro','<=' , $request->data_fim);
+        if ($request->filled('data_inicio') && $request->filled('data_fim')) {
+            $query->whereBetween('data_cadastro', [
+                $request->data_inicio . ' 00:00:00',
+                $request->data_fim . ' 23:59:59'
+            ]);
+        }
+        if ($request->pesquisaDestinacao) {
+            $query->where('id_destinacao', $request->pesquisaDestinacao);
+        }
+        if ($request->pesquisaCategoriaMaterial) {
+            $query->where('id_cat_material', $request->pesquisaCategoriaMaterial);
+        }
+        if ($request->pesquisaEmpresa) {
+            $query->whereHas('DocOrigem', function ($q) use ($request) {
+                $q->where('id_empresa', $request->pesquisaEmpresa);
+            });
+        }
+        if ($request->pesquisaNomeMaterial) {
+            $query->where('id_nome_mat', $request->pesquisaNomeMaterial);
+        }
+        if ($request->pesquisaDocumento) {
+            $query->whereHas('documento_origem', function ($q) use ($request) {
+                $q->where('id_tp_doc', $request->pesquisaDocumento);
+            });
+        }
+        if ($request->pesquisaTipoMaterial) {
+            $query->where('id_tipo_material', $request->pesquisaMaterial);
+        }
+        if ($request->pesquisaSolicitacao) {
+            $query->where('id_sol_origem', $request->pesquisaSolicitacao);
+        }
+        if ($request->pesquisaStatus) {
+            $query->where('id_tp_status', $request->pesquisaStatus);
         }
 
-        $material = $request->material;
-        if ($request->material){
-            $result->where('icm.nome', 'like', "%$request->material%");
-        }
+        $cadastroInicial = $query->orderBy('id', 'asc')->paginate(20);
 
-        $obs = $request->obs;
-        if ($request->obs){
-            $result->where('im.observacao', 'like', "%$request->obs%");
-        }
-
-        $ref_fab = $request->ref_fab;
-        if ($request->ref_fab){
-            $result->where('im.ref_fabricante', '=', $request->ref_fab);
-        }
-
-        $categoria = $request->categoria;
-        if ($request->categoria){
-            $result->where('tcm.id', '=', "$request->categoria");
-        }
-                
-        $total = $request->compra;
-        if ($request->compra){
-            $result->where('im.adquirido', '=', "$request->compra");
-        }
-        
-        $contar = $result->count();
-        
-        $result = $result->orderBy('im.id', 'DESC')->paginate(500);
-
-        
-
-        
-
-        return view('cadastroinicial/gerenciar-cadastro-inicial', compact('obs', 'ref_fab', 'contar', 'result','categoria', 'data_inicio', 'data_fim', 'material', 'resultCat'));
-
-
+        return view('cadastroinicial.gerenciar-cadastro-inicial', compact('sol', 'cadastroInicial', 'status', 'solMat', 'tipoMaterial', 'tipoDocumento', 'nomeMaterial', 'usuario', 'setor', 'deposito', 'destinacao', 'categoriaMaterial', 'empresa'))
+            ->with('i', (request()->input('page', 1) - 1) * 20);
     }
 
 
@@ -144,7 +150,7 @@ class CadastroInicialController extends Controller
 
 
         if ($id == $situacao){
-        
+
             return redirect()->action('CadastroInicialController@index')
             ->with('warning', 'Este item não pode ser alterado pois foi vendido!');
 
@@ -184,7 +190,7 @@ class CadastroInicialController extends Controller
                         //->orderBy('nome_item','ASC')
                         ->get();
 
-       
+
         $tamanho = DB::table('tipo_categoria_material AS tcm')
                         ->select('tcm.id', 't.id AS id_tam', 'tcm.id AS id_cat',  't.nome AS n3')
                         ->leftjoin('tamanho AS t', 'tcm.id' , '=', 't.id_categoria_material')
@@ -207,7 +213,7 @@ class CadastroInicialController extends Controller
                     ->orderBy('n4','ASC')
                     ->get();
 
-       
+
         $tipo = DB::table('tipo_material AS tp')
                         ->select('tp.id AS tp_id', 'tp.nome AS n8')
                         ->get();

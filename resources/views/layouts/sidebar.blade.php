@@ -36,10 +36,12 @@ $setor = session()->get('usuario.setor');
                 <ul class="navbar-nav" id="DAO">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="2" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">Cadastrar</a>
+                            data-bs-toggle="dropdown" aria-expanded="false">Cadastro</a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
 
                             {{-- @if (in_array(13, $acesso) or in_array(14, $acesso)) --}}
+                            <li><a class="dropdown-item" href="/gerenciar-cadastro-inicial">Inicial</a>
+                            </li>
                             <li><a class="dropdown-item" href="{{route('documento.index')}}">Documentos</a>
                             </li>
                             <li><a class="dropdown-item" href="/cad-cat-material">Categorias</a>

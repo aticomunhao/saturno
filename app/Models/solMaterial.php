@@ -16,7 +16,7 @@ class solMaterial extends Model
         'prioridade',
         'status',
         'id_setor',
-        'id_resp_mt',
+        'id_resp_sol_mt',
         'dt_usu_pres',
         'dt_usu_dir',
         'dt_usu_adm',
@@ -29,6 +29,7 @@ class solMaterial extends Model
         'aut_usu_daf',
         'motivo_recusa',
         'tipo_sol_material',
+        'id_resp_mt',
     ];
 
     public function matProposta()
@@ -45,10 +46,14 @@ class solMaterial extends Model
     }
     public function modelPessoa()
     {
-        return $this->belongsTo(ModelPessoa::class, 'id_resp_mt');
+        return $this->belongsTo(ModelPessoa::class, 'id_resp_sol_mt');
     }
     public function tipoSolMat()
     {
         return $this->belongsTo(tipoSolMat::class, 'tipo_sol_mat');
+    }
+    public function modelPessoaResponsavel()
+    {
+        return $this->belongsTo(ModelPessoa::class, 'id_resp_mt');
     }
 }

@@ -185,13 +185,13 @@ class AquisicaoMaterialController extends Controller
     {
 
         $idUsuario = session('usuario.id_pessoa');
-        //dd($setor);
+        //dd($idUsuario);
 
         $solicitacaoMaterial = SolMaterial::create([
             'data' => Carbon::now(),
             'status' => '1',
-            'id_setor' => $idUsuario,
             'tipo_sol_material' => '1',
+            'id_resp_sol_mt' => $idUsuario,
         ]);
 
         app('flasher')->addSuccess('Solicitação Criada com Sucesso, Adicione os materiais Necessários');
@@ -203,7 +203,8 @@ class AquisicaoMaterialController extends Controller
 
         $documentos = Documento::where('id_sol_mat', $idSolicitacao)->with('empresa')->get();
         //dd($documentos);
-        $solicitacao = SolMaterial::with('modelPessoa', 'setor')->find($idSolicitacao);
+        $solicitacao = SolMaterial::with('modelPessoa', 'modelPessoaResponsavel', 'setor')->find($idSolicitacao);
+        //dd($solicitacao->modelPessoa->nome_completo);
         $setor = session('usuario.setor');
         $buscaCategoria = TipoCategoriaMt::all();
         $buscaEmpresa = Empresa::all();

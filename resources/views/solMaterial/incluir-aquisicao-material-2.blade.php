@@ -1287,6 +1287,7 @@
             border-color: gray !important;
         }
     </style>
+
     {{-- Script dos botao de alternar e adicionar --}}
     <script>
         // Selecione todos os campos com a classe 'proposta'

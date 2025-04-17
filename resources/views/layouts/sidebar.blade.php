@@ -66,7 +66,7 @@ $setor = session()->get('usuario.setor');
                             </li>
                             <li><a class="dropdown-item" href="{{ route('conta-contabil.index') }}">Contas Contabeis</a>
                             </li>
-                            {{-- @endif --}}
+                            <li><a class="dropdown-item" href="{{ route('deposito.index') }}">Depósitos</a></li>
                         </ul>
                     </li>
                 </ul>

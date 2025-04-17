@@ -48,6 +48,7 @@ use App\Http\Controllers\AquisicaoServicosController;
 use App\Http\Controllers\CatalogoEmpresaController;
 use App\Http\Controllers\CatalogoServicoController;
 use App\Http\Controllers\AquisicaoMaterialController;
+use App\Http\Controllers\GerenciarDepositoController;
 use App\Http\Controllers\ValorCompraController;
 
 
@@ -403,7 +404,15 @@ Route::get('/valor-compra', [ValorCompraController::class, 'index']);
 Route::get('/conta-contabil', [ContaContabilController::class, 'index'])->name('conta-contabil.index');
 Route::get('/conta-contabil/form', [ContaContabilController::class, 'create'])->name('conta-contabil.create');
 Route::any('/conta-contabil/store', [ContaContabilController::class, 'store'])->name('conta-contabil.store');
-Route::get('/conta-contabil/edit/{id}',[ContaContabilController::class,'edit'])->name('conta-contabil.edit');
-Route::put('/conta-contabil/update/{id}', [ContaContabilController::class,'update'])->name('conta-contabil.update');
-Route::any('/conta-contabil/inativar/{id}', [ContaContabilController::class,'inativar'])->name('conta-contabil.inativar');
+Route::get('/conta-contabil/edit/{id}', [ContaContabilController::class, 'edit'])->name('conta-contabil.edit');
+Route::put('/conta-contabil/update/{id}', [ContaContabilController::class, 'update'])->name('conta-contabil.update');
+Route::any('/conta-contabil/inativar/{id}', [ContaContabilController::class, 'inativar'])->name('conta-contabil.inativar');
 
+//Deposito
+Route::get('/gerenciar-deposito', [GerenciarDepositoController::class, 'index'])->name('deposito.index');
+Route::get('/incluir-deposito', [GerenciarDepositoController::class, 'create'])->name('deposito.create');
+Route::post('/salvar-deposito', [GerenciarDepositoController::class, 'store'])->name('deposito.store');
+Route::get('/editar-deposito/{id}', [GerenciarDepositoController::class, 'edit'])->name('deposito.edit');
+Route::post('/atualizar-deposito/{id}', [GerenciarDepositoController::class, 'update'])->name('deposito.update');
+Route::delete('/deletar-deposito/{id}', [GerenciarDepositoController::class, 'delete'])->name('deposito.delete');
+Route::get('/retorna-deposito/{id}', [GerenciarDepositoController::class, 'show'])->name('deposito.show');

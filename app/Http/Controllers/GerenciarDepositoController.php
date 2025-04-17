@@ -15,7 +15,7 @@ class GerenciarDepositoController extends Controller
         $depositos =  Deposito::with(['tipoDeposito', 'sala'])->get();
         $tipoDeposito = Deposito::all();
         $sala = Deposito::all();
-        return view('gerenciar-deposito.index', compact('depositos', 'tipoDeposito', 'sala'));
+        return view('depositos.index', compact('depositos', 'tipoDeposito', 'sala'));
     }
 
     /**

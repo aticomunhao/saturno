@@ -212,23 +212,15 @@ Route::name('deposito')->group(function () {
     Route::put('/deposito/atualizar/{id}', [DepositoController::class, 'update']);
 });
 
-Route::get('/combo/catItem/{id}', [CadastroInicialController::class, 'getCategoria']);
-Route::get('/combo/catForm/{id}', [CadastroInicialController::class, 'getFormCadastro']);
-Route::get('/combo/valor/{id}', [CadastroInicialController::class, 'getValor']);
-Route::get('/combo/catFormFinal/{id}', [CadastroInicialController::class, 'getFormCadastroFinal']);
-Route::get('/combo/catValVariado/{id}', [CadastroInicialController::class, 'getValorVariado']);
-Route::get('/combo/composicao/{id}', [CadastroInicialController::class, 'getComposicao']);
-Route::post('/cad-inicial-material/inserir', [CadastroInicialController::class, 'store']);
-Route::get('/usuario-logado', [CadastroInicialController::class, 'search']);
 
 Route::get('/gerenciar-cadastro-inicial', [CadastroInicialController::class, 'index'])->name('cadastroinicial');
-Route::get('/gerenciar-cadastro-inicial/incluir', [CadastroInicialController::class, 'create']);
-Route::get('/gerenciar-cadastro-inicial/excluir/{id}', [CadastroInicialController::class, 'destroy']);
-Route::get('/editar-cadastro-inicial/{id}/{id_cat}', [CadastroInicialController::class, 'formEditar']);
-Route::put('/gerenciar-cadastro-inicial/alterar/{id}', [CadastroInicialController::class, 'update']);
+Route::any('/salvar-termo-doacao', [CadastroInicialController::class, 'storeTermoDoacao']);
+Route::get('/gerenciar-cadastro-inicial/doacao/{id}', [CadastroInicialController::class, 'createDoacao']);
+Route::get('/gerenciar-cadastro-inicial/compra-direta/{id}', [CadastroInicialController::class, 'createCompraDireta']);
+Route::post('/cad-inicial-material/doacao', [CadastroInicialController::class, 'storeDoacao']);
+Route::post('/cad-inicial-material/compra-direta', [CadastroInicialController::class, 'storeCompraDireta']);
+Route::post('/incluir-material-doacao-cadastro-inicial/{id}', [CadastroInicialController::class, 'storeMaterial']);
 
-Route::get('/combo/tamanho/{id}', [CadastroInicialController::class, 'getTamanho']);
-Route::get('/combo/embalagem/{id}', [CadastroInicialController::class, 'getEmbalagem']);
 
 
 

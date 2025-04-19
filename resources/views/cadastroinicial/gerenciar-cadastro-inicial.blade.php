@@ -22,16 +22,21 @@
                         <div class="card-body">
                             <div class="row" style="margin-left:5px">
                                 <div class="col-md d-flex">
-                                    <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal"
-                                        data-bs-target="#filtros" style="box-shadow: 3px 5px 6px #000000; ">
-                                        Filtrar <i class="bi bi-funnel"></i>
+                                    <button type="button" class="btn  btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#filtros"
+                                        style="box-shadow: 3px 5px 6px #000000; background-color: rgb(231, 231, 69); ">
+                                        FILTRAR <i class="bi bi-funnel"></i>
                                     </button>
                                 </div>
 
                                 <div class="col-md d-flex justify-content-end">
-                                    <a href="gerenciar-cadastro-inicial/incluir" class="btn btn-success"
+                                    <a href="gerenciar-cadastro-inicial/compra-direta" class="btn btn-success"
                                         style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; ">
-                                        Novo+
+                                        COMPRA DIRETA
+                                    </a>
+                                    <a href="gerenciar-cadastro-inicial/doacao" class="btn btn-success"
+                                        style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-left: 2%">
+                                        DOAÇÃO
                                     </a>
                                 </div>
                             </div>
@@ -52,8 +57,32 @@
                                         </th>
                                         <th>ID</th>
                                         <th>DATA</th>
-                                        <th>N/A</th>
-                                        <th>N/A</th>
+
+                                        @if ($request->pesquisaDeposito)
+                                            <th>DEPÓSITO</th>
+                                        @endif
+                                        @if ($request->pesquisaDestinacao)
+                                            <th>DESTINAÇÃO</th>
+                                        @endif
+
+                                        <th>CATEGORIA</th>
+
+                                        @if ($request->pesquisaEmpresa)
+                                            <th>EMPRESA</th>
+                                        @endif
+
+                                        <th>NOME</th>
+
+                                        @if ($request->pesquisaDocumento)
+                                            <th>TIPO DE DOCUMENTO</th>
+                                        @endif
+                                        @if ($request->pesquisaTipoMaterial)
+                                            <th>TIPO DE MATERIAL</th>
+                                        @endif
+                                        @if ($request->pesquisaSolicitacao)
+                                            <th>SOLICITAÇÃO</th>
+                                        @endif
+
                                         <th>STATUS</th>
                                         <th>AÇÕES</th>
                                     </tr>
@@ -70,10 +99,35 @@
                                                 </div>
                                             </td>
                                             <td>{{ $cadastroInicials->id ?? 'N/A' }}</td>
-                                            <td>{{ $cadastroInicials->data_cadastro ? \Carbon\Carbon::parse($aquisicaos->data)->format('d/m/Y') : 'N/A' }}
+                                            <td>{{ $cadastroInicials->data_cadastro ? \Carbon\Carbon::parse($cadastroInicials->data_cadastro)->format('d/m/Y') : 'N/A' }}
                                             </td>
-                                            <td>N/A</td>
-                                            <td>N/A</td>
+                                            @if ($request->pesquisaDeposito)
+                                                <td>{{ $cadastroInicials->deposito->nome ?? 'N/A' }}</td>
+                                            @endif
+                                            @if ($request->pesquisaDestinacao)
+                                                <td>{{ $cadastroInicials->destinacao->descricao ?? 'N/A' }}</td>
+                                            @endif
+
+                                            <td>{{ $cadastroInicials->CategoriaMaterial->nome ?? 'N/A' }}</td>
+
+                                            @if ($request->pesquisaEmpresa)
+                                                <td>{{ $cadastroInicials->docOrigem->empresa->razaosocial ?? 'N/A' }} -
+                                                    {{ $cadastroInicials->docOrigem->empresa->nomefantasia ?? 'N/A' }}</td>
+                                            @endif
+
+                                            <td>{{ $cadastroInicials->ItemCatalogoMaterial->nome ?? 'N/A' }}</td>
+
+                                            @if ($request->pesquisaDocumento)
+                                                <td>{{ $cadastroInicials->docOrigem->tipoDocumento->descricao ?? 'N/A' }}
+                                                </td>
+                                            @endif
+                                            @if ($request->pesquisaTipoMaterial)
+                                                <td>{{ $cadastroInicials->TipoMaterial->nome ?? 'N/A' }}</td>
+                                            @endif
+                                            @if ($request->pesquisaSolicitacao)
+                                                <td>{{ $cadastroInicials->id_sol_origem ?? 'N/A' }}</td>
+                                            @endif
+
                                             <td>{{ $cadastroInicials->status->descricao ?? 'N/A' }}</td>
                                             <td>
                                                 <a href="" class="btn btn-sm btn-outline-primary" data-tt="tooltip"
@@ -81,36 +135,36 @@
                                                     title="Visualizar">
                                                     <i class="bi bi-search"></i>
                                                 </a>
+                                                <a href="" class="btn btn-sm btn-outline-warning" data-tt="tooltip"
+                                                    style="font-size: 1rem; color:#303030" data-placement="top"
+                                                    title="Editar">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
                                                 {{-- @if (in_array($aquisicaos->tipoStatus->id, ['3', '2'])) --}}
                                                 <a href="" class="btn btn-sm btn-outline-primary" data-tt="tooltip"
                                                     style="font-size: 1rem; color:#303030" data-placement="top"
-                                                    title="Aprovar">
+                                                    title="Completar Cadastro">
                                                     <i class="bi bi-check-lg"></i>
                                                 </a>
                                                 {{-- @endif --}}
                                                 {{-- @if ($aquisicaos->tipoStatus->id == '3') --}}
                                                 <a href="" class="btn btn-sm btn-outline-success" data-tt="tooltip"
                                                     style="font-size: 1rem; color:#303030" data-placement="top"
-                                                    title="Homologar">
+                                                    title="Material Devolvido">
                                                     <i class="bi bi-clipboard-check"></i>
                                                 </a>
                                                 {{-- @endif --}}
                                                 {{-- @if ($aquisicaos->tipoStatus->id == '1') --}}
-                                                <a href="" class="btn btn-sm btn-outline-warning" data-tt="tooltip"
-                                                    style="font-size: 1rem; color:#303030" data-placement="top"
-                                                    title="Editar">
-                                                    <i class="bi bi-pencil"></i>
-                                                </a>
                                                 <a href="" class="btn btn-sm btn-outline-primary" data-tt="tooltip"
                                                     style="font-size: 1rem; color:#303030" data-placement="top"
-                                                    title="Enviar">
+                                                    title="Enviar Material">
                                                     <i class="bi bi-cart-check"></i>
                                                 </a>
                                                 {{-- @endif --}}
                                                 {{-- @if (isset($aquisicaos->aut_usu_pres, $aquisicaos->aut_usu_adm, $aquisicaos->aut_usu_daf)) --}}
                                                 <a href="" class="btn btn-sm btn-outline-info" data-tt="tooltip"
                                                     style="font-size: 1rem; color:#303030" data-placement="top"
-                                                    title="Aceite">
+                                                    title="Solicitar Teste">
                                                     <i class="bi bi-hand-thumbs-up"></i>
                                                 </a>
                                                 {{-- @endif --}}
@@ -118,7 +172,7 @@
                                                 <a href="#" class="btn btn-sm btn-outline-danger excluirSolicitacao"
                                                     data-tt="tooltip" style="font-size: 1rem; color:#303030"
                                                     data-placement="top" title="Excluir" data-bs-toggle="modal"
-                                                    data-bs-target="#modalExcluirSolicitacao">
+                                                    data-bs-target="#modalExcluirMaterial">
                                                     <i class="bi bi-trash"></i>
                                                 </a>
                                                 {{-- @endif --}}
@@ -189,11 +243,11 @@
                                         name="pesquisaCategoriaMaterial" id="idPesquisaCategoriaMaterial">
                                         <option value="">Todos</option>
                                         @foreach ($categoriaMaterial as $categoriaMaterials)
-                                        <option value="{{ $categoriaMaterials->id }}"
-                                            {{ old('pesquisaCategoriaMaterial') == $categoriaMaterials->id ? 'selected' : '' }}>
-                                            {{ $categoriaMaterials->nome }}
-                                        </option>
-                                    @endforeach
+                                            <option value="{{ $categoriaMaterials->id }}"
+                                                {{ old('pesquisaCategoriaMaterial') == $categoriaMaterials->id ? 'selected' : '' }}>
+                                                {{ $categoriaMaterials->nome }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="col-md-6 col-sm-12 mb-2">Por Empresa
@@ -201,11 +255,11 @@
                                         name="pesquisaEmpresa" id="idPesquisaEmpresa">
                                         <option value="">Todos</option>
                                         @foreach ($empresa as $empresas)
-                                        <option value="{{ $empresas->id }}"
-                                            {{ old('pesquisaEmpresa') == $empresas->id ? 'selected' : '' }}>
-                                            {{ $empresas->razaosocial }} - {{ $empresas->nomefantasia }}
-                                        </option>
-                                    @endforeach
+                                            <option value="{{ $empresas->id }}"
+                                                {{ old('pesquisaEmpresa') == $empresas->id ? 'selected' : '' }}>
+                                                {{ $empresas->razaosocial }} - {{ $empresas->nomefantasia }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="col-md-6 col-sm-12 mb-2">Por Nome do Material
@@ -213,11 +267,11 @@
                                         name="pesquisaNomeMaterial" id="idPesquisaNomeMaterial">
                                         <option value="">Todos</option>
                                         @foreach ($nomeMaterial as $nomeMaterials)
-                                        <option value="{{ $nomeMaterials->id }}"
-                                            {{ old('pesquisaNomeMaterial') == $nomeMaterials->id ? 'selected' : '' }}>
-                                            {{ $nomeMaterials->nome }}
-                                        </option>
-                                    @endforeach
+                                            <option value="{{ $nomeMaterials->id }}"
+                                                {{ old('pesquisaNomeMaterial') == $nomeMaterials->id ? 'selected' : '' }}>
+                                                {{ $nomeMaterials->nome }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="col-md-6 col-sm-12 mb-2">Por Tipo de Documento
@@ -225,11 +279,11 @@
                                         name="pesquisaDocumento" id="idPesquisaDocumento">
                                         <option value="">Todos</option>
                                         @foreach ($tipoDocumento as $tipoDocumentos)
-                                        <option value="{{ $tipoDocumentos->id }}"
-                                            {{ old('pesquisaDocumento') == $tipoDocumentos->id ? 'selected' : '' }}>
-                                            {{ $tipoDocumentos->sigla }} - {{ $tipoDocumentos->descricao }}
-                                        </option>
-                                    @endforeach
+                                            <option value="{{ $tipoDocumentos->id }}"
+                                                {{ old('pesquisaDocumento') == $tipoDocumentos->id ? 'selected' : '' }}>
+                                                {{ $tipoDocumentos->sigla }} - {{ $tipoDocumentos->descricao }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="col-md-6 col-sm-12 mb-2">Por Tipo de Material
@@ -237,11 +291,11 @@
                                         name="pesquisaTipoMaterial" id="idPesquisaTipoMaterial">
                                         <option value="">Todos</option>
                                         @foreach ($tipoMaterial as $tipoMaterials)
-                                        <option value="{{ $tipoMaterials->id }}"
-                                            {{ old('pesquisaTipoMaterial') == $tipoMaterials->id ? 'selected' : '' }}>
-                                            {{ $tipoMaterials->nome }}
-                                        </option>
-                                    @endforeach
+                                            <option value="{{ $tipoMaterials->id }}"
+                                                {{ old('pesquisaTipoMaterial') == $tipoMaterials->id ? 'selected' : '' }}>
+                                                {{ $tipoMaterials->nome }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="col-md-6 col-sm-12 mb-2">Por Solicitação de Material
@@ -249,11 +303,11 @@
                                         name="pesquisaSolicitacao" id="idPesquisaSolicitacao">
                                         <option value="">Todos</option>
                                         @foreach ($solMat as $solMats)
-                                        <option value="{{ $solMats->id }}"
-                                            {{ old('pesquisaSolicitacao') == $solMats->id ? 'selected' : '' }}>
-                                            {{ $solMats->id }}
-                                        </option>
-                                    @endforeach
+                                            <option value="{{ $solMats->id }}"
+                                                {{ old('pesquisaSolicitacao') == $solMats->id ? 'selected' : '' }}>
+                                                {{ $solMats->id }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="col-md-6 col-sm-12 mb-2">Por Status
@@ -261,11 +315,11 @@
                                         name="pesquisaStatus" id="idPesquisaStatus">
                                         <option value="">Todos</option>
                                         @foreach ($status as $statuss)
-                                        <option value="{{ $statuss->id }}"
-                                            {{ old('pesquisaStatus') == $statuss->id ? 'selected' : '' }}>
-                                            {{ $statuss->descricao }}
-                                        </option>
-                                    @endforeach
+                                            <option value="{{ $statuss->id }}"
+                                                {{ old('pesquisaStatus') == $statuss->id ? 'selected' : '' }}>
+                                                {{ $statuss->descricao }}
+                                            </option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -281,86 +335,6 @@
         </div>
     </form>{{-- Final Formulario de pesquisa --}}
 
-    <!-- Modal Excluir Solicitação -->
-    <div class="modal fade" id="modalExcluirSolicitacao" tabindex="-1" aria-labelledby="modalExcluirSolicitacaoLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <form id="formExcluirSolicitacao" class="form-horizontal" method="post">
-                @csrf
-                @method('DELETE')
-                <div class="modal-content">
-                    <div class="modal-header" style="background-color:#DC4C64;">
-                        <h5 class="modal-title" id="modalExcluirSolicitacaoLabel">Exclusão de Solicitação</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body" id="modal-body-content-excluir-material">
-                        Deseja realmente excluir a solicitação de Número: <span id="solicitacaoId"
-                            style="color: #DC4C64"></span>?
-                    </div>
-                    <div class="modal-footer mt-2">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Confirmar</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-    <!-- FIM da Modal Aprovar em Lote -->
-    <script>
-        $(document).ready(function() {
-            function populateMateriais(selectElement, classeMaterialValue) {
-                $.ajax({
-                    type: "GET",
-                    url: "/retorna-nome-materiais/" + classeMaterialValue,
-                    dataType: "json",
-                    success: function(response) {
-                        selectElement.empty();
-                        selectElement.append(
-                            '<option value="">Selecione um material</option>'
-                        );
-                        $.each(response, function(index, item) {
-                            selectElement.append(
-                                '<option value="' +
-                                item.id +
-                                '">' +
-                                item.descricao +
-                                "</option>"
-                            );
-                        });
-                        selectElement.prop("disabled", false);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Ocorreu um erro:", error);
-                        console.log(xhr.responseText);
-                    },
-                });
-            }
-
-            $("#classeServico").change(function() {
-                var classeServicoValue = $(this).val();
-                var materiaisSelect = $("#materiais");
-
-                if (!classeMaterialValue) {
-                    materiaisSelect
-                        .empty()
-                        .append('<option value="">Selecione um material</option>');
-                    servicosSelect.prop("disabled", true);
-                    return;
-                }
-
-                populateMateriais(materiaisSelect, classeMaterialValue);
-            });
-
-            $("#add-proposta").click(function() {
-                var newProposta = $("#template-proposta-comercial").html();
-                $("#form-propostas-comerciais").append(newProposta);
-            });
-
-            $(document).on("click", ".remove-proposta", function() {
-                $(this).closest(".proposta-comercial").remove();
-            });
-        });
-    </script>
     <script>
         // Função para selecionar ou desmarcar todos os checkboxes
         function toggleCheckboxes(selectAllCheckbox) {
@@ -372,60 +346,15 @@
 
         $(document).ready(function() {
             // Inicializa o Select2 dentro dos modais
-            $('#modalAprovarLote, #modalHomologarLote').on('shown.bs.modal', function() {
+            $('#filtros').on('shown.bs.modal', function() {
                 $('.select2').select2({
                     dropdownParent: $(this)
                 });
             });
 
-            // Configuração do modal de Aprovar em Lote
-            $('#modalAprovarLote').on('show.bs.modal', function() {
-                $('#modal-body-content-aprovar').empty();
-                const selectedCheckboxes = $('.item-checkbox:checked');
-                if (selectedCheckboxes.length === 0) {
-                    alert('Por favor, selecione pelo menos uma solicitação.');
-                    $('#modalAprovarLote').modal('hide');
-                    return;
-                }
-                generateModalContent(selectedCheckboxes, '#modal-body-content-aprovar');
-            });
-
-            // Configuração do modal de Homologar em Lote
-            $('#modalHomologarLote').on('show.bs.modal', function() {
-                $('#modal-body-content-homologar').empty();
-                const selectedCheckboxes = $('.item-checkbox:checked');
-                if (selectedCheckboxes.length === 0) {
-                    alert('Por favor, selecione pelo menos uma solicitação.');
-                    $('#modalHomologarLote').modal('hide');
-                    return;
-                }
-                generateModalContent(selectedCheckboxes, '#modal-body-content-homologar');
-            });
-
             // Recarrega a página ao cancelar no modal
             $('.btn-danger[data-bs-dismiss="modal"]').on('click', function() {
                 location.reload();
-            });
-        });
-    </script>
-    <style>
-        .card-body {
-            overflow-x: hidden;
-        }
-    </style>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            document.querySelectorAll(".excluirSolicitacao").forEach(button => {
-                button.addEventListener("click", function() {
-                    let id = this.getAttribute("data-id");
-                    let form = document.getElementById("formExcluirSolicitacao");
-
-                    // Atualiza a ação do formulário com o ID correto
-                    form.setAttribute("action", "/deletar-aquisicao-material/" + id);
-
-                    // Atualiza o texto dentro da modal
-                    document.getElementById("solicitacaoId").textContent = id;
-                });
             });
         });
     </script>

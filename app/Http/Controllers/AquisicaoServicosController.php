@@ -3,18 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\CatalogoServico;
+use App\Models\ModelCatalogoServico;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
-use App\Models\SolServico;
-use App\Models\TipoClasseSv;
-use App\Models\TipoStatusSolSv;
-use App\Models\Setor;
-use App\Models\Documento;
-use App\Models\Empresa;
-use App\Models\TipoCategoriaMt;
-use App\Models\SolMaterial;
+use App\Models\ModelSolServico;
+use App\Models\ModelTipoClasseSv;
+use App\Models\ModelTipoStatusSolSv;
+use App\Models\ModelSetor;
+use App\Models\ModelDocumento;
+use App\Models\ModelEmpresa;
+use App\Models\ModelTipoCategoriaMt;
+use App\Models\ModelSolMaterial;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Validator;
@@ -32,7 +32,7 @@ class AquisicaoServicosController extends Controller
         $setor = session('usuario.setor');
 
         //dd($setor);
-        $query = SolServico::with(['tipoClasse', 'catalogoServico', 'tipoStatus', 'setor']);
+        $query = ModelSolServico::with(['tipoClasse', 'catalogoServico', 'tipoStatus', 'setor']);
 
         if ($request->status_servico) {
             $query->where('status', $request->status_servico);
@@ -51,11 +51,11 @@ class AquisicaoServicosController extends Controller
 
         //dd($aquisicao);
 
-        $status = TipoStatusSolSv::all();
-        $classeAquisicao = TipoClasseSv::all();
-        $todosSetor = Setor::orderBy('nome')->get();
+        $status = ModelTipoStatusSolSv::all();
+        $classeAquisicao = ModelTipoClasseSv::all();
+        $todosSetor = ModelSetor::orderBy('nome')->get();
 
-        $prioridadesExistentes = SolServico::pluck('prioridade')->unique()->toArray();
+        $prioridadesExistentes = ModelSolServico::pluck('prioridade')->unique()->toArray();
 
         // Se existirem prioridades, encontra a maior e adiciona 1
         if (!empty($prioridadesExistentes)) {
@@ -89,12 +89,12 @@ class AquisicaoServicosController extends Controller
         $setor = session('usuario.setor');
         //dd($setor);
 
-        $buscaSetor = Setor::whereIn('id', $setor)->get();
-        $servico = SolServico::all();
-        $classeAquisicao = TipoClasseSv::all();
-        $empresas = Documento::all();
-        $buscaEmpresa = Empresa::all();
-        $buscaCategoria = TipoCategoriaMt::all();
+        $buscaSetor = ModelSetor::whereIn('id', $setor)->get();
+        $servico = ModelSolServico::all();
+        $classeAquisicao = ModelTipoClasseSv::all();
+        $empresas = ModelDocumento::all();
+        $buscaEmpresa = ModelEmpresa::all();
+        $buscaCategoria = ModelTipoCategoriaMt::all();
         //dd($classeAquisicao, $empresas, $servico, $buscaSetor);
 
         // Adiciona a URL completa do arquivo
@@ -126,7 +126,7 @@ class AquisicaoServicosController extends Controller
         try {
 
 
-            $solicitacao = SolServico::create([
+            $solicitacao = ModelSolServico::create([
                 'id_classe_sv' => $request->classeSv,
                 'id_tp_sv' => $request->tipoServicos,
                 'motivo' => $request->motivo,
@@ -139,7 +139,7 @@ class AquisicaoServicosController extends Controller
             ? $request->file('arquivoPrincipal')->store('documentos', 'public')
             : null;
 
-            Documento::create([
+            ModelDocumento::create([
                 'numero' => $request->numeroPrincipal,
                 'dt_doc' => $request->dt_inicialPrincipal,
                 'id_tp_doc' => '14',
@@ -155,7 +155,7 @@ class AquisicaoServicosController extends Controller
 
             if ($request->quantidadeMaterialPrincipal != null) {
 
-                $solicitacaoMat = SolServico::create([
+                $solicitacaoMat = ModelSolServico::create([
                     'id_cat_mt' => $request->CategoriaMaterialPrincipal,
                     'id_tp_mt' => $request->tipoServicos,
                     'motivo' => $request->motivo,
@@ -175,7 +175,7 @@ class AquisicaoServicosController extends Controller
                     ? $request->file('arquivo.' . $index)->store('documentos', 'public')
                     : null;
 
-                Documento::create([
+                ModelDocumento::create([
                     'numero' => $request->numero[$index],
                     'dt_doc' => $request->dt_inicial[$index],
                     'id_tp_doc' => '14',
@@ -203,14 +203,14 @@ class AquisicaoServicosController extends Controller
 
     public function edit($idS)
     {
-        $buscaEmpresa = Empresa::all();
-        $solicitacao = SolServico::findOrFail($idS);
-        $documentos = Documento::where('id_sol_sv', $idS)->get();
+        $buscaEmpresa = ModelEmpresa::all();
+        $solicitacao = ModelSolServico::findOrFail($idS);
+        $documentos = ModelDocumento::where('id_sol_sv', $idS)->get();
         //dd($documentos);
-        $tiposServico = CatalogoServico::where('id_cl_sv', $solicitacao->id_classe_sv)->get();
+        $tiposServico = ModelCatalogoServico::where('id_cl_sv', $solicitacao->id_classe_sv)->get();
         // dd($tiposServico);
-        $classeAquisicao = TipoClasseSv::all();
-        $buscaSetor = Setor::all();
+        $classeAquisicao = ModelTipoClasseSv::all();
+        $buscaSetor = ModelSetor::all();
 
         // Adiciona a URL completa do arquivo
         foreach ($documentos as $documento) {
@@ -229,7 +229,7 @@ class AquisicaoServicosController extends Controller
         DB::beginTransaction();
         try {
             // Encontrar a solicitação
-            $solicitacao = SolServico::findOrFail($id);
+            $solicitacao = ModelSolServico::findOrFail($id);
 
             // Atualizar dados da solicitação
             $solicitacao->update([
@@ -243,7 +243,7 @@ class AquisicaoServicosController extends Controller
             if ($request->has('documento_id')) {
                 foreach ($request->input('documento_id') as $index => $docId) {
                     // Verificar se o documento existe
-                    $documento = Documento::find($docId);
+                    $documento = ModelDocumento::find($docId);
 
                     if (!$documento) {
                         // Se o documento não existir, continue para o próximo'
@@ -342,12 +342,12 @@ class AquisicaoServicosController extends Controller
     public function aprovar($idSolicitacao)
     {
 
-        $aquisicao = SolServico::with(['tipoClasse', 'catalogoServico', 'tipoStatus', 'setor'])
+        $aquisicao = ModelSolServico::with(['tipoClasse', 'catalogoServico', 'tipoStatus', 'setor'])
             ->where('id', $idSolicitacao)
             ->first();
 
         // Recupera todas as prioridades existentes
-        $prioridadesExistentes = SolServico::pluck('prioridade')->unique()->toArray();
+        $prioridadesExistentes = ModelSolServico::pluck('prioridade')->unique()->toArray();
 
         // Se existirem prioridades, encontra a maior e adiciona 1
         if (!empty($prioridadesExistentes)) {
@@ -358,11 +358,11 @@ class AquisicaoServicosController extends Controller
             $numeros = range(1, 1);
         }
 
-        $todosSetor = Setor::orderBy('nome')->get();
+        $todosSetor = ModelSetor::orderBy('nome')->get();
 
-        $empresas = Documento::where('id_sol_sv', $idSolicitacao)->get();
+        $empresas = ModelDocumento::where('id_sol_sv', $idSolicitacao)->get();
 
-        $documentos = Documento::where('id_sol_sv', $idSolicitacao)->get();
+        $documentos = ModelDocumento::where('id_sol_sv', $idSolicitacao)->get();
 
         // Adiciona a URL completa do arquivo
         foreach ($empresas as $empresa) {
@@ -384,7 +384,7 @@ class AquisicaoServicosController extends Controller
         $aquisicaoId = $request->input('solicitacao_id');
 
         // Busca a aquisição no banco de dados
-        $aquisicao = SolServico::find($aquisicaoId);
+        $aquisicao = ModelSolServico::find($aquisicaoId);
 
         $novaPrioridade = $aquisicao->aut_usu_pres ?? $request->input('prioridade');
 
@@ -407,11 +407,11 @@ class AquisicaoServicosController extends Controller
 
             if ($novaPrioridade > $prioridadeAtual) {
                 // Desce as prioridades entre a atual e a nova prioridade
-                SolServico::whereBetween('prioridade', [$prioridadeAtual + 1, $novaPrioridade])
+                ModelSolServico::whereBetween('prioridade', [$prioridadeAtual + 1, $novaPrioridade])
                     ->decrement('prioridade');
             } elseif ($novaPrioridade < $prioridadeAtual) {
                 // Sobe as prioridades entre a nova e a atual prioridade
-                SolServico::whereBetween('prioridade', [$novaPrioridade, $prioridadeAtual - 1])
+                ModelSolServico::whereBetween('prioridade', [$novaPrioridade, $prioridadeAtual - 1])
                     ->increment('prioridade');
             }
 
@@ -453,7 +453,7 @@ class AquisicaoServicosController extends Controller
     private function reorganizarPrioridades()
     {
         // Obtém todas as solicitações com prioridade, ordenadas pela prioridade
-        $solicitacoes = SolServico::whereNotNull('prioridade')
+        $solicitacoes = ModelSolServico::whereNotNull('prioridade')
             ->orderBy('prioridade')
             ->get();
 
@@ -474,11 +474,11 @@ class AquisicaoServicosController extends Controller
         try {
 
             // Recupera a última prioridade e define a nova como maior + 1
-            $ultimaPrioridade = SolServico::max('prioridade');
+            $ultimaPrioridade = ModelSolServico::max('prioridade');
             $novaPrioridade = $ultimaPrioridade ? $ultimaPrioridade + 1 : 1;
 
             // Encontra a solicitação pelo ID ou lança uma exceção se não for encontrada
-            SolServico::findOrFail($idS)->update([
+            ModelSolServico::findOrFail($idS)->update([
                 'status' => '2',
                 'prioridade' => $novaPrioridade,
             ]);
@@ -498,12 +498,12 @@ class AquisicaoServicosController extends Controller
     public function homologar($id)
     {
 
-        $aquisicao = SolServico::with(['tipoClasse', 'catalogoServico', 'tipoStatus', 'setor'])
+        $aquisicao = ModelSolServico::with(['tipoClasse', 'catalogoServico', 'tipoStatus', 'setor'])
             ->where('id', $id)
             ->first();
 
         // Recupera todas as prioridades existentes
-        $prioridadesExistentes = SolServico::pluck('prioridade')->unique()->toArray();
+        $prioridadesExistentes = ModelSolServico::pluck('prioridade')->unique()->toArray();
 
         // Se existirem prioridades, encontra a maior e adiciona 1
         if (!empty($prioridadesExistentes)) {
@@ -514,11 +514,11 @@ class AquisicaoServicosController extends Controller
             $numeros = range(1, 1);
         }
 
-        $todosSetor = Setor::orderBy('nome')->get();
+        $todosSetor = ModelSetor::orderBy('nome')->get();
 
-        $empresas = Documento::where('id_sol_sv', $id)->get();
+        $empresas = ModelDocumento::where('id_sol_sv', $id)->get();
 
-        $documentos = Documento::where('id_sol_sv', $id)->get();
+        $documentos = ModelDocumento::where('id_sol_sv', $id)->get();
 
         // Adiciona a URL completa do arquivo
         foreach ($empresas as $empresa) {
@@ -539,7 +539,7 @@ class AquisicaoServicosController extends Controller
         $aquisicaoId = $request->input('solicitacao_id');
 
         // Busca a aquisição no banco de dados
-        $aquisicao = SolServico::find($aquisicaoId);
+        $aquisicao = ModelSolServico::find($aquisicaoId);
         $novaPrioridade = $request->input('prioridade');
 
         // Verifica se a aquisição foi encontrada
@@ -561,11 +561,11 @@ class AquisicaoServicosController extends Controller
 
             if ($novaPrioridade > $prioridadeAtual) {
                 // Desce as prioridades entre a atual e a nova prioridade
-                SolServico::whereBetween('prioridade', [$prioridadeAtual + 1, $novaPrioridade])
+                ModelSolServico::whereBetween('prioridade', [$prioridadeAtual + 1, $novaPrioridade])
                     ->decrement('prioridade');
             } elseif ($novaPrioridade < $prioridadeAtual) {
                 // Sobe as prioridades entre a nova e a atual prioridade
-                SolServico::whereBetween('prioridade', [$novaPrioridade, $prioridadeAtual - 1])
+                ModelSolServico::whereBetween('prioridade', [$novaPrioridade, $prioridadeAtual - 1])
                     ->increment('prioridade');
             }
 
@@ -639,7 +639,7 @@ class AquisicaoServicosController extends Controller
     {
         foreach ($prioridades as $id => $novaPrioridade) {
             if (isset($setores[$id]) && isset($novaPrioridade)) {
-                $solicitacao = SolServico::find($id);
+                $solicitacao = ModelSolServico::find($id);
 
                 if ($solicitacao) {
                     $prioridadeAtual = $solicitacao->prioridade;
@@ -650,11 +650,11 @@ class AquisicaoServicosController extends Controller
                         if ($novaPrioridade != $prioridadeAtual) {
                             if ($novaPrioridade > $prioridadeAtual) {
                                 // Reduz prioridades entre a atual e a nova
-                                SolServico::whereBetween('prioridade', [$prioridadeAtual + 1, $novaPrioridade])
+                                ModelSolServico::whereBetween('prioridade', [$prioridadeAtual + 1, $novaPrioridade])
                                     ->decrement('prioridade');
                             } elseif ($novaPrioridade < $prioridadeAtual) {
                                 // Aumenta prioridades entre a nova e a atual
-                                SolServico::whereBetween('prioridade', [$novaPrioridade, $prioridadeAtual - 1])
+                                ModelSolServico::whereBetween('prioridade', [$novaPrioridade, $prioridadeAtual - 1])
                                     ->increment('prioridade');
                             }
 
@@ -676,8 +676,8 @@ class AquisicaoServicosController extends Controller
     }
     public function show($id)
     {
-        $solicitacao = SolServico::with('tipoClasse', 'catalogoServico', 'tipoStatus', 'setor')->find($id);
-        $documentos = Documento::where('id_sol_sv', $id)->get();
+        $solicitacao = ModelSolServico::with('tipoClasse', 'catalogoServico', 'tipoStatus', 'setor')->find($id);
+        $documentos = ModelDocumento::where('id_sol_sv', $id)->get();
 
         foreach ($documentos as $documento) {
             if ($documento->end_arquivo) {
@@ -690,18 +690,18 @@ class AquisicaoServicosController extends Controller
 
     public function aditivo($idSolicitacao)
     {
-        $aquisicao = SolServico::with(['tipoClasse', 'catalogoServico', 'tipoStatus', 'setor', 'respSetor'])
+        $aquisicao = ModelSolServico::with(['tipoClasse', 'catalogoServico', 'tipoStatus', 'setor', 'respSetor'])
             ->where('id', $idSolicitacao)
             ->first();
 
         // Recupera todas as prioridades existentes
-        $prioridadesExistentes = SolServico::pluck('prioridade')->unique()->toArray();
+        $prioridadesExistentes = ModelSolServico::pluck('prioridade')->unique()->toArray();
 
 
 
-        $empresas = Documento::where('id_sol_sv', $idSolicitacao)->get();
+        $empresas = ModelDocumento::where('id_sol_sv', $idSolicitacao)->get();
 
-        $documentos = Documento::where('id_sol_sv', $idSolicitacao)->get();
+        $documentos = ModelDocumento::where('id_sol_sv', $idSolicitacao)->get();
 
         // Adiciona a URL completa do arquivo
         foreach ($empresas as $empresa) {
@@ -710,7 +710,7 @@ class AquisicaoServicosController extends Controller
             }
         }
 
-        $buscaEmpresa = Empresa::all();
+        $buscaEmpresa = ModelEmpresa::all();
 
         $contadorEmpresa = 1;
 
@@ -729,7 +729,7 @@ class AquisicaoServicosController extends Controller
             : null;
 
         // Inserção no banco de dados
-        Documento::create([
+        ModelDocumento::create([
             'numero' => $request->numeroAditivo,
             'dt_doc' => $request->dt_inicialAditivo,
             'id_tp_doc' => '15', // Considere usar uma constante ou buscar dinamicamente

@@ -34,8 +34,8 @@ class LoginController extends Controller
                         p.nome_completo,
                         u.hash_senha,
                         string_agg(distinct u_p.id_perfil::text, ',') perfis,
-                        string_agg(distinct u_d.id_deposito::text, ',') depositos,
-                        string_agg(distinct u_s.id_setor::text, ',') setor
+                        string_agg(distinct u_d.id_ModelDeposito::text, ',') depositos,
+                        string_agg(distinct u_s.id_ModelSetor::text, ',') setor
                         from usuario u
                         left join pessoas p on u.id_pessoa = p.id
                         left join associado a on a.id_pessoa = p.id
@@ -102,8 +102,8 @@ class LoginController extends Controller
             p.nome_completo,
             u.hash_senha,
             string_agg(distinct u_p.id_perfil::text, ',') perfis,
-            string_agg(distinct u_d.id_deposito::text, ',') depositos,
-            string_agg(distinct u_s.id_setor::text, ',') setor
+            string_agg(distinct u_d.id_ModelDeposito::text, ',') depositos,
+            string_agg(distinct u_s.id_ModelSetor::text, ',') setor
             from usuario u
             left join pessoas p on u.id_pessoa = p.id
             left join associado a on a.id_pessoa = p.id

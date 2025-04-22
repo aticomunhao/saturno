@@ -4350,7 +4350,7 @@ class CfopSeeder extends Seeder
         ];
 
         foreach ($data as $item) {
-            Cfop::create($item);
+            ModelCfop::create($item);
         }
     }
 }

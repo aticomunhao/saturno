@@ -3,23 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\CatalogoMaterial;
+use App\Models\ModelCatalogoMaterial;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
-use App\Models\SolMaterial;
-use App\Models\TipoCategoriaMt;
-use App\Models\TipoStatusSolMt;
-use App\Models\Setor;
+use App\Models\ModelSolMaterial;
+use App\Models\ModelTipoCategoriaMt;
+use App\Models\ModelTipoStatusSolMt;
+use App\Models\ModelSetor;
 use App\Models\ModelCor;
-use App\Models\Documento;
+use App\Models\ModelDocumento;
 use App\Models\ModelFaseEtaria;
 use App\Models\ModelMarca;
 use App\Models\ModelSexo;
 use App\Models\ModelTamanho;
-use App\Models\Empresa;
-use App\Models\ItemCatalogoMaterial;
-use App\Models\MatProposta;
+use App\Models\ModelEmpresa;
+use App\Models\ModelItemCatalogoMaterial;
+use App\Models\ModelMatProposta;
 use App\Models\ModelUnidadeMedida;
 use App\Models\ModelPessoa;
 use Illuminate\Support\Facades\Storage;
@@ -38,10 +38,10 @@ class AquisicaoMaterialController extends Controller
         $usuario = session('usuario.id_usuario');
         $setor = session('usuario.setor');
         $excluirSol = $request->excluirSol;
-        $sol = SolMaterial::find($excluirSol);
+        $sol = ModelSolMaterial::find($excluirSol);
 
         //dd($setor);
-        $query = solMaterial::with(['matProposta', 'tipoStatus', 'setor']);
+        $query = ModelSolMaterial::with(['matProposta', 'tipoStatus', 'setor']);
 
         if ($request->status_material) {
             $query->where('status', $request->status_material);
@@ -60,12 +60,12 @@ class AquisicaoMaterialController extends Controller
 
         //dd($aquisicao);
 
-        $status = TipoStatusSolMt::all();
+        $status = ModelTipoStatusSolMt::all();
 
-        $categoriaAquisicao = TipoCategoriaMt::all();
-        $todosSetor = Setor::orderBy('nome')->get();
+        $categoriaAquisicao = ModelTipoCategoriaMt::all();
+        $todosSetor = ModelSetor::orderBy('nome')->get();
 
-        $prioridadesExistentes = SolMaterial::pluck('prioridade')->unique()->toArray();
+        $prioridadesExistentes = ModelSolMaterial::pluck('prioridade')->unique()->toArray();
 
         // Se existirem prioridades, encontra a maior e adiciona 1
         if (!empty($prioridadesExistentes)) {
@@ -95,7 +95,7 @@ class AquisicaoMaterialController extends Controller
     private function reorganizarPrioridades()
     {
         // Obtém todas as solicitações com prioridade, ordenadas pela prioridade
-        $solicitacoes = SolMaterial::whereNotNull('prioridade')
+        $solicitacoes = ModelSolMaterial::whereNotNull('prioridade')
             ->orderBy('prioridade')
             ->get();
 
@@ -146,7 +146,7 @@ class AquisicaoMaterialController extends Controller
     {
         foreach ($prioridades as $id => $novaPrioridade) {
             if (isset($materiais[$id]) && isset($novaPrioridade)) {
-                $solicitacao = SolMaterial::find($id);
+                $solicitacao = ModelSolMaterial::find($id);
 
                 if ($solicitacao) {
                     $prioridadeAtual = $solicitacao->prioridade;
@@ -157,11 +157,11 @@ class AquisicaoMaterialController extends Controller
                         if ($novaPrioridade != $prioridadeAtual) {
                             if ($novaPrioridade > $prioridadeAtual) {
                                 // Reduz prioridades entre a atual e a nova
-                                SolMaterial::whereBetween('prioridade', [$prioridadeAtual + 1, $novaPrioridade])
+                                ModelSolMaterial::whereBetween('prioridade', [$prioridadeAtual + 1, $novaPrioridade])
                                     ->decrement('prioridade');
                             } elseif ($novaPrioridade < $prioridadeAtual) {
                                 // Aumenta prioridades entre a nova e a atual
-                                SolMaterial::whereBetween('prioridade', [$novaPrioridade, $prioridadeAtual - 1])
+                                ModelSolMaterial::whereBetween('prioridade', [$novaPrioridade, $prioridadeAtual - 1])
                                     ->increment('prioridade');
                             }
 
@@ -187,7 +187,7 @@ class AquisicaoMaterialController extends Controller
         $idUsuario = session('usuario.id_pessoa');
         //dd($idUsuario);
 
-        $solicitacaoMaterial = SolMaterial::create([
+        $solicitacaoMaterial = ModelSolMaterial::create([
             'data' => Carbon::now(),
             'status' => '1',
             'tipo_sol_material' => '1',
@@ -201,22 +201,22 @@ class AquisicaoMaterialController extends Controller
     {
         $idSolicitacao = $id;
 
-        $documentos = Documento::where('id_sol_mat', $idSolicitacao)->with('empresa')->get();
+        $documentos = ModelDocumento::where('id_sol_mat', $idSolicitacao)->with('empresa')->get();
         //dd($documentos);
-        $solicitacao = SolMaterial::with('modelPessoa', 'modelPessoaResponsavel', 'setor')->find($idSolicitacao);
+        $solicitacao = ModelSolMaterial::with('modelPessoa', 'modelPessoaResponsavel', 'setor')->find($idSolicitacao);
         //dd($solicitacao->modelPessoa->nome_completo);
         $setor = session('usuario.setor');
-        $buscaCategoria = TipoCategoriaMt::all();
-        $buscaEmpresa = Empresa::all();
+        $buscaCategoria = ModelTipoCategoriaMt::all();
+        $buscaEmpresa = ModelEmpresa::all();
         $buscaMarca = ModelMarca::all();
         $buscaTamanho = ModelTamanho::all();
         $buscaCor = ModelCor::all();
         $buscaFaseEtaria = ModelFaseEtaria::all();
         $buscaSexo = ModelSexo::all();
-        $bucaItemCatalogo = ItemCatalogoMaterial::all();
+        $bucaItemCatalogo = ModelItemCatalogoMaterial::all();
         $buscaUnidadeMedida = ModelUnidadeMedida::all();
-        $buscaSetor = Setor::whereIn('id', $setor)->get();
-        $materiais = MatProposta::with('documentoMaterial', 'tipoUnidadeMedida', 'tipoItemCatalogoMaterial', 'tipoCategoria', 'tipoMarca', 'tipoTamanho', 'tipoCor', 'tipoFaseEtaria', 'tipoSexo')->where('id_sol_mat', $id)->get();
+        $buscaSetor = ModelSetor::whereIn('id', $setor)->get();
+        $materiais = ModelMatProposta::with('documentoMaterial', 'tipoUnidadeMedida', 'tipoItemCatalogoMaterial', 'tipoCategoria', 'tipoMarca', 'tipoTamanho', 'tipoCor', 'tipoFaseEtaria', 'tipoSexo')->where('id_sol_mat', $id)->get();
         //dd($materiais);
 
         //dd($documentoMaterial);
@@ -227,7 +227,7 @@ class AquisicaoMaterialController extends Controller
     {
         $idSolicitacao = $id;
 
-        MatProposta::create([
+        ModelMatProposta::create([
             'id_marca' => $request->marcaMaterial,
             'id_tamanho' => $request->tamanhoMaterial,
             'id_cor' => $request->corMaterial,
@@ -271,13 +271,13 @@ class AquisicaoMaterialController extends Controller
     }
     public function getNomes($categoriaId)
     {
-        $nomes = itemCatalogoMaterial::where('id_categoria_material', $categoriaId)->get(['id', 'nome']);
+        $nomes = ModelItemCatalogoMaterial::where('id_categoria_material', $categoriaId)->get(['id', 'nome']);
         return response()->json($nomes);
     }
     public function destroyMaterial(Request $request)
     {
         // Busca e exclusão do material
-        $material = MatProposta::find($request->material_id);
+        $material = ModelMatProposta::find($request->material_id);
 
         if ($material) {
             $material->delete();
@@ -301,20 +301,20 @@ class AquisicaoMaterialController extends Controller
         //dd($request->all());
         $idSolicitacoes = $id;
         //dd($id);
-        $materiais = MatProposta::where('id_sol_mat', $idSolicitacoes)->get();
+        $materiais = ModelMatProposta::where('id_sol_mat', $idSolicitacoes)->get();
         $materiaisIds = $materiais->pluck('id');
-        $documentoMaterial = Documento::whereIn('mat_proposta', $materiaisIds)->get();
-        $solicitacao = SolMaterial::find($idSolicitacoes);
+        $documentoMaterial = ModelDocumento::whereIn('mat_proposta', $materiaisIds)->get();
+        $solicitacao = ModelSolMaterial::find($idSolicitacoes);
         //dd($solicitacao, $materiais, $solicitacao);
 
-        SolMaterial::where('id', $id)->update([
+        ModelSolMaterial::where('id', $id)->update([
             'motivo' => $request->motivoSolicitacao,
             'id_setor' => $request->idSetorSolicitacao,
         ]);
 
         if ($request->activeButton === 'material') {
 
-            SolMaterial::where('id', $id)->update([
+            ModelSolMaterial::where('id', $id)->update([
                 'tipo_sol_material' => '2',
             ]);
 
@@ -334,7 +334,7 @@ class AquisicaoMaterialController extends Controller
 
                 // Atualiza apenas se houver dados a modificar
                 if (!empty($data)) {
-                    MatProposta::where('id', $material->id)->update($data);
+                    ModelMatProposta::where('id', $material->id)->update($data);
                 }
 
                 $documentosFiltrados = array_filter($request->razaoSocial1, function ($doc, $index) use ($request, $material) {
@@ -389,7 +389,7 @@ class AquisicaoMaterialController extends Controller
                     ], $dadosComunsMaterial1);
 
                     // Busca documento existente considerando a empresa e o número
-                    $documentoQuery = Documento::where('mat_proposta', $material->id)
+                    $documentoQuery = ModelDocumento::where('mat_proposta', $material->id)
                         ->where('id_tp_doc', '14');
 
                     if (!empty($dadosComuns['numero'])) {
@@ -405,7 +405,7 @@ class AquisicaoMaterialController extends Controller
                     if ($documento) {
                         $documento->update($dadosComuns);
                     } else {
-                        Documento::create($dadosComuns);
+                        ModelDocumento::create($dadosComuns);
                     }
 
                     // Incrementa o contador
@@ -414,7 +414,7 @@ class AquisicaoMaterialController extends Controller
             }
         } else if ($request->activeButton === 'empresa') {
 
-            SolMaterial::where('id', $idSolicitacoes)->update([
+            ModelSolMaterial::where('id', $idSolicitacoes)->update([
                 'tipo_sol_material' => '1',
             ]);
             foreach ($materiais as $index => $material) {
@@ -436,7 +436,7 @@ class AquisicaoMaterialController extends Controller
 
                 // Atualiza apenas se houver dados a modificar
                 if (!empty($data)) {
-                    MatProposta::where('id', $material->id)->update($data);
+                    ModelMatProposta::where('id', $material->id)->update($data);
                 }
             }
 
@@ -486,7 +486,7 @@ class AquisicaoMaterialController extends Controller
                     'vencedor_geral' => '0',
                 ], $dadosDocumento);
 
-                $documentoQuery = Documento::where('id_sol_mat', $idSolicitacoes)
+                $documentoQuery = ModelDocumento::where('id_sol_mat', $idSolicitacoes)
                     ->where('id_tp_doc', '14');
 
                 if (!empty($dadosComuns['numero'])) {
@@ -502,7 +502,7 @@ class AquisicaoMaterialController extends Controller
                 if ($documento) {
                     $documento->update($dadosComuns);
                 } else {
-                    Documento::create($dadosComuns);
+                    ModelDocumento::create($dadosComuns);
                 }
             }
         }
@@ -514,26 +514,26 @@ class AquisicaoMaterialController extends Controller
     {
         $idSolicitacao = $id;
 
-        $documentos = Documento::where('id_sol_mat', $idSolicitacao)->with('empresa')->get();
+        $documentos = ModelDocumento::where('id_sol_mat', $idSolicitacao)->with('empresa')->get();
         //dd($documentos);
-        $solicitacao = SolMaterial::with('modelPessoa', 'setor')->find($idSolicitacao);
+        $solicitacao = ModelSolMaterial::with('modelPessoa', 'setor')->find($idSolicitacao);
         $setor = session('usuario.setor');
-        $buscaCategoria = TipoCategoriaMt::all();
-        $buscaEmpresa = Empresa::all();
+        $buscaCategoria = ModelTipoCategoriaMt::all();
+        $buscaEmpresa = ModelEmpresa::all();
         $buscaMarca = ModelMarca::all();
         $buscaTamanho = ModelTamanho::all();
         $buscaCor = ModelCor::all();
         $buscaFaseEtaria = ModelFaseEtaria::all();
         $buscaSexo = ModelSexo::all();
-        $bucaItemCatalogo = ItemCatalogoMaterial::all();
+        $bucaItemCatalogo = ModelItemCatalogoMaterial::all();
         $buscaUnidadeMedida = ModelUnidadeMedida::all();
-        $buscaSetor = Setor::whereIn('id', $setor)->get();
-        $materiais = MatProposta::with('documentoMaterial', 'tipoUnidadeMedida', 'tipoItemCatalogoMaterial', 'tipoCategoria', 'tipoMarca', 'tipoTamanho', 'tipoCor', 'tipoFaseEtaria', 'tipoSexo')->where('id_sol_mat', $id)->get();
-        $todosSetor = Setor::orderBy('nome')->get();
+        $buscaSetor = ModelSetor::whereIn('id', $setor)->get();
+        $materiais = ModelMatProposta::with('documentoMaterial', 'tipoUnidadeMedida', 'tipoItemCatalogoMaterial', 'tipoCategoria', 'tipoMarca', 'tipoTamanho', 'tipoCor', 'tipoFaseEtaria', 'tipoSexo')->where('id_sol_mat', $id)->get();
+        $todosSetor = ModelSetor::orderBy('nome')->get();
         //dd($materiais);
 
         // Recupera todas as prioridades existentes
-        $prioridadesExistentes = SolMaterial::pluck('prioridade')->unique()->toArray();
+        $prioridadesExistentes = ModelSolMaterial::pluck('prioridade')->unique()->toArray();
 
         // Se existirem prioridades, encontra a maior e adiciona 1
         if (!empty($prioridadesExistentes)) {
@@ -555,7 +555,7 @@ class AquisicaoMaterialController extends Controller
         $aquisicaoId = $request->input('solicitacao_id');
 
         // Busca a aquisição no banco de dados
-        $aquisicao = SolMaterial::find($aquisicaoId);
+        $aquisicao = ModelSolMaterial::find($aquisicaoId);
 
         $novaPrioridade = $aquisicao->aut_usu_pres ?? $request->input('prioridade');
 
@@ -578,11 +578,11 @@ class AquisicaoMaterialController extends Controller
 
             if ($novaPrioridade > $prioridadeAtual) {
                 // Desce as prioridades entre a atual e a nova prioridade
-                SolMaterial::whereBetween('prioridade', [$prioridadeAtual + 1, $novaPrioridade])
+                ModelSolMaterial::whereBetween('prioridade', [$prioridadeAtual + 1, $novaPrioridade])
                     ->decrement('prioridade');
             } elseif ($novaPrioridade < $prioridadeAtual) {
                 // Sobe as prioridades entre a nova e a atual prioridade
-                SolMaterial::whereBetween('prioridade', [$novaPrioridade, $prioridadeAtual - 1])
+                ModelSolMaterial::whereBetween('prioridade', [$novaPrioridade, $prioridadeAtual - 1])
                     ->increment('prioridade');
             }
 
@@ -624,26 +624,26 @@ class AquisicaoMaterialController extends Controller
     {
         $idSolicitacao = $id;
 
-        $documentos = Documento::where('id_sol_mat', $idSolicitacao)->with('empresa')->get();
+        $documentos = ModelDocumento::where('id_sol_mat', $idSolicitacao)->with('empresa')->get();
         //dd($documentos);
-        $solicitacao = SolMaterial::with('modelPessoa', 'setor')->find($idSolicitacao);
+        $solicitacao = ModelSolMaterial::with('modelPessoa', 'setor')->find($idSolicitacao);
         $setor = session('usuario.setor');
-        $buscaCategoria = TipoCategoriaMt::all();
-        $buscaEmpresa = Empresa::all();
+        $buscaCategoria = ModelTipoCategoriaMt::all();
+        $buscaEmpresa = ModelEmpresa::all();
         $buscaMarca = ModelMarca::all();
         $buscaTamanho = ModelTamanho::all();
         $buscaCor = ModelCor::all();
         $buscaFaseEtaria = ModelFaseEtaria::all();
         $buscaSexo = ModelSexo::all();
-        $bucaItemCatalogo = ItemCatalogoMaterial::all();
+        $bucaItemCatalogo = ModelItemCatalogoMaterial::all();
         $buscaUnidadeMedida = ModelUnidadeMedida::all();
-        $buscaSetor = Setor::whereIn('id', $setor)->get();
-        $materiais = MatProposta::with('documentoMaterial', 'tipoUnidadeMedida', 'tipoItemCatalogoMaterial', 'tipoCategoria', 'tipoMarca', 'tipoTamanho', 'tipoCor', 'tipoFaseEtaria', 'tipoSexo')->where('id_sol_mat', $id)->get();
-        $todosSetor = Setor::orderBy('nome')->get();
+        $buscaSetor = ModelSetor::whereIn('id', $setor)->get();
+        $materiais = ModelMatProposta::with('documentoMaterial', 'tipoUnidadeMedida', 'tipoItemCatalogoMaterial', 'tipoCategoria', 'tipoMarca', 'tipoTamanho', 'tipoCor', 'tipoFaseEtaria', 'tipoSexo')->where('id_sol_mat', $id)->get();
+        $todosSetor = ModelSetor::orderBy('nome')->get();
         //dd($materiais);
 
         // Recupera todas as prioridades existentes
-        $prioridadesExistentes = SolMaterial::pluck('prioridade')->unique()->toArray();
+        $prioridadesExistentes = ModelSolMaterial::pluck('prioridade')->unique()->toArray();
 
         // Se existirem prioridades, encontra a maior e adiciona 1
         if (!empty($prioridadesExistentes)) {
@@ -665,7 +665,7 @@ class AquisicaoMaterialController extends Controller
         $aquisicaoId = $request->input('solicitacao_id');
 
         // Busca a aquisição no banco de dados
-        $aquisicao = SolMaterial::find($aquisicaoId);
+        $aquisicao = ModelSolMaterial::find($aquisicaoId);
 
         $novaPrioridade = $aquisicao->aut_usu_pres ?? $request->input('prioridade');
 
@@ -688,11 +688,11 @@ class AquisicaoMaterialController extends Controller
 
             if ($novaPrioridade > $prioridadeAtual) {
                 // Desce as prioridades entre a atual e a nova prioridade
-                SolMaterial::whereBetween('prioridade', [$prioridadeAtual + 1, $novaPrioridade])
+                ModelSolMaterial::whereBetween('prioridade', [$prioridadeAtual + 1, $novaPrioridade])
                     ->decrement('prioridade');
             } elseif ($novaPrioridade < $prioridadeAtual) {
                 // Sobe as prioridades entre a nova e a atual prioridade
-                SolMaterial::whereBetween('prioridade', [$novaPrioridade, $prioridadeAtual - 1])
+                ModelSolMaterial::whereBetween('prioridade', [$novaPrioridade, $prioridadeAtual - 1])
                     ->increment('prioridade');
             }
 
@@ -732,7 +732,7 @@ class AquisicaoMaterialController extends Controller
     }
     public function delete($id)
     {
-        $solicitacao = SolMaterial::find($id);
+        $solicitacao = ModelSolMaterial::find($id);
 
         if ($solicitacao) {
             $solicitacao->delete();

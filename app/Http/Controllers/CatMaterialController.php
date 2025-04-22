@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ModelCatMaterial;
 use Illuminate\Support\Facades\DB;
-use App\Models\tipoCategoriaMt;
+use App\Models\ModelTipoCategoriaMt;
 
 
 class CatMaterialController extends Controller
@@ -46,7 +46,7 @@ class CatMaterialController extends Controller
 
         try {
             // Criação do registro no banco
-            tipoCategoriaMt::create([
+            ModelTipoCategoriaMt::create([
                 'nome' => $request->categoria,
             ]);
 
@@ -78,7 +78,7 @@ class CatMaterialController extends Controller
     {
         try {
             // Busca o registro pelo ID
-            $categoria = tipoCategoriaMt::findOrFail($id);
+            $categoria = ModelTipoCategoriaMt::findOrFail($id);
 
             // Verificar e armazenar novos valores somente se forem diferentes
             if ($request->filled("categoria") && $categoria->nome !== $request->categoria) {
@@ -103,7 +103,7 @@ class CatMaterialController extends Controller
     {
         try {
             // Busca o registro pelo ID
-            $categoria = tipoCategoriaMt::findOrFail($id);
+            $categoria = ModelTipoCategoriaMt::findOrFail($id);
 
             // Deleta o registro
             $categoria->delete();

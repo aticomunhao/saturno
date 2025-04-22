@@ -34,7 +34,7 @@
                                         style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; ">
                                         COMPRA DIRETA
                                     </a>
-                                    <a href="gerenciar-cadastro-inicial/doacao" class="btn btn-success"
+                                    <a href="/salvar-termo-doacao" class="btn btn-success"
                                         style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-left: 2%">
                                         DOAÇÃO
                                     </a>
@@ -89,46 +89,46 @@
                                 </thead>{{-- Fim do header da tabela --}}
                                 <tbody style="font-size: 15px; color:#000000; text-align: center;">
                                     {{-- Inicio body tabela --}}
-                                    @foreach ($cadastroInicial as $cadastroInicials)
+                                    @foreach ($CadastroInicial as $CadastroInicials)
                                         <tr>
                                             <td>
                                                 <div style="display: flex; justify-content: center; align-items: center;">
                                                     <input class="form-check-input item-checkbox" type="checkbox"
-                                                        id="checkboxNoLabel" value="{{ $cadastroInicials->id }}"
+                                                        id="checkboxNoLabel" value="{{ $CadastroInicials->id }}"
                                                         aria-label="..." style="border: 1px solid #000">
                                                 </div>
                                             </td>
-                                            <td>{{ $cadastroInicials->id ?? 'N/A' }}</td>
-                                            <td>{{ $cadastroInicials->data_cadastro ? \Carbon\Carbon::parse($cadastroInicials->data_cadastro)->format('d/m/Y') : 'N/A' }}
+                                            <td>{{ $CadastroInicials->id ?? 'N/A' }}</td>
+                                            <td>{{ $CadastroInicials->data_cadastro ? \Carbon\Carbon::parse($CadastroInicials->data_cadastro)->format('d/m/Y') : 'N/A' }}
                                             </td>
                                             @if ($request->pesquisaDeposito)
-                                                <td>{{ $cadastroInicials->deposito->nome ?? 'N/A' }}</td>
+                                                <td>{{ $CadastroInicials->deposito->nome ?? 'N/A' }}</td>
                                             @endif
                                             @if ($request->pesquisaDestinacao)
-                                                <td>{{ $cadastroInicials->destinacao->descricao ?? 'N/A' }}</td>
+                                                <td>{{ $CadastroInicials->destinacao->descricao ?? 'N/A' }}</td>
                                             @endif
 
-                                            <td>{{ $cadastroInicials->CategoriaMaterial->nome ?? 'N/A' }}</td>
+                                            <td>{{ $CadastroInicials->CategoriaMaterial->nome ?? 'N/A' }}</td>
 
                                             @if ($request->pesquisaEmpresa)
-                                                <td>{{ $cadastroInicials->docOrigem->empresa->razaosocial ?? 'N/A' }} -
-                                                    {{ $cadastroInicials->docOrigem->empresa->nomefantasia ?? 'N/A' }}</td>
+                                                <td>{{ $CadastroInicials->docOrigem->empresa->razaosocial ?? 'N/A' }} -
+                                                    {{ $CadastroInicials->docOrigem->empresa->nomefantasia ?? 'N/A' }}</td>
                                             @endif
 
-                                            <td>{{ $cadastroInicials->ItemCatalogoMaterial->nome ?? 'N/A' }}</td>
+                                            <td>{{ $CadastroInicials->ItemCatalogoMaterial->nome ?? 'N/A' }}</td>
 
                                             @if ($request->pesquisaDocumento)
-                                                <td>{{ $cadastroInicials->docOrigem->tipoDocumento->descricao ?? 'N/A' }}
+                                                <td>{{ $CadastroInicials->docOrigem->tipoDocumento->descricao ?? 'N/A' }}
                                                 </td>
                                             @endif
                                             @if ($request->pesquisaTipoMaterial)
-                                                <td>{{ $cadastroInicials->TipoMaterial->nome ?? 'N/A' }}</td>
+                                                <td>{{ $CadastroInicials->TipoMaterial->nome ?? 'N/A' }}</td>
                                             @endif
                                             @if ($request->pesquisaSolicitacao)
-                                                <td>{{ $cadastroInicials->id_sol_origem ?? 'N/A' }}</td>
+                                                <td>{{ $CadastroInicials->id_sol_origem ?? 'N/A' }}</td>
                                             @endif
 
-                                            <td>{{ $cadastroInicials->status->descricao ?? 'N/A' }}</td>
+                                            <td>{{ $CadastroInicials->status->descricao ?? 'N/A' }}</td>
                                             <td>
                                                 <a href="" class="btn btn-sm btn-outline-primary" data-tt="tooltip"
                                                     style="font-size: 1rem; color:#303030" data-placement="top"
@@ -186,7 +186,7 @@
                             @endforeach --}}
                         </div>
                         <div style="margin-right: 10px; margin-left: 10px">
-                            {{ $cadastroInicial->links('pagination::bootstrap-5') }}
+                            {{ $CadastroInicial->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
                 </div>

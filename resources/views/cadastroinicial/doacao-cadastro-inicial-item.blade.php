@@ -153,4 +153,86 @@
             </form>
         </div>
     </div>
+    <script>
+         $(document).ready(function() {
+            // Inicializa o Select2 dentro dos modais
+            $('#modalIncluirMaterial').on('shown.bs.modal', function() {
+                $('.select2').select2({
+                    dropdownParent: $(this)
+                });
+            });
+
+            // Recarrega a página ao cancelar no modal
+            $('.btn-danger[data-bs-dismiss="modal"]').on('click', function() {
+                location.reload();
+            });
+        });
+    </script>
+    {{-- preencher select da modal --}}
+    <script>
+        $(document).ready(function() {
+            // Função genérica para carregar opções via AJAX
+            function carregarOpcoes(url, targetSelect, placeholder = "Selecione...") {
+                fetch(url)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        const select = $(targetSelect);
+                        select.empty(); // Limpa as opções existentes
+                        if (data.length > 0) {
+                            select.append(`<option value="" disabled selected>${placeholder}</option>`);
+                            data.forEach((item) => {
+                                select.append(`<option value="${item.id}">${item.nome}</option>`);
+                            });
+                        } else {
+                            select.append(`<option value="" selected>Não Possui</option>`);
+                        }
+                    })
+                    .catch((error) => console.error("Erro ao carregar opções:", error));
+            }
+
+            // Filtro dinâmico com base na categoria
+            $('#categoriaMaterial').on('change', function() {
+                const categoriaId = this.value;
+                if (categoriaId) {
+                    carregarOpcoes(`/nome/${categoriaId}`, '#nomeMaterial');
+                    carregarOpcoes(`/marcas/${categoriaId}`, '#marcaMaterial');
+                    carregarOpcoes(`/tamanhos/${categoriaId}`, '#tamanhoMaterial');
+                    carregarOpcoes(`/cores/${categoriaId}`, '#corMaterial');
+                    carregarOpcoes(`/fases/${categoriaId}`, '#faseEtariaMaterial');
+                }
+            });
+
+            // Aplicar evento de mudança a todas as categorias por Material
+            $(document).on('change', '.categoria-por-material', function() {
+                let categoriaId = $(this).val();
+                let index = $(this).data('index'); // Obtém o índice do item
+
+                if (categoriaId) {
+                    carregarOpcoes(`/nome/${categoriaId}`, `select[name="nomePorMaterial[${index}]"]`);
+                    carregarOpcoes(`/marcas/${categoriaId}`, `select[name="marcaPorMaterial[${index}]"]`);
+                    carregarOpcoes(`/tamanhos/${categoriaId}`,
+                        `select[name="tamanhoPorMaterial[${index}]"]`);
+                    carregarOpcoes(`/cores/${categoriaId}`, `select[name="corPorMaterial[${index}]"]`);
+                    carregarOpcoes(`/fases/${categoriaId}`,
+                        `select[name="faseEtariaPorMaterial[${index}]"]`);
+                }
+            });
+
+            // Aplicar evento de mudança a todas as categorias por Empresa
+            $(document).on('change', '.categoria-por-empresa', function() {
+                let categoriaId = $(this).val();
+                let index = $(this).data('index'); // Obtém o índice do item
+
+                if (categoriaId) {
+                    carregarOpcoes(`/nome/${categoriaId}`, `select[name="nomePorEmpresa[${index}]"]`);
+                    carregarOpcoes(`/marcas/${categoriaId}`, `select[name="marcaPorEmpresa[${index}]"]`);
+                    carregarOpcoes(`/tamanhos/${categoriaId}`,
+                        `select[name="tamanhoPorEmpresa[${index}]"]`);
+                    carregarOpcoes(`/cores/${categoriaId}`, `select[name="corPorEmpresa[${index}]"]`);
+                    carregarOpcoes(`/fases/${categoriaId}`,
+                        `select[name="faseEtariaPorEmpresa[${index}]"]`);
+                }
+            });
+        });
+    </script>
 @endsection

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Deposito;
+use App\Models\ModelDeposito;
 use Illuminate\Http\Request;
 
 class GerenciarDepositoController extends Controller
@@ -12,9 +12,9 @@ class GerenciarDepositoController extends Controller
      */
     public function index()
     {
-        $depositos =  Deposito::with(['tipoDeposito', 'sala'])->get();
-        $tipoDeposito = Deposito::all();
-        $sala = Deposito::all();
+        $depositos =  ModelDeposito::with(['tipoDeposito', 'sala'])->get();
+        $tipoDeposito = ModelDeposito::all();
+        $sala = ModelDeposito::all();
         // dd($depositos->first());
 
         return view('depositos.index', compact('depositos', 'tipoDeposito', 'sala'));
@@ -25,8 +25,8 @@ class GerenciarDepositoController extends Controller
      */
     public function create()
     {
-        $tipoDeposito = Deposito::all();
-        $sala = Deposito::all();
+        $tipoDeposito = ModelDeposito::all();
+        $sala = ModelDeposito::all();
         return view('depositos.create', compact('tipoDeposito', 'sala'));
 
     }

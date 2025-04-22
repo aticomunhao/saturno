@@ -9,8 +9,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Validator;
-use App\Models\ValorCompra;
-use App\Models\HistValorCompra;
+use App\Models\ModelValorCompra;
+use App\Models\HistModelValorCompra;
 
 
 use function Laravel\Prompts\select;
@@ -23,7 +23,7 @@ class ValorCompraController extends Controller
         $id_funcionario = session('usuario.id_usuario');
         // Verifica e atualiza valorServDIADM
         if ($request->input('valorServDIADM') != null) {
-            $existingRecord = ValorCompra::where('tipo_sol', 1)
+            $existingRecord = ModelValorCompra::where('tipo_sol', 1)
                 ->where('tipo_compra', 1)
                 ->whereNull('dt_fim') // Busca registros sem 'dt_fim'
                 ->first();
@@ -37,7 +37,7 @@ class ValorCompraController extends Controller
                     ]);
                 }
                 // Insere um novo registro
-                ValorCompra::create([
+                ModelValorCompra::create([
                     'valor' => $request->input('valorServDIADM'),
                     'tipo_sol' => 1,
                     'tipo_compra' => 1,
@@ -50,7 +50,7 @@ class ValorCompraController extends Controller
 
         // Verifica e atualiza valorMatDIADM
         if ($request->input('valorMatDIADM') != null) {
-            $existingRecord = ValorCompra::where('tipo_sol', 2)
+            $existingRecord = ModelValorCompra::where('tipo_sol', 2)
                 ->where('tipo_compra', 1)
                 ->whereNull('dt_fim') // Busca registros sem 'dt_fim'
                 ->first();
@@ -64,7 +64,7 @@ class ValorCompraController extends Controller
                     ]);
                 }
                 // Insere um novo registro
-                $segundo = ValorCompra::create([
+                $segundo = ModelValorCompra::create([
                     'valor' => $request->input('valorMatDIADM'),
                     'tipo_sol' => 2,
                     'tipo_compra' => 1,
@@ -77,7 +77,7 @@ class ValorCompraController extends Controller
 
         // Verifica e atualiza valorServ
         if ($request->input('valorMaxServ') != null) {
-            $existingRecord = ValorCompra::where('tipo_sol', 1)
+            $existingRecord = ModelValorCompra::where('tipo_sol', 1)
                 ->where('tipo_compra', 2)
                 ->whereNull('dt_fim') // Busca registros sem 'dt_fim'
                 ->first();
@@ -91,7 +91,7 @@ class ValorCompraController extends Controller
                     ]);
                 }
                 // Insere um novo registro
-                $terceiro = ValorCompra::create([
+                $terceiro = ModelValorCompra::create([
                     'valor' => $request->input('valorMaxServ'),
                     'tipo_sol' => 1,
                     'tipo_compra' => 2,
@@ -104,7 +104,7 @@ class ValorCompraController extends Controller
 
         // Verifica e atualiza valorMat
         if ($request->input('valorMaxMat') != null) {
-            $existingRecord = ValorCompra::where('tipo_sol', 2)
+            $existingRecord = ModelValorCompra::where('tipo_sol', 2)
                 ->where('tipo_compra', 2)
                 ->whereNull('dt_fim') // Busca registros sem 'dt_fim'
                 ->first();
@@ -118,7 +118,7 @@ class ValorCompraController extends Controller
                     ]);
                 }
                 // Insere um novo registro
-                $quarto = ValorCompra::create([
+                $quarto = ModelValorCompra::create([
                     'valor' => $request->input('valorMaxMat'),
                     'tipo_sol' => 2,
                     'tipo_compra' => 2,
@@ -129,26 +129,26 @@ class ValorCompraController extends Controller
             }
         }
 
-        $valorServDIADM = ValorCompra::where('tipo_sol', 1)//tipo 1 significa que se refere a um servico
+        $valorServDIADM = ModelValorCompra::where('tipo_sol', 1)//tipo 1 significa que se refere a um servico
             ->where('tipo_compra', 1)//tipo 1 significa que se refere ao valor max que a DIADM vê
             ->whereNull('dt_fim') // Busca registros sem 'dt_fim'
             ->first();
 
-        $valorMatDIADM = ValorCompra::where('tipo_sol', 2)//tipo 2 significa que se refere a um material
+        $valorMatDIADM = ModelValorCompra::where('tipo_sol', 2)//tipo 2 significa que se refere a um material
             ->where('tipo_compra', 1)//tipo 1 significa que se refere ao valor max que a DIADM vê
             ->whereNull('dt_fim') // Busca registros sem 'dt_fim'
             ->first();
 
-        $valorMaxServ = ValorCompra::where('tipo_sol', 1)//tipo 1 significa que se refere a um servico
+        $valorMaxServ = ModelValorCompra::where('tipo_sol', 1)//tipo 1 significa que se refere a um servico
             ->where('tipo_compra', 2)//tipo 2 significa que se refere ao valor max que  não necessita 3 propostas comerciais
             ->whereNull('dt_fim') // Busca registros sem 'dt_fim'
             ->first();
 
-        $valorMaxMat = ValorCompra::where('tipo_sol', 2)//tipo 2 significa que se refere a um material
+        $valorMaxMat = ModelValorCompra::where('tipo_sol', 2)//tipo 2 significa que se refere a um material
             ->where('tipo_compra', 2)//tipo 2 significa que se refere ao valor max que  não necessita 3 propostas comerciais
             ->whereNull('dt_fim') // Busca registros sem 'dt_fim'
             ->first();
 
-        return view('valorCompra.valor-compra', compact('valorServDIADM', 'valorMatDIADM', 'valorMaxServ', 'valorMaxMat'));
+        return view('ModelValorCompra.valor-compra', compact('valorServDIADM', 'valorMatDIADM', 'valorMaxServ', 'valorMaxMat'));
     }
 }

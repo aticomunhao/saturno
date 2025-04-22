@@ -10,6 +10,6 @@ class ModelMarca extends Model
 
     public function tipoMarca()
     {
-        return $this->belongsTo(TipoCategoriaMt::class, 'id_categoria_material');
+        return $this->belongsTo(ModelTipoCategoriaMt::class, 'id_categoria_material');
     }
 }

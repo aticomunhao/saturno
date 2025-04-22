@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Documento;
-use App\Models\Empresa;
-use App\Models\Setor;
-use App\Models\TipoDocumento;
+use App\Models\ModelDocumento;
+use App\Models\ModelEmpresa;
+use App\Models\ModelSetor;
+use App\Models\ModelTipoDocumento;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DocumentoController extends Controller
 {
@@ -15,10 +16,10 @@ class DocumentoController extends Controller
      */
     public function index()
     {
-        $lista_de_documentos = Documento::with(['tipoDocumento', 'empresa'])->get();
+        $lista_de_documentos = ModelDocumento::with(['tipoDocumento', 'empresa'])->get();
         //dd($lista_de_documentos);
-        $lista_de_empresas = Empresa::all();
-        $tipo_de_tipos_documentos = TipoDocumento::all();
+        $lista_de_empresas = ModelEmpresa::all();
+        $tipo_de_tipos_documentos = ModelTipoDocumento::all();
         // dd($lista_documentos);
 
 
@@ -31,9 +32,9 @@ class DocumentoController extends Controller
      */
     public function create()
     {
-        $empresas = Empresa::all();
-        $tipos_documentos = TipoDocumento::all();
-        $setores = Setor::all();
+        $empresas = ModelEmpresa::all();
+        $tipos_documentos = ModelTipoDocumento::all();
+        $setores = ModelSetor::all();
 
         return view('documento.create', compact('empresas', 'tipos_documentos', 'setores'));
     }

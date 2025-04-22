@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
-use App\Models\SolServico;
-use App\Models\CatalogoServico;
-use App\Models\TipoClasseSv;
+use App\Models\ModelSolServico;
+use App\Models\ModelCatalogoServico;
+use App\Models\ModelTipoClasseSv;
 
 
 use function Laravel\Prompts\select;
@@ -18,7 +18,7 @@ class CatalogoServicoController extends Controller
 
     public function index(Request $request)
     {
-        $query = CatalogoServico::with('tipoClasseSv');
+        $query = ModelCatalogoServico::with('tipoClasseSv');
 
         // Aplicar filtros se forem fornecidos
         if ($request->classe) {
@@ -45,7 +45,7 @@ class CatalogoServicoController extends Controller
         //dd($aquisicao);
 
         // Pegar todas as classes e os serviços
-        $classeAquisicao = TipoClasseSv::all();
+        $classeAquisicao = ModelTipoClasseSv::all();
 
         return view('servico.catalogo-servico', compact('aquisicao', 'classeAquisicao'));
     }
@@ -53,7 +53,7 @@ class CatalogoServicoController extends Controller
     public function create()
     {
 
-        $classes = TipoClasseSv::all();
+        $classes = ModelTipoClasseSv::all();
 
         return view('servico.incluir-servico', compact('classes'));
     }
@@ -66,7 +66,7 @@ class CatalogoServicoController extends Controller
 
         // Cria uma nova classe de serviço se o campo de nova classe foi preenchido
         if (!$classeId && $request->filled('nova_classe_servico')) {
-            $novaClasse = TipoClasseSv::create([
+            $novaClasse = ModelTipoClasseSv::create([
                 'descricao' => $request->input('nova_classe_servico'),
                 'sigla' => $request->input('sigla_classe_servico'),
                 'situacao' => 'true',
@@ -82,7 +82,7 @@ class CatalogoServicoController extends Controller
 
             // Adiciona os tipos de serviço relacionados à classe
             foreach ($servicosValidos as $tipoServico) {
-                CatalogoServico::create([
+                ModelCatalogoServico::create([
                     'id_cl_sv' => $classeId,
                     'descricao' => $tipoServico,
                     'situacao' => 'true',
@@ -98,10 +98,10 @@ class CatalogoServicoController extends Controller
     public function edit($id)
     {
         // Encontre o serviço pelo ID
-        $servico = CatalogoServico::with('tipoClasseSv')->findOrFail($id);
+        $servico = ModelCatalogoServico::with('tipoClasseSv')->findOrFail($id);
 
         // Busque todas as classes disponíveis
-        $classes = TipoClasseSv::all(); // ou qualquer lógica que você tenha para pegar as classes
+        $classes = ModelTipoClasseSv::all(); // ou qualquer lógica que você tenha para pegar as classes
 
         return view('servico.editar-servico', [
             'servico' => $servico,
@@ -121,8 +121,8 @@ class CatalogoServicoController extends Controller
         ]);
 
         // Encontre o serviço pelo ID
-        $servico = CatalogoServico::findOrFail($id);
-        $classe = TipoClasseSv::findOrFail($servico->id_cl_sv);
+        $servico = ModelCatalogoServico::findOrFail($id);
+        $classe = ModelTipoClasseSv::findOrFail($servico->id_cl_sv);
 
         // Atualize os dados do serviço
         $servico->descricao = $request->input('nomeServico');
@@ -135,7 +135,7 @@ class CatalogoServicoController extends Controller
         // Se a classe for inativada, inative todos os serviços dessa classe
         if ($classe->situacao === false) {
             // Atualiza a situação de todos os serviços associados a essa classe
-            CatalogoServico::where('id_cl_sv', $classe->id)->update(['situacao' => false]);
+            ModelCatalogoServico::where('id_cl_sv', $classe->id)->update(['situacao' => false]);
         }
 
         // Salve as alterações no banco
@@ -149,7 +149,7 @@ class CatalogoServicoController extends Controller
 
     public function delete($id)
     {
-        $tipoServico = CatalogoServico::with('SolServico')->find($id);
+        $tipoServico = ModelCatalogoServico::with('SolServico')->find($id);
         if (!$tipoServico) {
             app('flasher')->addWarning('Serviço não encontrado.');
             return redirect()->route('catalogo-servico.index');
@@ -171,7 +171,7 @@ class CatalogoServicoController extends Controller
     public function deleteClasse(request $request)
     {
         $id = $request->input('classeExcluir');
-        $classeServico = TipoClasseSv::with('SolServico', 'catalogoServico')->find($id);
+        $classeServico = ModelTipoClasseSv::with('SolServico', 'catalogoServico')->find($id);
         if (!$classeServico) {
             app('flasher')->addError('Serviço não encontrado.');
             return redirect()->route('catalogo-servico.index');

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TipoClasseContaContabil;
-use App\Models\TipoGrupoContaContabil;
+use App\Models\ModelTipoClasseContaContabil;
+use App\Models\ModelTipoGrupoContaContabil;
 use Illuminate\Http\Request;
-use App\Models\ContaContabil;
-use App\Models\TipoCatalogoContaContabil;
-use App\Models\TipoNaturezaContaContabil;
+use App\Models\ModelContaContabil;
+use App\Models\ModelTipoCatalogoContaContabil;
+use App\Models\ModelTipoNaturezaContaContabil;
 use Carbon\Carbon;
 
 use Illuminate\Support\Facades\DB;
@@ -23,13 +23,13 @@ class ContaContabilController extends Controller
 
 
         // Parte dos campos estrangeiros para pesquisa.
-        $grupos_contabeis = TipoGrupoContaContabil::all();
-        $naturezas_contabeis = TipoNaturezaContaContabil::all();
-        $catalogos_contabeis = TipoCatalogoContaContabil::all();
-        $classes_contabeis = TipoClasseContaContabil::all();
+        $grupos_contabeis = ModelTipoGrupoContaContabil::all();
+        $naturezas_contabeis = ModelTipoNaturezaContaContabil::all();
+        $catalogos_contabeis = ModelTipoCatalogoContaContabil::all();
+        $classes_contabeis = ModelTipoClasseContaContabil::all();
 
         // Contador de Contas Contábeis
-        $contador_contabil_conta_contabil = ContaContabil::count();
+        $contador_contabil_conta_contabil = ModelContaContabil::count();
 
         // Campos para pesquisa
         $pesquisa_descricao = $request->input('descricao');
@@ -48,7 +48,7 @@ class ContaContabilController extends Controller
 
 
         // Pesquisa
-        $contas_contabeis = ContaContabil::with([
+        $contas_contabeis = ModelContaContabil::with([
             'natureza_contabil',
             'catalogo_contabil',
             'grupo_contabil',
@@ -214,10 +214,10 @@ class ContaContabilController extends Controller
         for ($i = 0; $i <= 100; $i++) {
             $numeros[] = $i;
         }
-        $catalogo_conta_contabil = TipoCatalogoContaContabil::all();
-        $natureza_conta_contabil = TipoNaturezaContaContabil::all();
-        $classe_conta_contabil = TipoClasseContaContabil::all();
-        $grupo_conta_contabil = TipoGrupoContaContabil::all();
+        $catalogo_conta_contabil = ModelTipoCatalogoContaContabil::all();
+        $natureza_conta_contabil = ModelTipoNaturezaContaContabil::all();
+        $classe_conta_contabil = ModelTipoClasseContaContabil::all();
+        $grupo_conta_contabil = ModelTipoGrupoContaContabil::all();
 
 
         return view("contas.create", compact("numeros", "catalogo_conta_contabil", "classe_conta_contabil", "grupo_conta_contabil", "natureza_conta_contabil"));
@@ -243,12 +243,12 @@ class ContaContabilController extends Controller
             'nivel_6' => 'nullable|integer|between:1,99',
         ]);
 
-        if (ContaContabil::hasDuplicateLevels($request)) {
+        if (ModelContaContabil::hasDuplicateLevels($request)) {
             app('flasher')->addError('Já existe uma conta Contabil com esse registro');
             return redirect()->back();
         }
 
-        ContaContabil::create([
+        ModelContaContabil::create([
             'data_inicio' => Carbon::now()->toDateString(),
             'id_tipo_catalogo' => $request->input('id_tipo_catalogo'),
             'descricao' => $request->input('descricao'),
@@ -285,11 +285,11 @@ class ContaContabilController extends Controller
         for ($i = 0; $i <= 100; $i++) {
             $numeros[] = $i;
         }
-        $catalogo_conta_contabil = TipoCatalogoContaContabil::all();
-        $natureza_conta_contabil = TipoNaturezaContaContabil::all();
-        $classe_conta_contabil = TipoClasseContaContabil::all();
-        $grupo_conta_contabil = TipoGrupoContaContabil::all();
-        $contaContabil = ContaContabil::with([
+        $catalogo_conta_contabil = ModelTipoCatalogoContaContabil::all();
+        $natureza_conta_contabil = ModelTipoNaturezaContaContabil::all();
+        $classe_conta_contabil = ModelTipoClasseContaContabil::all();
+        $grupo_conta_contabil = ModelTipoGrupoContaContabil::all();
+        $contaContabil = ModelContaContabil::with([
             'natureza_contabil',
             'catalogo_contabil',
             'grupo_contabil',
@@ -319,7 +319,7 @@ class ContaContabilController extends Controller
         ]);
 
         // Verifica se já existe um registro com os mesmos níveis, excluindo o atual
-        $duplicate = ContaContabil::where('nivel_1', $request->input('nivel_1'))
+        $duplicate = ModelContaContabil::where('nivel_1', $request->input('nivel_1'))
             ->where('nivel_2', $request->input('nivel_2'))
             ->where('nivel_3', $request->input('nivel_3'))
             ->where('nivel_4', $request->input('nivel_4'))
@@ -333,7 +333,7 @@ class ContaContabilController extends Controller
             return redirect()->back();
         }
 
-        $contaContabil = ContaContabil::findOrFail($id);
+        $contaContabil = ModelContaContabil::findOrFail($id);
         $contaContabil->update([
             'data_inicio' => Carbon::now()->toDateString(),
             'id_tipo_catalogo' => $request->input('id_tipo_catalogo'),
@@ -363,7 +363,7 @@ class ContaContabilController extends Controller
 
     public function inativar(string $id)
     {
-        $contaContabil = ContaContabil::findOrFail($id);
+        $contaContabil = ModelContaContabil::findOrFail($id);
         $contaContabil->update([
             'data_fim' => Carbon::now()->toDateString(),
         ]);

@@ -29,7 +29,7 @@ class RecuperaSenhaController extends Controller
                         p.nome,
                         u.hash_senha,
                         string_agg(distinct u_p.id_tp_perfil::text, ',') perfis,
-                        string_agg(distinct u_d.id_deposito::text, ',') depositos
+                        string_agg(distinct u_d.id_ModelDeposito::text, ',') depositos
                         from usuario u
                         left join pessoa p on u.id_pessoa = p.id
                         left join usuario_perfil u_p on u.id = u_p.id_usuario

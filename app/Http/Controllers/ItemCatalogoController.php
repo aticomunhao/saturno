@@ -5,11 +5,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\ModelItemCatalogo;
 use App\Models\ModelCatMaterial;
-use App\Models\Cest;
-use App\Models\Cfop;
-use App\Models\Ncm;
-use App\Models\CsosnIcms;
-use App\Models\OrigemIcms;
+use App\Models\ModelCest;
+use App\Models\ModelCfop;
+use App\Models\ModelNcm;
+use App\Models\ModelCsosnIcms;
+use App\Models\ModelOrigemIcms;
 
 
 use Illuminate\Support\Facades\Http;
@@ -55,13 +55,13 @@ class ItemCatalogoController extends Controller
     {
         $resultCategoria = $this->objTipoMaterial->all();
 
-        $cfop = Cfop::all();
-        $cest = Cest::all();
-        $ncm = Ncm::all();
+        $cfop = ModelCfop::all();
+        $cest = ModelCest::all();
+        $ncm = ModelNcm::all();
 
         //ICMS
-        $csosn_icms = CsosnIcms::all();
-        $origem_icms = OrigemIcms::orderBy('id')->get();
+        $csosn_icms = ModelCsosnIcms::all();
+        $origem_icms = ModelOrigemIcms::orderBy('id')->get();
 
         return view('catalogo/incluir-item-catalogo', compact('resultCategoria', 'cfop', 'cest', 'ncm', 'csosn_icms', 'origem_icms'));
     }

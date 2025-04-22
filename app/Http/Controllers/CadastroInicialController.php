@@ -7,40 +7,44 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use App\Models\ModelCadastroInicial;
-use App\Models\SolMaterial;
-use App\Models\DepositoMaterial;
-use App\Models\Destinacao;
-use App\Models\Setor;
-use App\Models\CadastroInicial;
-use App\Models\Documento;
-use App\Models\Empresa;
-use App\Models\ItemCatalogoMaterial;
+use App\Models\ModelSolMaterial;
+use App\Models\ModelDepositoMaterial;
+use App\Models\ModelDestinacao;
+use App\Models\ModelSetor;
+use App\Models\ModelDocumento;
+use App\Models\ModelEmpresa;
+use App\Models\ModelItemCatalogoMaterial;
 use App\Models\ModelCatMaterial;
 use App\Models\ModelTipoMaterial;
-use App\Models\StatusCadastroInicial;
-use App\Models\TipoDocumento;
-use App\Models\TipoCategoriaMt;
+use App\Models\ModelStatusCadastroInicial;
+use App\Models\ModelTipoDocumento;
+use App\Models\ModelTipoCategoriaMt;
 use App\Models\ModelUnidadeMedida;
 use App\Models\ModelSexo;
+use App\Models\ModelCor;
+use App\Models\ModelFaseEtaria;
+use App\Models\ModelMarca;
+use App\Models\ModelTamanho;
+use App\Models\ModelMatProposta;
 use Illuminate\Database\Eloquent\Model;
 
 class CadastroInicialController extends Controller
 {
     public function index(Request $request)
     {
-        $deposito = DepositoMaterial::all();
-        $destinacao = Destinacao::all();
+        $deposito = ModelDepositoMaterial::all();
+        $destinacao = ModelDestinacao::all();
         $categoriaMaterial = ModelCatMaterial::all();
-        $empresa = Empresa::all();
-        $nomeMaterial = ItemCatalogoMaterial::all();
-        $tipoDocumento = TipoDocumento::all();
+        $empresa = ModelEmpresa::all();
+        $nomeMaterial = ModelItemCatalogoMaterial::all();
+        $tipoDocumento = ModelTipoDocumento::all();
         $tipoMaterial = ModelTipoMaterial::all();
-        $solMat = SolMaterial::all();
-        $status = StatusCadastroInicial::all();
+        $solMat = ModelSolMaterial::all();
+        $status = ModelStatusCadastroInicial::all();
 
 
         //dd($setor);
-        $query = CadastroInicial::with('Status', 'SolOrigem', 'DocOrigem', 'Deposito', 'Destinacao', 'CategoriaMaterial', 'TipoMaterial');
+        $query = ModelCadastroInicial::with('Status', 'SolOrigem', 'DocOrigem', 'Deposito', 'Destinacao', 'CategoriaMaterial', 'TipoMaterial');
 
         if ($request->pesquisaDeposito) {
             $query->where('id_deposito', $request->pesquisaDeposito);
@@ -80,36 +84,49 @@ class CadastroInicialController extends Controller
             $query->where('id_tp_status', $request->pesquisaStatus);
         }
 
-        $cadastroInicial = $query->orderBy('id', 'asc')->paginate(20);
+        $CadastroInicial = $query->orderBy('id', 'asc')->paginate(20);
 
-        return view('cadastroinicial.gerenciar-cadastro-inicial', compact( 'request', 'cadastroInicial', 'status', 'solMat', 'tipoMaterial', 'tipoDocumento', 'nomeMaterial', 'deposito', 'destinacao', 'categoriaMaterial', 'empresa'))
+        return view('CadastroInicial.gerenciar-cadastro-inicial', compact('request', 'CadastroInicial', 'status', 'solMat', 'tipoMaterial', 'tipoDocumento', 'nomeMaterial', 'deposito', 'destinacao', 'categoriaMaterial', 'empresa'))
             ->with('i', (request()->input('page', 1) - 1) * 20);
     }
 
     public function storeTermoDoacao()
     {
-        $cadastroInicialDoacao = CadastroInicial::create([
+        $CadastroInicialDoacao = ModelCadastroInicial::create([
             'data_cadastro' => Carbon::now(),
             'id_tp_status' => '1',
         ]);
 
         app('flasher')->addSuccess('Termo de Doação Criado com Sucesso, Adicione os materiais Necessários');
-        return redirect("/gerenciar-cadastro-inicial/doacao/{$cadastroInicialDoacao->id}");
+        return redirect("/gerenciar-cadastro-inicial/doacao/{$CadastroInicialDoacao->id}");
     }
 
-    public function createDoacao()
+    public function createDoacao($id)
     {
-        $buscaCategoria = TipoCategoriaMt::all();
-        $buscaUnidadeMedida = ModelUnidadeMedida::all();
+        $buscaCategoria = ModelTipoCategoriaMt::all();
+
+        $setor = session('usuario.setor');
+
+        $buscaCategoria = ModelTipoCategoriaMt::all();
+        $buscaEmpresa = ModelEmpresa::all();
+        $buscaMarca = ModelMarca::all();
+        $buscaTamanho = ModelTamanho::all();
+        $buscaCor = ModelCor::all();
+        $buscaFaseEtaria = ModelFaseEtaria::all();
         $buscaSexo = ModelSexo::all();
+        $bucaItemCatalogo = ModelItemCatalogoMaterial::all();
+        $buscaUnidadeMedida = ModelUnidadeMedida::all();
+        $buscaSetor = ModelSetor::whereIn('id', $setor)->get();
+        $materiais = ModelMatProposta::with('documentoMaterial', 'tipoUnidadeMedida', 'tipoItemCatalogoMaterial', 'tipoCategoria', 'tipoMarca', 'tipoTamanho', 'tipoCor', 'tipoFaseEtaria', 'tipoSexo')->where('id_sol_mat', $id)->get();
 
 
-        return view('/gerenciar-cadastro-inicial/doacao', compact('buscaCategoria', 'buscaUnidadeMedida', 'buscaSexo'));
+
+        return view("CadastroInicial.doacao-cadastro-inicial-item", compact('buscaCategoria', 'buscaUnidadeMedida', 'buscaSexo'));
     }
 
     public function createCompraDireta()
     {
-        $sql ="Select
+        $sql = "Select
                     it.id,
                     it.nome,
                     c.nome categoria
@@ -119,42 +136,42 @@ class CadastroInicialController extends Controller
 
         $resultItem = DB::select($sql);
 
-        return view('cadastroinicial/compra-direta-cadastro-inicial-item', compact('resultItem'));
+        return view('CadastroInicial/compra-direta-cadastro-inicial-item', compact('resultItem'));
     }
 
     public function storeDoacao(Request $request)
     {
 
-            $Adquirido = isset($request->checkAdq) ? 1 : 0;
-            $Avariado = isset($request->checkAvariado) ? 1 : 0;
+        $Adquirido = isset($request->checkAdq) ? 1 : 0;
+        $Avariado = isset($request->checkAvariado) ? 1 : 0;
 
-            for ($i=0; $i < $request->input('qtdItens'); $i++){
+        for ($i = 0; $i < $request->input('qtdItens'); $i++) {
 
             //???????????? Liberacao_venda, id_tipo_situacao, valor_aquisicao,valor_venda_promocional, ?id_usuario?
             DB::table('item_material')->insert([
-            'id_item_catalogo_material' => $request->input('item_material'),
-            'observacao' => $request->input('observacao'),
-            'data_cadastro' => date("m-d-Y"),
-            'id_usuario_cadastro'=> session()->get('usuario.id_usuario'),
-            'id_tipo_embalagem' => $request->input('embalagem'),
-            'id_tipo_unidade_medida' => $request->input('und_med'),
-            'quantidade_embalagem' => $request->input('qtdEmb'),
-            'adquirido' => $Adquirido,
-            'valor_venda' => $request->input('valor_venda'),
-            'id_marca' => $request->input('marca'),
-            'id_tamanho' => $request->input('tamanho'),
-            'id_cor' => $request->input('cor'),
-            'id_tipo_material' => $request->input('tp_mat'),
-            'id_fase_etaria' => $request->input('fase_etaria'),
-            'id_tp_sexo' => $request->input('sexo'),
-            'id_deposito' => $request->input('deposito'),
-            'valor_aquisicao' => $request->input ('vlr_aqs'),
-            'ref_fabricante' => $request->input ('ref_fab'),
-            'avariado' => $Avariado,
-            'data_validade' => $request->input('dt_validade'),
-            'liberacao_venda' => 0,
-            'id_tipo_situacao' => '1',
-        ]);
+                'id_item_catalogo_material' => $request->input('item_material'),
+                'observacao' => $request->input('observacao'),
+                'data_cadastro' => date("m-d-Y"),
+                'id_usuario_cadastro' => session()->get('usuario.id_usuario'),
+                'id_tipo_embalagem' => $request->input('embalagem'),
+                'id_tipo_unidade_medida' => $request->input('und_med'),
+                'quantidade_embalagem' => $request->input('qtdEmb'),
+                'adquirido' => $Adquirido,
+                'valor_venda' => $request->input('valor_venda'),
+                'id_marca' => $request->input('marca'),
+                'id_tamanho' => $request->input('tamanho'),
+                'id_cor' => $request->input('cor'),
+                'id_tipo_material' => $request->input('tp_mat'),
+                'id_fase_etaria' => $request->input('fase_etaria'),
+                'id_tp_sexo' => $request->input('sexo'),
+                'id_deposito' => $request->input('deposito'),
+                'valor_aquisicao' => $request->input('vlr_aqs'),
+                'ref_fabricante' => $request->input('ref_fab'),
+                'avariado' => $Avariado,
+                'data_validade' => $request->input('dt_validade'),
+                'liberacao_venda' => 0,
+                'id_tipo_situacao' => '1',
+            ]);
         }
 
         //dd($request);
@@ -165,36 +182,36 @@ class CadastroInicialController extends Controller
     public function storeCompraDireta(Request $request)
     {
 
-            $Adquirido = isset($request->checkAdq) ? 1 : 0;
-            $Avariado = isset($request->checkAvariado) ? 1 : 0;
+        $Adquirido = isset($request->checkAdq) ? 1 : 0;
+        $Avariado = isset($request->checkAvariado) ? 1 : 0;
 
-            for ($i=0; $i < $request->input('qtdItens'); $i++){
+        for ($i = 0; $i < $request->input('qtdItens'); $i++) {
 
             //???????????? Liberacao_venda, id_tipo_situacao, valor_aquisicao,valor_venda_promocional, ?id_usuario?
             DB::table('item_material')->insert([
-            'id_item_catalogo_material' => $request->input('item_material'),
-            'observacao' => $request->input('observacao'),
-            'data_cadastro' => date("m-d-Y"),
-            'id_usuario_cadastro'=> session()->get('usuario.id_usuario'),
-            'id_tipo_embalagem' => $request->input('embalagem'),
-            'id_tipo_unidade_medida' => $request->input('und_med'),
-            'quantidade_embalagem' => $request->input('qtdEmb'),
-            'adquirido' => $Adquirido,
-            'valor_venda' => $request->input('valor_venda'),
-            'id_marca' => $request->input('marca'),
-            'id_tamanho' => $request->input('tamanho'),
-            'id_cor' => $request->input('cor'),
-            'id_tipo_material' => $request->input('tp_mat'),
-            'id_fase_etaria' => $request->input('fase_etaria'),
-            'id_tp_sexo' => $request->input('sexo'),
-            'id_deposito' => $request->input('deposito'),
-            'valor_aquisicao' => $request->input ('vlr_aqs'),
-            'ref_fabricante' => $request->input ('ref_fab'),
-            'avariado' => $Avariado,
-            'data_validade' => $request->input('dt_validade'),
-            'liberacao_venda' => 0,
-            'id_tipo_situacao' => '1',
-        ]);
+                'id_item_catalogo_material' => $request->input('item_material'),
+                'observacao' => $request->input('observacao'),
+                'data_cadastro' => date("m-d-Y"),
+                'id_usuario_cadastro' => session()->get('usuario.id_usuario'),
+                'id_tipo_embalagem' => $request->input('embalagem'),
+                'id_tipo_unidade_medida' => $request->input('und_med'),
+                'quantidade_embalagem' => $request->input('qtdEmb'),
+                'adquirido' => $Adquirido,
+                'valor_venda' => $request->input('valor_venda'),
+                'id_marca' => $request->input('marca'),
+                'id_tamanho' => $request->input('tamanho'),
+                'id_cor' => $request->input('cor'),
+                'id_tipo_material' => $request->input('tp_mat'),
+                'id_fase_etaria' => $request->input('fase_etaria'),
+                'id_tp_sexo' => $request->input('sexo'),
+                'id_deposito' => $request->input('deposito'),
+                'valor_aquisicao' => $request->input('vlr_aqs'),
+                'ref_fabricante' => $request->input('ref_fab'),
+                'avariado' => $Avariado,
+                'data_validade' => $request->input('dt_validade'),
+                'liberacao_venda' => 0,
+                'id_tipo_situacao' => '1',
+            ]);
         }
 
         //dd($request);

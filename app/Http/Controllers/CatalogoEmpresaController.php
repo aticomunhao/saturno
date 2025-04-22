@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Empresa;
-use App\Models\TipoCidade;
-use App\Models\TipoUf;
-use App\Models\TipoPais;
+use App\Models\ModelEmpresa;
+use App\Models\ModelTipoCidade;
+use App\Models\ModelTipoUf;
+use App\Models\ModelTipoPais;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Rules\CpfCnpj;
@@ -22,7 +22,7 @@ class CatalogoEmpresaController extends Controller
     public function index(Request $request)
     {
 
-        $query = Empresa::with(['TipoUf']);
+        $query = ModelEmpresa::with(['ModelTipoUf']);
 
         if ($request->razaoSocial) {
             $query->where('razaosocial', 'ILIKE', '%' . $request->razaoSocial . '%');
@@ -40,8 +40,8 @@ class CatalogoEmpresaController extends Controller
     public function create()
     {
 
-        $tp_uf = TipoUf::all();
-        $tipoPais = TipoPais::all();
+        $tp_uf = ModelTipoUf::all();
+        $tipoPais = ModelTipoPais::all();
 
 
         return view('empresa.incluir-empresa', compact('tp_uf', 'tipoPais'));
@@ -56,7 +56,7 @@ class CatalogoEmpresaController extends Controller
         // ]);
 
         // Verifica se o CNPJ ou CPF já existe
-        $cnpjCpfExistente = Empresa::where('cnpj_cpf', $request->input('cnpj'))->exists();
+        $cnpjCpfExistente = ModelEmpresa::where('cnpj_cpf', $request->input('cnpj'))->exists();
 
         if ($cnpjCpfExistente) {
 
@@ -64,7 +64,7 @@ class CatalogoEmpresaController extends Controller
             return redirect()->back()->withInput();
         }
 
-        $empresa = Empresa::create([
+        $empresa = ModelEmpresa::create([
             'razaosocial' => $request->input('razaoSocial'),
             'nomefantasia' => $request->input('nomeFantasia'),
             'cnpj_cpf' => $request->input('cnpj'),
@@ -88,7 +88,7 @@ class CatalogoEmpresaController extends Controller
 
     public function retornaCidadeDadosResidenciais($id)
     {
-        $cidadeDadosResidenciais = TipoCidade::with('TipoUf')->where('id_uf', $id)->orderby('descricao')->get();
+        $cidadeDadosResidenciais = ModelTipoCidade::with('ModelTipoUf')->where('id_uf', $id)->orderby('descricao')->get();
 
         return response()->json($cidadeDadosResidenciais);
     }
@@ -96,12 +96,12 @@ class CatalogoEmpresaController extends Controller
     public function edit($id)
     {
 
-        $buscaEmpresa = Empresa::with(['TipoUf', 'TipoPais', 'TipoCidade'])->find($id);
-        $tiposUf = TipoUf::all();
-        $tipoPais = TipoPais::all();
-        $tipoCidade = TipoCidade::all();
+        $buscaEmpresa = ModelEmpresa::with(['ModelTipoUf', 'TipoPais', 'TipoCidade'])->find($id);
+        $tiposUf = ModelTipoUf::all();
+        $tipoPais = ModelTipoPais::all();
+        $tipoCidade = ModelTipoCidade::all();
 
-        //dd($buscaEmpresa->TipoUf->id);
+        //dd($buscaEmpresa->ModelTipoUf->id);
 
 
 
@@ -110,7 +110,7 @@ class CatalogoEmpresaController extends Controller
 
     public function update(Request $request)
     {
-        $empresa = Empresa::find($request->input('id'));
+        $empresa = ModelEmpresa::find($request->input('id'));
 
         // $request->validate([
         //     'cnpj' => ['required', new CpfCnpj],
@@ -146,7 +146,7 @@ class CatalogoEmpresaController extends Controller
 
     public function delete($id)
     {
-        $empresa = Empresa::with('documento')->find($id);
+        $empresa = ModelEmpresa::with('documento')->find($id);
 
 
         if (!$empresa) {

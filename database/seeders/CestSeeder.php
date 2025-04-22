@@ -9927,7 +9927,7 @@ class CestSeeder extends Seeder
         ];
 
         foreach ($data as $item) {
-            Cest::create($item);
+            ModelCest::create($item);
         }
     }
 }

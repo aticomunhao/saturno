@@ -111,10 +111,10 @@
                                         style="border: 1px solid #999999; padding: 5px; background-color: white"
                                         id="tp_uf" name="tp_uf">
                                         <option value=""></option>
-                                        @foreach ($tiposUf as $tipoUf)
-                                            <option value="{{ $tipoUf->id }}"
-                                                @if (old('tp_uf', $buscaEmpresa->tipoUf->id) == $tipoUf->id) selected @endif>
-                                                {{ $tipoUf->sigla }}
+                                        @foreach ($tiposUf as $ModelTipoUf)
+                                            <option value="{{ $ModelTipoUf->id }}"
+                                                @if (old('tp_uf', $buscaEmpresa->ModelTipoUf->id) == $ModelTipoUf->id) selected @endif>
+                                                {{ $ModelTipoUf->sigla }}
                                             </option>
                                         @endforeach
                                     </select>

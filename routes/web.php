@@ -49,7 +49,7 @@ use App\Http\Controllers\CatalogoEmpresaController;
 use App\Http\Controllers\CatalogoServicoController;
 use App\Http\Controllers\AquisicaoMaterialController;
 use App\Http\Controllers\GerenciarDepositoController;
-use App\Http\Controllers\ModelValorCompraController;
+use App\Http\Controllers\ValorCompraController;
 
 
 /*
@@ -389,7 +389,7 @@ Route::get('/homologar-aquisicao-material/{id}', [AquisicaoMaterialController::c
 Route::post('/homologar-store-proposta-material/{id}', [AquisicaoMaterialController::class, 'homologarStore']);
 
 //Valor Mínimo de Compra
-Route::get('/valor-compra', [ModelValorCompraController::class, 'index']);
+Route::get('/valor-compra', [ValorCompraController::class, 'index']);
 
 //Contas Contabeis
 

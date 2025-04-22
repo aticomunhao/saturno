@@ -37,7 +37,7 @@ class ModelDocumento extends Model
     }
     public function tipoDocumento()
     {
-        return $this->belongsTo(TipoModelDocumento::class, 'id_tp_doc');
+        return $this->belongsTo(ModelTipoDocumento::class, 'id_tp_doc');
     }
     public function matProposta()
     {

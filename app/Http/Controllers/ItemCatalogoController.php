@@ -10,6 +10,7 @@ use App\Models\ModelCfop;
 use App\Models\ModelNcm;
 use App\Models\ModelCsosnIcms;
 use App\Models\ModelOrigemIcms;
+use App\Models\ModelUnidadeMedida;
 
 
 use Illuminate\Support\Facades\Http;
@@ -58,12 +59,13 @@ class ItemCatalogoController extends Controller
         $cfop = ModelCfop::all();
         $cest = ModelCest::all();
         $ncm = ModelNcm::all();
+        $unidadeMedida = ModelUnidadeMedida::all();
 
         //ICMS
         $csosn_icms = ModelCsosnIcms::all();
         $origem_icms = ModelOrigemIcms::orderBy('id')->get();
 
-        return view('catalogo/incluir-item-catalogo', compact('resultCategoria', 'cfop', 'cest', 'ncm', 'csosn_icms', 'origem_icms'));
+        return view('catalogo/incluir-item-catalogo', compact('resultCategoria', 'unidadeMedida', 'cfop', 'cest', 'ncm', 'csosn_icms', 'origem_icms'));
     }
 
 
@@ -81,6 +83,7 @@ class ItemCatalogoController extends Controller
             'valor_maximo' => $request->input('val_maximo'),
             'valor_marca' => $request->input('val_marca'),
             'valor_etiqueta' => $request->input('val_etiqueta'),
+            'tp_unidade_medida' => $request->input('tp_unidade_medida'),
             'composicao' => $composicao,
             'ativo' => $ativo,
         ]);

@@ -36,7 +36,7 @@
                             </div>
                             <div class="form-group row">
                                 <label for="categoria_item" class="col-sm-2 col-form-label">Categoria*</label>
-                                <div class="col-sm-10">
+                                <div class="col-md-10">
                                     <select class="form-control select2" id="categoria_item" name="categoria_item"
                                         required="required">
                                         <option value="">Selecione</option>
@@ -90,8 +90,19 @@
                             </div>
 
                             <div class="form-group row">
+                                <label for="tp_unidade_medida" class="col-sm-2 col-form-label">Unidade de Medida*</label>
+                                <div class="col">
+                                    <select class="form-control select2" id="tp_unidade_medida" name="tp_unidade_medida"
+                                        required="required">
+                                        <option value="">Selecione</option>
+                                        @foreach ($unidadeMedida as $unidadeMedidas)
+                                            <option value="{{ $unidadeMedidas->id }}">{{ $unidadeMedidas->sigla }} - {{ $unidadeMedidas->nome }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                                 <label for="ativo" class="col-sm-2 col-form-label">Ativo</label>
-                                <div class="col-sm-10">
+                                <div class="col">
                                     <input type="checkbox" id="ativo" name="ativo" checked="checked">
                                 </div>
                             </div>

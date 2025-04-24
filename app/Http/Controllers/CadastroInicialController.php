@@ -104,7 +104,7 @@ class CadastroInicialController extends Controller
     public function createDoacao($id)
     {
         $buscaCategoria = ModelTipoCategoriaMt::all();
-
+        $idSolicitacao = $id;
         $setor = session('usuario.setor');
 
         $buscaCategoria = ModelTipoCategoriaMt::all();
@@ -121,7 +121,7 @@ class CadastroInicialController extends Controller
 
 
 
-        return view("CadastroInicial.doacao-cadastro-inicial-item", compact('buscaCategoria', 'buscaUnidadeMedida', 'buscaSexo'));
+        return view("CadastroInicial.doacao-cadastro-inicial-item", compact('buscaCategoria', 'idSolicitacao', 'buscaUnidadeMedida', 'buscaSexo'));
     }
 
     public function createCompraDireta()

@@ -13,7 +13,7 @@
                     <br>
                     <div class="card" style="border-color: #355089;">
                         <div class="card-header">
-                            <div class="ROW">
+                            <div class="row">
                                 <h5 class="col-12" style="color: #355089">
                                     Termo de Doação
                                 </h5>
@@ -21,12 +21,26 @@
                         </div>
                         <br>
                         <div class="card-body">
-                            <div class="row" style="margin-left:5px">
-                                <!-- Botão Adicionar Material à direita -->
-                                <div>
-                                    <button type="button" class="btn btn-success" id="addMaterial" data-bs-toggle="modal"
+                            <div class="row" style="margin-left: 5px">
+                                <!-- Ambos os botões na mesma div -->
+                                <div class="col-md d-flex justify-content-start">
+                                    <button type="button" class="btn btn-success me-2" id="addMaterial" data-bs-toggle="modal"
                                         data-bs-target="#modalIncluirMaterial">
                                         Adicionar Material
+                                    </button>
+                                    <button type="button" class="btn btn-success" id="addTermo" data-bs-toggle="modal"
+                                        data-bs-target="#modalIncluirTermo">
+                                        Incluir Termo de Doação
+                                    </button>
+                                    <button type="button" class="btn me-2" id="sacolaBtn" style="background-color: rgb(199, 7, 7); color: white; margin-left: 5px;">
+                                        SACOLA
+                                    </button>
+                                </div>
+                                <div class="col-md d-flex justify-content-end" style="margin-right: 15px;">
+                                    <button type="button" class="btn  btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#filtros"
+                                        style="box-shadow: 3px 5px 6px #000000; background-color: rgb(231, 231, 69); ">
+                                        GERAR RECIBO
                                     </button>
                                 </div>
                             </div>
@@ -153,6 +167,39 @@
             </form>
         </div>
     </div>
+    <!-- Modal Incluir Termo -->
+    <div class="modal fade" id="modalIncluirTermo" tabindex="-1" aria-labelledby="modalIncluirTermoLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            {{-- <form class="form-horizontal" method="POST"
+                action="{{ url('/incluir-material-doacao-cadastro-inicial/' . $idSolicitacao) }}"> --}}
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color:lightblue;">
+                        <h5 class="modal-title" id="modalIncluirTermoLabel">
+                            Inclusão de Termo
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="modal-body-content-incluir-termo">
+                        <div class="row">
+                        </div>
+                    </div>
+                    <div class="modal-footer mt-2">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Confirmar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.getElementById('sacolaBtn').addEventListener('click', function () {
+            const btn = this;
+            const isActive = btn.classList.toggle('ativo');
+            btn.style.backgroundColor = isActive ? 'rgb(3, 109, 3)' : 'rgb(199, 7, 7)';
+        });
+    </script>
     <script>
          $(document).ready(function() {
             // Inicializa o Select2 dentro dos modais

@@ -18,4 +18,10 @@ import Inputmask from "inputmask";
 
 window.$ = window.jQuery = $;
 
+import { createApp } from 'vue';
+import ExampleComponent from './components/ExampleComponent.vue'; // ajuste o nome conforme seu componente
+
+const app = createApp({});
+app.component('example-component', ExampleComponent);
+app.mount('#app');
 

@@ -7,16 +7,16 @@
     },
     "devDependencies": {
         "@popperjs/core": "^2.11.6",
-        "@vitejs/plugin-vue": "^4.6.2",
+        "@vitejs/plugin-vue": "^5.2.3",
         "axios": "^1.6.4",
         "laravel-vite-plugin": "^1.0.5",
         "sass": "^1.80.7",
         "sass-loader": "^16.0.3",
-        "vite": "^5.4.11",
+        "vite": "^6.3.3",
         "vue": "^3.5.13"
     },
     "dependencies": {
-        "bootstrap": "^5.3.3",
+        "bootstrap": "^5.3.5",
         "bootstrap-icons": "^1.11.3",
         "bootstrap4-toggle": "^3.6.1",
         "bootstrap5-toggle": "^5.0.4",

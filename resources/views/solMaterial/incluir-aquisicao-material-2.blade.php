@@ -300,7 +300,7 @@
                                                                             @endif
                                                                         </label>
                                                                         <input type="text"
-                                                                            class="form-control valor valor-proposta"
+                                                                            class="form-control  valor-monetario"
                                                                             data-index="{{ $index }}"
                                                                             name="valor1[]"
                                                                             value="{{ $documentoMaterials->valor }}"
@@ -474,7 +474,7 @@
                                                                             @endif
                                                                         </label>
                                                                         <input type="text"
-                                                                            class="form-control valor valor-proposta"
+                                                                            class="form-control  valor-monetario"
                                                                             name="valor1[]" value=""
                                                                             style="background-color: white; border-color: gray;"
                                                                             placeholder="Digite o valor da proposta"
@@ -661,7 +661,7 @@
                                                                 @endif
                                                             </label>
                                                             <input type="text"
-                                                                class="form-control valor valor-proposta"
+                                                                class="form-control  valor-monetario"
                                                                 name="valorPorEmpresa[{{ $counter }}]"
                                                                 style="background-color: white; border-color: gray;"
                                                                 placeholder="Digite o valor da proposta"
@@ -846,7 +846,7 @@
                                                                 @endif
                                                             </label>
                                                             <input type="text"
-                                                                class="form-control valor valor-proposta"
+                                                                class="form-control  valor-monetario"
                                                                 name="valorPorEmpresa[]"
                                                                 style="background-color: white; border-color: gray;"
                                                                 placeholder="Digite o valor da proposta" value="">
@@ -1025,7 +1025,7 @@
                                                     </div>
                                                     <div class="col-md-1">
                                                         <label>Valor Unitário</label>
-                                                        <input type="text" class="form-control valor valor-proposta"
+                                                        <input type="text" class="form-control  valor-monetario"
                                                             name="valorUnitarioEmpresa1[{{ $index }}]"
                                                             style="background-color: white; border-color: gray;"
                                                             placeholder="Digite o valor da proposta"
@@ -1034,7 +1034,7 @@
                                                     </div>
                                                     <div class="col-md-1">
                                                         <label>Valor Unitário</label>
-                                                        <input type="text" class="form-control valor valor-proposta"
+                                                        <input type="text" class="form-control  valor-monetario"
                                                             name="valorUnitarioEmpresa2[{{ $index }}]"
                                                             style="background-color: white; border-color: gray;"
                                                             placeholder="Digite o valor da proposta"
@@ -1043,7 +1043,7 @@
                                                     </div>
                                                     <div class="col-md-1">
                                                         <label>Valor Unitário</label>
-                                                        <input type="text" class="form-control valor valor-proposta"
+                                                        <input type="text" class="form-control  valor-monetario"
                                                             name="valorUnitarioEmpresa3[{{ $index }}]"
                                                             style="background-color: white; border-color: gray;"
                                                             placeholder="Digite o valor da proposta"
@@ -1287,31 +1287,10 @@
             border-color: gray !important;
         }
     </style>
-
     {{-- Script dos botao de alternar e adicionar --}}
     <script>
-        // Selecione todos os campos com a classe 'proposta'
-        document.querySelectorAll('.valor-proposta').forEach(function(input) {
-            input.addEventListener('input', function(event) {
-                let value = event.target.value.replace(/\D/g, ''); // Remove tudo o que não for número
-                if (value) {
-                    value = (parseInt(value) / 100).toFixed(2); // Converte para valor decimal
-                    value = value.replace('.', ','); // Substitui ponto por vírgula
-                    event.target.value = 'R$ ' + value; // Adiciona o "R$" antes do valor
-                }
-            });
-        });
 
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.valor-proposta').forEach(function(input) {
-                let value = input.value.replace(/\D/g, ''); // Remove tudo o que não for número
-                if (value) {
-                    value = (parseInt(value) / 100).toFixed(2).replace('.',
-                        ','); // Converte para valor decimal
-                    input.value = 'R$ ' + value;
-                }
-            });
-        });
+
         document.addEventListener('DOMContentLoaded', function() {
             // Captura os elementos do DOM
             const btnPorEmpresa = document.getElementById('btnPorEmpresa');
@@ -1424,73 +1403,6 @@
             <p>Tem certeza de que deseja excluir o material <strong>${materialName}</strong>?</p>
             <input type="hidden" name="material_id" value="${materialId}">
         `;
-            });
-        });
-    </script>
-    {{-- preencher select da modal --}}
-    <script>
-        $(document).ready(function() {
-            // Função genérica para carregar opções via AJAX
-            function carregarOpcoes(url, targetSelect, placeholder = "Selecione...") {
-                fetch(url)
-                    .then((response) => response.json())
-                    .then((data) => {
-                        const select = $(targetSelect);
-                        select.empty(); // Limpa as opções existentes
-                        if (data.length > 0) {
-                            select.append(`<option value="" disabled selected>${placeholder}</option>`);
-                            data.forEach((item) => {
-                                select.append(`<option value="${item.id}">${item.nome}</option>`);
-                            });
-                        } else {
-                            select.append(`<option value="" selected>Não Possui</option>`);
-                        }
-                    })
-                    .catch((error) => console.error("Erro ao carregar opções:", error));
-            }
-
-            // Filtro dinâmico com base na categoria
-            $('#categoriaMaterial').on('change', function() {
-                const categoriaId = this.value;
-                if (categoriaId) {
-                    carregarOpcoes(`/nome/${categoriaId}`, '#nomeMaterial');
-                    carregarOpcoes(`/marcas/${categoriaId}`, '#marcaMaterial');
-                    carregarOpcoes(`/tamanhos/${categoriaId}`, '#tamanhoMaterial');
-                    carregarOpcoes(`/cores/${categoriaId}`, '#corMaterial');
-                    carregarOpcoes(`/fases/${categoriaId}`, '#faseEtariaMaterial');
-                }
-            });
-
-            // Aplicar evento de mudança a todas as categorias por Material
-            $(document).on('change', '.categoria-por-material', function() {
-                let categoriaId = $(this).val();
-                let index = $(this).data('index'); // Obtém o índice do item
-
-                if (categoriaId) {
-                    carregarOpcoes(`/nome/${categoriaId}`, `select[name="nomePorMaterial[${index}]"]`);
-                    carregarOpcoes(`/marcas/${categoriaId}`, `select[name="marcaPorMaterial[${index}]"]`);
-                    carregarOpcoes(`/tamanhos/${categoriaId}`,
-                        `select[name="tamanhoPorMaterial[${index}]"]`);
-                    carregarOpcoes(`/cores/${categoriaId}`, `select[name="corPorMaterial[${index}]"]`);
-                    carregarOpcoes(`/fases/${categoriaId}`,
-                        `select[name="faseEtariaPorMaterial[${index}]"]`);
-                }
-            });
-
-            // Aplicar evento de mudança a todas as categorias por Empresa
-            $(document).on('change', '.categoria-por-empresa', function() {
-                let categoriaId = $(this).val();
-                let index = $(this).data('index'); // Obtém o índice do item
-
-                if (categoriaId) {
-                    carregarOpcoes(`/nome/${categoriaId}`, `select[name="nomePorEmpresa[${index}]"]`);
-                    carregarOpcoes(`/marcas/${categoriaId}`, `select[name="marcaPorEmpresa[${index}]"]`);
-                    carregarOpcoes(`/tamanhos/${categoriaId}`,
-                        `select[name="tamanhoPorEmpresa[${index}]"]`);
-                    carregarOpcoes(`/cores/${categoriaId}`, `select[name="corPorEmpresa[${index}]"]`);
-                    carregarOpcoes(`/fases/${categoriaId}`,
-                        `select[name="faseEtariaPorEmpresa[${index}]"]`);
-                }
             });
         });
     </script>

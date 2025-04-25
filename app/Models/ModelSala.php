@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class ModelSala extends Model
 {
     protected $connection = 'pgsql2';
-    protected $table = 'sala';
+    protected $table = 'salas';
     protected $fillable = [
-        'nome'
+        'nome',
+        'numero'
     ];
 }

@@ -403,7 +403,7 @@ Route::any('/conta-contabil/inativar/{id}', [ContaContabilController::class, 'in
 //Deposito
 Route::get('/gerenciar-deposito', [GerenciarDepositoController::class, 'index'])->name('deposito.index');
 Route::get('/incluir-deposito', [GerenciarDepositoController::class, 'create'])->name('deposito.create');
-Route::post('/salvar-deposito', [GerenciarDepositoController::class, 'store'])->name('deposito.store');
+Route::any('/salvar-deposito', [GerenciarDepositoController::class, 'store'])->name('deposito.store');
 Route::get('/editar-deposito/{id}', [GerenciarDepositoController::class, 'edit'])->name('deposito.edit');
 Route::post('/atualizar-deposito/{id}', [GerenciarDepositoController::class, 'update'])->name('deposito.update');
 Route::delete('/deletar-deposito/{id}', [GerenciarDepositoController::class, 'delete'])->name('deposito.delete');

@@ -59,6 +59,10 @@
                                                     <strong>{{ $deposito->nome }}</strong>?
                                                 </p>
                                             </x-modal-excluir>
+                                        @else
+                                            <button type="button" class="btn btn-outline-secondary">
+                                                <i class="bi bi-arrow-repeat"></i>
+                                            </button>
                                         @endif
                                         {{-- Modal Excluir --}}
                                     </td>

@@ -406,3 +406,4 @@ Route::any('/editar-deposito/{id}', [GerenciarDepositoController::class, 'edit']
 Route::any('/atualizar-deposito/{id}', [GerenciarDepositoController::class, 'update'])->name('deposito.update');
 Route::any('/deletar-deposito/{id}', [GerenciarDepositoController::class, 'destroy'])->name('deposito.delete');
 Route::any('/retorna-deposito/{id}', [GerenciarDepositoController::class, 'show'])->name('deposito.show');
+Route::any('reativar-deposito/{id}', [GerenciarDepositoController::class, 'reativar'])->name('deposito.reativar');

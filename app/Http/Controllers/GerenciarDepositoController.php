@@ -15,15 +15,31 @@ class GerenciarDepositoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $depositos =  ModelDeposito::with(['tipoDeposito', 'sala'])->get();
-        $tipoDeposito = ModelDeposito::all();
-        $sala = ModelDeposito::all();
-        // dd($depositos->get(0));
+        // 1. Monta a query base, já carregando relações
+        $query = ModelDeposito::with(['tipoDeposito', 'sala']);
 
+        // 2. Aplica filtros, somente se preenchidos
+        if ($request->filled('nome')) {
+            $query->where('nome', 'like', '%'.$request->nome.'%');
+        }
 
-        return view('depositos.index', compact('depositos', 'tipoDeposito', 'sala'));
+        if ($request->filled('sigla')) {
+            $query->where('sigla', 'like', '%'.$request->sigla.'%');
+        }
+
+        if ($request->filled('ativo')) {
+            $query->where('ativo', $request->ativo);
+        }
+
+        // 3. Ordena e paginar (10 por página)
+        $depositos = $query
+            ->orderBy('nome')
+            ->paginate(10);
+
+        // 4. Retorna view com os dados paginados
+        return view('depositos.index', compact('depositos'));
     }
 
     /**
@@ -160,7 +176,9 @@ class GerenciarDepositoController extends Controller
             'altura' => $request->altura,
             'largura_porta' => $request->largura_porta,
             'altura_porta' => $request->altura_porta,
-            'capacidade_volume' => $request->comprimento * $request->largura * $request->altura, // Atualiza a capacidade
+            'capacidade_volume' => $request->comprimento *
+             $request->largura *
+              $request->altura, // Atualiza a capacidade
         ]);
 
         // Redireciona para a lista de depósitos com uma mensagem de sucesso
@@ -172,7 +190,13 @@ class GerenciarDepositoController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        //Depois volta e verficar se o depósito pode ser excluído
+        $deposito = ModelDeposito::findOrFail($id);
+        //desativa o deposito
+        $deposito->update(['ativo' => false]);
+        // $deposito->delete();
+        return redirect()->route('deposito.index')->with('success', 'Depósito excluído com sucesso!');
+
     }
     private function parseDecimalInputs(Request $request)
     {
@@ -188,5 +212,11 @@ class GerenciarDepositoController extends Controller
             'altura_porta' => (float) str_replace(',', '.', $request->input('altura_porta')),
             'capacidade' => (float) str_replace(',', '.', $request->input('capacidade')),
         ];
+    }
+    public function reativar($id)
+    {
+        $deposito = ModelDeposito::findOrFail($id);
+        $deposito->update(['ativo' => true]);
+        return redirect()->route('deposito.index')->with('success', 'Depósito reativado com sucesso!');
     }
 }

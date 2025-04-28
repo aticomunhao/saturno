@@ -17,26 +17,29 @@
                     {{-- Formulário de Filtro --}}
                     <div class="col-md-12">
                         <form method="GET" action="{{ route('deposito.index') }}" class="row g-2">
-                            <div class="col-sm-4">
+                            <div class="col-sm-3">
                                 <label for="idnome">Nome:</label>
                                 <input type="text" name="nome" value="{{ request('nome') }}" class="form-control"
                                     placeholder="Pesquisar Nome" id="idnome">
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-2">
+                                <label for="idsigla">Sigla</label>
                                 <input type="text" name="sigla" value="{{ request('sigla') }}" class="form-control"
-                                    placeholder="Pesquisar Sigla">
+                                    placeholder="Pesquisar Sigla" id="idsigla">
                             </div>
-                            <div class="col-sm-3">
-                                <select name="ativo" class="form-select">
+                            <div class="col-sm-2">
+                                <label for="idstatus">Tipo de Depósito</label>
+                                <select name="ativo" class="form-select" id="idstatus">
                                     <option value="">-- Todos --</option>
                                     <option value="1" {{ request('ativo') === '1' ? 'selected' : '' }}>Ativo</option>
                                     <option value="0" {{ request('ativo') === '0' ? 'selected' : '' }}>Inativo</option>
                                 </select>
                             </div>
-                            <div class="col-sm-2 d-grid">
-                                <button type="submit" class="btn btn-primary">Filtrar</button>
+                            <div class="col-sm-2">
+
+                                <button type="submit" class="btn btn-primary" style="width: 100%">Filtrar</button>
                             </div>
-                            <div class="col-md-2 mb-2">
+                            <div class="col-md-2">
                                 <a href="{{ route('deposito.create') }}" class="btn btn-success w-100">
                                     Novo
                                 </a>

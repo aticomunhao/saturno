@@ -2,7 +2,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\ModelItemCatalogo;
+use App\Models\ModelItemCatalogoMaterial;
 use App\Models\ModelCatMaterial;
 use App\Models\ModelVendas;
 use Illuminate\Pagination\Paginator;
@@ -17,7 +17,7 @@ class GerenciarVendasController extends Controller
     //private $totalPage = 3;
 
     public function __construct(){
-        $this->objItemCatalogo = new ModelItemCatalogo();
+        $this->objItemCatalogo = new ModelItemCatalogoMaterial();
         $this->objTipoMaterial = new ModelCatMaterial();
         $this->objVendas = new ModelVendas();
     }
@@ -148,7 +148,7 @@ class GerenciarVendasController extends Controller
 
         $desconto = round($desconto, 2);
 
- 
+
 
         $total_preco = DB::table ('venda')
         ->leftjoin('venda_item_material', 'venda.id', '=', 'venda_item_material.id_venda')
@@ -156,7 +156,7 @@ class GerenciarVendasController extends Controller
         ->where ('id_venda', '=', $id)
         ->sum('item_material.valor_venda');
 
-        $total_preco =  round($total_preco, 2); 
+        $total_preco =  round($total_preco, 2);
 
         //dd($total_preco);
 
@@ -175,7 +175,7 @@ class GerenciarVendasController extends Controller
 
 
         //dd($valor == $pago );
-        
+
 
         $sit_ven =  DB::table ('venda')
         ->where ('id', '=', $id)
@@ -220,7 +220,7 @@ class GerenciarVendasController extends Controller
 
         }
 
-        
+
         return redirect()
         ->action('GerenciarvendasController@index')
         ->with('warning', 'Ocorreu um erro não identificado.');

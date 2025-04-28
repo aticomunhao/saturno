@@ -18,7 +18,6 @@ use App\Http\Controllers\PessoaController;
 use App\Http\Controllers\EntidadeController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\ItemCatalogoController;
-use App\Http\Controllers\ComposicaoItemController;
 use App\Http\Controllers\MarcaController;
 use App\Http\Controllers\TamanhoController;
 use App\Http\Controllers\CorController;
@@ -138,11 +137,6 @@ Route::get('/item-catalogo/alterar/{id}', [ItemCatalogoController::class, 'edit'
 Route::put('item-catalogo-atualizar/{id}', [ItemCatalogoController::class, 'update']);
 Route::get('/item-catalogo/excluir/{id}', [ItemCatalogoController::class, 'destroy']);
 Route::post('/cad-item-material/inserir', [ItemCatalogoController::class, 'store']);
-
-Route::get('gerenciar-composicao', [ComposicaoItemController::class, 'index']);
-Route::get('item-composicao/incluir/{id}', [ComposicaoItemController::class, 'create']);
-Route::post('item-composicao/inserir', [ComposicaoItemController::class, 'store']);
-Route::get('/item-composicao/excluir/{id}/{idComposicao}', [ComposicaoItemController::class, 'destroy']);
 
 Route::get('/marca', [MarcaController::class, 'index']);
 Route::post('/marca/inserir', [MarcaController::class, 'store']);

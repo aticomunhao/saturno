@@ -14,7 +14,7 @@ $setor = session()->get('usuario.setor');
             </button>
             <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
                 {{-- @if (in_array(38, $setor) or in_array(25, $setor)) --}}
-                <ul class="navbar-nav" id="AME">
+                <ul class="navbar-nav" id="aquisicao">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="1" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">Aquisição</a>
@@ -33,7 +33,7 @@ $setor = session()->get('usuario.setor');
                 </ul>
                 {{-- @endif
                 @if (in_array(7, $setor) or in_array(25, $setor)) --}}
-                <ul class="navbar-nav" id="DAO">
+                <ul class="navbar-nav" id="cadastro">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="2" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">Cadastro</a>
@@ -46,13 +46,15 @@ $setor = session()->get('usuario.setor');
                             </li>
                             <li><a class="dropdown-item" href="/cad-cat-material">Categorias</a>
                             </li>
+                            <li><a class="dropdown-item" href="/unidade-medida">Unidade de Medida</a>
+                            </li>
                             {{-- @endif --}}
                         </ul>
                     </li>
                 </ul>
                 {{-- @endif --}}
                 {{-- @if (in_array(6, $setor) or in_array(25, $setor)) --}}
-                <ul class="navbar-nav" id="DAE">
+                <ul class="navbar-nav" id="catalogo">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="2" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">Catálogos</a>

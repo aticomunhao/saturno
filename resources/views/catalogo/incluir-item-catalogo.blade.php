@@ -27,83 +27,93 @@
                         <!-- <p class="card-title-desc">Here are examples of <code class="highlighter-rouge">.form-control</code> applied to each textual HTML5 <code class="highlighter-rouge">&lt;input&gt;</code> <code class="highlighter-rouge">type</code>.</p>-->
                         <form class="form-horizontal mt-4" method="POST" action="/cad-item-material/inserir">
                             @csrf
-                            <div class="form-group row">
-                                <label for="nome_item" class="col-sm-2 col-form-label">Nome Item*</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control" required="required" type="text" id="nome_item"
-                                        name="nome_item">
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <label for="nome_item" class="col-sm-2 col-form-label">Nome Item*</label>
+                                    <div class="col-md-10">
+                                        <input class="form-control" required="required" type="text" id="nome_item"
+                                            name="nome_item">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="categoria_item" class="col-sm-2 col-form-label">Categoria*</label>
-                                <div class="col-md-10">
-                                    <select class="form-control select2" id="categoria_item" name="categoria_item"
-                                        required="required">
-                                        <option value="">Selecione</option>
-                                        @foreach ($resultCategoria as $resultCategorias)
-                                            <option value="{{ $resultCategorias->id }}">{{ $resultCategorias->nome }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                                <div class="form-group row">
+                                    <label for="categoria_item" class="col-sm-2 col-form-label">Categoria*</label>
+                                    <div class="col-md-10">
+                                        <select class="form-control select2" id="categoria_item" name="categoria_item"
+                                            required="required">
+                                            <option value="">Selecione</option>
+                                            @foreach ($resultCategoria as $resultCategorias)
+                                                <option value="{{ $resultCategorias->id }}">{{ $resultCategorias->nome }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
+                                <div class="form-group row">
+                                    <label for="val_minimo" class="col-sm-2 col-form-label">Valor Minimo*</label>
+                                    <div class="col-md-4">
+                                        <input class="form-control" value="0.00" type="numeric" id="val_minimo"
+                                            name="val_minimo" required="required"
+                                            onchange="this.value = this.value.replace(/,/g, '.')">
+                                    </div>
+                                    <label for="val_medio" class="col-sm-2 col-form-label">Valor Médio*</label>
+                                    <div class="col-md-4">
+                                        <input class="form-control" value="0.00" type="numeric" id="val_medio"
+                                            name="val_medio" required="required"
+                                            onchange="this.value = this.value.replace(/,/g, '.')">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="val_maximo" class="col-sm-2 col-form-label">Valor Máximo*</label>
+                                    <div class="col-md-4">
+                                        <input class="form-control" type="numeric" value="0.00" id="val_maximo"
+                                            name="val_maximo" required="required"
+                                            onchange="this.value = this.value.replace(/,/g, '.')">
+                                    </div>
+                                    <label for="val_marca" class="col-sm-2 col-form-label">Valor Marca*</label>
+                                    <div class="col-md-4">
+                                        <input class="form-control" type="numeric" value="0.00" id="val_marca"
+                                            name="val_marca" required="required"
+                                            onchange="this.value = this.value.replace(/,/g, '.')">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="val_etiqueta" class="col-sm-2 col-form-label">Valor Etiqueta*</label>
+                                    <div class="col-md-4">
+                                        <input class="form-control" type="numeric" value="0.00" id="val_etiqueta"
+                                            name="val_etiqueta" required="required"
+                                            onchange="this.value = this.value.replace(/,/g, '.')">
+                                    </div>
+                                    <label for="tipoMaterial" class="col-sm-2 col-form-label">Tipo do Material</label>
+                                    <div class="col-md-4">
+                                        <select class="form-control select2" id="tp_material" name="tp_material"
+                                            required="required">
+                                            <option value="">Selecione</option>
+                                            @foreach ($tipoMaterial as $tipoMaterials)
+                                                <option value="{{ $tipoMaterials->id }}">{{ $tipoMaterials->nome }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
 
-                            <div class="form-group row">
-                                <label for="val_minimo" class="col-sm-2 col-form-label">Valor Minimo*</label>
-                                <div class="col">
-                                    <input class="form-control" value="0.00" type="numeric" id="val_minimo"
-                                        name="val_minimo" required="required"
-                                        onchange="this.value = this.value.replace(/,/g, '.')">
-                                </div>
-                                <label for="val_medio" class="col-sm-2 col-form-label">Valor Médio*</label>
-                                <div class="col">
-                                    <input class="form-control" value="0.00" type="numeric" id="val_medio"
-                                        name="val_medio" required="required"
-                                        onchange="this.value = this.value.replace(/,/g, '.')">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="val_maximo" class="col-sm-2 col-form-label">Valor Máximo*</label>
-                                <div class="col">
-                                    <input class="form-control" type="numeric" value="0.00" id="val_maximo"
-                                        name="val_maximo" required="required"
-                                        onchange="this.value = this.value.replace(/,/g, '.')">
-                                </div>
-                                <label for="val_marca" class="col-sm-2 col-form-label">Valor Marca*</label>
-                                <div class="col">
-                                    <input class="form-control" type="numeric" value="0.00" id="val_marca"
-                                        name="val_marca" required="required"
-                                        onchange="this.value = this.value.replace(/,/g, '.')">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="val_etiqueta" class="col-sm-2 col-form-label">Valor Etiqueta*</label>
-                                <div class="col">
-                                    <input class="form-control" type="numeric" value="0.00" id="val_etiqueta"
-                                        name="val_etiqueta" required="required"
-                                        onchange="this.value = this.value.replace(/,/g, '.')">
-                                </div>
-                                <label for="composicao" class="col-sm-2 col-form-label">Item Composição</label>
-                                <div class="col">
-                                    <input type="checkbox" id="composicao" name="composicao">
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="tp_unidade_medida" class="col-sm-2 col-form-label">Unidade de Medida*</label>
-                                <div class="col">
-                                    <select class="form-control select2" id="tp_unidade_medida" name="tp_unidade_medida"
-                                        required="required">
-                                        <option value="">Selecione</option>
-                                        @foreach ($unidadeMedida as $unidadeMedidas)
-                                            <option value="{{ $unidadeMedidas->id }}">{{ $unidadeMedidas->sigla }} - {{ $unidadeMedidas->nome }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <label for="ativo" class="col-sm-2 col-form-label">Ativo</label>
-                                <div class="col">
-                                    <input type="checkbox" id="ativo" name="ativo" checked="checked">
+                                <div class="form-group row">
+                                    <label for="tp_unidade_medida" class="col-sm-2 col-form-label">Unidade de
+                                        Medida*</label>
+                                    <div class="col-md-4">
+                                        <select class="form-control select2" id="tp_unidade_medida"
+                                            name="tp_unidade_medida" required="required">
+                                            <option value="">Selecione</option>
+                                            @foreach ($unidadeMedida as $unidadeMedidas)
+                                                <option value="{{ $unidadeMedidas->id }}">{{ $unidadeMedidas->sigla }} -
+                                                    {{ $unidadeMedidas->nome }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <label for="ativo" class="col-sm-2 col-form-label">Ativo</label>
+                                    <div class="col-md-4">
+                                        <input type="checkbox" id="ativo" name="ativo" checked="checked">
+                                    </div>
                                 </div>
                             </div>
                             <br>
@@ -207,7 +217,8 @@
                                                         name="idOrigem" required>
                                                         @foreach ($origem_icms as $buscaOrigem)
                                                             <option value="{{ $buscaOrigem->id }}">
-                                                                {{ $buscaOrigem->id }} - {{ $buscaOrigem->tipo }} - {{ $buscaOrigem->descricao }}
+                                                                {{ $buscaOrigem->id }} - {{ $buscaOrigem->tipo }} -
+                                                                {{ $buscaOrigem->descricao }}
                                                             </option>
                                                         @endforeach
                                                     </select>

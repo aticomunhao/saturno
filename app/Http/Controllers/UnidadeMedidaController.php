@@ -9,16 +9,10 @@ use Illuminate\Support\Facades\DB;
 
 class UnidadeMedidaController extends Controller
 {
-    
-    private $objUnidade;
-
-    public function __construct(){        
-        $this->objUnidade = new ModelUnidadeMedida();
-    }
-
     public function index()
     {
-        $result = $this->objUnidade->all();
+        $result = ModelUnidadeMedida::all();
+
         return view('/cadastro-geral/gerenciar-unidade-medida', compact('result'));
     }
 
@@ -28,13 +22,14 @@ class UnidadeMedidaController extends Controller
     }
 
     public function store(Request $request)
-    {           
-        DB::table('tipo_unidade_medida')->insert([            
+    {
+        ModelUnidadeMedida::Create([
             'nome' => $request->input('unidade_med'),
-            'sigla' => $request->input('sigla'),            
+            'sigla' => $request->input('sigla'),
+            'ativo' => 1
         ]);
 
-        $result = $this->objUnidade->all();
+        $result = ModelUnidadeMedida::all();
         return view('/cadastro-geral/gerenciar-unidade-medida', compact('result'));
     }
 
@@ -47,25 +42,39 @@ class UnidadeMedidaController extends Controller
     {
         $resultUniMed = DB::select("select id, nome, sigla from tipo_unidade_medida where id = $id");
 
-        return view('/cadastro-geral/alterar-unidade-medida', compact('resultUniMed')); 
+        return view('/cadastro-geral/alterar-unidade-medida', compact('resultUniMed'));
     }
-    
+
     public function update(Request $request, $id)
     {
-         DB::table('tipo_unidade_medida')
-        ->where('id', $id)
-        ->update([
-            'nome' => $request->input('unidade_med'),
-            'sigla' => $request->input('sigla')
-        ]);
+        DB::table('tipo_unidade_medida')
+            ->where('id', $id)
+            ->update([
+                'nome' => $request->input('unidade_med'),
+                'sigla' => $request->input('sigla')
+            ]);
 
         return redirect()->action('UnidadeMedidaController@index');
     }
-  
+
     public function destroy($id)
     {
-       $deleted = DB::delete('delete from tipo_unidade_medida where id= ?', [$id] );
-       $result = $this->objUnidade->all();
-       return view('/cadastro-geral/gerenciar-unidade-medida', compact('result'));
+        $count = DB::table('embalagem')
+            ->where('id_un_med_n1', $id)
+            ->orWhere('id_un_med_n2', $id)
+            ->count();
+
+        if ($count == 0)
+            $deleted = DB::table('tipo_unidade_medida')
+            ->where('id', $id)
+            ->update([
+                'ativo' => 0,
+            ]);
+        else
+            app('flasher')->addError('Não é possível excluir esta unidade de medida, pois ela está vinculada a um material');
+        ;
+
+        $result = ModelUnidadeMedida::all();
+        return view('/cadastro-geral/gerenciar-unidade-medida', compact('result'));
     }
 }

@@ -16,14 +16,14 @@
                             <div class="row">
                                 <label for="unidade_med" class="col-sm-2 col-form-label">Nova Unidade</label>
                                 <div class="col-sm-4">
-                                    <input class="form-control" type="text" id="unidade_med" name="unidade_med" required oninvalid="this.setCustomValidity('Campo requerido')">
+                                    <input class="form-control" type="text" id="unidade_med" name="unidade_med" required>
                                 </div>
                             </div>
 
                             <div class="row mt-3">
                                 <label for="sigla" class="col-sm-2 col-form-label">Sigla</label>
                                 <div class="col-sm-4">
-                                    <input class="form-control" type="text" id="sigla" name="sigla" required oninvalid="this.setCustomValidity('Campo requerido')">
+                                    <input class="form-control" type="text" id="sigla" name="sigla" required>
                                 </div>
                             </div>
                         </div>

@@ -3,13 +3,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\ModelItemCatalogo;
+use App\Models\ModelItemCatalogoMaterial;
 use App\Models\ModelCatMaterial;
 use App\Models\ModelCest;
 use App\Models\ModelCfop;
 use App\Models\ModelNcm;
 use App\Models\ModelCsosnIcms;
+use App\Models\ModelEmbalagem;
 use App\Models\ModelOrigemIcms;
+use App\Models\ModelTipoMaterial;
 use App\Models\ModelUnidadeMedida;
 
 
@@ -22,7 +24,7 @@ class ItemCatalogoController extends Controller
     private $objTipoMaterial;
 
     public function __construct(){
-        $this->objItemCatalogo = new ModelItemCatalogo();
+        $this->objItemCatalogo = new ModelItemCatalogoMaterial();
         $this->objTipoMaterial = new ModelCatMaterial();
     }
 
@@ -60,12 +62,13 @@ class ItemCatalogoController extends Controller
         $cest = ModelCest::all();
         $ncm = ModelNcm::all();
         $unidadeMedida = ModelUnidadeMedida::all();
+        $tipoMaterial = ModelTipoMaterial::all();
 
         //ICMS
         $csosn_icms = ModelCsosnIcms::all();
         $origem_icms = ModelOrigemIcms::orderBy('id')->get();
 
-        return view('catalogo/incluir-item-catalogo', compact('resultCategoria', 'unidadeMedida', 'cfop', 'cest', 'ncm', 'csosn_icms', 'origem_icms'));
+        return view('catalogo/incluir-item-catalogo', compact('resultCategoria', 'unidadeMedida', 'tipoMaterial', 'cfop', 'cest', 'ncm', 'csosn_icms', 'origem_icms'));
     }
 
 
@@ -75,7 +78,7 @@ class ItemCatalogoController extends Controller
         $composicao = isset($request->composicao) ? 1 : 0;
 
 
-        DB::table('item_catalogo_material')->insert([
+       $novoMaterial = ModelItemCatalogoMaterial::Create([
             'nome' => $request->input('nome_item'),
             'id_categoria_material' => $request->input('categoria_item'),
             'valor_minimo' => $request->input('val_minimo'),
@@ -86,6 +89,13 @@ class ItemCatalogoController extends Controller
             'tp_unidade_medida' => $request->input('tp_unidade_medida'),
             'composicao' => $composicao,
             'ativo' => $ativo,
+        ]);
+
+        ModelEmbalagem::create([
+            'id_item_catalogo' => $novoMaterial->id,
+            'id_un_med_n1' => $request->input('tp_unidade_medida'),
+            'qtde_n1' => '1',
+            'id_tp_material' => $request->input('tp_material'),
         ]);
 
 

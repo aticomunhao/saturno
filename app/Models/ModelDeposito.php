@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ModelDeposito extends Model
 {
     protected $table = 'deposito';
+    public $timestamps = false;
     protected $fillable = [
         'nome',
         'sigla',

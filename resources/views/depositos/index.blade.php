@@ -22,11 +22,12 @@
                         class= "table table-sm table-striped table-bordered border-secondary table-hover align-middle">
                         <thead style="text-align: center; ">{{-- inicio header tabela --}}
                             <tr style="background-color: #d6e3ff; color:#000;" class="align-middle">
-                                <th>Nome</th>
-                                <th>Sigla</th>
-                                <th>Sala</th>
-                                <th>Tipo de Depósito</th>
-                                <th>Ativo</th>
+                                <th class="col">Nome</th>
+                                <th class="col">Sigla</th>
+                                <th class="col">Sala</th>
+                                <th class="col">Tipo de Depósito</th>
+                                <th class="col">Ativo</th>
+                                <th class="col">Ações</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -35,9 +36,19 @@
                                 <tr>
                                     <td>{{ $deposito->nome }}</td>
                                     <td>{{ $deposito->sigla }}</td>
-                                    <td>{{ $deposito->sala }}</td>
-                                    <td>{{ $deposito->id_tp_deposito }}</td>
+                                    <td>{{ optional($deposito->sala)->nome }}</td>
+                                    <td>{{ optional($deposito->tipoDeposito)->nome }}</td>
                                     <td>{{ $deposito->ativo ? 'Sim' : 'Não' }}</td>
+                                    <td> <a href="{{ route('deposito.edit', ['id' => $deposito->id]) }}"
+                                            class="btn btn-sm btn-outline-warning" data-tt="tooltip"
+                                            style="font-size: 1rem; color: #303030;">
+                                            <i class="bi bi-pencil"></i></a>
+                                        <a href="{{ route('deposito.show', ['id' => $deposito->id]) }}"
+                                            class="btn btn-sm btn-outline-secondary" data-tt="tooltip"
+                                            style="font-size: 1rem; color: #303030;">
+                                            <i class="bi bi-search"></i></a>
+                                    </td>
+
                                 </tr>
                             @endforeach
                             <tr>

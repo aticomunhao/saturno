@@ -131,8 +131,6 @@ Route::name('entidade')->group(function () {
 });
 
 
-
-
 Route::get('/gerenciar-item-catalogo', [ItemCatalogoController::class, 'index']);
 Route::get('item-catalogo-incluir', [ItemCatalogoController::class, 'create']);
 Route::post('cad-item-material/inserir', [ItemCatalogoController::class, 'store']);
@@ -216,9 +214,9 @@ Route::name('deposito')->group(function () {
 
 Route::get('/gerenciar-cadastro-inicial', [CadastroInicialController::class, 'index'])->name('CadastroInicial');
 Route::any('/salvar-termo-doacao', [CadastroInicialController::class, 'storeTermoDoacao']);
-Route::get('/gerenciar-cadastro-inicial/doacao/{id}', [CadastroInicialController::class, 'createDoacao']);
+Route::get('/gerenciar-cadastro-inicial/doacao/{id}', [CadastroInicialController::class, 'createDoacao'])->name('doacao');
 Route::get('/gerenciar-cadastro-inicial/compra-direta/{id}', [CadastroInicialController::class, 'createCompraDireta']);
-Route::post('/cad-inicial-material/doacao', [CadastroInicialController::class, 'storeDoacao']);
+Route::post('/cad-inicial-material/doacao/{id}', [CadastroInicialController::class, 'storeDoacao']);
 Route::post('/cad-inicial-material/compra-direta', [CadastroInicialController::class, 'storeCompraDireta']);
 Route::post('/incluir-material-doacao-cadastro-inicial/{id}', [CadastroInicialController::class, 'storeMaterial']);
 

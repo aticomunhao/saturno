@@ -118,10 +118,10 @@ class CadastroInicialController extends Controller
         $buscaUnidadeMedida = ModelUnidadeMedida::all();
         $buscaSetor = ModelSetor::whereIn('id', $setor)->get();
         $materiais = ModelMatProposta::with('documentoMaterial', 'tipoUnidadeMedida', 'tipoItemCatalogoMaterial', 'tipoCategoria', 'tipoMarca', 'tipoTamanho', 'tipoCor', 'tipoFaseEtaria', 'tipoSexo')->where('id_sol_mat', $id)->get();
+        $buscaTipoMaterial = ModelTipoMaterial::all();
 
 
-
-        return view("CadastroInicial.doacao-cadastro-inicial-item", compact('buscaCategoria', 'idSolicitacao', 'buscaUnidadeMedida', 'buscaSexo'));
+        return view("CadastroInicial.doacao-cadastro-inicial-item", compact('buscaCategoria', 'buscaTipoMaterial', 'idSolicitacao', 'buscaUnidadeMedida', 'buscaSexo'));
     }
 
     public function createCompraDireta()
@@ -141,40 +141,6 @@ class CadastroInicialController extends Controller
 
     public function storeDoacao(Request $request)
     {
-
-        $Adquirido = isset($request->checkAdq) ? 1 : 0;
-        $Avariado = isset($request->checkAvariado) ? 1 : 0;
-
-        for ($i = 0; $i < $request->input('qtdItens'); $i++) {
-
-            //???????????? Liberacao_venda, id_tipo_situacao, valor_aquisicao,valor_venda_promocional, ?id_usuario?
-            DB::table('item_material')->insert([
-                'id_item_catalogo_material' => $request->input('item_material'),
-                'observacao' => $request->input('observacao'),
-                'data_cadastro' => date("m-d-Y"),
-                'id_usuario_cadastro' => session()->get('usuario.id_usuario'),
-                'id_tipo_embalagem' => $request->input('embalagem'),
-                'id_tipo_unidade_medida' => $request->input('und_med'),
-                'quantidade_embalagem' => $request->input('qtdEmb'),
-                'adquirido' => $Adquirido,
-                'valor_venda' => $request->input('valor_venda'),
-                'id_marca' => $request->input('marca'),
-                'id_tamanho' => $request->input('tamanho'),
-                'id_cor' => $request->input('cor'),
-                'id_tipo_material' => $request->input('tp_mat'),
-                'id_fase_etaria' => $request->input('fase_etaria'),
-                'id_tp_sexo' => $request->input('sexo'),
-                'id_deposito' => $request->input('deposito'),
-                'valor_aquisicao' => $request->input('vlr_aqs'),
-                'ref_fabricante' => $request->input('ref_fab'),
-                'avariado' => $Avariado,
-                'data_validade' => $request->input('dt_validade'),
-                'liberacao_venda' => 0,
-                'id_tipo_situacao' => '1',
-            ]);
-        }
-
-        //dd($request);
 
         return redirect()->action('CadastroInicialController@index');
     }
@@ -217,5 +183,12 @@ class CadastroInicialController extends Controller
         //dd($request);
 
         return redirect()->action('CadastroInicialController@index');
+    }
+    public function storeMaterial(Request $request, $id)
+    {
+        $idSolicitacao = $id;
+
+
+        return redirect()->route('doacao', ['id' => $idSolicitacao]);
     }
 }

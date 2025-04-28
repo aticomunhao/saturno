@@ -57,11 +57,10 @@
             </button>
         </div>
     </form>
-    {{-- filepath: c:\xampp\htdocs\saturno\resources\views\your-view.blade.php --}}
     <x-modal-incluir id="modalIncluirMaterial" labelId="modalIncluirMaterialLabel"
         action="{{ url('/incluir-material-doacao-cadastro-inicial/' . $idSolicitacao) }}" title="Inclusão de Material">
         <div class="row material-item">
-            <div class="col-md">
+            <div class="col-md-6" style="margin-top: 10px">
                 <label>Categoria do Material</label>
                 <select class="form-select  select2" id="categoriaMaterial" style="border: 1px solid #999999; padding: 5px;"
                     name="categoriaMaterial">
@@ -74,7 +73,7 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-md">
+            <div class="col-md-6" style="margin-top: 10px">
                 <label>Nome do Material</label>
                 <select class="form-select js-nome-material select2" id="nomeMaterial"
                     style="border: 1px solid #999999; padding: 5px;" name="nomeMaterial">
@@ -82,7 +81,20 @@
                     </option>
                 </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-6" style="margin-top: 10px">
+                <label>Tipo do Material</label>
+                <select class="form-select select2" id="tipoMaterial"
+                    style="border: 1px solid #999999; padding: 5px;" name="tipoMaterial">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                    @foreach ($buscaTipoMaterial as $buscaTipoMaterials)
+                        <option value="{{ $buscaTipoMaterials->id }}">
+                            {{ $buscaTipoMaterials->nome }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
                 <label>Unid. Medida</label>
                 <select class="form-select  select2" style="border: 1px solid #999999; padding: 5px;"
                     name="UnidadeMedidaMaterial">
@@ -95,12 +107,12 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3" style="margin-top: 10px">
                 <label>Quantidade</label>
                 <input type="number" class="form-control" name="quantidadeMaterial">
             </div>
         </div>
-        <div class="row material-item" style="margin-top: 20px">
+        <div class="row material-item" style="margin-top: 10px">
             <div class="col-md">
                 <label>Marca</label>
                 <select class="form-select js-marca-material select2" id="marcaMaterial"

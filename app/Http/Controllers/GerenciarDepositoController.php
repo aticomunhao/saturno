@@ -15,14 +15,31 @@ class GerenciarDepositoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $depositos =  ModelDeposito::with(['tipoDeposito', 'sala'])->get();
-        $tipoDeposito = ModelDeposito::all();
-        $sala = ModelDeposito::all();
-        // dd($depositos->get(0));
+        // 1. Monta a query base, já carregando relações
+        $query = ModelDeposito::with(['tipoDeposito', 'sala']);
 
-        return view('depositos.index', compact('depositos', 'tipoDeposito', 'sala'));
+        // 2. Aplica filtros, somente se preenchidos
+        if ($request->filled('nome')) {
+            $query->where('nome', 'like', '%'.$request->nome.'%');
+        }
+
+        if ($request->filled('sigla')) {
+            $query->where('sigla', 'like', '%'.$request->sigla.'%');
+        }
+
+        if ($request->filled('ativo')) {
+            $query->where('ativo', $request->ativo);
+        }
+
+        // 3. Ordena e paginar (10 por página)
+        $depositos = $query
+            ->orderBy('nome')
+            ->paginate(10);
+
+        // 4. Retorna view com os dados paginados
+        return view('depositos.index', compact('depositos'));
     }
 
     /**

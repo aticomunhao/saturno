@@ -9,7 +9,6 @@ class ModelTipoDeposito extends Model
     protected $table = 'tipo_deposito';
     protected $fillable = [
         'nome',
-
     ];
 
     public $timestamp = false;

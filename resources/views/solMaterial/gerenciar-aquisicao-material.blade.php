@@ -20,7 +20,7 @@
                         </div>
                         <br>
                         <div class="card-body">
-                            <div class="ROW" style="margin-left:5px">
+                            <div class="row" style="margin-left:5px">
                                 <div style="display: flex; gap: 20px; align-items: flex-end;">
                                     <div class="col-md-2 col-sm-12">Categoria do Material
                                         <br>

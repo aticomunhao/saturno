@@ -14,5 +14,6 @@ class ModelUnidadeMedida extends Model
         'nome',
         'sigla',
         'ativo',
+        'tipo',
     ];
 }

@@ -2,6 +2,7 @@
     <div class="modal-dialog modal-lg">
         <form class="form-horizontal" method="POST" action="{{ $action ?? '#' }}">
             @csrf
+            @method('DELETE')
             <div class="modal-content">
                 <div class="modal-header" style="background-color:#DC4C64;">
                     <h5 class="modal-title" id="{{ $labelId ?? 'modalExcluirLabel' }}">

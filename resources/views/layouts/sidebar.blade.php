@@ -48,6 +48,8 @@ $setor = session()->get('usuario.setor');
                             </li>
                             <li><a class="dropdown-item" href="/unidade-medida">Unidade de Medida</a>
                             </li>
+                            <li><a class="dropdown-item" href="/cad-embalagem">Embalagem</a>
+                            </li>
                             {{-- @endif --}}
                         </ul>
                     </li>
@@ -68,7 +70,10 @@ $setor = session()->get('usuario.setor');
                             </li>
                             <li><a class="dropdown-item" href="{{ route('conta-contabil.index') }}">Contas Contabeis</a>
                             </li>
-                            <li><a class="dropdown-item" href="{{ route('deposito.index') }}">Depósitos</a></li>
+                            <li><a class="dropdown-item" href="{{ route('deposito.index') }}">Depósitos</a>
+                            </li>
+                            <li><a class="dropdown-item" href="/gerenciar-embalagem">Embalagens</a>
+                            </li>
                         </ul>
                     </li>
                 </ul>

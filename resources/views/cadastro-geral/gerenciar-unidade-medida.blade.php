@@ -37,48 +37,55 @@
                                 </div>
                             </div>
                         </form>
-                    <hr>
-                    <h5>Lista de Unidade de Medida</h5>
-                    <div class="row">
-                        <div class="col-12">
-                                    <table id="datatable" class="table table-bordered dt-responsive nowrap"
-                                        style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                        <thead>
-                                            <tr>
-                                                <th>Id</th>
-                                                <th>Unidade de Medida</th>
-                                                <th>Sigla</th>
-                                                <th>Ação</th>
-                                            </tr>
-                                        </thead>
+                        <hr>
+                        <h5>Lista de Unidade de Medida</h5>
+                        <div class="row">
+                            <div class="col-12">
+                                <table id="datatable" class="table table-bordered dt-responsive nowrap"
+                                    style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Unidade de Medida</th>
+                                            <th>Sigla</th>
+                                            <th>Ação</th>
+                                        </tr>
+                                    </thead>
 
-                                        <tbody>
-                                            @foreach ($result as $results)
-                                                <tr>
-                                                    <td>{{ $results->id }}</td>
-                                                    <td>{{ $results->nome }}</td>
-                                                    <td>{{ $results->sigla }}</td>
-                                                    <td>
-                                                        <button type="button" value="{{ $results->id }}"
-                                                            id="btnAlterarUniMed"
-                                                            class="btn btn-warning waves-effect waves-light classBtnAlterar"
-                                                            data-toggle="modal"
-                                                            data-target=".bs-example-modal-lg">Alterar</button>
-                                                        <a href="/unidade-medida/excluir/{{ $results->id }}">
-                                                            <input class="btn btn-danger" type="button" value="Excluir">
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                            @endForeach
-                                        </tbody>
-                                    </table>
-                                </div>
+                                    <tbody>
+                                        @foreach ($result as $results)
+                                            <tr>
+                                                <td>{{ $results->id }}</td>
+                                                <td>{{ $results->nome }}</td>
+                                                <td>{{ $results->sigla }}</td>
+                                                <td>
+                                                    <button type="button" value="{{ $results->id }}" id="btnAlterarUniMed"
+                                                        class="btn btn-warning waves-effect waves-light classBtnAlterar"
+                                                        data-toggle="modal"
+                                                        data-target=".bs-example-modal-lg">Alterar</button>
+                                                    <a href="#"
+                                                        class="btn btn-sm btn-outline-danger excluirSolicitacao"
+                                                        data-tt="tooltip" style="font-size: 1rem; color:#303030"
+                                                        data-placement="top" title="Excluir" data-bs-toggle="modal"
+                                                        data-bs-target="#modalExcluirSolicitacao"
+                                                        data-id="{{ $aquisicaos->id }}">
+                                                        <i class="bi bi-trash"></i>
+                                                    </a>
+                                                    <a href="/unidade-medida/excluir/{{ $results->id }}">
+                                                        <input class="btn btn-danger" type="button" value="Excluir">
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @endForeach
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
     </div>
     @include('cadastro-geral/popUp-alterar')

@@ -26,7 +26,8 @@ class UnidadeMedidaController extends Controller
         ModelUnidadeMedida::Create([
             'nome' => $request->input('unidade_med'),
             'sigla' => $request->input('sigla'),
-            'ativo' => 1
+            'ativo' => 1,
+            'tipo' => 1,
         ]);
 
         $result = ModelUnidadeMedida::all();

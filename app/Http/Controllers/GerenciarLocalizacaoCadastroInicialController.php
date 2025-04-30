@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class GerenciarMovimentacoesCadastroInicialController extends Controller
+class GerenciarLocalizacaoCadastroInicialController extends Controller
 {
     /**
      * Display a listing of the resource.

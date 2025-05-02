@@ -12,8 +12,13 @@ class GerenciarLocalizacaoCadastroInicialController extends Controller
      */
     public function index()
     {
-        $movimentacao_cadastro_incicial= ModelLocalizacaoCadastroInicial::with(['cadastroInicial', 'remetente', 'destinatario', 'depositoOrigem', 'depositoDestino'])->get();
-        return view('gerenciar_localizacao_cadastro_inicial.index', compact('movimentacao_cadastro_incicial'));
+        $movimentacao_cadastro_incicial= ModelLocalizacaoCadastroInicial::with([
+        'cadastroInicial',
+        'remetente',
+        'destinatario',
+        'depositoOrigem',
+        'depositoDestino'])->get();
+        return view('localizacao-cadastro-inicial.index', compact('movimentacao_cadastro_incicial'));
     }
 
     /**
@@ -21,7 +26,8 @@ class GerenciarLocalizacaoCadastroInicialController extends Controller
      */
     public function create()
     {
-        //
+
+        return view('localizacao-cadastro-inicial.create');
     }
 
     /**

@@ -408,4 +408,11 @@ Route::any('/deletar-deposito/{id}', [GerenciarDepositoController::class, 'destr
 Route::any('/retorna-deposito/{id}', [GerenciarDepositoController::class, 'show'])->name('deposito.show');
 Route::any('reativar-deposito/{id}', [GerenciarDepositoController::class, 'reativar'])->name('deposito.reativar');
 
+//Localizacao Cadastro Inicial
 Route::any('/gerenciar-localizacao-cadastro-inicial', [GerenciarLocalizacaoCadastroInicialController::class, 'index'])->name('localizacao-cadastro-inicial.index');
+Route::any('/incluir-localizacao-cadastro-inicial', [GerenciarLocalizacaoCadastroInicialController::class, 'create'])->name('localizacao-cadastro-inicial.create');
+Route::any('/salvar-localizacao-cadastro-inicial', [GerenciarLocalizacaoCadastroInicialController::class, 'store'])->name('localizacao-cadastro-inicial.store');
+Route::any('/editar-localizacao-cadastro-inicial/{id}', [GerenciarLocalizacaoCadastroInicialController::class, 'edit'])->name('localizacao-cadastro-inicial.edit');
+Route::any('/atualizar-localizacao-cadastro-inicial/{id}', [GerenciarLocalizacaoCadastroInicialController::class, 'update'])->name('localizacao-cadastro-inicial.update');
+Route::any('/deletar-localizacao-cadastro-inicial/{id}', [GerenciarLocalizacaoCadastroInicialController::class, 'destroy'])->name('localizacao-cadastro-inicial.delete');
+Route::any('/retorna-localizacao-cadastro-inicial/{id}', [GerenciarLocalizacaoCadastroInicialController::class, 'show'])->name('localizacao-cadastro-inicial.show');

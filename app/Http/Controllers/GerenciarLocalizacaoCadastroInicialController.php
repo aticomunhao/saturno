@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ModelLocalizacaoCadastroInicial;
 use Illuminate\Http\Request;
 
 class GerenciarLocalizacaoCadastroInicialController extends Controller
@@ -11,7 +12,8 @@ class GerenciarLocalizacaoCadastroInicialController extends Controller
      */
     public function index()
     {
-        //
+        $movimentacao_cadastro_incicial= ModelLocalizacaoCadastroInicial::with(['cadastroInicial', 'remetente', 'destinatario', 'depositoOrigem', 'depositoDestino'])->get();
+        return view('gerenciar_localizacao_cadastro_inicial.index', compact('movimentacao_cadastro_incicial'));
     }
 
     /**

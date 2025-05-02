@@ -48,6 +48,7 @@ use App\Http\Controllers\CatalogoEmpresaController;
 use App\Http\Controllers\CatalogoServicoController;
 use App\Http\Controllers\AquisicaoMaterialController;
 use App\Http\Controllers\GerenciarDepositoController;
+use App\Http\Controllers\GerenciarLocalizacaoCadastroInicialController;
 use App\Http\Controllers\ValorCompraController;
 
 
@@ -406,3 +407,5 @@ Route::any('/atualizar-deposito/{id}', [GerenciarDepositoController::class, 'upd
 Route::any('/deletar-deposito/{id}', [GerenciarDepositoController::class, 'destroy'])->name('deposito.delete');
 Route::any('/retorna-deposito/{id}', [GerenciarDepositoController::class, 'show'])->name('deposito.show');
 Route::any('reativar-deposito/{id}', [GerenciarDepositoController::class, 'reativar'])->name('deposito.reativar');
+
+Route::any('/gerenciar-localizacao-cadastro-inicial', [GerenciarLocalizacaoCadastroInicialController::class, 'index'])->name('localizacao-cadastro-inicial.index');

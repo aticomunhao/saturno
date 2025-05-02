@@ -170,8 +170,8 @@ Route::get('/gerenciar-embalagem/alterar/{id}', [EmbalagemController::class, 'ed
 Route::put('/gerenciar-embalagem/atualizar/{id}', [EmbalagemController::class, 'update']);
 Route::get('/cad-embalagem', [EmbalagemController::class, 'indexCad']);
 Route::post('/cad-embalagem/inserir', [EmbalagemController::class, 'storeCad']);
-Route::delete('/cad-embalagem/excluir', [EmbalagemController::class, 'deleteCad']);
-Route::post('/cad-embalagem/alterar', [EmbalagemController::class, 'updateCad']);
+Route::post('/cad-embalagem/excluir/{id}', [EmbalagemController::class, 'deleteCad']);
+Route::put('/cad-embalagem/alterar/{id}', [EmbalagemController::class, 'updateCad']);
 
 
 Route::get('/cad-sexo', [SexoController::class, 'index']);

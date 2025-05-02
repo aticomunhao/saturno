@@ -11,7 +11,7 @@ class UnidadeMedidaController extends Controller
 {
     public function index()
     {
-        $result = ModelUnidadeMedida::all();
+        $result = ModelUnidadeMedida::where('tipo', 1)->where('ativo', true)->get();
 
         return view('/cadastro-geral/gerenciar-unidade-medida', compact('result'));
     }
@@ -30,7 +30,8 @@ class UnidadeMedidaController extends Controller
             'tipo' => 1,
         ]);
 
-        $result = ModelUnidadeMedida::all();
+        $result = ModelUnidadeMedida::where('tipo', 1)->where('ativo', true)->get();
+
         return view('/cadastro-geral/gerenciar-unidade-medida', compact('result'));
     }
 

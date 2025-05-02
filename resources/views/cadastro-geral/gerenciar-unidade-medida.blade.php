@@ -59,20 +59,17 @@
                                                 <td>{{ $results->nome }}</td>
                                                 <td>{{ $results->sigla }}</td>
                                                 <td>
-                                                    <button type="button" value="{{ $results->id }}" id="btnAlterarUniMed"
-                                                        class="btn btn-warning waves-effect waves-light classBtnAlterar"
-                                                        data-toggle="modal"
-                                                        data-target=".bs-example-modal-lg">Alterar</button>
-                                                    <a href="#"
-                                                        class="btn btn-sm btn-outline-danger excluirSolicitacao"
-                                                        data-tt="tooltip" style="font-size: 1rem; color:#303030"
-                                                        data-placement="top" title="Excluir" data-bs-toggle="modal"
-                                                        data-bs-target="#modalExcluirSolicitacao"
-                                                        data-id="{{ $aquisicaos->id }}">
-                                                        <i class="bi bi-trash"></i>
+                                                    <a href="#" class="btn btn-sm btn-outline-warning"
+                                                        data-bs-toggle="modal" data-bs-target="#modalEditarEmbalagem"
+                                                        style="font-size: 1rem; color:#303030" data-id="{{ $results->id }}" title="Editar"
+                                                        data-nome="{{ $results->nome }}" data-sigla="{{ $results->sigla }}">
+                                                        <i class="bi bi-pencil"></i>
                                                     </a>
-                                                    <a href="/unidade-medida/excluir/{{ $results->id }}">
-                                                        <input class="btn btn-danger" type="button" value="Excluir">
+                                                    <a href="#" class="btn btn-sm btn-outline-danger"
+                                                        data-bs-toggle="modal" data-bs-target="#modalExcluirEmbalagem"
+                                                        style="font-size: 1rem; color:#303030" data-id="{{ $results->id }}" title="Inativar"
+                                                        data-nome="{{ $results->nome }}" data-sigla="{{ $results->sigla }}">
+                                                        <i class="bi bi-exclamation-circle"></i>
                                                     </a>
                                                 </td>
                                             </tr>
@@ -88,16 +85,59 @@
     </div>
     </div>
     </div>
-    @include('cadastro-geral/popUp-alterar')
-@endsection
 
-@section('footerScript')
-    <!-- Required datatable js -->
-    <script src="{{ URL::asset('/libs/datatables/datatables.min.js') }}"></script>
-    <script src="{{ URL::asset('/libs/jszip/jszip.min.js') }}"></script>
-    <script src="{{ URL::asset('/libs/pdfmake/pdfmake.min.js') }}"></script>
+   <x-modal-editar id="modalEditarEmbalagem" labelId="modalEditarEmbalagemLabel" title="Editar Embalagem">
+        @method('PUT') {{-- para usar o método HTTP PUT --}}
+        <input type="hidden" id="edit-id" name="id">
+        <div class="row">
+            <div class="col-md-5 col-sm-12">
+                Nome da Embalagem
+                <input class="form-control" type="text" id="edit-nome" name="unidade_med" required>
+            </div>
+            <div class="col-md-2 col-sm-12">
+                Sigla
+                <input class="form-control" type="text" id="edit-sigla" name="sigla" required>
+            </div>
+        </div>
+    </x-modal-editar>
+    <x-modal-Excluir id="modalExcluirEmbalagem" labelId="modalExcluirEmbalagemLabel" title="Excluir Embalagem">
+        <input type="hidden" name="id" id="excluir-id">
+        <p>
+            <!-- Modal body -->
+            deseja realmente excluir a embalagem <strong id="excluir-nome" style="color: red"></strong> com a sigla <strong
+                id="excluir-sigla" style="color: red"></strong>?
+        </p>
+    </x-modal-Excluir>
+    <script>
+        const modalEditar = document.getElementById('modalEditarEmbalagem');
+        modalEditar.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const id = button.getAttribute('data-id');
+            const nome = button.getAttribute('data-nome');
+            const sigla = button.getAttribute('data-sigla');
 
-    <!-- Datatable init js -->
-    <script src="{{ URL::asset('/js/pages/datatables.init.js') }}"></script>
-    <script src="{{ URL::asset('/js/pages/gerenciar-unidade-medida.init.js') }}"></script>
+            modalEditar.querySelector('#edit-id').value = id;
+            modalEditar.querySelector('#edit-nome').value = nome;
+            modalEditar.querySelector('#edit-sigla').value = sigla;
+
+            const form = modalEditar.querySelector('form');
+            form.action = `/cad-embalagem/alterar/${id}`;
+        });
+    </script>
+    <script>
+        const modalExcluir = document.getElementById('modalExcluirEmbalagem');
+        modalExcluir.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const id = button.getAttribute('data-id');
+            const nome = button.getAttribute('data-nome');
+            const sigla = button.getAttribute('data-sigla');
+
+            modalExcluir.querySelector('#excluir-id').value = id;
+            modalExcluir.querySelector('#excluir-nome').textContent = nome;
+            modalExcluir.querySelector('#excluir-sigla').textContent = sigla;
+
+            const form = modalExcluir.querySelector('form');
+            form.action = `/cad-embalagem/excluir/${id}`;
+        });
+    </script>
 @endsection

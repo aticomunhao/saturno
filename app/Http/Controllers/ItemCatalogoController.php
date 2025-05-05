@@ -86,16 +86,18 @@ class ItemCatalogoController extends Controller
             'valor_maximo' => $request->input('val_maximo'),
             'valor_marca' => $request->input('val_marca'),
             'valor_etiqueta' => $request->input('val_etiqueta'),
-            'tp_unidade_medida' => $request->input('tp_unidade_medida'),
+            'id_embalagem' => $request->input('tp_unidade_medida'),
             'composicao' => $composicao,
             'ativo' => $ativo,
+            'id_tp_material' => $request->input('tp_material'),
+            'tp_unidade_medida' => $request->input('tp_unidade_medida'),
         ]);
 
         ModelEmbalagem::create([
             'id_item_catalogo' => $novoMaterial->id,
             'id_un_med_n1' => $request->input('tp_unidade_medida'),
             'qtde_n1' => '1',
-            'id_tp_material' => $request->input('tp_material'),
+            'ativo' => true,
         ]);
 
 

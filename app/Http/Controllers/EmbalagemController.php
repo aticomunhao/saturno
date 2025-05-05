@@ -4,16 +4,31 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ModelEmbalagem;
+use App\Models\ModelItemCatalogoMaterial;
 use App\Models\ModelUnidadeMedida;
+use App\Models\ModelTipoCategoriaMt;
 use Illuminate\Support\Facades\DB;
 
 class EmbalagemController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $query = ModelItemCatalogoMaterial::with('tipoCategoriaMt');
+        if ($request->categoria) {
+            $query->where('id_categoria_material', $request->categoria);
+        }
+        if ($request->nomeMaterial) {
+            $query->where('nome', $request->nomeMaterial);
+        }
 
-        return view('/embalagem/gerenciar-embalagem');
+        $result = $query->orderBy('id', 'asc')->paginate(20);
+
+        $categoria = ModelTipoCategoriaMt::all();
+        $nomeMaterial = ModelItemCatalogoMaterial::all();
+
+        return view('/embalagem/gerenciar-embalagem', compact('result', 'categoria', 'nomeMaterial'));
     }
+
     public function indexCad()
     {
 

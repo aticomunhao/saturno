@@ -104,7 +104,7 @@ Route::name('sit-doacao')->group(function () {
 });
 
 Route::get('/unidade-medida', [UnidadeMedidaController::class, 'index']);
-Route::post('/unidade-medida/inserir', [UnidadeMedidaController::class, 'store']);
+Route::any('/unidade-medida/inserir', [UnidadeMedidaController::class, 'store']);
 Route::get('/unidade-medida/excluir/{id}', [UnidadeMedidaController::class, 'destroy']);
 Route::get('/unidade-medida/alterar/{id}', [UnidadeMedidaController::class, 'edit']);
 Route::put('/unidade-medida/atualizar/{id}', [UnidadeMedidaController::class, 'update']);

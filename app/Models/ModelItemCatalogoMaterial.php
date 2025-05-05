@@ -13,9 +13,14 @@ class ModelItemCatalogoMaterial extends Model
         'id_categoria_material',
         'composicao',
         'ativo',
+        'id_embalagem',
     ];
     public function tipoCategoriaMt()
     {
         return $this->belongsTo(ModelTipoCategoriaMt::class, 'id_cl_mt');
+    }
+    public function embalagem()
+    {
+        return $this->hasMany(ModelEmbalagem::class, 'id_item_catalogo');
     }
 }

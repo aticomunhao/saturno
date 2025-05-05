@@ -17,7 +17,6 @@
                             </h5>
                         </div>
                     </div>
-                    <br>
                     <div class="card-body">
                         <form class="form-horizontal" method="POST" action="/cad-embalagem/inserir">
                             @csrf
@@ -98,11 +97,11 @@
             </div>
         </div>
     </x-modal-editar>
-    <x-modal-Excluir id="modalExcluirEmbalagem" labelId="modalExcluirEmbalagemLabel" title="Excluir Embalagem">
+    <x-modal-Excluir id="modalExcluirEmbalagem" labelId="modalExcluirEmbalagemLabel" title="Inativar Embalagem">
         <input type="hidden" name="id" id="excluir-id">
         <p>
             <!-- Modal body -->
-            deseja realmente excluir a embalagem <strong id="excluir-nome" style="color: red"></strong> com a sigla <strong
+            deseja realmente inativar a embalagem <strong id="excluir-nome" style="color: red"></strong> com a sigla <strong
                 id="excluir-sigla" style="color: red"></strong>?
         </p>
     </x-modal-Excluir>

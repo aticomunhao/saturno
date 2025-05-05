@@ -86,12 +86,12 @@
     </div>
     </div>
 
-   <x-modal-editar id="modalEditarEmbalagem" labelId="modalEditarEmbalagemLabel" title="Editar Embalagem">
+   <x-modal-editar id="modalEditarEmbalagem" labelId="modalEditarEmbalagemLabel" title="Editar Unidade de Medida">
         @method('PUT') {{-- para usar o método HTTP PUT --}}
         <input type="hidden" id="edit-id" name="id">
         <div class="row">
             <div class="col-md-5 col-sm-12">
-                Nome da Embalagem
+                Nome da Unidade de Medida
                 <input class="form-control" type="text" id="edit-nome" name="unidade_med" required>
             </div>
             <div class="col-md-2 col-sm-12">
@@ -100,11 +100,11 @@
             </div>
         </div>
     </x-modal-editar>
-    <x-modal-Excluir id="modalExcluirEmbalagem" labelId="modalExcluirEmbalagemLabel" title="Excluir Embalagem">
+    <x-modal-Excluir id="modalExcluirEmbalagem" labelId="modalExcluirEmbalagemLabel" title="Inativar Unidade de Medida">
         <input type="hidden" name="id" id="excluir-id">
         <p>
             <!-- Modal body -->
-            deseja realmente excluir a embalagem <strong id="excluir-nome" style="color: red"></strong> com a sigla <strong
+            deseja realmente inativar a unidade de medida <strong id="excluir-nome" style="color: red"></strong> com a sigla <strong
                 id="excluir-sigla" style="color: red"></strong>?
         </p>
     </x-modal-Excluir>

@@ -26,4 +26,25 @@ class ModelEmbalagem extends Model
         'comprimento',
         'id_tp_material',
     ];
+
+    public function itemMaterial()
+    {
+        return $this->belongsTo(ModelItemCatalogoMaterial::class, 'id_item_catalogo');
+    }
+    public function unidadeMedida()
+    {
+        return $this->belongsTo(ModelUnidadeMedida::class, 'id_un_med_n1');
+    }
+    public function unidadeMedida2()
+    {
+        return $this->belongsTo(ModelUnidadeMedida::class, 'id_un_med_n2');
+    }
+    public function unidadeMedida3()
+    {
+        return $this->belongsTo(ModelUnidadeMedida::class, 'id_un_med_n3');
+    }
+    public function unidadeMedida4()
+    {
+        return $this->belongsTo(ModelUnidadeMedida::class, 'id_un_med_n4');
+    }
 }

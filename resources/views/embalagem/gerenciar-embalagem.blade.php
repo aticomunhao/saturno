@@ -51,7 +51,7 @@
                                         style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-right:5px;"{{-- Botao submit do formulario de pesquisa --}}
                                         type="submit">Pesquisar
                                     </button>
-                                    <a href="/gerenciar-aquisicao-material" type="button" class="btn btn-light btn-sm"
+                                    <a href="/gerenciar-embalagem" type="button" class="btn btn-light btn-sm"
                                         style="box-shadow: 1px 2px 5px #000000; font-size: 1rem" value="">Limpar</a>
                                 </div>
                             </div>
@@ -64,6 +64,8 @@
                                         <tr>
                                             <th>Id</th>
                                             <th>Item Material</th>
+                                            <th>Unidade de Medida</th>
+                                            <th>Status</th>
                                             <th>Ação</th>
                                         </tr>
                                     </thead>
@@ -73,7 +75,14 @@
                                             <tr>
                                                 <td>{{ $results->id }}</td>
                                                 <td>{{ $results->nome }}</td>
-
+                                                <td>{{ $results->tp_unidade_medida }}</td>
+                                                <td>
+                                                    @if ($results->ativo == 1)
+                                                        <span class="badge bg-success">Ativo</span>
+                                                    @else
+                                                        <span class="badge bg-danger">Inativo</span>
+                                                    @endif
+                                                </td>
                                                 <td>
                                                     <a href="#" class="btn btn-sm btn-outline-warning"
                                                         data-bs-toggle="modal" data-bs-target="#modalEditarEmbalagem"

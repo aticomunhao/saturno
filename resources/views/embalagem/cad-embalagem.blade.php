@@ -18,9 +18,44 @@
                         </div>
                     </div>
                     <div class="card-body">
+                        <form method="GET" action="{{ route('cadEmbalagem.index') }}">
+                            @csrf
+                            <div style="display: flex; gap: 20px; align-items: flex-end;">
+                                <div class="col-md-2 col-sm-12">Nome da Embalagem
+                                    <br>
+                                    <input class="form-control" type="text" id="nomeEmb" name="nomeEmb"
+                                        value="{{ request('nomeEmb') }}">
+                                </div>
+                                <div class="col-md-2 col-sm-12">Sigla da Embalagem
+                                    <input class="form-control" type="text" id="siglaEmb" name="siglaEmb"
+                                        value="{{ request('siglaEmb') }}">
+                                </div>
+                                <div class="col-md-2 col-sm-12">
+                                    Status
+                                    <select class="form-control select2" id="status" name="status">
+                                        <option value="" {{ request('status') == '' ? 'selected' : '' }}>Todos
+                                        </option>
+                                        <option value="ativo" {{ request('status') == 'ativo' ? 'selected' : '' }}>Ativo
+                                        </option>
+                                        <option value="inativo" {{ request('status') == 'inativo' ? 'selected' : '' }}>
+                                            Inativo</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <button class="btn btn-light btn-sm "
+                                        style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-right:5px;"{{-- Botao submit do formulario de pesquisa --}}
+                                        type="submit">Pesquisar
+                                    </button>
+                                    <a href="/cad-embalagem" type="button" class="btn btn-light btn-sm"
+                                        style="box-shadow: 1px 2px 5px #000000; font-size: 1rem" value="">Limpar</a>
+                                </div>
+                            </div>
+                        </form>
+                        <br>
+                        <hr>
                         <form class="form-horizontal" method="POST" action="/cad-embalagem/inserir">
                             @csrf
-                            <div class="row" style="margin-left:5px">
+                            <div class="row">
                                 <div style="display: flex; gap: 20px; align-items: flex-end;">
                                     <div class="col-md-3 col-sm-12">
                                         Nova Embalagem
@@ -48,6 +83,7 @@
                                             <th>Id</th>
                                             <th>Embalagem</th>
                                             <th>Sigla</th>
+                                            <th>Ativo</th>
                                             <th>Ação</th>
                                         </tr>
                                     </thead>
@@ -59,22 +95,34 @@
                                                 <td>{{ $results->nome }}</td>
                                                 <td>{{ $results->sigla }}</td>
                                                 <td>
+                                                    @if ($results->ativo == 1)
+                                                        <span class="badge bg-success">Ativo</span>
+                                                    @else
+                                                        <span class="badge bg-danger">Inativo</span>
+                                                    @endif
+                                                </td>
+                                                <td>
                                                     <a href="#" class="btn btn-sm btn-outline-warning"
                                                         data-bs-toggle="modal" data-bs-target="#modalEditarEmbalagem"
-                                                        style="font-size: 1rem; color:#303030" data-id="{{ $results->id }}" title="Editar"
-                                                        data-nome="{{ $results->nome }}" data-sigla="{{ $results->sigla }}">
+                                                        style="font-size: 1rem; color:#303030" data-id="{{ $results->id }}"
+                                                        title="Editar" data-nome="{{ $results->nome }}"
+                                                        data-sigla="{{ $results->sigla }}">
                                                         <i class="bi bi-pencil"></i>
                                                     </a>
                                                     <a href="#" class="btn btn-sm btn-outline-danger"
                                                         data-bs-toggle="modal" data-bs-target="#modalInativarEmbalagem"
-                                                        style="font-size: 1rem; color:#303030" data-id="{{ $results->id }}" title="Inativar"
-                                                        data-nome="{{ $results->nome }}" data-sigla="{{ $results->sigla }}">
+                                                        style="font-size: 1rem; color:#303030"
+                                                        data-id="{{ $results->id }}" title="Inativar"
+                                                        data-nome="{{ $results->nome }}"
+                                                        data-sigla="{{ $results->sigla }}">
                                                         <i class="bi bi-exclamation-circle"></i>
                                                     </a>
                                                     <a href="#" class="btn btn-sm btn-outline-danger"
                                                         data-bs-toggle="modal" data-bs-target="#modalExcluirEmbalagem"
-                                                        style="font-size: 1rem; color:#303030" data-id="{{ $results->id }}" title="Excluir"
-                                                        data-nome="{{ $results->nome }}" data-sigla="{{ $results->sigla }}">
+                                                        style="font-size: 1rem; color:#303030"
+                                                        data-id="{{ $results->id }}" title="Excluir"
+                                                        data-nome="{{ $results->nome }}"
+                                                        data-sigla="{{ $results->sigla }}">
                                                         <i class="bi bi-trash"></i>
                                                     </a>
                                                 </td>
@@ -107,16 +155,16 @@
         <input type="hidden" name="id" id="inativar-id">
         <p>
             <!-- Modal body -->
-            Deseja realmente inativar a embalagem: <strong id="inativar-nome" style="color: red"></strong>. Com a sigla <strong
-                id="inativar-sigla" style="color: red"></strong>?
+            Deseja realmente inativar a embalagem: <strong id="inativar-nome" style="color: red"></strong>. Com a sigla
+            <strong id="inativar-sigla" style="color: red"></strong>?
         </p>
     </x-modal-Excluir>
     <x-modal-Excluir id="modalExcluirEmbalagem" labelId="modalExcluirEmbalagemLabel" title="Excluir Embalagem">
         <input type="hidden" name="id" id="excluir-id">
         <p>
             <!-- Modal body -->
-            Deseja realmente excluir a embalagem: <strong id="excluir-nome" style="color: red"></strong>. Com a sigla <strong
-                id="excluir-sigla" style="color: red"></strong>?
+            Deseja realmente excluir a embalagem: <strong id="excluir-nome" style="color: red"></strong>. Com a sigla
+            <strong id="excluir-sigla" style="color: red"></strong>?
         </p>
     </x-modal-Excluir>
     <script>

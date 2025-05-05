@@ -9,9 +9,25 @@ use Illuminate\Support\Facades\DB;
 
 class UnidadeMedidaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $result = ModelUnidadeMedida::where('tipo', 1)->orderBy('id', 'asc')->paginate(20);
+        $query = ModelUnidadeMedida::where('tipo', 1);
+
+        if ($request->nomeUM) {
+            $query->where('nome', 'ilike', '%' . $request->nomeUM . '%');
+        }
+        if ($request->siglaUM) {
+            $query->where('sigla', 'ilike', '%' . $request->siglaUM . '%');
+        }
+        if ($request->filled('status')) {
+            if ($request->status === 'ativo') {
+                $query->where('ativo', true);
+            } elseif ($request->status === 'inativo') {
+                $query->where('ativo', false);
+            }
+        }
+
+        $result = $query->orderBy('id', 'asc')->paginate(20);
 
         return view('/cadastro-geral/gerenciar-unidade-medida', compact('result'));
     }
@@ -76,20 +92,34 @@ class UnidadeMedidaController extends Controller
 
     public function inativar($id)
     {
-        $count = DB::table('embalagem')
-            ->where('id_un_med_n1', $id)
-            ->orWhere('id_un_med_n2', $id)
-            ->count();
+        $unidade = ModelUnidadeMedida::findOrFail($id);
 
-        if ($count == 0) {
-            ModelUnidadeMedida::where('id', $id)->update(['ativo' => 0]);
-            app('flasher')->addSuccess('Unidade de medida inativada com sucesso!');
+        // Se estiver ativa, verifica se pode ser inativada
+        if ($unidade->ativo) {
+            $count = DB::table('embalagem')
+                ->where('id_un_med_n1', $id)
+                ->orWhere('id_un_med_n2', $id)
+                ->orWhere('id_un_med_n3', $id)
+                ->orWhere('id_un_med_n4', $id)
+                ->count();
+
+            if ($count == 0) {
+                $unidade->ativo = 0;
+                $unidade->save();
+                app('flasher')->addSuccess('Unidade de medida inativada com sucesso!');
+            } else {
+                app('flasher')->addError('Não é possível inativar esta unidade de medida, pois ela está vinculada a um material.');
+            }
         } else {
-            app('flasher')->addError('Não é possível inativar esta unidade de medida, pois ela está vinculada a um material.');
+            // Se estiver inativa, ativa diretamente
+            $unidade->ativo = 1;
+            $unidade->save();
+            app('flasher')->addSuccess('Unidade de medida ativada com sucesso!');
         }
 
         return redirect()->route('unidade-medida.index');
     }
+
 
     public function destroy($id)
     {

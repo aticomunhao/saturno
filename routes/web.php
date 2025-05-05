@@ -104,11 +104,12 @@ Route::name('sit-doacao')->group(function () {
     Route::put('/cad-sit-doacao/atualizar/{id}', [SitDoacaoController::class, 'update']);
 });
 
-Route::get('/unidade-medida', [UnidadeMedidaController::class, 'index']);
+Route::get('/unidade-medida', [UnidadeMedidaController::class, 'index'])->name('unidade-medida.index');
 Route::any('/unidade-medida/inserir', [UnidadeMedidaController::class, 'store']);
-Route::get('/unidade-medida/excluir/{id}', [UnidadeMedidaController::class, 'destroy']);
+Route::get('/unidade-medida/inativar/{id}', [UnidadeMedidaController::class, 'inativar']);
 Route::get('/unidade-medida/alterar/{id}', [UnidadeMedidaController::class, 'edit']);
 Route::put('/unidade-medida/atualizar/{id}', [UnidadeMedidaController::class, 'update']);
+Route::any('/unidade-medida/excluir/{id}', [UnidadeMedidaController::class, 'destroy']);
 
 
 Route::get('/gerenciar-pessoa', [PessoaController::class, 'index'])->name('listapessoa.index');
@@ -164,12 +165,12 @@ Route::get('/cad-cat-material/excluir/{id}', [CatMaterialController::class, 'des
 Route::get('/cad-cat-material/alterar/{id}', [CatMaterialController::class, 'edit']);
 Route::put('/cad-cat-material/atualizar/{id}', [CatMaterialController::class, 'update']);
 
-Route::get('/gerenciar-embalagem', [EmbalagemController::class, 'index']);
+Route::get('/gerenciar-embalagem', [EmbalagemController::class, 'index'])->name('embalagem.index');
 Route::post('/gerenciar-embalagem/inserir', [EmbalagemController::class, 'store']);
 Route::get('/gerenciar-embalagem/excluir/{id}', [EmbalagemController::class, 'destroy']);
 Route::get('/gerenciar-embalagem/alterar/{id}', [EmbalagemController::class, 'edit']);
 Route::put('/gerenciar-embalagem/atualizar/{id}', [EmbalagemController::class, 'update']);
-Route::get('/cad-embalagem', [EmbalagemController::class, 'indexCad']);
+Route::get('/cad-embalagem', [EmbalagemController::class, 'indexCad'])->name('cadEmbalagem.index');
 Route::post('/cad-embalagem/inserir', [EmbalagemController::class, 'storeCad']);
 Route::post('/cad-embalagem/excluir/{id}', [EmbalagemController::class, 'deleteCad']);
 Route::put('/cad-embalagem/alterar/{id}', [EmbalagemController::class, 'updateCad']);

@@ -9,11 +9,28 @@ class ModelLocalizacaoCadastroInicial extends Model
     public $timestamps = false;
     protected $table = 'localizacao_cadastro_inicial';
     protected $fillable = [
-        'id',
-        'id_usuario',
-        'id_localizacao',
         'id_cadastro_inicial',
-        'data_cadastro',
-        'data_atualizacao'
+        'id_remetente',
+        'id_destinatario',
+        'id_deposito_origem',
+        'id_deposito_destino',
+        'data'
     ];
+
+    public function cadastroInicial()
+    {
+        return $this->belongsTo(ModelCadastroInicial::class, 'id_cadastro_inicial');
+    }
+
+    public function remetente()
+    {
+        return $this->belongsTo(ModelUsuario::class, 'id_remetente');
+    }
+    public function destinatario(){
+        return $this->belongsTo(ModelUsuario::class, 'id_destinatario');
+    }
+    public function depositoOrigem(){
+        return $this->belongsTo(ModelDeposito::class, 'id_deposito_origem');
+    }
+
 }

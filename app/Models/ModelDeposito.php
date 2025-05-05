@@ -31,4 +31,10 @@ class ModelDeposito extends Model
     {
         return $this->belongsTo(ModelSala::class, 'id_sala');
     }
+    public function depositoOrigemLocalizacaoCadastroInicial(){
+        return $this->hasMany(ModelLocalizacaoCadastroInicial::class, 'id_deposito_origem');
+    }
+    public function depositoDestinoLocalizacaoCadastroInicial(){
+        return $this->hasMany(ModelLocalizacaoCadastroInicial::class, 'id_deposito_destino');
+    }
 }

@@ -48,6 +48,7 @@ use App\Http\Controllers\CatalogoEmpresaController;
 use App\Http\Controllers\CatalogoServicoController;
 use App\Http\Controllers\AquisicaoMaterialController;
 use App\Http\Controllers\GerenciarDepositoController;
+use App\Http\Controllers\GerenciarLocalizacaoCadastroInicialController;
 use App\Http\Controllers\ValorCompraController;
 
 
@@ -406,3 +407,13 @@ Route::any('/atualizar-deposito/{id}', [GerenciarDepositoController::class, 'upd
 Route::any('/deletar-deposito/{id}', [GerenciarDepositoController::class, 'destroy'])->name('deposito.delete');
 Route::any('/retorna-deposito/{id}', [GerenciarDepositoController::class, 'show'])->name('deposito.show');
 Route::any('reativar-deposito/{id}', [GerenciarDepositoController::class, 'reativar'])->name('deposito.reativar');
+
+//Localizacao Cadastro Inicial
+Route::any('/gerenciar-localizacao-cadastro-inicial', [GerenciarLocalizacaoCadastroInicialController::class, 'index'])->name('localizacao-cadastro-inicial.index');
+Route::any('/incluir-localizacao-cadastro-inicial', [GerenciarLocalizacaoCadastroInicialController::class, 'create'])->name('localizacao-cadastro-inicial.create');
+Route::any('/salvar-localizacao-cadastro-inicial', [GerenciarLocalizacaoCadastroInicialController::class, 'store'])->name('localizacao-cadastro-inicial.store');
+Route::any('/editar-localizacao-cadastro-inicial/{id}', [GerenciarLocalizacaoCadastroInicialController::class, 'edit'])->name('localizacao-cadastro-inicial.edit');
+Route::any('/atualizar-localizacao-cadastro-inicial/{id}', [GerenciarLocalizacaoCadastroInicialController::class, 'update'])->name('localizacao-cadastro-inicial.update');
+Route::any('/deletar-localizacao-cadastro-inicial/{id}', [GerenciarLocalizacaoCadastroInicialController::class, 'destroy'])->name('localizacao-cadastro-inicial.delete');
+Route::any('/retorna-localizacao-cadastro-inicial/{id}', [GerenciarLocalizacaoCadastroInicialController::class, 'show'])->name('localizacao-cadastro-inicial.show');
+Route::any('/solicitar-teste-material', [GerenciarLocalizacaoCadastroInicialController::class, 'solicitar_teste_material'])->name('localizacao-cadastro-inicial.solicitar_teste_material');

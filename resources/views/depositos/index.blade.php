@@ -103,6 +103,7 @@
                                                 </button>
                                                 <x-modal-excluir :id="'modalExcluir' . $d->id" :labelId="'modalExcluirLabel' . $d->id" :action="route('deposito.delete', $d->id)"
                                                     title="Excluir Depósito: {{ $d->nome }}">
+                                                    @method('DELETE')
                                                     <p>Deseja mesmo excluir o depósito
                                                         <strong>{{ $d->nome }}</strong>?
                                                     </p>

@@ -86,7 +86,7 @@ class GerenciarLocalizacaoCadastroInicialController extends Controller
          'TipoMaterial',
          'ItemCatalogoMaterial',
          'Localizacao')->whereDoesntHave('Localizacao')->get();
-dd($cadastro_inicial);
-        return view('localizacao-cadastro-inicial.solicitar-teste', compact('setores_para_teste'));
+// dd($cadastro_inicial);
+        return view('localizacao-cadastro-inicial.solicitar-teste', compact('setores_para_teste', 'cadastro_inicial'));
     }
 }

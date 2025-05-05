@@ -12,6 +12,9 @@
                         <a href="{{ route('localizacao-cadastro-inicial.create') }}" class="btn btn-success">
                             Novo Cadastro Inicial
                         </a>
+                        <a href="{{ route('localizacao-cadastro-inicial.solicitar_teste_material') }}" class="btn btn-info">
+                            Solicitar Teste de Material
+                        </a>
                     </div>
                 </div>
                 <table class="table table-sm table-striped table-bordered border-secondary table-hover align-middle">

@@ -44,6 +44,10 @@ class ModelCadastroInicial extends Model
         return $this->belongsTo(ModelTipoMaterial::class, 'id_tipo_material');
     }
 
+    public function Localizacao()
+    {
+        return $this->hasMany(ModelLocalizacaoCadastroInicial::class, 'id_cadastro_inicial');
+    }
     protected $fillable = [
         'id_item_catalogo',
         'observacao',

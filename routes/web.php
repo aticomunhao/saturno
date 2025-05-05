@@ -416,3 +416,4 @@ Route::any('/editar-localizacao-cadastro-inicial/{id}', [GerenciarLocalizacaoCad
 Route::any('/atualizar-localizacao-cadastro-inicial/{id}', [GerenciarLocalizacaoCadastroInicialController::class, 'update'])->name('localizacao-cadastro-inicial.update');
 Route::any('/deletar-localizacao-cadastro-inicial/{id}', [GerenciarLocalizacaoCadastroInicialController::class, 'destroy'])->name('localizacao-cadastro-inicial.delete');
 Route::any('/retorna-localizacao-cadastro-inicial/{id}', [GerenciarLocalizacaoCadastroInicialController::class, 'show'])->name('localizacao-cadastro-inicial.show');
+Route::any('/solicitar-teste-material', [GerenciarLocalizacaoCadastroInicialController::class, 'solicitar_teste_material'])->name('localizacao-cadastro-inicial.solicitar_teste_material');

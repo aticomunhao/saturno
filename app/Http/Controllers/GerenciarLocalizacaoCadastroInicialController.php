@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ModelCadastroInicial;
 use App\Models\ModelLocalizacaoCadastroInicial;
+use App\Models\ModelSetor;
 use Illuminate\Http\Request;
 
 class GerenciarLocalizacaoCadastroInicialController extends Controller
@@ -26,8 +28,10 @@ class GerenciarLocalizacaoCadastroInicialController extends Controller
      */
     public function create()
     {
+        $setores = ModelSetor::all();
+        // dd($setores);
 
-        return view('localizacao-cadastro-inicial.create');
+        return view('localizacao-cadastro-inicial.create', compact('setores'));
     }
 
     /**
@@ -68,5 +72,21 @@ class GerenciarLocalizacaoCadastroInicialController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function solicitar_teste_material(){
+        $setores_para_teste = ModelSetor::where('testa_material', true)->get();
+    //    dd($setores_para_teste);
+        $cadastro_inicial =  ModelCadastroInicial::with('Status',
+        'SolOrigem',
+        'DocOrigem',
+        'Deposito',
+        'Destinacao',
+         'CategoriaMaterial',
+         'TipoMaterial',
+         'ItemCatalogoMaterial',
+         'Localizacao')->whereDoesntHave('Localizacao')->get();
+dd($cadastro_inicial);
+        return view('localizacao-cadastro-inicial.solicitar-teste', compact('setores_para_teste'));
     }
 }

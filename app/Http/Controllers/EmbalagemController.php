@@ -32,7 +32,7 @@ class EmbalagemController extends Controller
     public function indexCad()
     {
 
-        $result = ModelUnidadeMedida::where('tipo', 2)->where('ativo', true)->get();
+        $result = ModelUnidadeMedida::where('tipo', 2)->where('ativo', true)->orderBy('id', 'asc')->paginate(20);
 
         return view('/embalagem/cad-embalagem', compact('result'));
     }
@@ -45,7 +45,7 @@ class EmbalagemController extends Controller
     public function store(Request $request)
     {
 
-        return view('/embalagem/gerenciar-embalagem');
+        return redirect()->route('embalagem.index');
     }
     public function storeCad(Request $request)
     {
@@ -56,9 +56,7 @@ class EmbalagemController extends Controller
             'tipo' => 2,
         ]);
 
-        $result = ModelUnidadeMedida::where('tipo', 2)->where('ativo', true)->get();
-
-        return view('/embalagem/cad-embalagem', compact('result'));
+        return redirect()->route('cadEmbalagem.index');
     }
 
 
@@ -81,21 +79,42 @@ class EmbalagemController extends Controller
         $embalagem->save();
 
         app('flasher')->addSuccess('Embalagem atualizada com sucesso!');
-        return redirect()->back();
+        return redirect()->route('cadEmbalagem.index');
     }
 
+    public function inativarCad($id)
+    {
+        $count = DB::table('embalagem')
+            ->where('id_un_med_n1', $id)
+            ->orWhere('id_un_med_n2', $id)
+            ->orWhere('id_un_med_n3', $id)
+            ->orWhere('id_un_med_n4', $id)
+            ->count();
+
+        if ($count == 0) {
+            ModelUnidadeMedida::where('id', $id)->update(['ativo' => 0]);
+            app('flasher')->addSuccess('Unidade de medida inativada com sucesso!');
+        } else {
+            app('flasher')->addError('Não é possível inativar esta unidade de medida, pois ela está vinculada a um material.');
+        }
+
+        return redirect()->route('cadEmbalagem.index');
+    }
     public function deleteCad($id)
     {
-        try {
-            $embalagem = ModelUnidadeMedida::findOrFail($id);
-            $embalagem->ativo = false;
-            $embalagem->save();
+        $count = DB::table('embalagem')
+            ->where('id_un_med_n1', $id)
+            ->orWhere('id_un_med_n2', $id)
+            ->orWhere('id_un_med_n3', $id)
+            ->orWhere('id_un_med_n4', $id)
+            ->count();
 
-            app('flasher')->addSuccess('Embalagem inativada com sucesso!');
-            return redirect()->back();
-        } catch (\Exception $e) {
-            app('flasher')->addError('Erro ao inativar embalagem.');
-            return redirect()->back();
+        if ($count == 0) {
+            ModelUnidadeMedida::where('id', $id)->delete();
+            app('flasher')->addSuccess('Unidade de medida excluída com sucesso!');
+        } else {
+            app('flasher')->addError('Não é possível excluir esta unidade de medida, pois ela está vinculada a um material.');
         }
+        return redirect()->route('cadEmbalagem.index');
     }
 }

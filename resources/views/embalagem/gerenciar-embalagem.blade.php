@@ -83,12 +83,20 @@
                                                         <i class="bi bi-pencil"></i>
                                                     </a>
                                                     <a href="#" class="btn btn-sm btn-outline-danger"
-                                                        data-bs-toggle="modal" data-bs-target="#modalExcluirEmbalagem"
+                                                        data-bs-toggle="modal" data-bs-target="#modalinativarEmbalagem"
                                                         style="font-size: 1rem; color:#303030"
                                                         data-id="{{ $results->id }}" title="Inativar"
                                                         data-nome="{{ $results->nome }}"
                                                         data-sigla="{{ $results->sigla }}">
                                                         <i class="bi bi-exclamation-circle"></i>
+                                                    </a>
+                                                    <a href="#" class="btn btn-sm btn-outline-danger"
+                                                        data-bs-toggle="modal" data-bs-target="#modalExcluirEmbalagem"
+                                                        style="font-size: 1rem; color:#303030"
+                                                        data-id="{{ $results->id }}" title="Excluir"
+                                                        data-nome="{{ $results->nome }}"
+                                                        data-sigla="{{ $results->sigla }}">
+                                                        <i class="bi bi-trash"></i>
                                                     </a>
                                                 </td>
                                             </tr>

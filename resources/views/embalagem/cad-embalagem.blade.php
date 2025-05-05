@@ -66,10 +66,16 @@
                                                         <i class="bi bi-pencil"></i>
                                                     </a>
                                                     <a href="#" class="btn btn-sm btn-outline-danger"
-                                                        data-bs-toggle="modal" data-bs-target="#modalExcluirEmbalagem"
+                                                        data-bs-toggle="modal" data-bs-target="#modalInativarEmbalagem"
                                                         style="font-size: 1rem; color:#303030" data-id="{{ $results->id }}" title="Inativar"
                                                         data-nome="{{ $results->nome }}" data-sigla="{{ $results->sigla }}">
                                                         <i class="bi bi-exclamation-circle"></i>
+                                                    </a>
+                                                    <a href="#" class="btn btn-sm btn-outline-danger"
+                                                        data-bs-toggle="modal" data-bs-target="#modalExcluirEmbalagem"
+                                                        style="font-size: 1rem; color:#303030" data-id="{{ $results->id }}" title="Excluir"
+                                                        data-nome="{{ $results->nome }}" data-sigla="{{ $results->sigla }}">
+                                                        <i class="bi bi-trash"></i>
                                                     </a>
                                                 </td>
                                             </tr>
@@ -97,11 +103,19 @@
             </div>
         </div>
     </x-modal-editar>
-    <x-modal-Excluir id="modalExcluirEmbalagem" labelId="modalExcluirEmbalagemLabel" title="Inativar Embalagem">
+    <x-modal-Excluir id="modalInativarEmbalagem" labelId="modalInativarEmbalagemLabel" title="Inativar Embalagem">
+        <input type="hidden" name="id" id="inativar-id">
+        <p>
+            <!-- Modal body -->
+            Deseja realmente inativar a embalagem: <strong id="inativar-nome" style="color: red"></strong>. Com a sigla <strong
+                id="inativar-sigla" style="color: red"></strong>?
+        </p>
+    </x-modal-Excluir>
+    <x-modal-Excluir id="modalExcluirEmbalagem" labelId="modalExcluirEmbalagemLabel" title="Excluir Embalagem">
         <input type="hidden" name="id" id="excluir-id">
         <p>
             <!-- Modal body -->
-            deseja realmente inativar a embalagem <strong id="excluir-nome" style="color: red"></strong> com a sigla <strong
+            Deseja realmente excluir a embalagem: <strong id="excluir-nome" style="color: red"></strong>. Com a sigla <strong
                 id="excluir-sigla" style="color: red"></strong>?
         </p>
     </x-modal-Excluir>
@@ -119,6 +133,22 @@
 
             const form = modalEditar.querySelector('form');
             form.action = `/cad-embalagem/alterar/${id}`;
+        });
+    </script>
+    <script>
+        const modalInativar = document.getElementById('modalInativarEmbalagem');
+        modalInativar.addEventListener('show.bs.modal', function(event) {
+            const button = event.relatedTarget;
+            const id = button.getAttribute('data-id');
+            const nome = button.getAttribute('data-nome');
+            const sigla = button.getAttribute('data-sigla');
+
+            modalInativar.querySelector('#inativar-id').value = id;
+            modalInativar.querySelector('#inativar-nome').textContent = nome;
+            modalInativar.querySelector('#inativar-sigla').textContent = sigla;
+
+            const form = modalInativar.querySelector('form');
+            form.action = `/cad-embalagem/inativar/${id}`;
         });
     </script>
     <script>

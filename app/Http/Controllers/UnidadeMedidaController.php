@@ -11,7 +11,7 @@ class UnidadeMedidaController extends Controller
 {
     public function index()
     {
-        $result = ModelUnidadeMedida::where('tipo', 1)->where('ativo', true)->get();
+        $result = ModelUnidadeMedida::where('tipo', 1)->orderBy('id', 'asc')->paginate(20);
 
         return view('/cadastro-geral/gerenciar-unidade-medida', compact('result'));
     }

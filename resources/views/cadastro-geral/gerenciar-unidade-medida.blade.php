@@ -48,6 +48,7 @@
                                             <th>Id</th>
                                             <th>Unidade de Medida</th>
                                             <th>Sigla</th>
+                                            <th>Status</th>
                                             <th>Ação</th>
                                         </tr>
                                     </thead>
@@ -58,6 +59,7 @@
                                                 <td>{{ $results->id }}</td>
                                                 <td>{{ $results->nome }}</td>
                                                 <td>{{ $results->sigla }}</td>
+                                                <td>{{ $results->ativo == 1 ? 'Ativo' : 'Inativo' }}</td>
                                                 <td>
                                                     <a href="#" class="btn btn-sm btn-outline-warning"
                                                         data-bs-toggle="modal" data-bs-target="#modalEditarEmbalagem"
@@ -133,7 +135,7 @@
             modalEditar.querySelector('#edit-sigla').value = sigla;
 
             const form = modalEditar.querySelector('form');
-            form.action = `/cad-embalagem/alterar/${id}`;
+            form.action = `/unidade-medida/alterar/${id}`;
         });
     </script>
     <script>
@@ -149,7 +151,7 @@
             modalInativar.querySelector('#inativar-sigla').textContent = sigla;
 
             const form = modalInativar.querySelector('form');
-            form.action = `/cad-embalagem/inativar/${id}`;
+            form.action = `/unidade-medida/inativar/${id}`;
         });
     </script>
     <script>
@@ -165,7 +167,7 @@
             modalExcluir.querySelector('#excluir-sigla').textContent = sigla;
 
             const form = modalExcluir.querySelector('form');
-            form.action = `/cad-embalagem/excluir/${id}`;
+            form.action = `/unidade-medida/excluir/${id}`;
         });
     </script>
 @endsection

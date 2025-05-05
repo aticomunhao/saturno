@@ -61,7 +61,7 @@ class ItemCatalogoController extends Controller
         $cfop = ModelCfop::all();
         $cest = ModelCest::all();
         $ncm = ModelNcm::all();
-        $unidadeMedida = ModelUnidadeMedida::all();
+        $unidadeMedida = ModelUnidadeMedida::where('tipo', 1)->orderBy('id')->get();
         $tipoMaterial = ModelTipoMaterial::all();
 
         //ICMS
@@ -86,7 +86,6 @@ class ItemCatalogoController extends Controller
             'valor_maximo' => $request->input('val_maximo'),
             'valor_marca' => $request->input('val_marca'),
             'valor_etiqueta' => $request->input('val_etiqueta'),
-            'id_embalagem' => $request->input('tp_unidade_medida'),
             'composicao' => $composicao,
             'ativo' => $ativo,
             'id_tp_material' => $request->input('tp_material'),
@@ -103,7 +102,8 @@ class ItemCatalogoController extends Controller
 
 
         $result= $result= $this->getListaItemMatAll();
-        return view('catalogo/gerenciar-item-catalogo',['result'=>$result]);
+
+        return redirect()->route('itemCatalogo.index');
     }
 
 

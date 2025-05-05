@@ -102,7 +102,6 @@
                                     <div class="col-md-4">
                                         <select class="form-control select2" id="tp_unidade_medida"
                                             name="tp_unidade_medida" required="required">
-                                            <option value="">Selecione</option>
                                             @foreach ($unidadeMedida as $unidadeMedidas)
                                                 <option value="{{ $unidadeMedidas->id }}">{{ $unidadeMedidas->sigla }} -
                                                     {{ $unidadeMedidas->nome }}
@@ -117,7 +116,7 @@
                                 </div>
                             </div>
                             <br>
-                            <div class="card" style="border-color: #355089;">
+                            {{-- <div class="card" style="border-color: #355089;">
                                 <div class="card-header">
                                     <div class="ROW">
                                         <h5 class="col-12" style="color: #355089">
@@ -426,7 +425,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                             <br>
                             <div class="botões">
                                 <a href="javascript:history.back()"

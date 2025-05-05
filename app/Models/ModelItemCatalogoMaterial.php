@@ -13,11 +13,18 @@ class ModelItemCatalogoMaterial extends Model
         'id_categoria_material',
         'composicao',
         'ativo',
-        'id_embalagem',
+        'tp_unidade_medida',
+        'valor_minimo',
+        'valor_medio',
+        'valor_maximo',
+        'valor_marca',
+        'valor_etiqueta',
+        'composicao',
+        'id_tp_material',
     ];
     public function tipoCategoriaMt()
     {
-        return $this->belongsTo(ModelTipoCategoriaMt::class, 'id_cl_mt');
+        return $this->belongsTo(ModelTipoCategoriaMt::class, 'id_categoria_material');
     }
     public function embalagem()
     {

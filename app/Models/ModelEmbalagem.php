@@ -25,6 +25,7 @@ class ModelEmbalagem extends Model
         'largura',
         'comprimento',
         'id_tp_material',
+        'ativo',
     ];
 
     public function itemMaterial()

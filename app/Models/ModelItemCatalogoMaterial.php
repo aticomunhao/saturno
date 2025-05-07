@@ -26,8 +26,16 @@ class ModelItemCatalogoMaterial extends Model
     {
         return $this->belongsTo(ModelTipoCategoriaMt::class, 'id_categoria_material');
     }
+    public function tipoMaterial()
+    {
+        return $this->belongsTo(ModelTipoMaterial::class, 'id_tp_material');
+    }
     public function embalagem()
     {
         return $this->hasMany(ModelEmbalagem::class, 'id_item_catalogo');
+    }
+    public function unidadeMedida()
+    {
+        return $this->belongsTo(ModelUnidadeMedida::class, 'tp_unidade_medida');
     }
 }

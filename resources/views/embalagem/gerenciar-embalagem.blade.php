@@ -5,22 +5,22 @@
 @endsection
 
 @section('content')
-    <form class="form-horizontal mt-4" method="POST" action="/cad-inicial-material/compra-direta">
-        @csrf
-        <div class="container-fluid"> {{-- Container completo da página  --}}
-            <div class="justify-content-center">
-                <div class="col-12">
-                    <br>
-                    <div class="card" style="border-color: #355089;">
-                        <div class="card-header">
-                            <div class="row">
-                                <h5 class="col-12" style="color: #355089">
-                                    Gerenciar Embalagens
-                                </h5>
-                            </div>
+    <div class="container-fluid"> {{-- Container completo da página  --}}
+        <div class="justify-content-center">
+            <div class="col-12">
+                <br>
+                <div class="card" style="border-color: #355089;">
+                    <div class="card-header">
+                        <div class="row">
+                            <h5 class="col-12" style="color: #355089">
+                                Gerenciar Embalagens
+                            </h5>
                         </div>
-                        <br>
-                        <div class="card-body">
+                    </div>
+                    <br>
+                    <div class="card-body">
+                        <form class="form-horizontal mt-4" method="GET" action="{{ route('embalagem.index') }}">
+                            @csrf
                             <div style="display: flex; gap: 20px; align-items: flex-end;">
                                 <div class="col-md-2 col-sm-12">Categoria do Material
                                     <br>
@@ -45,7 +45,17 @@
                                         @endforeach
                                     </select>
                                 </div>
-
+                                <div class="col-md-2 col-sm-12">
+                                    Status
+                                    <select class="form-control select2" id="status" name="status">
+                                        <option value="" {{ request('status') == '' ? 'selected' : '' }}>Todos
+                                        </option>
+                                        <option value="ativo" {{ request('status') == 'ativo' ? 'selected' : '' }}>Ativo
+                                        </option>
+                                        <option value="inativo" {{ request('status') == 'inativo' ? 'selected' : '' }}>
+                                            Inativo</option>
+                                    </select>
+                                </div>
                                 <div class="col-12">
                                     <button class="btn btn-light btn-sm "
                                         style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-right:5px;"{{-- Botao submit do formulario de pesquisa --}}
@@ -55,74 +65,61 @@
                                         style="box-shadow: 1px 2px 5px #000000; font-size: 1rem" value="">Limpar</a>
                                 </div>
                             </div>
-                            <br>
-                            <hr>
-                            <div class="row" style="margin-left:5px">
-                                <table id="datatable" class="table table-bordered dt-responsive nowrap"
-                                    style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                    <thead>
-                                        <tr>
-                                            <th>Id</th>
-                                            <th>Item Material</th>
-                                            <th>Unidade de Medida</th>
-                                            <th>Status</th>
-                                            <th>Ação</th>
-                                        </tr>
-                                    </thead>
+                        </form>
+                        <br>
+                        <hr>
+                        <div class="row" style="margin-left:5px">
+                            <table id="datatable" class="table table-bordered dt-responsive nowrap"
+                                style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Item Material</th>
+                                        <th>Unidade de Medida</th>
+                                        <th>Status</th>
+                                        <th>Ação</th>
+                                    </tr>
+                                </thead>
 
-                                    <tbody>
-                                        @foreach ($result as $results)
-                                            <tr>
-                                                <td>{{ $results->id }}</td>
-                                                <td>{{ $results->nome }}</td>
-                                                <td>{{ $results->tp_unidade_medida }}</td>
-                                                <td>
-                                                    @if ($results->ativo == 1)
-                                                        <span class="badge bg-success">Ativo</span>
-                                                    @else
-                                                        <span class="badge bg-danger">Inativo</span>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    <a href="#" class="btn btn-sm btn-outline-warning"
-                                                        data-bs-toggle="modal" data-bs-target="#modalEditarEmbalagem"
-                                                        style="font-size: 1rem; color:#303030" data-id="{{ $results->id }}"
-                                                        title="Editar" data-nome="{{ $results->nome }}"
-                                                        data-sigla="{{ $results->sigla }}">
-                                                        <i class="bi bi-pencil"></i>
-                                                    </a>
-                                                    <a href="#" class="btn btn-sm btn-outline-danger"
-                                                        data-bs-toggle="modal" data-bs-target="#modalinativarEmbalagem"
-                                                        style="font-size: 1rem; color:#303030"
-                                                        data-id="{{ $results->id }}" title="Inativar"
-                                                        data-nome="{{ $results->nome }}"
-                                                        data-sigla="{{ $results->sigla }}">
-                                                        <i class="bi bi-exclamation-circle"></i>
-                                                    </a>
-                                                    <a href="#" class="btn btn-sm btn-outline-danger"
-                                                        data-bs-toggle="modal" data-bs-target="#modalExcluirEmbalagem"
-                                                        style="font-size: 1rem; color:#303030"
-                                                        data-id="{{ $results->id }}" title="Excluir"
-                                                        data-nome="{{ $results->nome }}"
-                                                        data-sigla="{{ $results->sigla }}">
-                                                        <i class="bi bi-trash"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        @endForeach
-                                    </tbody>
-                                </table>
-                            </div>
+                                <tbody>
+                                    @foreach ($result as $results)
+                                        <tr>
+                                            <td>{{ $results->id ?? 'N/A' }}</td>
+                                            <td>{{ $results->nome ?? 'N/A' }}</td>
+                                            <td>{{ $results->unidadeMedida->sigla ?? '' }} -
+                                                {{ $results->unidadeMedida->nome ?? '' }}</td>
+                                            <td>
+                                                @if ($results->ativo == 1)
+                                                    <span class="badge bg-success">Ativo</span>
+                                                @else
+                                                    <span class="badge bg-danger">Inativo</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <a href="/gerenciar-embalagem/alterar/{{ $results->id }}"
+                                                    class="btn btn-sm btn-outline-warning" data-tt="tooltip"
+                                                    style="font-size: 1rem; color:#303030" data-placement="top"
+                                                    title="Editar Embalagens">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @endForeach
+                                </tbody>
+                            </table>
                         </div>
+                    </div>
+                    <div style="margin-right: 10px; margin-left: 10px">
+                        {{ $result->links('pagination::bootstrap-5') }}
                     </div>
                 </div>
             </div>
         </div>
-        {{-- Botões Confirmar e Cancelar --}}
-        <div class="botões">
-            <a href="/gerenciar-cadastro-inicial" class="btn btn-danger col-md-3 col-2 mt-4 offset-md-2">Cancelar</a>
-            <button type="submit" value="Confirmar" class="btn btn-primary col-md-3 col-1 mt-4 offset-md-2">Confirmar
-            </button>
-        </div>
-    </form>
+    </div>
+    {{-- Botões Confirmar e Cancelar --}}
+    <div class="botões">
+        <a href="/gerenciar-cadastro-inicial" class="btn btn-danger col-md-3 col-2 mt-4 offset-md-2">Cancelar</a>
+        <button type="submit" value="Confirmar" class="btn btn-primary col-md-3 col-1 mt-4 offset-md-2">Confirmar
+        </button>
+    </div>
 @endsection

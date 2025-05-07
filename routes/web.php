@@ -165,16 +165,17 @@ Route::get('/cad-cat-material/alterar/{id}', [CatMaterialController::class, 'edi
 Route::put('/cad-cat-material/atualizar/{id}', [CatMaterialController::class, 'update']);
 
 Route::get('/gerenciar-embalagem', [EmbalagemController::class, 'index'])->name('embalagem.index');
-Route::post('/gerenciar-embalagem/inserir', [EmbalagemController::class, 'store']);
+Route::post('/gerenciar-embalagem/inserir/{id}', [EmbalagemController::class, 'store']);
 Route::get('/gerenciar-embalagem/excluir/{id}', [EmbalagemController::class, 'destroy']);
-Route::get('/gerenciar-embalagem/alterar/{id}', [EmbalagemController::class, 'edit']);
+Route::get('/gerenciar-embalagem/alterar/{id}', [EmbalagemController::class, 'edit'])->name('embalagem.alterar');
 Route::put('/gerenciar-embalagem/atualizar/{id}', [EmbalagemController::class, 'update']);
 Route::get('/cad-embalagem', [EmbalagemController::class, 'indexCad'])->name('cadEmbalagem.index');
 Route::post('/cad-embalagem/inserir', [EmbalagemController::class, 'storeCad']);
 Route::any('/cad-embalagem/inativar/{id}', [EmbalagemController::class, 'inativarCad']);
 Route::any('/cad-embalagem/excluir/{id}', [EmbalagemController::class, 'deleteCad']);
 Route::put('/cad-embalagem/alterar/{id}', [EmbalagemController::class, 'updateCad']);
-
+Route::any('/gerenciar-embalagem/inativar/{id}', [EmbalagemController::class, 'inativar']);
+Route::any('/geranciar-embalagem/excluir/{id}', [EmbalagemController::class, 'delete']);
 
 Route::get('/cad-sexo', [SexoController::class, 'index']);
 Route::post('/cad-sexo/inserir', [SexoController::class, 'store']);

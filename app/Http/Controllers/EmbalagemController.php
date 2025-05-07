@@ -13,15 +13,22 @@ class EmbalagemController extends Controller
 {
     public function index(Request $request)
     {
-        $query = ModelItemCatalogoMaterial::with('tipoCategoriaMt');
+        $query = ModelItemCatalogoMaterial::with('tipoCategoriaMt', 'unidadeMedida');
         if ($request->categoria) {
             $query->where('id_categoria_material', $request->categoria);
         }
         if ($request->nomeMaterial) {
             $query->where('nome', $request->nomeMaterial);
         }
+        if ($request->filled('status')) {
+            if ($request->status === 'ativo') {
+                $query->where('ativo', true);
+            } elseif ($request->status === 'inativo') {
+                $query->where('ativo', false);
+            }
+        }
 
-        $result = $query->orderBy('id', 'asc')->paginate(20);
+        $result = $query->orderBy('id', 'desc')->paginate(20);
 
         $categoria = ModelTipoCategoriaMt::all();
         $nomeMaterial = ModelItemCatalogoMaterial::all();
@@ -57,10 +64,31 @@ class EmbalagemController extends Controller
         //
     }
 
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
+        $unidadeMedida = ModelItemCatalogoMaterial::where('id', $id)->value('tp_unidade_medida');
 
-        return redirect()->route('embalagem.index');
+        $existe = ModelEmbalagem::where('id_item_catalogo', $id)
+            ->where('qtde_n1', $request->input('qtdUM'))
+            ->where('id_un_med_n2', $request->input('embalagem1'))
+            ->exists();
+
+        if ($existe) {
+            app('flasher')->addError('Essa embalagem já está cadastrada para este item.');
+            return redirect()->back();
+        }
+
+        ModelEmbalagem::create([
+            'id_item_catalogo' => $id,
+            'id_un_med_n1' => $unidadeMedida,
+            'qtde_n1' => $request->input('qtdUM'),
+            'id_un_med_n2' => $request->input('embalagem1'),
+            'qtde_n2' => 1,
+            'ativo' => 1,
+        ]);
+
+        app('flasher')->addSuccess('Embalagem criada com sucesso!');
+        return redirect()->route('embalagem.alterar', ['id' => $id]);
     }
     public function storeCad(Request $request)
     {
@@ -74,16 +102,36 @@ class EmbalagemController extends Controller
         return redirect()->route('cadEmbalagem.index');
     }
 
-
-    public function show($id)
-    {
-        //
-    }
-
-
     public function edit($id)
     {
+        $itemMaterial = ModelItemCatalogoMaterial::with('tipoCategoriaMt', 'tipoMaterial')->findOrFail($id);
+        $embalagem = ModelUnidadeMedida::where('tipo', 2)->get();
+        $result = ModelEmbalagem::with('unidadeMedida', 'unidadeMedida2', 'unidadeMedida3', 'unidadeMedida4')->where('id_item_catalogo', $id)->orderby('id', 'asc')->get();
 
+        return view('/embalagem/editar-embalagem', compact('itemMaterial', 'result', 'embalagem'));
+    }
+
+    public function update(Request $request, $id)
+    {
+
+        $existe = ModelEmbalagem::where('id_item_catalogo', $id)
+            ->where('qtde_n1', $request->input('qtdUM'))
+            ->where('id_un_med_n2', $request->input('embalagem1'))
+            ->exists();
+
+        if ($existe) {
+            app('flasher')->addError('Essa embalagem já está cadastrada para este item.');
+            return redirect()->back();
+        }
+
+        ModelEmbalagem::where('id', $id)
+            ->update([
+                'qtde_n1' => $request->input('editQtdUM'),
+                'id_un_med_n2' => $request->input('editEmbalagem1'),
+            ]);
+
+        app('flasher')->addSuccess('Embalagem alterada com sucesso!');
+        return redirect()->back();
     }
 
     public function updateCad(Request $request, $id)

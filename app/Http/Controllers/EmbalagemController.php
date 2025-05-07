@@ -36,29 +36,6 @@ class EmbalagemController extends Controller
         return view('/embalagem/gerenciar-embalagem', compact('result', 'categoria', 'nomeMaterial'));
     }
 
-    public function indexCad(Request $request)
-    {
-        $query = ModelUnidadeMedida::where('tipo', 2);
-
-        if ($request->nomeEmb) {
-            $query->where('nome', 'ilike', '%' . $request->nomeEmb . '%');
-        }
-        if ($request->siglaEmb) {
-            $query->where('sigla', 'ilike', '%' . $request->siglaEmb . '%');
-        }
-        if ($request->filled('status')) {
-            if ($request->status === 'ativo') {
-                $query->where('ativo', true);
-            } elseif ($request->status === 'inativo') {
-                $query->where('ativo', false);
-            }
-        }
-
-        $result = $query->orderBy('id', 'asc')->paginate(20);
-
-        return view('/embalagem/cad-embalagem', compact('result'));
-    }
-
     public function create()
     {
         //
@@ -90,17 +67,6 @@ class EmbalagemController extends Controller
         app('flasher')->addSuccess('Embalagem criada com sucesso!');
         return redirect()->route('embalagem.alterar', ['id' => $id]);
     }
-    public function storeCad(Request $request)
-    {
-        ModelUnidadeMedida::Create([
-            'nome' => $request->input('unidade_med'),
-            'sigla' => $request->input('sigla'),
-            'ativo' => 1,
-            'tipo' => 2,
-        ]);
-
-        return redirect()->route('cadEmbalagem.index');
-    }
 
     public function edit($id)
     {
@@ -113,10 +79,11 @@ class EmbalagemController extends Controller
 
     public function update(Request $request, $id)
     {
+        $itemMaterial = ModelEmbalagem::where('id', $id)->value('id_item_catalogo');
 
-        $existe = ModelEmbalagem::where('id_item_catalogo', $id)
-            ->where('qtde_n1', $request->input('qtdUM'))
-            ->where('id_un_med_n2', $request->input('embalagem1'))
+        $existe = ModelEmbalagem::where('id_item_catalogo', $itemMaterial)
+            ->where('qtde_n1', $request->input('editQtdUM'))
+            ->where('id_un_med_n2', $request->input('editEmbalagem1'))
             ->exists();
 
         if ($existe) {
@@ -132,6 +99,56 @@ class EmbalagemController extends Controller
 
         app('flasher')->addSuccess('Embalagem alterada com sucesso!');
         return redirect()->back();
+    }
+
+    public function delete($id)
+    {
+        $count = DB::table('cadastro_inicial')
+            ->where('id_embalagem', $id)
+            ->count();
+
+        if ($count == 0) {
+            ModelEmbalagem::where('id', $id)->delete();
+            app('flasher')->addSuccess('Embalagem excluída com sucesso!');
+        } else {
+            app('flasher')->addError('Não é possível excluir esta embalagem, pois ela está vinculada a um material.');
+        }
+        return redirect()->back();
+    }
+
+    public function indexCad(Request $request)
+    {
+        $query = ModelUnidadeMedida::where('tipo', 2);
+
+        if ($request->nomeEmb) {
+            $query->where('nome', 'ilike', '%' . $request->nomeEmb . '%');
+        }
+        if ($request->siglaEmb) {
+            $query->where('sigla', 'ilike', '%' . $request->siglaEmb . '%');
+        }
+        if ($request->filled('status')) {
+            if ($request->status === 'ativo') {
+                $query->where('ativo', true);
+            } elseif ($request->status === 'inativo') {
+                $query->where('ativo', false);
+            }
+        }
+
+        $result = $query->orderBy('id', 'asc')->paginate(20);
+
+        return view('/embalagem/cad-embalagem', compact('result'));
+    }
+
+    public function storeCad(Request $request)
+    {
+        ModelUnidadeMedida::Create([
+            'nome' => $request->input('unidade_med'),
+            'sigla' => $request->input('sigla'),
+            'ativo' => 1,
+            'tipo' => 2,
+        ]);
+
+        return redirect()->route('cadEmbalagem.index');
     }
 
     public function updateCad(Request $request, $id)

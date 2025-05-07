@@ -119,6 +119,7 @@
         </p>
     </x-modal-Excluir>
     <x-modal-Excluir id="modalExcluirEmbalagem" labelId="modalExcluirEmbalagemLabel" title="Excluir Embalagem">
+        @method('DELETE')
         <input type="hidden" name="id" id="excluir-id">
         <p>
             <!-- Modal body -->

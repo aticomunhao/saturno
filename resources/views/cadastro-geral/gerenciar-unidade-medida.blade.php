@@ -109,17 +109,20 @@
                                                         data-sigla="{{ $results->sigla }}">
                                                         <i class="bi bi-pencil"></i>
                                                     </a>
-                                                    <a href="#" class="btn btn-sm btn-outline-danger"
+                                                    <a href="#" class="btn btn-sm btn-outline-warning"
                                                         data-bs-toggle="modal" data-bs-target="#modalInativarEmbalagem"
-                                                        style="font-size: 1rem; color:#303030" data-id="{{ $results->id }}"
-                                                        title="Ativar/Inativar" data-nome="{{ $results->nome }}"
+                                                        style="font-size: 1rem; color:#303030"
+                                                        data-id="{{ $results->id }}" title="Ativar/Inativar"
+                                                        data-nome="{{ $results->nome }}"
+                                                        data-ativo="{{ $results->ativo }}"
                                                         data-sigla="{{ $results->sigla }}">
                                                         <i class="bi bi-exclamation-circle"></i>
                                                     </a>
                                                     <a href="#" class="btn btn-sm btn-outline-danger"
                                                         data-bs-toggle="modal" data-bs-target="#modalExcluirEmbalagem"
-                                                        style="font-size: 1rem; color:#303030" data-id="{{ $results->id }}"
-                                                        title="Excluir" data-nome="{{ $results->nome }}"
+                                                        style="font-size: 1rem; color:#303030"
+                                                        data-id="{{ $results->id }}" title="Excluir"
+                                                        data-nome="{{ $results->nome }}"
                                                         data-sigla="{{ $results->sigla }}">
                                                         <i class="bi bi-trash"></i>
                                                     </a>
@@ -155,20 +158,19 @@
             </div>
         </div>
     </x-modal-editar>
-    <x-modal-Excluir id="modalInativarEmbalagem" labelId="modalInativarEmbalagemLabel" title="Inativar Unidade de Medida">
+    <x-modal-editar id="modalInativarEmbalagem" labelId="modalInativarEmbalagemLabel" title="Inativar Unidade de Medida">
         <input type="hidden" name="id" id="inativar-id">
-        <p>
-            Deseja realmente inativar a unidade de medida: <strong id="inativar-nome" style="color: red"></strong>. Com a
-            sigla: <strong id="inativar-sigla" style="color: red"></strong>?
+        <p id="modal-inativar-um-texto">
+            <!-- Conteúdo dinâmico via JS -->
         </p>
-    </x-modal-Excluir>
-    <x-modal-Excluir id="modalExcluirEmbalagem" labelId="modalExcluirEmbalagemLabel" title="Excluir Unidade de Medida">
+    </x-modal-editar>
+    <x-modal-excluir id="modalExcluirEmbalagem" labelId="modalExcluirEmbalagemLabel" title="Excluir Unidade de Medida">
         <input type="hidden" name="id" id="excluir-id">
         <p>
             Deseja realmente excluir a unidade de medida: <strong id="excluir-nome" style="color: red"></strong>. Com a
             sigla: <strong id="excluir-sigla" style="color: red"></strong>?
         </p>
-    </x-modal-Excluir>
+    </x-modal-excluir>
     <script>
         const modalEditar = document.getElementById('modalEditarEmbalagem');
         modalEditar.addEventListener('show.bs.modal', function(event) {
@@ -192,13 +194,23 @@
             const id = button.getAttribute('data-id');
             const nome = button.getAttribute('data-nome');
             const sigla = button.getAttribute('data-sigla');
+            const ativo = button.getAttribute('data-ativo');
 
             modalInativar.querySelector('#inativar-id').value = id;
-            modalInativar.querySelector('#inativar-nome').textContent = nome;
-            modalInativar.querySelector('#inativar-sigla').textContent = sigla;
+            modalInativar.querySelector('form').action = `/unidade-medida/inativar/${id}`;
 
-            const form = modalInativar.querySelector('form');
-            form.action = `/unidade-medida/inativar/${id}`;
+            const label = modalInativar.querySelector('#modalInativarEmbalagemLabel');
+            const texto = modalInativar.querySelector('#modal-inativar-um-texto');
+
+            if (ativo == '1') {
+                label.textContent = 'Inativar Unidade de Medida';
+                texto.innerHTML =
+                    `Deseja realmente <strong style="color:red">INATIVAR</strong> a unidade de medida: <strong style="color:red">${nome}</strong> com a sigla <strong style="color:red">${sigla}</strong>?`;
+            } else {
+                label.textContent = 'Ativar Unidade de Medida';
+                texto.innerHTML =
+                    `Deseja realmente <strong style="color:green">ATIVAR</strong> a unidade de medida: <strong style="color:green">${nome}</strong> com a sigla <strong style="color:green">${sigla}</strong>?`;
+            }
         });
     </script>
     <script>

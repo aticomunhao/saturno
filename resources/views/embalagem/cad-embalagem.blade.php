@@ -109,11 +109,11 @@
                                                         data-sigla="{{ $results->sigla }}">
                                                         <i class="bi bi-pencil"></i>
                                                     </a>
-                                                    <a href="#" class="btn btn-sm btn-outline-danger"
+                                                    <a href="#" class="btn btn-sm btn-outline-warning"
                                                         data-bs-toggle="modal" data-bs-target="#modalInativarEmbalagem"
                                                         style="font-size: 1rem; color:#303030"
-                                                        data-id="{{ $results->id }}" title="Ativar/Inativar"
-                                                        data-nome="{{ $results->nome }}"
+                                                        data-ativo="{{ $results->ativo }}" data-id="{{ $results->id }}"
+                                                        title="Ativar/Inativar" data-nome="{{ $results->nome }}"
                                                         data-sigla="{{ $results->sigla }}">
                                                         <i class="bi bi-exclamation-circle"></i>
                                                     </a>
@@ -154,14 +154,12 @@
             </div>
         </div>
     </x-modal-editar>
-    <x-modal-Excluir id="modalInativarEmbalagem" labelId="modalInativarEmbalagemLabel" title="Inativar Embalagem">
+    <x-modal-editar id="modalInativarEmbalagem" labelId="modalInativarEmbalagemLabel" title="Inativar Embalagem">
         <input type="hidden" name="id" id="inativar-id">
-        <p>
-            <!-- Modal body -->
-            Deseja realmente inativar a embalagem: <strong id="inativar-nome" style="color: red"></strong>. Com a sigla
-            <strong id="inativar-sigla" style="color: red"></strong>?
+        <p id="modal-inativar-texto">
+            <!-- Conteúdo atualizado dinamicamente -->
         </p>
-    </x-modal-Excluir>
+    </x-modal-editar>
     <x-modal-Excluir id="modalExcluirEmbalagem" labelId="modalExcluirEmbalagemLabel" title="Excluir Embalagem">
         <input type="hidden" name="id" id="excluir-id">
         <p>
@@ -193,13 +191,23 @@
             const id = button.getAttribute('data-id');
             const nome = button.getAttribute('data-nome');
             const sigla = button.getAttribute('data-sigla');
+            const ativo = button.getAttribute('data-ativo');
 
             modalInativar.querySelector('#inativar-id').value = id;
-            modalInativar.querySelector('#inativar-nome').textContent = nome;
-            modalInativar.querySelector('#inativar-sigla').textContent = sigla;
+            modalInativar.querySelector('form').action = `/cad-embalagem/inativar/${id}`;
 
-            const form = modalInativar.querySelector('form');
-            form.action = `/cad-embalagem/inativar/${id}`;
+            const modalLabel = modalInativar.querySelector('#modalInativarEmbalagemLabel');
+            const texto = modalInativar.querySelector('#modal-inativar-texto');
+
+            if (ativo == '1') {
+                modalLabel.textContent = 'Inativar Embalagem';
+                texto.innerHTML =
+                    `Deseja realmente <strong style="color:red">INATIVAR</strong> a embalagem: <strong style="color:red">${nome}</strong>, com a sigla <strong style="color:red">${sigla}</strong>?`;
+            } else {
+                modalLabel.textContent = 'Ativar Embalagem';
+                texto.innerHTML =
+                    `Deseja realmente <strong style="color:green">ATIVAR</strong> a embalagem: <strong style="color:green">${nome}</strong>, com a sigla <strong style="color:green">${sigla}</strong>?`;
+            }
         });
     </script>
     <script>

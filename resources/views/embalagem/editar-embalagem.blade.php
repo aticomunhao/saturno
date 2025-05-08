@@ -74,10 +74,10 @@
                                                     data-qtde="{{ $results->qtde_n1 }}">
                                                     <i class="bi bi-pencil"></i>
                                                 </a>
-                                                <a href="#" class="btn btn-sm btn-outline-danger"
+                                                <a href="#" class="btn btn-sm btn-outline-warning"
                                                     data-bs-toggle="modal" data-bs-target="#modalInativarEmbalagem"
                                                     style="font-size: 1rem; color:#303030" data-id="{{ $results->id }}"
-                                                    title="Ativar/Inativar"
+                                                    title="Ativar/Inativar" data-ativo="{{ $results->ativo }}"
                                                     data-nome="{{ $results->unidadeMedida2->nome ?? 'N/A' }}"
                                                     data-qtde="{{ $results->qtde_n1 }}">
                                                     <i class="bi bi-exclamation-circle"></i>
@@ -110,14 +110,12 @@
         </div>
     </div>
 
-    <x-modal-Excluir id="modalInativarEmbalagem" labelId="modalInativarEmbalagemLabel" title="Inativar Embalagem">
+    <x-modal-editar id="modalInativarEmbalagem" labelId="modalInativarEmbalagemLabel" title="Inativar Embalagem">
         <input type="hidden" name="id" id="inativar-id">
-        <p>
-            <!-- Modal body -->
-            Deseja realmente inativar a embalagem: <strong id="inativar-nome" style="color: red"></strong>. Com a quantidade
-            <strong id="inativar-qtde" style="color: red"></strong>?
+        <p id="modal-inativar-texto">
+            <!-- Este conteúdo será substituído dinamicamente via JS -->
         </p>
-    </x-modal-Excluir>
+    </x-modal-editar>
     <x-modal-Excluir id="modalExcluirEmbalagem" labelId="modalExcluirEmbalagemLabel" title="Excluir Embalagem">
         @method('DELETE')
         <input type="hidden" name="id" id="excluir-id">
@@ -245,13 +243,23 @@
             const id = button.getAttribute('data-id');
             const nome = button.getAttribute('data-nome');
             const qtde = button.getAttribute('data-qtde');
+            const ativo = button.getAttribute('data-ativo');
 
             modalInativar.querySelector('#inativar-id').value = id;
-            modalInativar.querySelector('#inativar-nome').textContent = nome;
-            modalInativar.querySelector('#inativar-qtde').textContent = qtde;
+            modalInativar.querySelector('form').action = `/gerenciar-embalagem/inativar/${id}`;
 
-            const form = modalInativar.querySelector('form');
-            form.action = `/gerenciar-embalagem/inativar/${id}`;
+            const modalLabel = modalInativar.querySelector('#modalInativarEmbalagemLabel');
+            const texto = modalInativar.querySelector('#modal-inativar-texto');
+
+            if (ativo == '1') {
+                modalLabel.textContent = 'Inativar Embalagem';
+                texto.innerHTML =
+                    `Deseja realmente <strong style="color:red">INATIVAR</strong> a embalagem: <strong style="color:red">${nome}</strong> com a quantidade <strong style="color:red">${qtde}</strong>?`;
+            } else {
+                modalLabel.textContent = 'Ativar Embalagem';
+                texto.innerHTML =
+                    `Deseja realmente <strong style="color:green">ATIVAR</strong> a embalagem: <strong style="color:green">${nome}</strong> com a quantidade <strong style="color:green">${qtde}</strong>?`;
+            }
         });
     </script>
     <script>

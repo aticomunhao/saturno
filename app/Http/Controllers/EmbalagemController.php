@@ -101,6 +101,40 @@ class EmbalagemController extends Controller
         return redirect()->back();
     }
 
+    public function inativar($id)
+    {
+        $embalagem = ModelEmbalagem::find($id);
+
+        if (!$embalagem) {
+            app('flasher')->addError('Embalagem não encontrada.');
+            return redirect()->back();
+        }
+
+        // Se estiver ativa e vinculada a algum material, impede a inativação
+        if ($embalagem->ativo == 1) {
+            $count = DB::table('cadastro_inicial')
+                ->where('id_embalagem', $id)
+                ->count();
+
+            if ($count > 0) {
+                app('flasher')->addError('Não é possível inativar esta embalagem, pois ela está vinculada a um material.');
+                return redirect()->back();
+            }
+        }
+
+        // Inverte o estado atual de "ativo"
+        $embalagem->ativo = $embalagem->ativo == 1 ? 0 : 1;
+        $embalagem->save();
+
+        $mensagem = $embalagem->ativo == 1
+            ? 'Embalagem ativada com sucesso!'
+            : 'Embalagem inativada com sucesso!';
+
+        app('flasher')->addSuccess($mensagem);
+
+        return redirect()->back();
+    }
+
     public function delete($id)
     {
         $count = DB::table('cadastro_inicial')

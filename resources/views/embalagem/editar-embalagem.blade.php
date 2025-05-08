@@ -104,7 +104,7 @@
     <br>
     <div class="row d-flex justify-content-around">
         <div class="col-4">
-            <a href="javascript:history.back()">
+            <a href="{{ route('embalagem.index') }}">
                 <button class="btn btn-primary" style="width: 100%">Retornar </button>
             </a>
         </div>

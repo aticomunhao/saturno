@@ -135,7 +135,7 @@
                                                     title="Visualizar">
                                                     <i class="bi bi-search"></i>
                                                 </a>
-                                                <a href="/gerenciar-cadastro-inicial/doacao/{{ $CadastroInicials->id }}"
+                                                <a href="/gerenciar-cadastro-inicial/doacao/{{ $CadastroInicials->documento_origem }}"
                                                     class="btn btn-sm btn-outline-warning" data-tt="tooltip"
                                                     style="font-size: 1rem; color:#303030" data-placement="top"
                                                     title="Editar">

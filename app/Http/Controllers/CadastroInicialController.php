@@ -86,15 +86,17 @@ class CadastroInicialController extends Controller
 
         $CadastroInicial = $query->orderBy('id', 'asc')->paginate(20);
 
-        return view('CadastroInicial.gerenciar-cadastro-inicial', compact('request', 'CadastroInicial', 'status', 'solMat', 'tipoMaterial', 'tipoDocumento', 'nomeMaterial', 'deposito', 'destinacao', 'categoriaMaterial', 'empresa'))
+        return view('cadastroInicial.gerenciar-cadastro-inicial', compact('request', 'CadastroInicial', 'status', 'solMat', 'tipoMaterial', 'tipoDocumento', 'nomeMaterial', 'deposito', 'destinacao', 'categoriaMaterial', 'empresa'))
             ->with('i', (request()->input('page', 1) - 1) * 20);
     }
 
     public function storeTermoDoacao()
     {
-        $CadastroInicialDoacao = ModelCadastroInicial::create([
-            'data_cadastro' => Carbon::now(),
-            'id_tp_status' => '1',
+
+        $CadastroInicialDoacao = ModelDocumento::create([
+            'id_tp_doc' => '16',
+            'dt_doc' => Carbon::now(),
+
         ]);
 
         app('flasher')->addSuccess('Termo de Doação Criado com Sucesso, Adicione os materiais Necessários');
@@ -103,7 +105,6 @@ class CadastroInicialController extends Controller
 
     public function createDoacao($id)
     {
-        $buscaCategoria = ModelTipoCategoriaMt::all();
         $idSolicitacao = $id;
         $setor = session('usuario.setor');
 
@@ -120,8 +121,9 @@ class CadastroInicialController extends Controller
         $materiais = ModelMatProposta::with('documentoMaterial', 'tipoUnidadeMedida', 'tipoItemCatalogoMaterial', 'tipoCategoria', 'tipoMarca', 'tipoTamanho', 'tipoCor', 'tipoFaseEtaria', 'tipoSexo')->where('id_sol_mat', $id)->get();
         $buscaTipoMaterial = ModelTipoMaterial::all();
 
+        $result = ModelCadastroInicial::where('documento_origem', $id)->get();
 
-        return view("CadastroInicial.doacao-cadastro-inicial-item", compact('buscaCategoria', 'buscaTipoMaterial', 'idSolicitacao', 'buscaUnidadeMedida', 'buscaSexo'));
+        return view("cadastroInicial.doacao-cadastro-inicial-item", compact('result', 'buscaCategoria', 'buscaTipoMaterial', 'idSolicitacao', 'buscaUnidadeMedida', 'buscaSexo'));
     }
 
     public function createCompraDireta()
@@ -136,7 +138,7 @@ class CadastroInicialController extends Controller
 
         $resultItem = DB::select($sql);
 
-        return view('CadastroInicial/compra-direta-cadastro-inicial-item', compact('resultItem'));
+        return view('cadastroInicial/compra-direta-cadastro-inicial-item', compact('resultItem'));
     }
 
     public function storeDoacao(Request $request)
@@ -182,7 +184,7 @@ class CadastroInicialController extends Controller
 
         //dd($request);
 
-        return redirect()->action('CadastroInicialController@index');
+        return redirect()->action('cadastroInicialController@index');
     }
     public function storeMaterial(Request $request, $id)
     {

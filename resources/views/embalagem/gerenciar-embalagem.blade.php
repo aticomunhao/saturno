@@ -17,9 +17,8 @@
                             </h5>
                         </div>
                     </div>
-                    <br>
                     <div class="card-body">
-                        <form class="form-horizontal mt-4" method="GET" action="{{ route('embalagem.index') }}">
+                        <form class="form-horizontal" method="GET" action="{{ route('embalagem.index') }}">
                             @csrf
                             <div style="display: flex; gap: 20px; align-items: flex-end;">
                                 <div class="col-md-2 col-sm-12">Categoria do Material

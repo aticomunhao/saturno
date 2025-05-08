@@ -43,4 +43,8 @@ class ModelDocumento extends Model
     {
         return $this->belongsTo( ModelMatProposta::class,'mat_proposta');
     }
+    public function termoDoacao()
+    {
+        return $this->hasMany( ModelCadastroInicial::class,'documento_origem');
+    }
 }

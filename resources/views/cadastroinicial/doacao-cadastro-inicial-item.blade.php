@@ -45,6 +45,47 @@
                                     </button>
                                 </div>
                             </div>
+                            <br>
+                            <div class="row" style="margin-left:5px">
+                                <table id="datatable" class="table table-bordered dt-responsive nowrap"
+                                    style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Item Material</th>
+                                            <th>Unidade de Medida</th>
+                                            <th>Status</th>
+                                            <th>Ação</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        @foreach ($result as $results)
+                                            <tr>
+                                                <td>{{ $results->id ?? 'N/A' }}</td>
+                                                <td>{{ $results->nome ?? 'N/A' }}</td>
+                                                <td>{{ $results->unidadeMedida->sigla ?? '' }} -
+                                                    {{ $results->unidadeMedida->nome ?? '' }}</td>
+                                                <td>
+                                                    @if ($results->ativo == 1)
+                                                        <span class="badge bg-success">Ativo</span>
+                                                    @else
+                                                        <span class="badge bg-danger">Inativo</span>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <a href="/gerenciar-embalagem/alterar/{{ $results->id }}"
+                                                        class="btn btn-sm btn-outline-warning" data-tt="tooltip"
+                                                        style="font-size: 1rem; color:#303030" data-placement="top"
+                                                        title="Editar Embalagens">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @endForeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -166,32 +207,6 @@
 
         </div>
     </x-modal-incluir>
-    <!-- Modal Incluir Termo -->
-    <div class="modal fade" id="modalIncluirTermo" tabindex="-1" aria-labelledby="modalIncluirTermoLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            {{-- <form class="form-horizontal" method="POST"
-                action="{{ url('/incluir-material-doacao-cadastro-inicial/' . $idSolicitacao) }}"> --}}
-            @csrf
-            <div class="modal-content">
-                <div class="modal-header" style="background-color:lightblue;">
-                    <h5 class="modal-title" id="modalIncluirTermoLabel">
-                        Inclusão de Termo
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body" id="modal-body-content-incluir-termo">
-                    <div class="row">
-                    </div>
-                </div>
-                <div class="modal-footer mt-2">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Confirmar</button>
-                </div>
-            </div>
-            </form>
-        </div>
-    </div>
     {{-- Botão de SACOLA --}}
     <script>
         document.getElementById('sacolaBtn').addEventListener('click', function() {

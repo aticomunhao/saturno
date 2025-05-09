@@ -53,7 +53,7 @@
                                         <tr>
                                             <th>Id</th>
                                             <th>Item Material</th>
-                                            <th>Unidade de Medida</th>
+                                            <th>Embalagem</th>
                                             <th>Status</th>
                                             <th>Ação</th>
                                         </tr>
@@ -99,7 +99,7 @@
         </div>
     </form>
     <x-modal-incluir id="modalIncluirMaterial" labelId="modalIncluirMaterialLabel"
-        action="{{ url('/incluir-material-doacao-cadastro-inicial/' . $idSolicitacao) }}" title="Inclusão de Material">
+        action="{{ url('/incluir-material-doacao-cadastro-inicial/' . $idDocumento) }}" title="Inclusão de Material">
         <div class="row material-item">
             <div class="col-md-6" style="margin-top: 10px">
                 <label>Categoria do Material</label>
@@ -136,21 +136,36 @@
                 </select>
             </div>
             <div class="col-md-3" style="margin-top: 10px">
-                <label>Unid. Medida</label>
-                <select class="form-select  select2" style="border: 1px solid #999999; padding: 5px;"
-                    name="UnidadeMedidaMaterial">
+                <label>Embalagem</label>
+                <select class="form-select js-nome-material select2" id="embalagemMaterial"
+                    style="border: 1px solid #999999; padding: 5px;" name="embalagemMaterial">
                     <option value="" disabled selected>Selecione...
                     </option>
-                    @foreach ($buscaUnidadeMedida as $buscaUnidadeMedidas)
-                        <option value="{{ $buscaUnidadeMedidas->id }}">
-                            {{ $buscaUnidadeMedidas->nome }}
-                        </option>
-                    @endforeach
                 </select>
             </div>
             <div class="col-md-3" style="margin-top: 10px">
                 <label>Quantidade</label>
                 <input type="number" class="form-control" name="quantidadeMaterial">
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Modelo</label>
+                <input type="text" class="form-control" name="modeloMaterial">
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Observação</label>
+                <input type="text" class="form-control" name="observacaoMaterial">
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Avariado</label>
+                <input type="button" class="form-control" name="checkAvariado">
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Aplicação</label>
+                <input type="text" class="form-control" name="checkAplicacao">
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Data de Validade</label>
+                <input type="date" class="form-control" name="dataValidadeMaterial">
             </div>
         </div>
         <div class="row material-item" style="margin-top: 10px">

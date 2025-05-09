@@ -105,7 +105,7 @@ class CadastroInicialController extends Controller
 
     public function createDoacao($id)
     {
-        $idSolicitacao = $id;
+        $idDocumento = $id;
         $setor = session('usuario.setor');
 
         $buscaCategoria = ModelTipoCategoriaMt::all();
@@ -116,14 +116,14 @@ class CadastroInicialController extends Controller
         $buscaFaseEtaria = ModelFaseEtaria::all();
         $buscaSexo = ModelSexo::all();
         $bucaItemCatalogo = ModelItemCatalogoMaterial::all();
-        $buscaUnidadeMedida = ModelUnidadeMedida::all();
+        $buscaUnidadeMedida = ModelUnidadeMedida::where('tipo', '2')->get();
         $buscaSetor = ModelSetor::whereIn('id', $setor)->get();
         $materiais = ModelMatProposta::with('documentoMaterial', 'tipoUnidadeMedida', 'tipoItemCatalogoMaterial', 'tipoCategoria', 'tipoMarca', 'tipoTamanho', 'tipoCor', 'tipoFaseEtaria', 'tipoSexo')->where('id_sol_mat', $id)->get();
         $buscaTipoMaterial = ModelTipoMaterial::all();
 
         $result = ModelCadastroInicial::where('documento_origem', $id)->get();
 
-        return view("cadastroInicial.doacao-cadastro-inicial-item", compact('result', 'buscaCategoria', 'buscaTipoMaterial', 'idSolicitacao', 'buscaUnidadeMedida', 'buscaSexo'));
+        return view("cadastroInicial.doacao-cadastro-inicial-item", compact('result', 'buscaCategoria', 'buscaTipoMaterial', 'idDocumento', 'buscaUnidadeMedida', 'buscaSexo'));
     }
 
     public function createCompraDireta()
@@ -188,9 +188,31 @@ class CadastroInicialController extends Controller
     }
     public function storeMaterial(Request $request, $id)
     {
-        $idSolicitacao = $id;
+        $idDocumento = $id;
 
+        ModelCadastroInicial::create([
+            'id_item_catalogo' => $request->input('nomeMaterial'),
+            'obaservacao' => $request->input('observacaoMaterial'),
+            'data_cadastro' => Carbon::now(),
+            'quantidade' => $request->input('quantidadeMaterial'),
+            'adquirido' => false,
+            'id_marca' => $request->input('marcaMaterial'),
+            'id_tamanho' => $request->input('tamanhoMaterial'),
+            'id_cor' => $request->input('corMaterial'),
+            'id_tipo_material' => $request->input('tipoMaterial'),
+            'id_fase_etaria' => $request->input('faseEtariaMaterial'),
+            'id_tp_sexo' => $request->input('sexoMaterial'),
+            'id_deposito' => '1',
+            'data_validade' => $request->input('dataValidadeMaterial'),
+            'id_tp_status' => '1',
+            'documento_origem' => $id,
+            'avariado' => $request->input('checkAvariado') ? 1 : 0,
+            'aplicacao' => $request->input('checkAplicacao') ? 1 : 0,
+            'id_cat_material' => $request->input('categoriaMaterial'),
+            'id_embalagem' => $request->input('embalagemMaterial'),
+            'modelo' => $request->input('modeloMaterial'),
+        ]);
 
-        return redirect()->route('doacao', ['id' => $idSolicitacao]);
+        return redirect()->route('doacao', ['id' => $idDocumento]);
     }
 }

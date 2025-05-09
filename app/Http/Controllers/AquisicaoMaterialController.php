@@ -13,6 +13,7 @@ use App\Models\ModelTipoStatusSolMt;
 use App\Models\ModelSetor;
 use App\Models\ModelCor;
 use App\Models\ModelDocumento;
+use App\Models\ModelEmbalagem;
 use App\Models\ModelFaseEtaria;
 use App\Models\ModelMarca;
 use App\Models\ModelSexo;
@@ -273,6 +274,46 @@ class AquisicaoMaterialController extends Controller
     {
         $nomes = ModelItemCatalogoMaterial::where('id_categoria_material', $categoriaId)->get(['id', 'nome']);
         return response()->json($nomes);
+    }
+    public function getEmbalagens($nomeId)
+    {
+        $embalagens = ModelEmbalagem::with([
+            'unidadeMedida',       // n1
+            'unidadeMedida2',      // n2
+            'unidadeMedida3',      // n3
+            'unidadeMedida4'       // n4
+        ])
+            ->where('id_item_catalogo', $nomeId)
+            ->get();
+
+        $embalagensFormatadas = $embalagens->map(function ($emb) {
+            $partes = [];
+
+            if ($emb->qtde_n4 && $emb->unidadeMedida4) {
+                $partes[] = "{$emb->qtde_n4} {$emb->unidadeMedida4->nome}";
+            }
+
+            if ($emb->qtde_n3 && $emb->unidadeMedida3) {
+                $partes[] = "{$emb->qtde_n3} {$emb->unidadeMedida3->nome}";
+            }
+
+            if ($emb->qtde_n2 && $emb->unidadeMedida2) {
+                $partes[] = "{$emb->qtde_n2} {$emb->unidadeMedida2->nome}";
+            }
+
+            if ($emb->qtde_n1 && $emb->unidadeMedida) {
+                $partes[] = "{$emb->qtde_n1} {$emb->unidadeMedida->nome}";
+            }
+
+            $desc = implode(' / ', $partes);
+
+            return [
+                'id' => $emb->id,
+                'nome' => $desc
+            ];
+        });
+
+        return response()->json($embalagensFormatadas);
     }
     public function destroyMaterial(Request $request)
     {

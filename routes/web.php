@@ -379,6 +379,7 @@ Route::get('/tamanhos/{categoriaId}', [AquisicaoMaterialController::class, 'getT
 Route::get('/cores/{categoriaId}', [AquisicaoMaterialController::class, 'getCores']);
 Route::get('/fases/{categoriaId}', [AquisicaoMaterialController::class, 'getFases']);
 Route::get('/nome/{categoriaId}', [AquisicaoMaterialController::class, 'getNomes']);
+Route::get('/embalagem/{nomeId}', [AquisicaoMaterialController::class, 'getEmbalagens']);
 Route::delete('/excluir-material-solicitacao', [AquisicaoMaterialController::class, 'destroyMaterial']);
 Route::post('/salvar-proposta-material/{id}', [AquisicaoMaterialController::class, 'store3']);
 Route::delete('/deletar-aquisicao-material/{id}', [AquisicaoMaterialController::class, 'delete']);

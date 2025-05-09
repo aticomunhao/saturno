@@ -55,11 +55,19 @@ $(document).ready(function () {
             carregarOpcoes(`/fases/${categoriaId}`, '#faseEtariaMaterial');
         }
     });
+
+    // Filtro dinâmico com base no nome do material
+    $('#nomeMaterial').on('change', function () {
+        const nomeId = this.value;
+        if (nomeId) {
+            carregarOpcoes(`/embalagem/${nomeId}`, '#embalagemMaterial');
+        }
+    });
 });
 
 // Selecione todos os campos com a classe 'proposta'
-document.querySelectorAll('.valor-monetario').forEach(function(input) {
-    input.addEventListener('input', function(event) {
+document.querySelectorAll('.valor-monetario').forEach(function (input) {
+    input.addEventListener('input', function (event) {
         let value = event.target.value.replace(/\D/g, ''); // Remove tudo o que não for número
         if (value) {
             value = (parseInt(value) / 100).toFixed(2); // Converte para valor decimal

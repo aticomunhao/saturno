@@ -83,8 +83,7 @@ $setor = session()->get('usuario.setor');
                             data-bs-toggle="dropdown" aria-expanded="false">Movimentação</a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
                             {{-- @if (in_array(13, $acesso) or in_array(14, $acesso)) --}}
-                            <li><a class="dropdown-item"
-                                    href="{{ route('localizacao-cadastro-inicial.index') }}">Cadastro inicial</a>
+                            <li><a class="dropdown-item" href="{{ route('movimentacao-fisica.index') }}">Fisica</a>
                             </li>
 
                         </ul>

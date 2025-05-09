@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\ContaContabilController;
 use App\Http\Controllers\DocumentoController;
+use App\Http\Controllers\GerenciarMovimentacaoFisica;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -409,12 +410,10 @@ Route::any('/deletar-deposito/{id}', [GerenciarDepositoController::class, 'destr
 Route::any('/retorna-deposito/{id}', [GerenciarDepositoController::class, 'show'])->name('deposito.show');
 Route::any('reativar-deposito/{id}', [GerenciarDepositoController::class, 'reativar'])->name('deposito.reativar');
 
-//Localizacao Cadastro Inicial
-Route::any('/gerenciar-localizacao-cadastro-inicial', [GerenciarLocalizacaoCadastroInicialController::class, 'index'])->name('localizacao-cadastro-inicial.index');
-Route::any('/incluir-localizacao-cadastro-inicial', [GerenciarLocalizacaoCadastroInicialController::class, 'create'])->name('localizacao-cadastro-inicial.create');
-Route::any('/salvar-localizacao-cadastro-inicial', [GerenciarLocalizacaoCadastroInicialController::class, 'store'])->name('localizacao-cadastro-inicial.store');
-Route::any('/editar-localizacao-cadastro-inicial/{id}', [GerenciarLocalizacaoCadastroInicialController::class, 'edit'])->name('localizacao-cadastro-inicial.edit');
-Route::any('/atualizar-localizacao-cadastro-inicial/{id}', [GerenciarLocalizacaoCadastroInicialController::class, 'update'])->name('localizacao-cadastro-inicial.update');
-Route::any('/deletar-localizacao-cadastro-inicial/{id}', [GerenciarLocalizacaoCadastroInicialController::class, 'destroy'])->name('localizacao-cadastro-inicial.delete');
-Route::any('/retorna-localizacao-cadastro-inicial/{id}', [GerenciarLocalizacaoCadastroInicialController::class, 'show'])->name('localizacao-cadastro-inicial.show');
-Route::any('/solicitar-teste-material', [GerenciarLocalizacaoCadastroInicialController::class, 'solicitar_teste_material'])->name('localizacao-cadastro-inicial.solicitar_teste_material');
+//Movimentação Física
+Route::get('/movimentacao-fisica', [GerenciarMovimentacaoFisica::class, 'index'])->name('movimentacao-fisica.index');
+Route::get('/movimentacao-fisica/gerar', [GerenciarMovimentacaoFisica::class, 'create'])->name('movimentacao-fisica.create');
+Route::post('/movimentacao-fisica/store', [GerenciarMovimentacaoFisica::class, 'store'])->name('movimentacao-fisica.store');
+Route::get('/movimentacao-fisica/editar/{id}', [GerenciarMovimentacaoFisica::class, 'edit'])->name('movimentacao-fisica.edit');
+Route::put('/movimentacao-fisica/update/{id}', [GerenciarMovimentacaoFisica::class, 'update'])->name('movimentacao-fisica.update');
+// Route::get('/movimentacao-fisica/excluir/{id}', [GerenciarMovimentacaoFisica::class, 'destroy'])->name('movimentacao.delete');

@@ -11,6 +11,34 @@ class ModelCadastroInicial extends Model
 
     protected $table = 'cadastro_inicial';
 
+    protected $fillable = [
+        'id_item_catalogo',
+        'observacao',
+        'data_cadastro',
+        'quantidade',
+        'adquirido',
+        'valor_aquisicao',
+        'id_marca',
+        'id_tamanho',
+        'id_cor',
+        'id_tipo_material',
+        'id_fase_etaria',
+        'id_tp_sexo',
+        'id_deposito',
+        'data_validade',
+        'id_tp_status',
+        'id_loc_deposito',
+        'id_destinacao',
+        'documento_origem',
+        'avariado',
+        'aplicacao',
+        'id_sol_origem',
+        'id_cat_material',
+        'componente',
+        'id_embalagem',
+        'modelo',
+    ];
+
     public function Status()
     {
         return $this->belongsTo(ModelStatusCadastroInicial::class, 'id_tp_status');
@@ -48,31 +76,4 @@ class ModelCadastroInicial extends Model
     {
         return $this->hasMany(ModelLocalizacaoCadastroInicial::class, 'id_cadastro_inicial');
     }
-    protected $fillable = [
-        'id_item_catalogo',
-        'observacao',
-        'data_cadastro',
-        'quantidade',
-        'adquirido',
-        'valor_aquisicao',
-        'id_marca',
-        'id_tamanho',
-        'id_cor',
-        'id_tipo_material',
-        'id_fase_etaria',
-        'id_tp_sexo',
-        'id_deposito',
-        'data_validade',
-        'id_tp_status',
-        'id_loc_deposito',
-        'id_destinacao',
-        'documento_origem',
-        'id_modelo',
-        'avariado',
-        'aplicacao',
-        'id_sol_origem',
-        'id_cat_material',
-        'componente',
-        'id_nome_mat',
-    ];
 }

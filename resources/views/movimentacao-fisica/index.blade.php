@@ -8,9 +8,14 @@
                 <div class="row">
                     <div class="col-md-3 col-sm-12"></div>
                 </div>
-                <br>
+                <hr>
 
-                <div class="row">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-12">
+                            <a href="{{ route('movimentacao-fisica.solicitar-teste') }}" class="btn btn-info" >Solicitar Teste</a>
+                        </div>
+                    </div>
+                    <br>
                     <table class="table table-sm table-striped table-bordered border-secondary table-hover align-middle">
                         <thead class="text-center" style="background-color: #d6e3ff; color:#000;">
                             <tr>
@@ -33,7 +38,7 @@
                             </tr>
                         </tbody>
                     </table>
-                </div>
+
 
             </div>
         </div>

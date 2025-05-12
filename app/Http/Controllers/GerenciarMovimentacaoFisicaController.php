@@ -49,7 +49,7 @@ class GerenciarMovimentacaoFisicaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(GerenciarMovimentacaoFisica $gerenciarMovimentacaoFisica)
+    public function show($id)
     {
         //
     }
@@ -57,7 +57,7 @@ class GerenciarMovimentacaoFisicaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(GerenciarMovimentacaoFisica $gerenciarMovimentacaoFisica)
+    public function edit($id)
     {
         //
     }
@@ -65,7 +65,7 @@ class GerenciarMovimentacaoFisicaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, GerenciarMovimentacaoFisica $gerenciarMovimentacaoFisica)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -73,8 +73,15 @@ class GerenciarMovimentacaoFisicaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(GerenciarMovimentacaoFisica $gerenciarMovimentacaoFisica)
+    public function destroy()
     {
         //
+    }
+    public function solicitar_teste(){
+
+     $cadastro_inicial =   $query = ModelCadastroInicial::with('Status', 'SolOrigem', 'DocOrigem', 'Deposito', 'Destinacao', 'CategoriaMaterial', 'TipoMaterial');
+
+        return view('movimentacao-fisica.solicitar-teste', compact('cadastro_inicial'));
+
     }
 }

@@ -50,6 +50,7 @@ use App\Http\Controllers\CatalogoServicoController;
 use App\Http\Controllers\AquisicaoMaterialController;
 use App\Http\Controllers\GerenciarDepositoController;
 use App\Http\Controllers\GerenciarLocalizacaoCadastroInicialController;
+use App\Http\Controllers\GerenciarMovimentacaoFisicaController;
 use App\Http\Controllers\ValorCompraController;
 
 
@@ -412,9 +413,9 @@ Route::any('/retorna-deposito/{id}', [GerenciarDepositoController::class, 'show'
 Route::any('reativar-deposito/{id}', [GerenciarDepositoController::class, 'reativar'])->name('deposito.reativar');
 
 //Movimentação Física
-Route::get('/movimentacao-fisica', [GerenciarMovimentacaoFisica::class, 'index'])->name('movimentacao-fisica.index');
-Route::get('/movimentacao-fisica/gerar', [GerenciarMovimentacaoFisica::class, 'create'])->name('movimentacao-fisica.create');
-Route::post('/movimentacao-fisica/store', [GerenciarMovimentacaoFisica::class, 'store'])->name('movimentacao-fisica.store');
-Route::get('/movimentacao-fisica/editar/{id}', [GerenciarMovimentacaoFisica::class, 'edit'])->name('movimentacao-fisica.edit');
-Route::put('/movimentacao-fisica/update/{id}', [GerenciarMovimentacaoFisica::class, 'update'])->name('movimentacao-fisica.update');
+Route::get('/movimentacao-fisica', [GerenciarMovimentacaoFisicaController::class, 'index'])->name('movimentacao-fisica.index');
+Route::get('/movimentacao-fisica/gerar', [GerenciarMovimentacaoFisicaController::class, 'create'])->name('movimentacao-fisica.create');
+Route::post('/movimentacao-fisica/store', [GerenciarMovimentacaoFisicaController::class, 'store'])->name('movimentacao-fisica.store');
+Route::get('/movimentacao-fisica/editar/{id}', [GerenciarMovimentacaoFisicaController::class, 'edit'])->name('movimentacao-fisica.edit');
+Route::put('/movimentacao-fisica/update/{id}', [GerenciarMovimentacaoFisicaController::class, 'update'])->name('movimentacao-fisica.update');
 // Route::get('/movimentacao-fisica/excluir/{id}', [GerenciarMovimentacaoFisica::class, 'destroy'])->name('movimentacao.delete');

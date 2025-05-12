@@ -121,9 +121,15 @@ class CadastroInicialController extends Controller
         $materiais = ModelMatProposta::with('documentoMaterial', 'tipoUnidadeMedida', 'tipoItemCatalogoMaterial', 'tipoCategoria', 'tipoMarca', 'tipoTamanho', 'tipoCor', 'tipoFaseEtaria', 'tipoSexo')->where('id_sol_mat', $id)->get();
         $buscaTipoMaterial = ModelTipoMaterial::all();
 
-        $result = ModelCadastroInicial::where('documento_origem', $id)->get();
+        $result = ModelCadastroInicial::with('ItemCatalogoMaterial', 'Embalagem', 'CategoriaMaterial', 'TipoMaterial')->where('documento_origem', $id)->get();
 
         return view("cadastroInicial.doacao-cadastro-inicial-item", compact('result', 'buscaCategoria', 'buscaTipoMaterial', 'idDocumento', 'buscaUnidadeMedida', 'buscaSexo'));
+    }
+
+    public function storeDoacao(Request $request)
+    {
+
+        return redirect()->action('CadastroInicialController@index');
     }
 
     public function createCompraDireta()
@@ -139,12 +145,6 @@ class CadastroInicialController extends Controller
         $resultItem = DB::select($sql);
 
         return view('cadastroInicial/compra-direta-cadastro-inicial-item', compact('resultItem'));
-    }
-
-    public function storeDoacao(Request $request)
-    {
-
-        return redirect()->action('CadastroInicialController@index');
     }
 
     public function storeCompraDireta(Request $request)
@@ -189,28 +189,30 @@ class CadastroInicialController extends Controller
     public function storeMaterial(Request $request, $id)
     {
         $idDocumento = $id;
+        $checkAvariado = isset($request->checkAvariado) ? 1 : 0;
+        $checkAplicacao = isset($request->checkAplicacao) ? 1 : 0;
 
         ModelCadastroInicial::create([
+            'id_cat_material' => $request->input('categoriaMaterial'),
             'id_item_catalogo' => $request->input('nomeMaterial'),
-            'obaservacao' => $request->input('observacaoMaterial'),
-            'data_cadastro' => Carbon::now(),
+            'id_tipo_material' => $request->input('tipoMaterial'),
+            'id_embalagem' => $request->input('embalagemMaterial'),
             'quantidade' => $request->input('quantidadeMaterial'),
-            'adquirido' => false,
+            'modelo' => $request->input('modeloMaterial'),
+            'obaservacao' => $request->input('observacaoMaterial'),
+            'avariado' => $checkAvariado,
+            'aplicacao' => $checkAplicacao,
+            'data_validade' => $request->input('dataValidadeMaterial'),
             'id_marca' => $request->input('marcaMaterial'),
             'id_tamanho' => $request->input('tamanhoMaterial'),
             'id_cor' => $request->input('corMaterial'),
-            'id_tipo_material' => $request->input('tipoMaterial'),
             'id_fase_etaria' => $request->input('faseEtariaMaterial'),
             'id_tp_sexo' => $request->input('sexoMaterial'),
+            'data_cadastro' => Carbon::now(),
+            'adquirido' => false,
             'id_deposito' => '1',
-            'data_validade' => $request->input('dataValidadeMaterial'),
             'id_tp_status' => '1',
             'documento_origem' => $id,
-            'avariado' => $request->input('checkAvariado') ? 1 : 0,
-            'aplicacao' => $request->input('checkAplicacao') ? 1 : 0,
-            'id_cat_material' => $request->input('categoriaMaterial'),
-            'id_embalagem' => $request->input('embalagemMaterial'),
-            'modelo' => $request->input('modeloMaterial'),
         ]);
 
         return redirect()->route('doacao', ['id' => $idDocumento]);

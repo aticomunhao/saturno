@@ -65,15 +65,18 @@ class ModelCadastroInicial extends Model
     }
     public function ItemCatalogoMaterial()
     {
-        return $this->belongsTo(ModelItemCatalogoMaterial::class, 'id_nome_mat');
+        return $this->belongsTo(ModelItemCatalogoMaterial::class, 'id_item_catalogo');
     }
     public function TipoMaterial()
     {
         return $this->belongsTo(ModelTipoMaterial::class, 'id_tipo_material');
     }
-
     public function Localizacao()
     {
         return $this->hasMany(ModelLocalizacaoCadastroInicial::class, 'id_cadastro_inicial');
+    }
+    public function Embalagem()
+    {
+        return $this->belongsTo(ModelEmbalagem::class, 'id_embalagem');
     }
 }

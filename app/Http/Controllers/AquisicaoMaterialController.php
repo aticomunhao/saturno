@@ -247,74 +247,7 @@ class AquisicaoMaterialController extends Controller
         app('flasher')->addSuccess('Material Adicionado com Sucesso');
         return redirect("/incluir-aquisicao-material-2/{$idSolicitacao}");
     }
-    public function getMarcas($categoriaId)
-    {
-        $marcas = ModelMarca::where('id_categoria_material', $categoriaId)->get(['id', 'nome']);
-        return response()->json($marcas);
-    }
-
-    public function getTamanhos($categoriaId)
-    {
-        $tamanhos = ModelTamanho::where('id_categoria_material', $categoriaId)->get(['id', 'nome']);
-        return response()->json($tamanhos);
-    }
-
-    public function getCores($categoriaId)
-    {
-        $cores = ModelCor::where('id_categoria_material', $categoriaId)->get(['id', 'nome']);
-        return response()->json($cores);
-    }
-
-    public function getFases($categoriaId)
-    {
-        $fases = ModelFaseEtaria::where('id_categoria_material', $categoriaId)->get(['id', 'nome']);
-        return response()->json($fases);
-    }
-    public function getNomes($categoriaId)
-    {
-        $nomes = ModelItemCatalogoMaterial::where('id_categoria_material', $categoriaId)->get(['id', 'nome']);
-        return response()->json($nomes);
-    }
-    public function getEmbalagens($nomeId)
-    {
-        $embalagens = ModelEmbalagem::with([
-            'unidadeMedida',       // n1
-            'unidadeMedida2',      // n2
-            'unidadeMedida3',      // n3
-            'unidadeMedida4'       // n4
-        ])
-            ->where('id_item_catalogo', $nomeId)
-            ->get();
-
-        $embalagensFormatadas = $embalagens->map(function ($emb) {
-            $partes = [];
-
-            if ($emb->qtde_n4 && $emb->unidadeMedida4) {
-                $partes[] = "{$emb->qtde_n4} {$emb->unidadeMedida4->nome}";
-            }
-
-            if ($emb->qtde_n3 && $emb->unidadeMedida3) {
-                $partes[] = "{$emb->qtde_n3} {$emb->unidadeMedida3->nome}";
-            }
-
-            if ($emb->qtde_n2 && $emb->unidadeMedida2) {
-                $partes[] = "{$emb->qtde_n2} {$emb->unidadeMedida2->nome}";
-            }
-
-            if ($emb->qtde_n1 && $emb->unidadeMedida) {
-                $partes[] = "{$emb->qtde_n1} {$emb->unidadeMedida->nome}";
-            }
-
-            $desc = implode(' / ', $partes);
-
-            return [
-                'id' => $emb->id,
-                'nome' => $desc
-            ];
-        });
-
-        return response()->json($embalagensFormatadas);
-    }
+   
     public function destroyMaterial(Request $request)
     {
         // Busca e exclusão do material

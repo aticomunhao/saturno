@@ -52,9 +52,11 @@
                                     <thead>
                                         <tr>
                                             <th>Id</th>
+                                            <th>Categoria do Material</th>
                                             <th>Item Material</th>
+                                            <th>Tipo</th>
                                             <th>Embalagem</th>
-                                            <th>Status</th>
+                                            <th>Observação</th>
                                             <th>Ação</th>
                                         </tr>
                                     </thead>
@@ -63,16 +65,33 @@
                                         @foreach ($result as $results)
                                             <tr>
                                                 <td>{{ $results->id ?? 'N/A' }}</td>
-                                                <td>{{ $results->nome ?? 'N/A' }}</td>
-                                                <td>{{ $results->unidadeMedida->sigla ?? '' }} -
-                                                    {{ $results->unidadeMedida->nome ?? '' }}</td>
+                                                <td>{{ $results->CategoriaMaterial->nome ?? 'N/A' }}</td>
+                                                <td>{{ $results->ItemCatalogoMaterial->nome ?? 'N/A' }}</td>
+                                                <td>{{ $results->TipoMaterial->nome ?? 'N/A' }}</td>
                                                 <td>
-                                                    @if ($results->ativo == 1)
-                                                        <span class="badge bg-success">Ativo</span>
-                                                    @else
-                                                        <span class="badge bg-danger">Inativo</span>
-                                                    @endif
+                                                    @php
+                                                        $emb = $results->Embalagem;
+                                                        $partes = [];
+
+                                                        if ($emb && $emb->qtde_n4 && $emb->unidadeMedida4) {
+                                                            $partes[] = "{$emb->qtde_n4} {$emb->unidadeMedida4->nome}";
+                                                        }
+                                                        if ($emb && $emb->qtde_n3 && $emb->unidadeMedida3) {
+                                                            $partes[] = "{$emb->qtde_n3} {$emb->unidadeMedida3->nome}";
+                                                        }
+                                                        if ($emb && $emb->qtde_n2 && $emb->unidadeMedida2) {
+                                                            $partes[] = "{$emb->qtde_n2} {$emb->unidadeMedida2->nome}";
+                                                        }
+                                                        if ($emb && $emb->qtde_n1 && $emb->unidadeMedida) {
+                                                            $partes[] = "{$emb->qtde_n1} {$emb->unidadeMedida->nome}";
+                                                        }
+
+                                                        $descricao = implode(' / ', $partes);
+                                                    @endphp
+
+                                                    {{ $descricao }}
                                                 </td>
+                                                <td>{{ $results->observacao }}</td>
                                                 <td>
                                                     <a href="/gerenciar-embalagem/alterar/{{ $results->id }}"
                                                         class="btn btn-sm btn-outline-warning" data-tt="tooltip"
@@ -99,7 +118,7 @@
         </div>
     </form>
     <x-modal-incluir id="modalIncluirMaterial" labelId="modalIncluirMaterialLabel"
-        action="{{ url('/incluir-material-doacao-cadastro-inicial/' . $idDocumento) }}" title="Inclusão de Material">
+        action="{{ url('/incluir-material-cadastro-inicial/' . $idDocumento) }}" title="Inclusão de Material">
         <div class="row material-item">
             <div class="col-md-6" style="margin-top: 10px">
                 <label>Categoria do Material</label>
@@ -124,18 +143,12 @@
             </div>
             <div class="col-md-6" style="margin-top: 10px">
                 <label>Tipo do Material</label>
-                <select class="form-select select2" id="tipoMaterial"
-                    style="border: 1px solid #999999; padding: 5px;" name="tipoMaterial">
-                    <option value="" disabled selected>Selecione...
-                    </option>
-                    @foreach ($buscaTipoMaterial as $buscaTipoMaterials)
-                        <option value="{{ $buscaTipoMaterials->id }}">
-                            {{ $buscaTipoMaterials->nome }}
-                        </option>
-                    @endforeach
-                </select>
+                <!-- Campo visível: apenas para mostrar o nome -->
+                <input type="text" id="tipoMaterialNome" class="form-control" disabled>
+                <!-- Campo oculto: envia o ID no form -->
+                <input type="hidden" id="tipoMaterial" name="tipoMaterial">
             </div>
-            <div class="col-md-3" style="margin-top: 10px">
+            <div class="col-md-4" style="margin-top: 10px">
                 <label>Embalagem</label>
                 <select class="form-select js-nome-material select2" id="embalagemMaterial"
                     style="border: 1px solid #999999; padding: 5px;" name="embalagemMaterial">
@@ -143,33 +156,36 @@
                     </option>
                 </select>
             </div>
-            <div class="col-md-3" style="margin-top: 10px">
+            <div class="col-md-2" style="margin-top: 10px">
                 <label>Quantidade</label>
                 <input type="number" class="form-control" name="quantidadeMaterial">
             </div>
-            <div class="col-md-3" style="margin-top: 10px">
+            <div class="col-md-6" style="margin-top: 10px">
                 <label>Modelo</label>
                 <input type="text" class="form-control" name="modeloMaterial">
             </div>
             <div class="col-md-3" style="margin-top: 10px">
-                <label>Observação</label>
-                <input type="text" class="form-control" name="observacaoMaterial">
+                <label>Valor Unitário</label>
+                <select class="form-select select2" id="valorMaterial"
+                    style="border: 1px solid #999999; padding: 5px;" name="valorMaterial">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                    @foreach ($buscaCategoria as $buscaCategorias)
+                        <option value="{{ $buscaCategorias->id }}">
+                            {{ $buscaCategorias->nome }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
             <div class="col-md-3" style="margin-top: 10px">
-                <label>Avariado</label>
-                <input type="button" class="form-control" name="checkAvariado">
-            </div>
-            <div class="col-md-3" style="margin-top: 10px">
-                <label>Aplicação</label>
-                <input type="text" class="form-control" name="checkAplicacao">
+                <label>Part Number</label>
+                <input type="number" class="form-control" name="partNumberMaterial">
             </div>
             <div class="col-md-3" style="margin-top: 10px">
                 <label>Data de Validade</label>
                 <input type="date" class="form-control" name="dataValidadeMaterial">
             </div>
-        </div>
-        <div class="row material-item" style="margin-top: 10px">
-            <div class="col-md">
+            <div class="col-md-3" style="margin-top: 10px">
                 <label>Marca</label>
                 <select class="form-select js-marca-material select2" id="marcaMaterial"
                     style="border: 1px solid #999999; padding: 5px;" name="marcaMaterial">
@@ -177,7 +193,7 @@
                     </option>
                 </select>
             </div>
-            <div class="col-md">
+            <div class="col-md-3" style="margin-top: 10px">
                 <label>Tamanho</label>
                 <select class="form-select js-tamanho-material select2" id="tamanhoMaterial"
                     style="border: 1px solid #999999; padding: 5px;" name="tamanhoMaterial">
@@ -185,7 +201,11 @@
                     </option>
                 </select>
             </div>
-            <div class="col-md">
+            <div class="col-md-1" style="margin-top: 10px">
+                <label>Avariado</label>
+                <input type="checkbox" id="checkAvariado" name="checkAvariado">
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
                 <label>Cor</label>
                 <select class="form-select js-cor-material select2" id="corMaterial"
                     style="border: 1px solid #999999; padding: 5px;" name="corMaterial">
@@ -193,7 +213,7 @@
                     </option>
                 </select>
             </div>
-            <div class="col-md">
+            <div class="col-md-3" style="margin-top: 10px">
                 <label>Fase Etária</label>
                 <select class="form-select js-fase-material select2" id="faseEtariaMaterial"
                     style="border: 1px solid #999999; padding: 5px;" name="faseEtariaMaterial">
@@ -201,7 +221,7 @@
                     </option>
                 </select>
             </div>
-            <div class="col-md">
+            <div class="col-md-3" style="margin-top: 10px">
                 <label>Sexo</label>
                 <select class="form-select js-sexo-material select2" id="sexoMaterial"
                     style="border: 1px solid #999999; padding: 5px;" name="sexoMaterial">
@@ -214,10 +234,17 @@
                     @endforeach
                 </select>
             </div>
+            <div class="col-md-1" style="margin-top: 10px">
+                <label>Aplicação</label>
+                <input type="checkbox" id="checkAplicacao" name="checkAplicacao">
+            </div>
+            <div class="col-md-12" style="margin-top: 10px">
+                <label>Observação</label>
+                <textarea type="text" class="form-control" name="observacaoMaterial" rows="2"></textarea>
+            </div>
         </div>
     </x-modal-incluir>
-    <x-modal-incluir id="modalIncluirTermo" labelId="modalIncluirTermoLabel"
-        action="" title="Inclusão de Termo">
+    <x-modal-incluir id="modalIncluirTermo" labelId="modalIncluirTermoLabel" action="" title="Inclusão de Termo">
         <div class="row termo">
 
         </div>

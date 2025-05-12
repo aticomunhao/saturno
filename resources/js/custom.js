@@ -13,7 +13,29 @@ $(document).ready(function () {
     // Inicializa o Select2 em qualquer modal que contenha .select2
     $(document).on('shown.bs.modal', '.modal', function () {
         $('.select2', this).select2({
-            dropdownParent: $(this)
+            theme: "bootstrap-5",
+            dropdownParent: $(this),
+        });
+
+        // Para o select2 específico com tags: true
+        const $valorSelect = $('#valorMaterial', this);
+        $valorSelect.select2({
+            theme: "bootstrap-5",
+            dropdownParent: $(this),
+            tags: true,
+            placeholder: "Selecione ou digite um valor",
+            allowClear: true,
+            createTag: function (params) {
+                const term = params.term.trim();
+                if (!/^\d+(\.\d{1,2})?$/.test(term)) {
+                    return null;
+                }
+                return {
+                    id: term,
+                    text: term,
+                    newTag: true
+                };
+            }
         });
     });
 
@@ -61,6 +83,17 @@ $(document).ready(function () {
         const nomeId = this.value;
         if (nomeId) {
             carregarOpcoes(`/embalagem/${nomeId}`, '#embalagemMaterial');
+            fetch(`/tipo/${nomeId}`)
+                .then(response => response.json())
+                .then(data => {
+                    $('#tipoMaterialNome').val(data.nome || '');
+                    $('#tipoMaterial').val(data.id || '');
+                })
+                .catch(error => {
+                    $('#tipoMaterialNome').val('');
+                    $('#tipoMaterial').val('');
+                    console.error('Erro ao buscar tipo do material:', error);
+                });
         }
     });
 });

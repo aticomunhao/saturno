@@ -49,7 +49,7 @@ use App\Http\Controllers\CatalogoEmpresaController;
 use App\Http\Controllers\CatalogoServicoController;
 use App\Http\Controllers\AquisicaoMaterialController;
 use App\Http\Controllers\GerenciarDepositoController;
-use App\Http\Controllers\PesquisaController;
+use App\Http\Controllers\GerenciarLocalizacaoCadastroInicialController;
 use App\Http\Controllers\ValorCompraController;
 
 
@@ -412,13 +412,3 @@ Route::post('/movimentacao-fisica/store', [GerenciarMovimentacaoFisica::class, '
 Route::get('/movimentacao-fisica/editar/{id}', [GerenciarMovimentacaoFisica::class, 'edit'])->name('movimentacao-fisica.edit');
 Route::put('/movimentacao-fisica/update/{id}', [GerenciarMovimentacaoFisica::class, 'update'])->name('movimentacao-fisica.update');
 // Route::get('/movimentacao-fisica/excluir/{id}', [GerenciarMovimentacaoFisica::class, 'destroy'])->name('movimentacao.delete');
-
-
-//Controller de pesquisa
-Route::get('/marcas/{categoriaId}', [PesquisaController::class, 'getMarcas']);
-Route::get('/tamanhos/{categoriaId}', [PesquisaController::class, 'getTamanhos']);
-Route::get('/cores/{categoriaId}', [PesquisaController::class, 'getCores']);
-Route::get('/fases/{categoriaId}', [PesquisaController::class, 'getFases']);
-Route::get('/nome/{categoriaId}', [PesquisaController::class, 'getNomes']);
-Route::get('/embalagem/{nomeId}', [PesquisaController::class, 'getEmbalagens']);
-Route::get('/tipo/{nomeId}', [PesquisaController::class, 'getTipo']);

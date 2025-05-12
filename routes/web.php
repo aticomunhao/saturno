@@ -419,3 +419,4 @@ Route::post('/movimentacao-fisica/store', [GerenciarMovimentacaoFisicaController
 Route::get('/movimentacao-fisica/editar/{id}', [GerenciarMovimentacaoFisicaController::class, 'edit'])->name('movimentacao-fisica.edit');
 Route::put('/movimentacao-fisica/update/{id}', [GerenciarMovimentacaoFisicaController::class, 'update'])->name('movimentacao-fisica.update');
 Route::any('/movimentacao-fisica/solicitar-teste', [GerenciarMovimentacaoFisicaController::class, 'solicitar_teste'])->name('movimentacao-fisica.solicitar-teste');
+Route::any('/movimentacao-fisica/solicitar-teste/store', [GerenciarMovimentacaoFisicaController::class, 'solicitar_teste_store'])->name('movimentacao-fisica.solicitar-teste.create');

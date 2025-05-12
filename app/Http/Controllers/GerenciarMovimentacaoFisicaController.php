@@ -79,9 +79,13 @@ class GerenciarMovimentacaoFisicaController extends Controller
     }
     public function solicitar_teste(){
 
-     $cadastro_inicial =   $query = ModelCadastroInicial::with('Status', 'SolOrigem', 'DocOrigem', 'Deposito', 'Destinacao', 'CategoriaMaterial', 'TipoMaterial');
+     $cadastro_inicial = ModelCadastroInicial::with('Status', 'SolOrigem', 'DocOrigem', 'Deposito', 'Destinacao', 'CategoriaMaterial', 'TipoMaterial');
 
         return view('movimentacao-fisica.solicitar-teste', compact('cadastro_inicial'));
+
+    }
+    public function solicitar_teste_store(Request $request){
+        $request->all();
 
     }
 }

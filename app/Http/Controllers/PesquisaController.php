@@ -19,10 +19,12 @@ use App\Models\ModelMarca;
 use App\Models\ModelSexo;
 use App\Models\ModelTamanho;
 use App\Models\ModelEmpresa;
+use App\Models\ModelCadastroInicial;
 use App\Models\ModelItemCatalogoMaterial;
 use App\Models\ModelMatProposta;
 use App\Models\ModelUnidadeMedida;
 use App\Models\ModelPessoa;
+use App\Models\ModelValorAvariado;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Validator;
@@ -109,5 +111,52 @@ class PesquisaController extends Controller
             'id' => $item->tipoMaterial->id ?? null,
             'nome' => $item->tipoMaterial->nome ?? null,
         ]);
+    }
+    public function getValorAquisicao($nomeId)
+    {
+        $nomes = ModelCadastroInicial::where('id_item_catalogo', $nomeId)
+            ->get(['valor_aquisicao'])
+            ->filter(function ($item) {
+                return !is_null($item->valor_aquisicao);
+            })
+            ->map(function ($item) {
+                return [
+                    'id' => $item->valor_aquisicao,
+                    'nome' => number_format($item->valor_aquisicao, 2, ',', '')
+                ];
+            });
+        return response()->json($nomes->values());
+    }
+
+    public function getValorVenda($nomeId)
+    {
+        $nomes = ModelCadastroInicial::where('id_item_catalogo', $nomeId)
+            ->get(['valor_venda'])
+            ->filter(function ($item) {
+                return !is_null($item->valor_venda);
+            })
+            ->map(function ($item) {
+                return [
+                    'id' => $item->valor_venda,
+                    'nome' => number_format($item->valor_venda, 2, ',', '')
+                ];
+            });
+        return response()->json($nomes->values());
+    }
+
+    public function getValorVendaAvariado($nomeId)
+    {
+        $nomes = ModelValorAvariado::get(['valor'])
+            ->filter(function ($item) {
+                return !is_null($item->valor);
+            })
+            ->map(function ($item) {
+                return [
+                    'id' => $item->valor,
+                    'nome' => number_format($item->valor, 2, ',', '')
+                ];
+            });
+
+        return response()->json($nomes->values());
     }
 }

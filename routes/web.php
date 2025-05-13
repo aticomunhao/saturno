@@ -424,3 +424,6 @@ Route::get('/fases/{categoriaId}', [PesquisaController::class, 'getFases']);
 Route::get('/nome/{categoriaId}', [PesquisaController::class, 'getNomes']);
 Route::get('/embalagem/{nomeId}', [PesquisaController::class, 'getEmbalagens']);
 Route::get('/tipo/{nomeId}', [PesquisaController::class, 'getTipo']);
+Route::get('/valorAquisicao/{nomeId}', [PesquisaController::class, 'getValorAquisicao']);
+Route::get('/valorVenda/{nomeId}', [PesquisaController::class, 'getValorVenda']);
+Route::get('/valorVendaAvariado/{nomeId}', [PesquisaController::class, 'getValorVendaAvariado']);

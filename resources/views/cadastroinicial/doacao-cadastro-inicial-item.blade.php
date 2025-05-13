@@ -160,26 +160,30 @@
                 <label>Quantidade</label>
                 <input type="number" class="form-control" name="quantidadeMaterial">
             </div>
-            <div class="col-md-6" style="margin-top: 10px">
+            <div class="col-md-4" style="margin-top: 10px">
                 <label>Modelo</label>
                 <input type="text" class="form-control" name="modeloMaterial">
             </div>
+            <div class="col-md-2" style="margin-top: 10px">
+                <label>Avariado</label>
+                <br>
+                <input type="checkbox" id="checkAvariado" name="checkAvariado">
+            </div>
             <div class="col-md-3" style="margin-top: 10px">
-                <label>Valor Unitário</label>
-                <select class="form-select select2" id="valorMaterial"
-                    style="border: 1px solid #999999; padding: 5px;" name="valorMaterial">
+                <label>Valor de Aquisição</label>
+                <select class="form-select js-marca-material select2" id="valorAquisicaoMaterial"
+                    style="border: 1px solid #999999; padding: 5px;" name="valorAquisicaoMaterial">
                     <option value="" disabled selected>Selecione...
                     </option>
-                    @foreach ($buscaCategoria as $buscaCategorias)
-                        <option value="{{ $buscaCategorias->id }}">
-                            {{ $buscaCategorias->nome }}
-                        </option>
-                    @endforeach
                 </select>
             </div>
             <div class="col-md-3" style="margin-top: 10px">
-                <label>Part Number</label>
-                <input type="number" class="form-control" name="partNumberMaterial">
+                <label>Valor de Venda</label>
+                <select class="form-select js-marca-material select2" id="valorVendaMaterial"
+                    style="border: 1px solid #999999; padding: 5px;" name="valorVendaMaterial">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                </select>
             </div>
             <div class="col-md-3" style="margin-top: 10px">
                 <label>Data de Validade</label>
@@ -201,9 +205,9 @@
                     </option>
                 </select>
             </div>
-            <div class="col-md-1" style="margin-top: 10px">
-                <label>Avariado</label>
-                <input type="checkbox" id="checkAvariado" name="checkAvariado">
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Part Number</label>
+                <input type="number" class="form-control" name="partNumberMaterial">
             </div>
             <div class="col-md-3" style="margin-top: 10px">
                 <label>Cor</label>

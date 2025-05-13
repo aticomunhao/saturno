@@ -18,7 +18,7 @@ $(document).ready(function () {
         });
 
         // Para o select2 específico com tags: true
-        const $valorSelect = $('#valorMaterial', this);
+        const $valorSelect = $('#valorAquisicaoMaterial, #valorVendaMaterial', this);
         $valorSelect.select2({
             theme: "bootstrap-5",
             dropdownParent: $(this),
@@ -53,6 +53,7 @@ $(document).ready(function () {
             .then((response) => response.json())
             .then((data) => {
                 const select = $(targetSelect);
+                console.log(data);
                 select.empty(); // Limpa as opções existentes
                 if (data.length > 0) {
                     select.append(`<option value="" disabled selected>${placeholder}</option>`);
@@ -65,6 +66,14 @@ $(document).ready(function () {
             })
             .catch((error) => console.error("Erro ao carregar opções:", error));
     }
+
+    let avariadoAtivo = false;
+
+    // Atualiza a flag quando o checkbox mudar
+    $('#checkAvariado').on('change', function () {
+        avariadoAtivo = $(this).is(':checked');
+        $('#nomeMaterial').trigger('change');
+    });
 
     // Filtro dinâmico com base na categoria
     $('#categoriaMaterial').on('change', function () {
@@ -83,6 +92,15 @@ $(document).ready(function () {
         const nomeId = this.value;
         if (nomeId) {
             carregarOpcoes(`/embalagem/${nomeId}`, '#embalagemMaterial');
+            carregarOpcoes(`/valorAquisicao/${nomeId}`, '#valorAquisicaoMaterial');
+
+            // Verifica se avariado está ativado para buscar dos endpoints corretos
+            if (avariadoAtivo) {
+                carregarOpcoes(`/valorVendaAvariado/${nomeId}`, '#valorVendaMaterial');
+            } else {
+                carregarOpcoes(`/valorVenda/${nomeId}`, '#valorVendaMaterial');
+            }
+
             fetch(`/tipo/${nomeId}`)
                 .then(response => response.json())
                 .then(data => {
@@ -97,6 +115,7 @@ $(document).ready(function () {
         }
     });
 });
+
 
 // Selecione todos os campos com a classe 'proposta'
 document.querySelectorAll('.valor-monetario').forEach(function (input) {

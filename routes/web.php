@@ -413,6 +413,8 @@ Route::get('/movimentacao-fisica/gerar', [GerenciarMovimentacaoFisicaController:
 Route::post('/movimentacao-fisica/store', [GerenciarMovimentacaoFisicaController::class, 'store'])->name('movimentacao-fisica.store');
 Route::get('/movimentacao-fisica/editar/{id}', [GerenciarMovimentacaoFisicaController::class, 'edit'])->name('movimentacao-fisica.edit');
 Route::put('/movimentacao-fisica/update/{id}', [GerenciarMovimentacaoFisicaController::class, 'update'])->name('movimentacao-fisica.update');
+Route::any('/movimentacao-fisica/solicitar-teste', [GerenciarMovimentacaoFisicaController::class, 'solicitar_teste'])->name('movimentacao-fisica.solicitar-teste');
+Route::any('/movimentacao-fisica/solicitar-teste/store', [GerenciarMovimentacaoFisicaController::class, 'solicitar_teste_store'])->name('movimentacao-fisica.solicitar-teste.create');
 // Route::get('/movimentacao-fisica/excluir/{id}', [GerenciarMovimentacaoFisica::class, 'destroy'])->name('movimentacao.delete');
 
 Route::get('/marcas/{categoriaId}', [PesquisaController::class, 'getMarcas']);

@@ -13,7 +13,7 @@
                     @csrf
                     <div class="mb-3">
                         <label for="materiais" class="form-label">Selecione os Materiais</label>
-                        <select name="materiais[]"  class="form-select idmateriais" multiple="multiple">
+                        <select name="materiais1[]" class="form-select select2" multiple="multiple">
                             @foreach ($cadastro_inicial->unique('id') as $material)
                                 <option value="{{ $material->id }}">
                                     {{ $material->CategoriaMaterial->nome }}
@@ -36,13 +36,4 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-    <script>
-        $(document).ready(function() {
-            $('.idmateriais').select2({
-                theme: 'bootstrap-5',
-                allowClear: true,
-                width: '100%'
-            });
-        });
-    </script>
 @endsection

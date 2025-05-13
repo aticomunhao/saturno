@@ -26,6 +26,7 @@ class GerenciarMovimentacaoFisicaController extends Controller
         ])->get();
 
         $tipos_deposito = ModelTipoDeposito::all();
+        // dd($movimentacoes_fisicas);
 
     return view('movimentacao-fisica.index', compact('movimentacoes_fisicas', 'tipos_deposito'));
     }
@@ -79,8 +80,8 @@ class GerenciarMovimentacaoFisicaController extends Controller
     }
     public function solicitar_teste(){
 
-     $cadastro_inicial = ModelCadastroInicial::with('Status', 'SolOrigem', 'DocOrigem', 'Deposito', 'Destinacao', 'CategoriaMaterial', 'TipoMaterial');
-
+     $cadastro_inicial = ModelCadastroInicial::with('Status', 'SolOrigem', 'DocOrigem', 'Deposito', 'Destinacao', 'CategoriaMaterial', 'TipoMaterial')->get(    );
+    //   dd($cadastro_inicial);
         return view('movimentacao-fisica.solicitar-teste', compact('cadastro_inicial'));
 
     }

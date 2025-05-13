@@ -3,25 +3,46 @@
 @section('content')
     <br>
     <div class="container">
-        <div class="card">
-            <div class="card-header">
-                Solicitar Teste de Material
+        <div class="card shadow rounded-3">
+            <div class="card-header bg-primary text-white">
+                <strong>Solicitar Teste de Material</strong>
             </div>
             <div class="card-body">
-                <div class="card-text">
-                    <form action="{{ route('movimentacao-fisica.solicitar-teste.create') }}" method="POST">
-                        @csrf
-                        <label for="materiais">Selecione Os Materiais</label>
-                        <select name="materiais[]" id="materiais" class="form-control" multiple>
-                            @foreach ($cadastro_inicial as $material)
-                                <option value="{{ $material->id }}">{{ $material->ItemCatalogoMaterial->nome }}</option>
+
+                <form action="{{ route('movimentacao-fisica.solicitar-teste.create') }}" method="POST">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="materiais" class="form-label">Selecione os Materiais</label>
+                        <select name="materiais[]"  class="form-select idmateriais" multiple="multiple">
+                            @foreach ($cadastro_inicial->unique('id') as $material)
+                                <option value="{{ $material->id }}">
+                                    {{ $material->CategoriaMaterial->nome }}
+                                </option>
                             @endforeach
                         </select>
-                        <br>
-                        <button type="submit" class="btn btn-primary">Solicitar Teste</button>
-                    </form>
-                </div>
+                    </div>
+                    <button type="submit" class="btn btn-success">Solicitar Teste</button>
+                </form>
             </div>
         </div>
     </div>
+
+    {{-- Estilo Select2 + tema Bootstrap 5 --}}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"
+        rel="stylesheet" />
+
+    {{-- jQuery + Select2 --}}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('.idmateriais').select2({
+                theme: 'bootstrap-5',
+                allowClear: true,
+                width: '100%'
+            });
+        });
+    </script>
 @endsection

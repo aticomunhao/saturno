@@ -19,9 +19,23 @@
                                 </h5>
                             </div>
                         </div>
-                        <br>
                         <div class="card-body">
-                            <div class="row" style="margin-left: 5px">
+                            <div class="row">
+                                <div class="col-md-3 col-sm-12">
+                                    <label>ID do Documento</label>
+                                    <br>
+                                    <input type="text" class="form-control"
+                                        value="{{ $resultDocumento->id ?? 'Não especificado' }}" disabled>
+                                </div>
+                                <div class="col-md-3 col-sm-12">
+                                    <label>Número do Documento</label>
+                                    <br>
+                                    <input type="text" class="form-control"
+                                        value="{{ $resultDocumento->numero ?? 'Não especificado' }}" disabled>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
                                 <!-- Ambos os botões na mesma div -->
                                 <div class="col-md d-flex justify-content-start">
                                     <button type="button" class="btn btn-success me-2" id="addMaterial"
@@ -30,7 +44,7 @@
                                     </button>
                                     <button type="button" class="btn btn-success" id="addTermo" data-bs-toggle="modal"
                                         data-bs-target="#modalIncluirTermo">
-                                        Incluir Termo de Doação
+                                        Incluir Documento
                                     </button>
                                     <button type="button" class="btn me-2" id="sacolaBtn"
                                         style="background-color: rgb(199, 7, 7); color: white; margin-left: 5px;">
@@ -118,7 +132,7 @@
         </div>
     </form>
     <x-modal-incluir id="modalIncluirMaterial" labelId="modalIncluirMaterialLabel"
-        action="{{ url('/incluir-material-cadastro-inicial/' . $idDocumento) }}" title="Inclusão de Material">
+        action="{{ url('/cadastro-inicial/incluir-material/' . $idDocumento) }}" title="Inclusão de Material">
         <div class="row material-item">
             <div class="col-md-6" style="margin-top: 10px">
                 <label>Categoria do Material</label>
@@ -141,12 +155,17 @@
                     </option>
                 </select>
             </div>
-            <div class="col-md-6" style="margin-top: 10px">
+            <div class="col-md-4" style="margin-top: 10px">
                 <label>Tipo do Material</label>
                 <!-- Campo visível: apenas para mostrar o nome -->
                 <input type="text" id="tipoMaterialNome" class="form-control" disabled>
                 <!-- Campo oculto: envia o ID no form -->
                 <input type="hidden" id="tipoMaterial" name="tipoMaterial">
+            </div>
+            <div class="col-md-2" style="margin-top: 10px">
+                <label>Aplicação</label>
+                <br>
+                <input type="checkbox" id="checkAplicacao" name="checkAplicacao" disabled>
             </div>
             <div class="col-md-4" style="margin-top: 10px">
                 <label>Embalagem</label>
@@ -206,10 +225,6 @@
                 </select>
             </div>
             <div class="col-md-3" style="margin-top: 10px">
-                <label>Part Number</label>
-                <input type="number" class="form-control" name="partNumberMaterial">
-            </div>
-            <div class="col-md-3" style="margin-top: 10px">
                 <label>Cor</label>
                 <select class="form-select js-cor-material select2" id="corMaterial"
                     style="border: 1px solid #999999; padding: 5px;" name="corMaterial">
@@ -238,19 +253,21 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-1" style="margin-top: 10px">
-                <label>Aplicação</label>
-                <input type="checkbox" id="checkAplicacao" name="checkAplicacao">
-            </div>
             <div class="col-md-12" style="margin-top: 10px">
                 <label>Observação</label>
                 <textarea type="text" class="form-control" name="observacaoMaterial" rows="2"></textarea>
             </div>
         </div>
     </x-modal-incluir>
-    <x-modal-incluir id="modalIncluirTermo" labelId="modalIncluirTermoLabel" action="" title="Inclusão de Termo">
+    <x-modal-incluir id="modalIncluirTermo" labelId="modalIncluirTermoLabel"
+        action="{{ url('/cadastro-inicial/incluir-termo/' . $idDocumento) }}" title="Inclusão de Termo">
         <div class="row termo">
-
+            <!-- Arquivo da Proposta -->
+            <div class="col-md">
+                <label>Arquivo do Termo de Doação</label>
+                <input type="file" class="form-control" style="background-color: white; border-color: gray;"
+                    id="arquivoMaterial" name="arquivoMaterial" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
+            </div>
         </div>
     </x-modal-incluir>
     {{-- Botão de SACOLA --}}

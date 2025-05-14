@@ -47,71 +47,101 @@ $(document).ready(function () {
 
 //preencher select da modal Itens Material
 $(document).ready(function () {
-    // Função genérica para carregar opções via AJAX
-    function carregarOpcoes(url, targetSelect, placeholder = "Selecione...") {
-        fetch(url)
-            .then((response) => response.json())
-            .then((data) => {
-                const select = $(targetSelect);
-                console.log(data);
-                select.empty(); // Limpa as opções existentes
-                if (data.length > 0) {
-                    select.append(`<option value="" disabled selected>${placeholder}</option>`);
-                    data.forEach((item) => {
-                        select.append(`<option value="${item.id}">${item.nome}</option>`);
-                    });
-                } else {
-                    select.append(`<option value="" selected>Não Possui</option>`);
-                }
-            })
-            .catch((error) => console.error("Erro ao carregar opções:", error));
+    // Função genérica para carregar opções via AJAX com async/await
+    async function carregarOpcoes(url, targetSelect, placeholder = "Selecione...") {
+        const select = $(targetSelect);
+        if (select.length === 0) return;
+
+        select.prop('disabled', true);
+        select.html(`<option selected>Carregando...</option>`);
+
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+
+            select.empty();
+
+            if (data.length > 0) {
+                select.append(`<option value="" disabled selected>${placeholder}</option>`);
+                data.forEach((item) => {
+                    select.append(`<option value="${item.id}">${item.nome}</option>`);
+                });
+            } else {
+                select.append(`<option value="" selected>Não Possui</option>`);
+            }
+        } catch (error) {
+            console.error("Erro ao carregar opções:", error);
+            select.html(`<option value="">Erro ao carregar</option>`);
+        } finally {
+            select.prop('disabled', false);
+        }
     }
 
+    // Flag do checkbox "Avariado"
     let avariadoAtivo = false;
 
-    // Atualiza a flag quando o checkbox mudar
+    // Atualiza apenas o valor de venda ao marcar/desmarcar "Avariado"
     $('#checkAvariado').on('change', function () {
         avariadoAtivo = $(this).is(':checked');
-        $('#nomeMaterial').trigger('change');
-    });
 
-    // Filtro dinâmico com base na categoria
-    $('#categoriaMaterial').on('change', function () {
-        const categoriaId = this.value;
-        if (categoriaId) {
-            carregarOpcoes(`/nome/${categoriaId}`, '#nomeMaterial');
-            carregarOpcoes(`/marcas/${categoriaId}`, '#marcaMaterial');
-            carregarOpcoes(`/tamanhos/${categoriaId}`, '#tamanhoMaterial');
-            carregarOpcoes(`/cores/${categoriaId}`, '#corMaterial');
-            carregarOpcoes(`/fases/${categoriaId}`, '#faseEtariaMaterial');
+        const nomeId = $('#nomeMaterial').val();
+        if (nomeId) {
+            const valorVendaUrl = avariadoAtivo
+                ? `/valorVendaAvariado/${nomeId}`
+                : `/valorVenda/${nomeId}`;
+
+            carregarOpcoes(valorVendaUrl, '#valorVendaMaterial');
         }
     });
 
-    // Filtro dinâmico com base no nome do material
-    $('#nomeMaterial').on('change', function () {
+    // Quando categoria é selecionada
+    $('#categoriaMaterial').on('change', function () {
+        const categoriaId = this.value;
+        if (!categoriaId) return;
+
+        const filtrosCategoria = {
+            [`/nome/${categoriaId}`]: '#nomeMaterial',
+            [`/marcas/${categoriaId}`]: '#marcaMaterial',
+            [`/tamanhos/${categoriaId}`]: '#tamanhoMaterial',
+            [`/cores/${categoriaId}`]: '#corMaterial',
+            [`/fases/${categoriaId}`]: '#faseEtariaMaterial',
+        };
+
+        for (const [url, selector] of Object.entries(filtrosCategoria)) {
+            carregarOpcoes(url, selector);
+        }
+    });
+
+    // Quando nome do material é selecionado
+    $('#nomeMaterial').on('change', async function () {
         const nomeId = this.value;
-        if (nomeId) {
-            carregarOpcoes(`/embalagem/${nomeId}`, '#embalagemMaterial');
-            carregarOpcoes(`/valorAquisicao/${nomeId}`, '#valorAquisicaoMaterial');
+        if (!nomeId) return;
 
-            // Verifica se avariado está ativado para buscar dos endpoints corretos
-            if (avariadoAtivo) {
-                carregarOpcoes(`/valorVendaAvariado/${nomeId}`, '#valorVendaMaterial');
+        await carregarOpcoes(`/embalagem/${nomeId}`, '#embalagemMaterial');
+        await carregarOpcoes(`/valorAquisicao/${nomeId}`, '#valorAquisicaoMaterial');
+
+        const valorVendaUrl = avariadoAtivo
+            ? `/valorVendaAvariado/${nomeId}`
+            : `/valorVenda/${nomeId}`;
+        await carregarOpcoes(valorVendaUrl, '#valorVendaMaterial');
+
+        // Carrega o tipo do material e preenche os campos ocultos
+        try {
+            const response = await fetch(`/tipo/${nomeId}`);
+            const data = await response.json();
+
+            $('#tipoMaterialNome').val(data.nome || '');
+            $('#tipoMaterial').val(data.id || '');
+
+            if (data.id == 2) {
+                $('#checkAplicacao').prop('disabled', false);
             } else {
-                carregarOpcoes(`/valorVenda/${nomeId}`, '#valorVendaMaterial');
+                $('#checkAplicacao').prop('disabled', true).prop('checked', false);
             }
-
-            fetch(`/tipo/${nomeId}`)
-                .then(response => response.json())
-                .then(data => {
-                    $('#tipoMaterialNome').val(data.nome || '');
-                    $('#tipoMaterial').val(data.id || '');
-                })
-                .catch(error => {
-                    $('#tipoMaterialNome').val('');
-                    $('#tipoMaterial').val('');
-                    console.error('Erro ao buscar tipo do material:', error);
-                });
+        } catch (error) {
+            console.error('Erro ao buscar tipo do material:', error);
+            $('#tipoMaterialNome').val('');
+            $('#tipoMaterial').val('');
         }
     });
 });

@@ -121,9 +121,10 @@ class CadastroInicialController extends Controller
         $materiais = ModelMatProposta::with('documentoMaterial', 'tipoUnidadeMedida', 'tipoItemCatalogoMaterial', 'tipoCategoria', 'tipoMarca', 'tipoTamanho', 'tipoCor', 'tipoFaseEtaria', 'tipoSexo')->where('id_sol_mat', $id)->get();
         $buscaTipoMaterial = ModelTipoMaterial::all();
 
+        $resultDocumento = ModelDocumento::where('id', $id)->first();
         $result = ModelCadastroInicial::with('ItemCatalogoMaterial', 'Embalagem', 'CategoriaMaterial', 'TipoMaterial')->where('documento_origem', $id)->get();
 
-        return view("cadastroInicial.doacao-cadastro-inicial-item", compact('result', 'buscaCategoria', 'buscaTipoMaterial', 'idDocumento', 'buscaUnidadeMedida', 'buscaSexo'));
+        return view("cadastroInicial.doacao-cadastro-inicial-item", compact('result', 'resultDocumento', 'buscaCategoria', 'buscaTipoMaterial', 'idDocumento', 'buscaUnidadeMedida', 'buscaSexo'));
     }
 
     public function storeDoacao(Request $request)
@@ -213,6 +214,18 @@ class CadastroInicialController extends Controller
             'id_deposito' => '1',
             'id_tp_status' => '1',
             'documento_origem' => $id,
+        ]);
+
+        return redirect()->route('doacao', ['id' => $idDocumento]);
+    }
+    public function storeTermoMaterial(Request $request, $id)
+    {
+        $idDocumento = $id;
+        $checkAvariado = isset($request->checkAvariado) ? 1 : 0;
+        $checkAplicacao = isset($request->checkAplicacao) ? 1 : 0;
+
+        ModelDocumento::update([
+
         ]);
 
         return redirect()->route('doacao', ['id' => $idDocumento]);

@@ -124,7 +124,7 @@ class CadastroInicialController extends Controller
         $resultDocumento = ModelDocumento::where('id', $id)->first();
         $result = ModelCadastroInicial::with('ItemCatalogoMaterial', 'Embalagem', 'CategoriaMaterial', 'TipoMaterial')->where('documento_origem', $id)->get();
 
-        return view("cadastroInicial.doacao-cadastro-inicial-item", compact('result', 'resultDocumento', 'buscaCategoria', 'buscaTipoMaterial', 'idDocumento', 'buscaUnidadeMedida', 'buscaSexo'));
+        return view("cadastroInicial.doacao-cadastro-inicial-item", compact('result', 'resultDocumento', 'buscaSetor', 'buscaEmpresa', 'buscaCategoria', 'buscaTipoMaterial', 'idDocumento', 'buscaUnidadeMedida', 'buscaSexo'));
     }
 
     public function storeDoacao(Request $request)
@@ -221,13 +221,35 @@ class CadastroInicialController extends Controller
     public function storeTermoMaterial(Request $request, $id)
     {
         $idDocumento = $id;
-        $checkAvariado = isset($request->checkAvariado) ? 1 : 0;
-        $checkAplicacao = isset($request->checkAplicacao) ? 1 : 0;
 
-        ModelDocumento::update([
+        // Verifica se um arquivo foi enviado
+        if ($request->hasFile('arquivoDocDoacao') && $request->file('arquivoDocDoacao')->isValid()) {
+            // Salva o arquivo no disco 'public' dentro da pasta 'termos-doacao'
+            $caminhoArquivo = $request->file('arquivoDocDoacao')->store('termos-doacao', 'public');
+        } else {
+            // Se nenhum novo arquivo foi enviado, mantém o caminho atual (se necessário)
+            $caminhoArquivo = null;
+        }
 
-        ]);
+        // Atualiza os dados no banco
+        $dadosAtualizados = [
+            'id_empresa' => $request->input('empresaDocDoacao'),
+            'id_setor' => $request->input('setorDocDoacao'),
+        ];
+
+         // Só atualiza o número se houver valor preenchido
+        if ($request->filled('numeroDocDoacao')) {
+            $dadosAtualizados['numero'] = $request->input('numeroDocDoacao');
+        }
+
+        // Só adiciona o arquivo se ele foi enviado
+        if ($caminhoArquivo) {
+            $dadosAtualizados['end_arquivo'] = $caminhoArquivo;
+        }
+
+        ModelDocumento::where('id', $idDocumento)->update($dadosAtualizados);
 
         return redirect()->route('doacao', ['id' => $idDocumento]);
     }
+
 }

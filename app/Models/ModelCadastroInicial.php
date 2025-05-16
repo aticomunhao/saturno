@@ -80,4 +80,24 @@ class ModelCadastroInicial extends Model
     {
         return $this->belongsTo(ModelEmbalagem::class, 'id_embalagem');
     }
+    public function Marca()
+    {
+        return $this->belongsTo(ModelMarca::class, 'id_marca');
+    }
+    public function Cor()
+    {
+        return $this->belongsTo(ModelCor::class, 'id_cor');
+    }
+    public function Tamanho()
+    {
+        return $this->belongsTo(ModelTamanho::class, 'id_tamanho');
+    }
+    public function FaseEtaria()
+    {
+        return $this->belongsTo(ModelFaseEtaria::class, 'id_fase_etaria');
+    }
+    public function TipoSexo()
+    {
+        return $this->belongsTo(ModelSexo::class, 'id_tp_sexo');
+    }
 }

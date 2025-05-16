@@ -131,7 +131,7 @@ class CadastroInicialController extends Controller
     {
         $sacola = isset($request->sacolaBtn) ? 1 : 0;
 
-
+        ModelCadastroInicial::update
 
         return redirect()->action('CadastroInicial');
     }

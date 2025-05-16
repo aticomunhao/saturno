@@ -8,7 +8,7 @@ class ModelMarca extends Model
 {
     protected $table = 'marca';
 
-    public function tipoMarca()
+    public function tipoCategoriaMt()
     {
         return $this->belongsTo(ModelTipoCategoriaMt::class, 'id_categoria_material');
     }

@@ -127,11 +127,13 @@ class CadastroInicialController extends Controller
         return view("cadastroInicial.doacao-cadastro-inicial-item", compact('result', 'resultDocumento', 'buscaSetor', 'buscaEmpresa', 'buscaCategoria', 'buscaTipoMaterial', 'idDocumento', 'buscaUnidadeMedida', 'buscaSexo'));
     }
 
-    public function storeDoacao(Request $request)
+    public function storeDoacao(Request $request, $id)
     {
-        $sacola = isset($request->sacolaBtn) ? 1 : 0;
+        $sacola = $request->input('sacola', 0); // vai pegar o valor 0 ou 1
 
-        ModelCadastroInicial::update
+        ModelCadastroInicial::where('id', $id)->update([
+            'sacola' => $sacola,
+        ]);
 
         return redirect()->action('CadastroInicial');
     }

@@ -46,6 +46,7 @@
                                         data-bs-target="#modalIncluirTermo">
                                         Incluir Documento
                                     </button>
+                                    <input type="hidden" name="sacola" id="sacola" value="0">
                                     <button type="button" class="btn me-2" id="sacolaBtn" name="sacolaBtn"
                                         style="background-color: rgb(199, 7, 7); color: white; margin-left: 5px;">
                                         SACOLA
@@ -309,6 +310,7 @@
             const btn = this;
             const isActive = btn.classList.toggle('ativo');
             btn.style.backgroundColor = isActive ? 'rgb(3, 109, 3)' : 'rgb(199, 7, 7)';
+            document.getElementById('sacola').value = isActive ? '1' : '0';
         });
     </script>
 @endsection

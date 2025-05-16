@@ -38,6 +38,7 @@ class ModelCadastroInicial extends Model
         'id_embalagem',
         'modelo',
         'valor_venda',
+        'sacola',
     ];
 
     public function Status()

@@ -46,7 +46,7 @@
                                         data-bs-target="#modalIncluirTermo">
                                         Incluir Documento
                                     </button>
-                                    <button type="button" class="btn me-2" id="sacolaBtn"
+                                    <button type="button" class="btn me-2" id="sacolaBtn" name="sacolaBtn"
                                         style="background-color: rgb(199, 7, 7); color: white; margin-left: 5px;">
                                         SACOLA
                                     </button>
@@ -278,8 +278,8 @@
             <div class="col-md-6">
                 <label>Selecione seu Setor</label>
                 <br>
-                <select class="form-select  select2" id="setorDocDoacao"
-                    style="border: 1px solid #999999; padding: 5px;" name="setorDocDoacao">
+                <select class="form-select  select2" id="setorDocDoacao" style="border: 1px solid #999999; padding: 5px;"
+                    name="setorDocDoacao">
                     <option value="" disabled selected>Selecione...
                     </option>
                     @foreach ($buscaSetor as $buscaSetors)
@@ -291,8 +291,9 @@
             </div>
             <div class="col-md-6">
                 <label>Alterar Número da Proposta</label>
-                <input type="text" class="form-control" style="background-color: white; border-color: gray;" value="{{ old('numeroDocDoacao', $resultDocumento->numero ?? '' ) }}"
-                    id="numeroDocDoacao" name="numeroDocDoacao">
+                <input type="text" class="form-control" style="background-color: white; border-color: gray;"
+                    value="{{ old('numeroDocDoacao', $resultDocumento->numero ?? '') }}" id="numeroDocDoacao"
+                    name="numeroDocDoacao">
             </div>
             <!-- Arquivo da Proposta -->
             <div class="col-md-6">

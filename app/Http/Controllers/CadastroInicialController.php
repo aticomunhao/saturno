@@ -129,8 +129,11 @@ class CadastroInicialController extends Controller
 
     public function storeDoacao(Request $request)
     {
+        $sacola = isset($request->sacolaBtn) ? 1 : 0;
 
-        return redirect()->action('CadastroInicialController@index');
+
+
+        return redirect()->action('CadastroInicial');
     }
 
     public function createCompraDireta()
@@ -193,14 +196,14 @@ class CadastroInicialController extends Controller
         $checkAvariado = isset($request->checkAvariado) ? 1 : 0;
         $checkAplicacao = isset($request->checkAplicacao) ? 1 : 0;
 
-        ModelCadastroInicial::create([
+
+        $dadosComuns = [
             'id_cat_material' => $request->input('categoriaMaterial'),
             'id_item_catalogo' => $request->input('nomeMaterial'),
             'id_tipo_material' => $request->input('tipoMaterial'),
             'id_embalagem' => $request->input('embalagemMaterial'),
-            'quantidade' => $request->input('quantidadeMaterial'),
             'modelo' => $request->input('modeloMaterial'),
-            'obaservacao' => $request->input('observacaoMaterial'),
+            'observacao' => $request->input('observacaoMaterial'),
             'avariado' => $checkAvariado,
             'aplicacao' => $checkAplicacao,
             'data_validade' => $request->input('dataValidadeMaterial'),
@@ -214,10 +217,25 @@ class CadastroInicialController extends Controller
             'id_deposito' => '1',
             'id_tp_status' => '1',
             'documento_origem' => $id,
-        ]);
+        ];
 
+        $quantidade = (int) $request->input('quantidadeMaterial');
+        $tipoMaterial = (int) $request->input('tipoMaterial');
+
+        if ($tipoMaterial === 1) {
+            // Cria vários registros com quantidade = 1
+            for ($i = 0; $i < $quantidade; $i++) {
+                ModelCadastroInicial::create(array_merge($dadosComuns, ['quantidade' => 1]));
+            }
+        } else {
+            // Cria apenas um registro com a quantidade total
+            ModelCadastroInicial::create(array_merge($dadosComuns, ['quantidade' => $quantidade]));
+        }
+
+        app('flasher')->addSuccess('Material adicionado com sucesso!');
         return redirect()->route('doacao', ['id' => $idDocumento]);
     }
+
     public function storeTermoMaterial(Request $request, $id)
     {
         $idDocumento = $id;
@@ -237,7 +255,7 @@ class CadastroInicialController extends Controller
             'id_setor' => $request->input('setorDocDoacao'),
         ];
 
-         // Só atualiza o número se houver valor preenchido
+        // Só atualiza o número se houver valor preenchido
         if ($request->filled('numeroDocDoacao')) {
             $dadosAtualizados['numero'] = $request->input('numeroDocDoacao');
         }

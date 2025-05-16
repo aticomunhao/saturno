@@ -5,44 +5,44 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use App\Models\ModelCatMaterial;
+use App\Models\ModelTipoCategoriaMt;
 
 class TamanhoController extends Controller
 {
     private $objCategoria;
 
     public function __construct(){
-        $this->objCategoria = new modelCatMaterial();
+        $this->objCategoria = new ModelTipoCategoriaMt();
     }
 
     public function getTamanhoCat()
     {
-        $sql="select  
+        $sql="select
                     t.id,
                     t.nome tamanho,
                     c.nome categoria
                from tamanho t
-               join tipo_categoria_material c on t.id_categoria_material = c.id 
+               join tipo_categoria_material c on t.id_categoria_material = c.id
                where t.ativo is true";
 
         return DB::select($sql);
     }
 
     public function index()
-    {   
-        $resultCategoria = $this->objCategoria->all();        
+    {
+        $resultCategoria = $this->objCategoria->all();
         $result = $this->getTamanhoCat();
         return view('/cadastro-geral/gerenciar-tamanho', compact('result','resultCategoria') );
     }
-   
+
     public function create()
     {
         //
     }
-    
+
     public function store(Request $request)
     {
-        DB::table('tamanho')->insert([            
+        DB::table('tamanho')->insert([
             'nome' => $request->input('tamanho'),
             'id_categoria_material' => $request->input('categoria'),
             'ativo' => 1
@@ -50,7 +50,7 @@ class TamanhoController extends Controller
 
         return redirect()->action('TamanhoController@index');
     }
-   
+
     public function show($id)
     {
         //
@@ -58,7 +58,7 @@ class TamanhoController extends Controller
 
     public function edit($id)
     {
-        $resultCategoria = $this->objCategoria->all(); 
+        $resultCategoria = $this->objCategoria->all();
         $resultTamanho = DB::select(" select id, nome, id_categoria_material, ativo from Tamanho where id = $id ");
 
         return view('/cadastro-geral/alterar-tamanho', compact('resultCategoria', 'resultTamanho'));
@@ -75,7 +75,7 @@ class TamanhoController extends Controller
 
         return redirect()->action('TamanhoController@index');
     }
-   
+
     public function destroy($id)
     {
         DB::delete('delete from tamanho where id = ?' , [$id]);

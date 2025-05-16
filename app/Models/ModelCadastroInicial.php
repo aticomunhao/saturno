@@ -77,7 +77,7 @@ class ModelCadastroInicial extends Model
 //Relacoes para movimentacao
       public function CategoriaMaterial()
     {
-        return $this->belongsTo(ModelCatMaterial::class, 'id_cat_material');
+        return $this->belongsTo(ModelTipoCategoriaMt::class, 'id_cat_material');
     }
     public function ItemCatalogoMaterial()
     {

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\ModelCatMaterial;
+use App\Models\ModelTipoCategoriaMt;
 
 class TipoMaterialController extends Controller
 {
@@ -14,7 +14,7 @@ class TipoMaterialController extends Controller
 
     function __construct()
     {
-        $this->objCategoria = new modelCatMaterial();
+        $this->objCategoria = new ModelTipoCategoriaMt();
     }
 
     public function getTipoMat()

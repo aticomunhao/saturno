@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use App\Models\ModelCatMaterial;
+use App\Models\ModelTipoCategoriaMt;
 
 class FaseEtariaController extends Controller
 {
     private $objCategoria;
 
     public function __construct(){
-        $this->objCategoria = new modelCatMaterial();
+        $this->objCategoria = new ModelTipoCategoriaMt();
     }
 
     public function getFaseEtariaCat(){
@@ -61,7 +61,7 @@ class FaseEtariaController extends Controller
         $resultCategoria = $this->objCategoria->all();
 
         $resultFaseEtaria = DB::select(" select id, nome, id_categoria_material, ativo from fase_etaria where id = $id ");
-        
+
         return view('cadastro-geral/alterar-fase-etaria' , compact("resultCategoria", "resultFaseEtaria"));
     }
 

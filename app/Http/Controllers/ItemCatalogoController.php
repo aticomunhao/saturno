@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\ModelItemCatalogoMaterial;
-use App\Models\ModelCatMaterial;
+use App\Models\ModelTipoCategoriaMt;
 use App\Models\ModelCest;
 use App\Models\ModelCfop;
 use App\Models\ModelNcm;
@@ -25,7 +25,7 @@ class ItemCatalogoController extends Controller
 
     public function __construct(){
         $this->objItemCatalogo = new ModelItemCatalogoMaterial();
-        $this->objTipoMaterial = new ModelCatMaterial();
+        $this->objTipoMaterial = new ModelTipoCategoriaMt();
     }
 
     private function getListaItemMatAll(){

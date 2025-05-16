@@ -5,14 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use App\Models\ModelCatMaterial;
+use App\Models\ModelTipoCategoriaMt;
 
 class CorController extends Controller
 {
     private $objCategoria;
 
     public function __construct(){
-        $this->objCategoria = new modelCatMaterial();
+        $this->objCategoria = new ModelTipoCategoriaMt();
     }
 
     public function getCorCat(){

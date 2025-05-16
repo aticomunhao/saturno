@@ -14,11 +14,10 @@ use App\Models\ModelSetor;
 use App\Models\ModelDocumento;
 use App\Models\ModelEmpresa;
 use App\Models\ModelItemCatalogoMaterial;
-use App\Models\ModelCatMaterial;
+use App\Models\ModelTipoCategoriaMt;
 use App\Models\ModelTipoMaterial;
 use App\Models\ModelStatusCadastroInicial;
 use App\Models\ModelTipoDocumento;
-use App\Models\ModelTipoCategoriaMt;
 use App\Models\ModelUnidadeMedida;
 use App\Models\ModelSexo;
 use App\Models\ModelCor;
@@ -34,7 +33,7 @@ class CadastroInicialController extends Controller
     {
         $deposito = ModelDepositoMaterial::all();
         $destinacao = ModelDestinacao::all();
-        $categoriaMaterial = ModelCatMaterial::all();
+        $categoriaMaterial = ModelTipoCategoriaMt::all();
         $empresa = ModelEmpresa::all();
         $nomeMaterial = ModelItemCatalogoMaterial::all();
         $tipoDocumento = ModelTipoDocumento::all();

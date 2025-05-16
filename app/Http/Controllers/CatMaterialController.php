@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ModelCatMaterial;
-use Illuminate\Support\Facades\DB;
 use App\Models\ModelTipoCategoriaMt;
+use Illuminate\Support\Facades\DB;
 
 
 class CatMaterialController extends Controller
@@ -15,7 +14,7 @@ class CatMaterialController extends Controller
 
     public function __construct()
     {
-        $this->objTpMat = new ModelCatMaterial();
+        $this->objTpMat = new ModelTipoCategoriaMt();
     }
 
     public function index(Request $request)

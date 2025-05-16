@@ -3,7 +3,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\ModelItemCatalogoMaterial;
-use App\Models\ModelCatMaterial;
+use App\Models\ModelTipoCategoriaMt;
 use App\Models\ModelVendas;
 use Illuminate\Pagination\Paginator;
 
@@ -18,7 +18,7 @@ class GerenciarVendasController extends Controller
 
     public function __construct(){
         $this->objItemCatalogo = new ModelItemCatalogoMaterial();
-        $this->objTipoMaterial = new ModelCatMaterial();
+        $this->objTipoMaterial = new ModelTipoCategoriaMt();
         $this->objVendas = new ModelVendas();
     }
 
@@ -104,9 +104,9 @@ class GerenciarVendasController extends Controller
         $result =DB::table('venda')->where('id',$id)->get();
         return view('vendas/gerenciar-vendas', compact('resultVenda', 'result'));
 
-        $resultVenda = DB::select("select id_pessoa, id_usuario from venda where id = $id ");
+        // $resultVenda = DB::select("select id_pessoa, id_usuario from venda where id = $id ");
 
-        return view('/vendas/gerenciar-vendas/alterar', compact("resultVendas"));
+        // return view('/vendas/gerenciar-vendas/alterar', compact("resultVendas"));
 
 
     }

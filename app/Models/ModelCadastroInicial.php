@@ -61,14 +61,7 @@ class ModelCadastroInicial extends Model
     {
         return $this->belongsTo(ModelDestinacao::class, 'id_destinacao');
     }
-    public function CategoriaMaterial()
-    {
-        return $this->belongsTo(ModelCatMaterial::class, 'id_cat_material');
-    }
-    public function ItemCatalogoMaterial()
-    {
-        return $this->belongsTo(ModelItemCatalogoMaterial::class, 'id_item_catalogo');
-    }
+
     public function TipoMaterial()
     {
         return $this->belongsTo(ModelTipoMaterial::class, 'id_tipo_material');
@@ -80,6 +73,15 @@ class ModelCadastroInicial extends Model
     public function Embalagem()
     {
         return $this->belongsTo(ModelEmbalagem::class, 'id_embalagem');
+    }
+//Relacoes para movimentacao
+      public function CategoriaMaterial()
+    {
+        return $this->belongsTo(ModelCatMaterial::class, 'id_cat_material');
+    }
+    public function ItemCatalogoMaterial()
+    {
+        return $this->belongsTo(ModelItemCatalogoMaterial::class, 'id_item_catalogo');
     }
     public function Marca()
     {

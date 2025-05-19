@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\ModelCadastroInicial;
 use App\Models\ModelMovimentacaoFisica;
 use App\Models\ModelTipoDeposito;
+use Illuminate\Database\Eloquent\Model;
 
 class GerenciarMovimentacaoFisicaController extends Controller
 {
@@ -80,13 +81,18 @@ class GerenciarMovimentacaoFisicaController extends Controller
     }
     public function solicitar_teste(){
 
-     $cadastro_inicial = ModelCadastroInicial::with('Status', 'SolOrigem', 'DocOrigem', 'Deposito', 'Destinacao', 'CategoriaMaterial', 'TipoMaterial')->get(    );
+     $cadastro_inicial = ModelCadastroInicial::with('Status', 'SolOrigem', 'DocOrigem', 'Deposito', 'Destinacao', 'CategoriaMaterial', 'TipoMaterial')->get();
     //   dd($cadastro_inicial);
         return view('movimentacao-fisica.solicitar-teste', compact('cadastro_inicial'));
 
     }
-    public function solicitar_teste_store(Request $request){
-        $request->all();
+    public function solicitar_teste_confere(Request $request){
+        $materiais_enviados = ModelCadastroInicial::with('Status', 'SolOrigem', 'DocOrigem', 'Deposito', 'Destinacao', 'CategoriaMaterial', 'TipoMaterial')->get();
 
     }
+    public function solicitar_teste_store(Request $request){
+        dd($request->all());
+
+    }
+
 }

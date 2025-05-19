@@ -135,14 +135,58 @@ $(document).ready(function () {
 
             if (data.id == 2) {
                 $('#checkAplicacao').prop('disabled', false);
+                $('#checkNumSerie').prop('disabled', true).prop('checked', false);
+                $('#checkVeiculo').prop('disabled', true).prop('checked', false);
             } else {
                 $('#checkAplicacao').prop('disabled', true).prop('checked', false);
+                $('#checkNumSerie').prop('disabled', false);
+                $('#checkVeiculo').prop('disabled', false);
             }
         } catch (error) {
             console.error('Erro ao buscar tipo do material:', error);
             $('#tipoMaterialNome').val('');
             $('#tipoMaterial').val('');
         }
+    });
+
+    $('#quantidadeMaterial').on('input', function () {
+        const quantidade = parseInt($(this).val());
+        const tipoMaterial = parseInt($('#tipoMaterial').val());
+        const checkNumSerie = $('#checkNumSerie').is(':checked');
+
+        const container = $('#containerNumerosSerie');
+        const inputs = $('#inputsNumerosSerie');
+
+        inputs.empty();
+
+        if (tipoMaterial === 1 && checkNumSerie && quantidade > 0) {
+            container.show();
+            for (let i = 0; i < quantidade; i++) {
+                inputs.append(`
+                <input type="text" name="numerosSerie[]" class="form-control mb-2" placeholder="Número de série ${i + 1}" required />
+            `);
+            }
+        } else {
+            container.hide();
+        }
+    });
+
+    $('#checkVeiculo').on('change', function () {
+        if ($(this).is(':checked')) {
+            $('#checkNumSerie').prop('disabled', true).prop('checked', false);
+            $('#quantidadeMaterial').trigger('input'); // atualiza exibição dos inputs de número de série
+        } else {
+            // Só habilita se o tipoMaterial for diferente de 2
+            const tipoMaterial = parseInt($('#tipoMaterial').val());
+            if (tipoMaterial !== 2) {
+                $('#checkNumSerie').prop('disabled', false);
+            }
+        }
+    });
+
+    // Reage a mudanças no checkbox também
+    $('#checkNumSerie').on('change', function () {
+        $('#quantidadeMaterial').trigger('input');
     });
 });
 

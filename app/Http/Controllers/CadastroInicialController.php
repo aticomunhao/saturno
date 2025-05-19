@@ -196,6 +196,7 @@ class CadastroInicialController extends Controller
         $idDocumento = $id;
         $checkAvariado = isset($request->checkAvariado) ? 1 : 0;
         $checkAplicacao = isset($request->checkAplicacao) ? 1 : 0;
+        $checkNumSerie = isset($request->checkNumSerie) ? 1 : 0;
 
 
         $dadosComuns = [
@@ -213,6 +214,9 @@ class CadastroInicialController extends Controller
             'id_cor' => $request->input('corMaterial'),
             'id_fase_etaria' => $request->input('faseEtariaMaterial'),
             'id_tp_sexo' => $request->input('sexoMaterial'),
+            'placa' => $request->input('placaMaterial'),
+            'renavam' => $request->input('renavamMaterial'),
+            'chassi' => $request->input('chassiMaterial'),
             'data_cadastro' => Carbon::now(),
             'adquirido' => false,
             'id_deposito' => '1',
@@ -224,14 +228,23 @@ class CadastroInicialController extends Controller
         $tipoMaterial = (int) $request->input('tipoMaterial');
 
         if ($tipoMaterial === 1) {
-            // Cria vários registros com quantidade = 1
+            $numerosSerie = $request->input('numerosSerie', []);
+
             for ($i = 0; $i < $quantidade; $i++) {
-                ModelCadastroInicial::create(array_merge($dadosComuns, ['quantidade' => 1]));
+                $dados = array_merge($dadosComuns, [
+                    'quantidade' => 1,
+                    'num_serie' => $numerosSerie[$i] ?? null,
+                ]);
+
+                ModelCadastroInicial::create($dados);
             }
         } else {
-            // Cria apenas um registro com a quantidade total
-            ModelCadastroInicial::create(array_merge($dadosComuns, ['quantidade' => $quantidade]));
+            ModelCadastroInicial::create(array_merge($dadosComuns, [
+                'quantidade' => $quantidade,
+                'num_serie' => null
+            ]));
         }
+
 
         app('flasher')->addSuccess('Material adicionado com sucesso!');
         return redirect()->route('doacao', ['id' => $idDocumento]);

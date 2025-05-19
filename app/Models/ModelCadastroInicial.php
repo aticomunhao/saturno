@@ -39,6 +39,10 @@ class ModelCadastroInicial extends Model
         'modelo',
         'valor_venda',
         'sacola',
+        'num_serie',
+        'chassi',
+        'placa',
+        'renavam',
     ];
 
     public function Status()

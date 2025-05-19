@@ -264,42 +264,18 @@
                 <br>
                 <input type="checkbox" id="checkNumSerie" name="checkNumSerie" disabled>
             </div>
-            {{-- <div class="col-md-3" style="margin-top: 10px">
-                <label>Placa</label>
-                <input type="text" class="form-control" name="placaMaterial" maxlength="7">
-            </div>
-            <div class="col-md-6" style="margin-top: 10px">
-                <label>RENAVAM</label>
-                <input type="text" class="form-control" name="renavamMaterial">
-            </div>
-            <div class="col-md-6" style="margin-top: 10px">
-                <label>Chassi</label>
-                <input type="text" class="form-control" name="chassiMaterial" maxlength="17">
-            </div> --}}
             <div>
-                <div id="containerNumerosSerie" class="col-md" style="display: none;">
+                <div id="containerNumerosSerie" class="col-md" style="display: none; margin-top: 10px;">
                     <label>Números de Série:</label>
                     <div id="inputsNumerosSerie"></div>
                 </div>
             </div>
             <div>
-                <div id="containerPlaca" class="col-md" style="display: none;">
-                    <label>Números das Placas:</label>
-                    <div id="inputsPlacas"></div>
+                <div id="containerVeiculo" class="col-md"  style="display: none; margin-top: 10px;">
+                    <div id="inputsVeiculo"></div>
                 </div>
             </div>
-            <div>
-                <div id="containerRenavam" class="col-md" style="display: none;">
-                    <label>Números dos RENAVAMS:</label>
-                    <div id="inputsRenavams"></div>
-                </div>
-            </div>
-            <div>
-                <div id="containerChassi" class="col-md" style="display: none;">
-                    <label>Números dos Chassis:</label>
-                    <div id="inputsChassis"></div>
-                </div>
-            </div>
+
             <div class="col-md-12" style="margin-top: 10px">
                 <label>Observação</label>
                 <textarea type="text" class="form-control" name="observacaoMaterial" rows="2"></textarea>

@@ -153,18 +153,34 @@ $(document).ready(function () {
         const quantidade = parseInt($(this).val());
         const tipoMaterial = parseInt($('#tipoMaterial').val());
         const checkNumSerie = $('#checkNumSerie').is(':checked');
+        const checkVeiculo = $('#checkVeiculo').is(':checked');
 
         const container = $('#containerNumerosSerie');
         const inputs = $('#inputsNumerosSerie');
+        const container2 = $('#containerVeiculo');
+        const inputs2 = $('#inputsVeiculo');
 
         inputs.empty();
+        inputs2.empty();
+
 
         if (tipoMaterial === 1 && checkNumSerie && quantidade > 0) {
             container.show();
             for (let i = 0; i < quantidade; i++) {
                 inputs.append(`
-                <input type="text" name="numerosSerie[]" class="form-control mb-2" placeholder="Número de série ${i + 1}" required />
+                <input type="text" name="numerosSerie[]" class="form-control mt-2 mb-2" placeholder="Número de série ${i + 1}" required />
             `);
+            }
+        } else if (tipoMaterial === 1 && checkVeiculo && quantidade > 0) {
+            container2.show();
+            for (let i = 0; i < quantidade; i++) {
+                inputs2.append(`
+                <div class="form-group"></div>
+                    <label>Dados do ${i + 1}º Veiculo:</label>
+                    <input type="text" name="numerosPlacas[]" class="form-control mb-2" placeholder="Número da Placa ${i + 1}" required />
+                    <input type="text" name="numerosRenavam[]" class="form-control mb-2" placeholder="Número do Renavam ${i + 1}" required />
+                    <input type="text" name="numerosChassis[]" class="form-control mb-2" placeholder="Número do Chassi ${i + 1}" required />
+                </div>`);
             }
         } else {
             container.hide();
@@ -174,7 +190,24 @@ $(document).ready(function () {
     $('#checkVeiculo').on('change', function () {
         if ($(this).is(':checked')) {
             $('#checkNumSerie').prop('disabled', true).prop('checked', false);
-            $('#quantidadeMaterial').trigger('input'); // atualiza exibição dos inputs de número de série
+            $('#quantidadeMaterial').trigger('input');
+
+            const quantidade = parseInt($(this).val());
+            const tipoMaterial = parseInt($('#tipoMaterial').val());
+
+
+
+            inputs.empty();
+
+            if (tipoMaterial === 1 && checkVeiculo && quantidade > 0) {
+                container.show();
+                for (let i = 0; i < quantidade; i++) {
+                    inputs.append(`
+                <input type="text" name="numerosPlacas[]" class="form-control mb-2" placeholder="Número de série ${i + 1}" required />
+                <input type="text" name="numerosRenavam[]" class="form-control mb-2" placeholder="Número de série ${i + 1}" required />
+                <input type="text" name="numerosChassis[]" class="form-control mb-2" placeholder="Número de série ${i + 1}" required />`);
+                }
+            }
         } else {
             // Só habilita se o tipoMaterial for diferente de 2
             const tipoMaterial = parseInt($('#tipoMaterial').val());
@@ -186,6 +219,10 @@ $(document).ready(function () {
 
     // Reage a mudanças no checkbox também
     $('#checkNumSerie').on('change', function () {
+        $('#quantidadeMaterial').trigger('input');
+    });
+
+    $('#checkVeiculo').on('change', function () {
         $('#quantidadeMaterial').trigger('input');
     });
 });

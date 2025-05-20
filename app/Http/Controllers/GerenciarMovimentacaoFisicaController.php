@@ -87,7 +87,26 @@ class GerenciarMovimentacaoFisicaController extends Controller
 
     }
     public function solicitar_teste_confere(Request $request){
-        $materiais_enviados = ModelCadastroInicial::with('Status', 'SolOrigem', 'DocOrigem', 'Deposito', 'Destinacao', 'CategoriaMaterial', 'TipoMaterial')->get();
+    //  $ids = $request->input('materiais1');
+//   dd($request->input('materiais1'));
+        $ids = $request->all()['materiais1'];
+        if(!$ids){
+            app('flasher')->addError('Selecione pelo menos um material para continuar.');
+            return redirect()->back();
+        }
+
+    $materiais_enviados = ModelCadastroInicial::with([
+        'Status',
+        'SolOrigem',
+        'DocOrigem',
+        'Deposito',
+        'Destinacao',
+        'CategoriaMaterial',
+        'TipoMaterial'
+        ])->whereIn('id', $request->input('materiais1'))->get();
+        // dd($materiais_enviados);
+
+        return view('movimentacao-fisica.solicitar-teste-confere', compact('materiais_enviados'));
 
     }
     public function solicitar_teste_store(Request $request){

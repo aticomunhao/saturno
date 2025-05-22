@@ -336,6 +336,14 @@
         </div>
     </form>{{-- Final Formulario de pesquisa --}}
 
+    @if (session('pdf_sacola_path'))
+        <script>
+            window.onload = function() {
+                window.open('{{ session('pdf_sacola_path') }}', '_blank');
+                printWindow.focus();
+            };
+        </script>
+    @endif
     <script>
         // Função para selecionar ou desmarcar todos os checkboxes
         function toggleCheckboxes(selectAllCheckbox) {

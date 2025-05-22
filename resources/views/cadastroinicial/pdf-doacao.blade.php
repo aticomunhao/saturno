@@ -22,16 +22,18 @@
             padding: 5px;
             text-align: left;
         }
-
-        h2 {
-            text-align: center;
-        }
     </style>
 </head>
 
 <body>
-    <h2>Recibo de Doação</h2>
-
+    <div style="margin-bottom: 20px;">
+        <div style="float: left; width: 20%;">
+            <img src="{{ public_path('images/logo.jpg') }}" height="100" alt="logo">
+        </div>
+        <div style="float: left; width: 80%; text-align: center; line-height: 100px;">
+            <h1 style="margin: 0;">Recibo de Doação</h1>
+        </div>
+    </div>
     <p><strong>ID Documento:</strong> {{ $documento->id }}</p>
     <p><strong>Número do Documento:</strong> {{ $documento->numero }}</p>
     <p><strong>Data:</strong> {{ \Carbon\Carbon::parse($documento->dt_doc)->format('d/m/Y') }}</p>
@@ -39,6 +41,7 @@
         <thead>
             <tr>
                 <th>#</th>
+                <th>QTD.</th>
                 <th>Categoria</th>
                 <th>Item</th>
                 <th>Tipo</th>
@@ -50,6 +53,7 @@
             @foreach ($materiais as $index => $mat)
                 <tr>
                     <td>{{ $index + 1 }}</td>
+                    <td> {{ $mat->quantidade }}</td>
                     <td>{{ $mat->CategoriaMaterial->nome ?? '-' }}</td>
                     <td>{{ $mat->ItemCatalogoMaterial->nome ?? '-' }}</td>
                     <td>{{ $mat->TipoMaterial->nome ?? '-' }}</td>
@@ -79,10 +83,17 @@
         </tbody>
     </table>
 
-
     <br><br>
-    <p>Assinatura do Doador: _______________________________________</p>
-    <p>Assinatura do Receptor: _______________________________________</p>
+    <div style="position: fixed; bottom: 30px; width: 100%; text-align: center;">
+        <div style="float: left; width: 50%; text-align: center;">
+            _______________________________________<br>
+            Assinatura do Doador
+        </div>
+        <div style="float: right; width: 50%; text-align: center;">
+            _______________________________________<br>
+            Assinatura do Receptor
+        </div>
+    </div>
 </body>
 
 </html>

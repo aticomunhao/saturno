@@ -131,10 +131,40 @@ class CadastroInicialController extends Controller
     public function storeDoacao(Request $request, $id)
     {
         $sacola = $request->input('sacola', 0); // vai pegar o valor 0 ou 1
-
+        $documento = ModelDocumento::with('empresa')->where('id', $id)->firstOrFail();
+        $materiais = ModelCadastroInicial::with(['ItemCatalogoMaterial', 'Embalagem', 'CategoriaMaterial', 'TipoMaterial'])
+            ->where('documento_origem', $id)
+            ->get();
         ModelCadastroInicial::where('id', $id)->update([
             'sacola' => $sacola,
         ]);
+
+        if ($documento->end_arquivo == null) {
+            $pdf = Pdf::loadView('cadastroInicial.pdf-doacao', compact('documento', 'materiais', 'usuario'));
+
+            // Define o caminho do arquivo
+            $fileName = 'recibo_doacao_' . $id . '.pdf';
+            $filePath = 'doacoes/' . $fileName;
+
+            // Salva no disco 'public'
+            Storage::disk('public')->put($filePath, $pdf->output());
+
+            // Atualiza a coluna end_arquivo do documento com o caminho salvo
+            $documento->end_arquivo = 'storage/' . $filePath;
+            $documento->save();
+        }
+        // Se a sacola estiver selecionada, gerar um novo PDF com número, sem salvar
+        if ($sacola == 1) {
+            $pdfNumero = Pdf::loadView('cadastroInicial.pdf-doacao-numero', compact('documento', 'materiais'));
+
+            $fileNameNumero = 'recibo_sacola_com_numero_' . $id . '.pdf';
+            $filePathNumero = 'doacoes/temp/' . $fileNameNumero;
+
+            Storage::disk('public')->put($filePathNumero, $pdfNumero->output());
+
+            // Salva o caminho do PDF temporário na sessão
+            session()->flash('pdf_sacola_path', asset('storage/' . $filePathNumero));
+        }
 
         return redirect()->action('CadastroInicial');
     }
@@ -307,22 +337,18 @@ class CadastroInicialController extends Controller
         $materiais = ModelCadastroInicial::with(['ItemCatalogoMaterial', 'Embalagem', 'CategoriaMaterial', 'TipoMaterial'])
             ->where('documento_origem', $id)
             ->get();
-            $usuario = session('usuario.nome');
+        $usuario = session('usuario.nome');
 
         $pdf = Pdf::loadView('cadastroInicial.pdf-doacao', compact('documento', 'materiais', 'usuario'));
 
-        // Define o caminho do arquivo
         $fileName = 'recibo_doacao_' . $id . '.pdf';
         $filePath = 'doacoes/' . $fileName;
 
-        // Salva no disco 'public'
         Storage::disk('public')->put($filePath, $pdf->output());
 
-        // Atualiza a coluna end_arquivo do documento com o caminho salvo
         $documento->end_arquivo = 'storage/' . $filePath;
         $documento->save();
 
-        // Exibe no navegador
         return $pdf->stream($fileName);
     }
 }

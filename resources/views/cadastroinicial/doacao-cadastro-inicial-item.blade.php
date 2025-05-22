@@ -177,7 +177,7 @@
             </div>
             <div class="col-md-2" style="margin-top: 10px">
                 <label>Quantidade</label>
-                <input type="number" class="form-control" id="quantidadeMaterial" name="quantidadeMaterial">
+                <input type="number" class="form-control" id="quantidadeMaterial" name="quantidadeMaterial" required>
             </div>
             <div class="col-md-4" style="margin-top: 10px">
                 <label>Modelo</label>

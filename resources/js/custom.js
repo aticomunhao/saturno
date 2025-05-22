@@ -188,34 +188,20 @@ $(document).ready(function () {
     });
 
     $('#checkVeiculo').on('change', function () {
-        if ($(this).is(':checked')) {
+        const checkVeiculo = $(this).is(':checked');
+        const tipoMaterial = parseInt($('#tipoMaterial').val());
+
+        if (checkVeiculo) {
             $('#checkNumSerie').prop('disabled', true).prop('checked', false);
-            $('#quantidadeMaterial').trigger('input');
-
-            const quantidade = parseInt($(this).val());
-            const tipoMaterial = parseInt($('#tipoMaterial').val());
-
-
-
-            inputs.empty();
-
-            if (tipoMaterial === 1 && checkVeiculo && quantidade > 0) {
-                container.show();
-                for (let i = 0; i < quantidade; i++) {
-                    inputs.append(`
-                <input type="text" name="numerosPlacas[]" class="form-control mb-2" placeholder="Número de série ${i + 1}" required />
-                <input type="text" name="numerosRenavam[]" class="form-control mb-2" placeholder="Número de série ${i + 1}" required />
-                <input type="text" name="numerosChassis[]" class="form-control mb-2" placeholder="Número de série ${i + 1}" required />`);
-                }
-            }
         } else {
-            // Só habilita se o tipoMaterial for diferente de 2
-            const tipoMaterial = parseInt($('#tipoMaterial').val());
             if (tipoMaterial !== 2) {
                 $('#checkNumSerie').prop('disabled', false);
             }
         }
+
+        $('#quantidadeMaterial').trigger('input');
     });
+
 
     // Reage a mudanças no checkbox também
     $('#checkNumSerie').on('change', function () {

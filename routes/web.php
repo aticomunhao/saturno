@@ -224,6 +224,7 @@ Route::post('/cad-inicial-material/doacao/{id}', [CadastroInicialController::cla
 Route::post('/cad-inicial-material/compra-direta', [CadastroInicialController::class, 'storeCompraDireta']);
 Route::post('/cadastro-inicial/incluir-material/{id}', [CadastroInicialController::class, 'storeMaterial']);
 Route::post('/cadastro-inicial/incluir-termo/{id}', [CadastroInicialController::class, 'storeTermoMaterial']);
+Route::get('/recibo-doacao/pdf/{id}', [CadastroInicialController::class, 'gerarPDFDoacao']);
 
 
 
@@ -265,7 +266,7 @@ Route::get('/substituicao/buscaritem', [GerenciarDevolucoesController::class, 'b
 
 
 
-Route::name('pagamentos')->group(function () {});
+Route::name('pagamentos')->group(function () { });
 
 
 Route::get('/gerenciar-pagamentos/{id}', [GerenciarpagamentoController::class, 'show'])->name('pagamento.show');

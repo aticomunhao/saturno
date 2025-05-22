@@ -53,11 +53,10 @@
                                     </button>
                                 </div>
                                 <div class="col-md d-flex justify-content-end" style="margin-right: 15px;">
-                                    <button type="button" class="btn  btn-sm" data-bs-toggle="modal"
-                                        data-bs-target="#filtros"
-                                        style="box-shadow: 3px 5px 6px #000000; background-color: rgb(231, 231, 69); ">
+                                    <a href="{{ url('/recibo-doacao/pdf/' . $idDocumento) }}" target="_blank"
+                                        class="btn btn-warning btn-sm" style="box-shadow: 3px 5px 6px #000000;">
                                         GERAR RECIBO
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                             <br>
@@ -271,7 +270,7 @@
                 </div>
             </div>
             <div>
-                <div id="containerVeiculo" class="col-md"  style="display: none; margin-top: 10px;">
+                <div id="containerVeiculo" class="col-md" style="display: none; margin-top: 10px;">
                     <div id="inputsVeiculo"></div>
                 </div>
             </div>

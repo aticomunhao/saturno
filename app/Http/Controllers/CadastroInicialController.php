@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\ModelCadastroInicial;
 use App\Models\ModelSolMaterial;
 use App\Models\ModelDepositoMaterial;
@@ -197,7 +199,7 @@ class CadastroInicialController extends Controller
         $checkAvariado = isset($request->checkAvariado) ? 1 : 0;
         $checkAplicacao = isset($request->checkAplicacao) ? 1 : 0;
         $checkNumSerie = isset($request->checkNumSerie) ? 1 : 0;
-
+        $checkVeiculo = isset($request->checkVeiculo) ? 1 : 0;
 
         $dadosComuns = [
             'id_cat_material' => $request->input('categoriaMaterial'),
@@ -227,7 +229,7 @@ class CadastroInicialController extends Controller
         $quantidade = (int) $request->input('quantidadeMaterial');
         $tipoMaterial = (int) $request->input('tipoMaterial');
 
-        if ($tipoMaterial === 1) {
+        if ($tipoMaterial === 1 && $checkNumSerie == 1) {
             $numerosSerie = $request->input('numerosSerie', []);
 
             for ($i = 0; $i < $quantidade; $i++) {
@@ -238,10 +240,26 @@ class CadastroInicialController extends Controller
 
                 ModelCadastroInicial::create($dados);
             }
+        } else if ($tipoMaterial === 1 && $checkVeiculo == 1) {
+            $numerosSerie = $request->input('numerosSerie', []);
+
+            for ($i = 0; $i < $quantidade; $i++) {
+                $dados = array_merge($dadosComuns, [
+                    'quantidade' => 1,
+                    'placa' => $numerosPlacas[$i] ?? null,
+                    'renavam' => $numerosRenavam[$i] ?? null,
+                    'chassi' => $numerosChassis[$i] ?? null,
+                ]);
+
+                ModelCadastroInicial::create($dados);
+            }
         } else {
             ModelCadastroInicial::create(array_merge($dadosComuns, [
                 'quantidade' => $quantidade,
-                'num_serie' => null
+                'num_serie' => null,
+                'placa' => null,
+                'renavam' => null,
+                'chassi' => null,
             ]));
         }
 
@@ -283,5 +301,28 @@ class CadastroInicialController extends Controller
 
         return redirect()->route('doacao', ['id' => $idDocumento]);
     }
+    public function gerarPDFDoacao($id)
+    {
+        $documento = ModelDocumento::with('empresa')->where('id', $id)->firstOrFail();
+        $materiais = ModelCadastroInicial::with(['ItemCatalogoMaterial', 'Embalagem', 'CategoriaMaterial', 'TipoMaterial'])
+            ->where('documento_origem', $id)
+            ->get();
+            $usuario = session('usuario.nome');
 
+        $pdf = Pdf::loadView('cadastroInicial.pdf-doacao', compact('documento', 'materiais', 'usuario'));
+
+        // Define o caminho do arquivo
+        $fileName = 'recibo_doacao_' . $id . '.pdf';
+        $filePath = 'doacoes/' . $fileName;
+
+        // Salva no disco 'public'
+        Storage::disk('public')->put($filePath, $pdf->output());
+
+        // Atualiza a coluna end_arquivo do documento com o caminho salvo
+        $documento->end_arquivo = 'storage/' . $filePath;
+        $documento->save();
+
+        // Exibe no navegador
+        return $pdf->stream($fileName);
+    }
 }

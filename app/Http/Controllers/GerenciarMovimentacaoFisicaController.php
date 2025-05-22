@@ -6,7 +6,9 @@ use App\Models\GerenciarMovimentacaoFisica;
 use Illuminate\Http\Request;
 use App\Models\ModelCadastroInicial;
 use App\Models\ModelMovimentacaoFisica;
+use App\Models\ModelSetor;
 use App\Models\ModelTipoDeposito;
+use App\Models\ModelUsuario;
 use Illuminate\Database\Eloquent\Model;
 
 class GerenciarMovimentacaoFisicaController extends Controller
@@ -105,13 +107,17 @@ class GerenciarMovimentacaoFisicaController extends Controller
         'TipoMaterial'
         ])->whereIn('id', $request->input('materiais1'))->get();
         // dd($materiais_enviados);
+       $setores = ModelSetor::orderBy('sigla')->get();
 
-        return view('movimentacao-fisica.solicitar-teste-confere', compact('materiais_enviados'));
+        $usuarios = ModelUsuario::with('pessoa')->get();
+
+        // dd($usuarios);
+
+        return view('movimentacao-fisica.solicitar-teste-confere', compact('materiais_enviados', 'setores', 'usuarios'));
 
     }
     public function solicitar_teste_store(Request $request){
         dd($request->all());
-
     }
 
 }

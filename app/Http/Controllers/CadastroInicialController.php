@@ -27,6 +27,7 @@ use App\Models\ModelFaseEtaria;
 use App\Models\ModelMarca;
 use App\Models\ModelTamanho;
 use App\Models\ModelMatProposta;
+use App\Models\ModelMovimentacaoFisica;
 use Illuminate\Database\Eloquent\Model;
 
 class CadastroInicialController extends Controller
@@ -165,6 +166,21 @@ class CadastroInicialController extends Controller
             session()->flash('pdf_base64', $pdfBase64);
         }
 
+        foreach ($materiais as $material) {
+            // Verifica se já existe uma movimentação para esse material
+            $jaExiste = ModelMovimentacaoFisica::where('id_cadastro_inicial', $material->id)->exists();
+
+            if (!$jaExiste) {
+                ModelMovimentacaoFisica::create([
+                    'id_destinatario' => session('usuario.id_usuario'),
+                    'data' => Carbon::now(),
+                    'id_deposito_destino' => 1,
+                    'id_tp_movimento' => 1,
+                    'id_cadastro_inicial' => $material->id
+                ]);
+            }
+        }
+
         return redirect()->route('CadastroInicial');
     }
 
@@ -191,7 +207,6 @@ class CadastroInicialController extends Controller
 
         for ($i = 0; $i < $request->input('qtdItens'); $i++) {
 
-            //???????????? Liberacao_venda, id_tipo_situacao, valor_aquisicao,valor_venda_promocional, ?id_usuario?
             DB::table('item_material')->insert([
                 'id_item_catalogo_material' => $request->input('item_material'),
                 'observacao' => $request->input('observacao'),
@@ -229,6 +244,15 @@ class CadastroInicialController extends Controller
         $checkAplicacao = isset($request->checkAplicacao) ? 1 : 0;
         $checkNumSerie = isset($request->checkNumSerie) ? 1 : 0;
         $checkVeiculo = isset($request->checkVeiculo) ? 1 : 0;
+        $valorAquisicao = $request->input('valorAquisicaoMaterial');
+        $valorVenda = $request->input('valorVendaMaterial');
+
+        if (is_array($valorAquisicao)) {
+            $valorAquisicao = $valorAquisicao[0] ?? null;
+        }
+        if (is_array($valorVenda)) {
+            $valorVenda = $valorVenda[0] ?? null;
+        }
 
         $dadosComuns = [
             'id_cat_material' => $request->input('categoriaMaterial'),
@@ -248,6 +272,8 @@ class CadastroInicialController extends Controller
             'placa' => $request->input('placaMaterial'),
             'renavam' => $request->input('renavamMaterial'),
             'chassi' => $request->input('chassiMaterial'),
+            'valor_aquisicao' => $valorAquisicao,
+            'valor_venda' => $valorVenda,
             'data_cadastro' => Carbon::now(),
             'adquirido' => false,
             'id_deposito' => '1',
@@ -270,14 +296,29 @@ class CadastroInicialController extends Controller
                 ModelCadastroInicial::create($dados);
             }
         } else if ($tipoMaterial === 1 && $checkVeiculo == 1) {
-            $numerosSerie = $request->input('numerosSerie', []);
-
+            $numerosPlacas = $request->input('numerosPlacas', []);
+            $numerosRenavam = $request->input('numerosRenavam', []);
+            $numerosChassis = $request->input('numerosChassis', []);
+            
             for ($i = 0; $i < $quantidade; $i++) {
                 $dados = array_merge($dadosComuns, [
                     'quantidade' => 1,
                     'placa' => $numerosPlacas[$i] ?? null,
                     'renavam' => $numerosRenavam[$i] ?? null,
                     'chassi' => $numerosChassis[$i] ?? null,
+                ]);
+
+                ModelCadastroInicial::create($dados);
+            }
+        } else if ($tipoMaterial === 1) {
+
+            for ($i = 0; $i < $quantidade; $i++) {
+                $dados = array_merge($dadosComuns, [
+                    'quantidade' => 1,
+                    'num_serie' => null,
+                    'placa' => null,
+                    'renavam' => null,
+                    'chassi' => null,
                 ]);
 
                 ModelCadastroInicial::create($dados);

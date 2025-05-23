@@ -66,6 +66,7 @@
                                     <thead>
                                         <tr>
                                             <th>Id</th>
+                                            <th>QTD.</th>
                                             <th>Categoria do Material</th>
                                             <th>Item Material</th>
                                             <th>Tipo</th>
@@ -79,6 +80,7 @@
                                         @foreach ($result as $results)
                                             <tr>
                                                 <td>{{ $results->id ?? 'N/A' }}</td>
+                                                <td>{{ $results->quantidade ?? 'N/A' }}</td>
                                                 <td>{{ $results->CategoriaMaterial->nome ?? 'N/A' }}</td>
                                                 <td>{{ $results->ItemCatalogoMaterial->nome ?? 'N/A' }}</td>
                                                 <td>{{ $results->TipoMaterial->nome ?? 'N/A' }}</td>

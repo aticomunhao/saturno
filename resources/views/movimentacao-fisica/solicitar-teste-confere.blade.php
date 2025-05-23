@@ -9,7 +9,7 @@
             </div>
             <div class="card-body">
                 @csrf
-                <form action="">
+                <form action="{{ route('movimentacao-fisica.homologar') }}">
                     <div class="row mb-3">
                         <label for="id_setor" class="form-label">Setor: </label>
                         <div class="col-md-4">
@@ -27,56 +27,69 @@
 
                     <hr>
 
-                    <div class="table-responsive" id="div_tabela">
-                        <table class="table table-bordered table-hover align-middle shadow-sm">
-                            <thead class="table-primary text-center text-dark">
-                                <tr>
-                                    <th scope="col" style="inline-size: 80%;">Material</th>
-                                    <th scope="col" style="inline-size: 20%;">Presente?</th>
-                                </tr>
-                            </thead>
-                            <tbody class="table-group-divider">
-                                @forelse ($materiais_enviados as $material)
-                                    <tr class="text-center">
-                                        <td class="text-start">
-                                            {{ implode(
-                                                ' - ',
-                                                array_filter([
-                                                    $material->CategoriaMaterial?->nome,
-                                                    $material->ItemCatalogoMaterial?->nome,
-                                                    $material->Marca?->nome,
-                                                    $material->Cor?->nome,
-                                                    $material->Tamanho?->nome,
-                                                    $material->FaseEtaria?->nome,
-                                                    $material->TipoSexo?->nome,
-                                                ]),
-                                            ) }}
-                                        </td>
-                                        <td>
-                                            <div class="form-check form-switch d-flex justify-content-center">
-                                                <input class="form-check-input" type="checkbox" name="presente[]"
-                                                    value="{{ $material->id }}">
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @empty
+                    <div class="container-fluid">
+                        <div class="table-responsive" id="div_tabela">
+                            <table class="table table-bordered table-hover align-middle shadow-sm">
+                                <thead class="table-primary text-center text-dark">
                                     <tr>
-                                        <td colspan="2" class="text-center text-muted">Nenhum material enviado.</td>
+                                        <th scope="col" style="inline-size: 80%;">Material</th>
+                                        <th scope="col" style="inline-size: 20%;">Presente?</th>
                                     </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody class="table-group-divider">
+                                    @forelse ($materiais_enviados as $material)
+                                        <tr class="text-center">
+                                            <td class="text-start">
+                                                {{ implode(
+                                                    ' - ',
+                                                    array_filter([
+                                                        $material->CategoriaMaterial?->nome,
+                                                        $material->ItemCatalogoMaterial?->nome,
+                                                        $material->Marca?->nome,
+                                                        $material->Cor?->nome,
+                                                        $material->Tamanho?->nome,
+                                                        $material->FaseEtaria?->nome,
+                                                        $material->TipoSexo?->nome,
+                                                    ]),
+                                                ) }}
+                                            </td>
+                                            <td>
+                                                <div class="form-check form-switch d-flex justify-content-center">
+                                                    <input class="form-check-input" type="checkbox" name="materiais[]"
+                                                        value="{{ $material->id }}">
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="2" class="text-center text-muted">Nenhum material enviado.</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row justify-content-around">
+                        <div class="col-sm-12 col-md-3">
+                            <a class="btn btn-danger" href="{{ route('movimentacao-fisica.index') }}">
+                                Cancelar
+                            </a>
+                        </div>
+                        <div class="col-sm-12 col-md-3" id="div_btn">
+                            <button class="btn btn-success" type="submit">
+                                Confirmar
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
     <script>
-        $(document).ready(function () {
-            $('#div_tabela').hide();
-            $('#id_setor').change(function (e) {
-                $('#div_tabela').show();
-
+        $(document).ready(function() {
+            $('#div_tabela, #div_btn').hide();
+            $('#id_setor').change(function(e) {
+                $('#div_tabela, #div_btn').show();
 
 
             });

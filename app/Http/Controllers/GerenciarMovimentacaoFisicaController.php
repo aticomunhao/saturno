@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\GerenciarMovimentacaoFisica;
 use Illuminate\Http\Request;
 use App\Models\ModelCadastroInicial;
 use App\Models\ModelMovimentacaoFisica;
 use App\Models\ModelSetor;
 use App\Models\ModelTipoDeposito;
 use App\Models\ModelUsuario;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
 
 class GerenciarMovimentacaoFisicaController extends Controller
 {
@@ -116,8 +117,73 @@ class GerenciarMovimentacaoFisicaController extends Controller
         return view('movimentacao-fisica.solicitar-teste-confere', compact('materiais_enviados', 'setores', 'usuarios'));
 
     }
+    public function homologar(Request $request){
+
+        $materiais_enviados = $request->input('materiais');
+
+        $setor = $request->input('setor');
+
+
+        return view('movimentacao-fisica.homologar', compact('materiais_enviados', 'setor'));
+
+
+    }
     public function solicitar_teste_store(Request $request){
         dd($request->all());
+
+            $cpf = $request->input('cpf');
+        $senha = $request->input('senha');
+
+        $result = DB::connection('pgsql2')->select("
+                        select
+                        u.id id_usuario,
+                        p.id id_pessoa,
+                        a.id id_associado,
+                        p.cpf,
+                        p.sexo,
+                        p.nome_completo,
+                        u.hash_senha,
+                        string_agg(distinct u_p.id_perfil::text, ',') perfis,
+                        string_agg(distinct u_d.id_Deposito::text, ',') depositos,
+                        string_agg(distinct u_s.id_Setor::text, ',') setor
+                        from usuario u
+                        left join pessoas p on u.id_pessoa = p.id
+                        left join associado a on a.id_pessoa = p.id
+                        left join usuario_perfil u_p on u.id = u_p.id_usuario
+                        left join usuario_deposito u_d on u.id = u_d.id_usuario
+                        left join usuario_setor u_s on u.id = u_s.id_usuario
+                        where u.ativo is true and p.cpf = '$cpf'
+                        group by u.id, p.id, a.id
+                        ");
+
+                        //dd($result);
+
+        if (count($result) > 0) {
+            $perfis = explode(',', $result[0]->perfis);
+            $setores = explode(',', $result[0]->setor);
+            $array_setores = $setores;
+
+            $perfis = DB::table('rotas_perfil')->whereIn('id_perfil', $perfis)->orderBy('id_rotas')->pluck('id_rotas');
+            $setores = DB::table('rotas_setor')->whereIn('id_setor', $setores)->orderBy('id_rotas')->pluck('id_rotas');
+
+            $perfis = json_decode(json_encode($perfis), true);
+            $setores = json_decode(json_encode($setores), true);
+
+            $rotasAutorizadas = array_intersect($perfis, $setores);
+
+            $hash_senha = $result[0]->hash_senha;
+
+            if (Hash::check($senha, $hash_senha)) {
+
+
+                app('flasher')->addSuccess('Acesso autorizado');
+
+                // if ($cpf == $senha) {
+                //     return view('/usuario/alterar-senha');
+                // }
+                // return view('login/home');
+            }
+        }
     }
 
 }

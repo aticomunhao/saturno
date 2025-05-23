@@ -418,6 +418,7 @@ Route::any('/movimentacao-fisica/solicitar-teste', [GerenciarMovimentacaoFisicaC
 Route::any('/movimentacao-fisica/solicitar-teste/confere', [GerenciarMovimentacaoFisicaController::class, 'solicitar_teste_confere'])->name('movimentacao-fisica.solicitar-teste.confere');
 Route::any('/movimentacao-fisica/solicitar-teste/store', [GerenciarMovimentacaoFisicaController::class, 'solicitar_teste_store'])->name('movimentacao-fisica.solicitar-teste.create');
 // Route::get('/movimentacao-fisica/excluir/{id}', [GerenciarMovimentacaoFisica::class, 'destroy'])->name('movimentacao.delete');
+Route::any('/movimentacao-fisica/homologar', [GerenciarMovimentacaoFisicaController::class, 'homologar'])->name('movimentacao-fisica.homologar');
 
 Route::get('/marcas/{categoriaId}', [PesquisaController::class, 'getMarcas']);
 Route::get('/tamanhos/{categoriaId}', [PesquisaController::class, 'getTamanhos']);

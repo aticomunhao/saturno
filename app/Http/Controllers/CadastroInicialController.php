@@ -135,11 +135,12 @@ class CadastroInicialController extends Controller
         $materiais = ModelCadastroInicial::with(['ItemCatalogoMaterial', 'Embalagem', 'CategoriaMaterial', 'TipoMaterial'])
             ->where('documento_origem', $id)
             ->get();
-        ModelCadastroInicial::where('id', $id)->update([
+        ModelCadastroInicial::where('documento_origem', $id)->update([
             'sacola' => $sacola,
         ]);
+        $usuario = session('usuario.nome');
 
-        if ($documento->end_arquivo == null) {
+        if (is_null($documento->end_arquivo)) {
             $pdf = Pdf::loadView('cadastroInicial.pdf-doacao', compact('documento', 'materiais', 'usuario'));
 
             // Define o caminho do arquivo
@@ -157,16 +158,14 @@ class CadastroInicialController extends Controller
         if ($sacola == 1) {
             $pdfNumero = Pdf::loadView('cadastroInicial.pdf-doacao-numero', compact('documento', 'materiais'));
 
-            $fileNameNumero = 'recibo_sacola_com_numero_' . $id . '.pdf';
-            $filePathNumero = 'doacoes/temp/' . $fileNameNumero;
+            // Codifica em base64 (não salva em disco)
+            $pdfBase64 = base64_encode($pdfNumero->output());
 
-            Storage::disk('public')->put($filePathNumero, $pdfNumero->output());
-
-            // Salva o caminho do PDF temporário na sessão
-            session()->flash('pdf_sacola_path', asset('storage/' . $filePathNumero));
+            // Envia o base64 via sessão
+            session()->flash('pdf_base64', $pdfBase64);
         }
 
-        return redirect()->action('CadastroInicial');
+        return redirect()->route('CadastroInicial');
     }
 
     public function createCompraDireta()

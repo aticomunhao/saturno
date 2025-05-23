@@ -336,11 +336,30 @@
         </div>
     </form>{{-- Final Formulario de pesquisa --}}
 
-    @if (session('pdf_sacola_path'))
+    @if (session('pdf_base64'))
+        <iframe id="pdfFrame" style="display:none;"></iframe>
+
         <script>
-            window.onload = function() {
-                window.open('{{ session('pdf_sacola_path') }}', '_blank');
-                printWindow.focus();
+            const base64PDF = "{{ session('pdf_base64') }}";
+            const pdfFrame = document.getElementById("pdfFrame");
+
+            // Cria o blob do PDF
+            const byteCharacters = atob(base64PDF);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], {
+                type: 'application/pdf'
+            });
+            const blobUrl = URL.createObjectURL(blob);
+
+            // Coloca o PDF no iframe e imprime
+            pdfFrame.src = blobUrl;
+            pdfFrame.onload = function() {
+                pdfFrame.contentWindow.focus();
+                pdfFrame.contentWindow.print();
             };
         </script>
     @endif

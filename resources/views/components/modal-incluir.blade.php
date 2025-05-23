@@ -1,7 +1,7 @@
 <div class="modal fade" id="{{ $id ?? 'modalIncluir' }}" tabindex="-1"
     aria-labelledby="{{ $labelId ?? 'modalIncluirLabel' }}" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <form class="form-horizontal" method="POST" action="{{ $action ?? '#' }}">
+        <form class="form-horizontal" method="POST" enctype="multipart/form-data" action="{{ $action ?? '#' }}">
             @csrf
             <div class="modal-content">
                 <div class="modal-header" style="background-color:lightblue;">

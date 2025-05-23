@@ -124,7 +124,7 @@ class CadastroInicialController extends Controller
         $buscaTipoMaterial = ModelTipoMaterial::all();
 
         $resultDocumento = ModelDocumento::where('id', $id)->first();
-        $result = ModelCadastroInicial::with('ItemCatalogoMaterial', 'Embalagem', 'CategoriaMaterial', 'TipoMaterial')->where('documento_origem', $id)->get();
+        $result = ModelCadastroInicial::with('ItemCatalogoMaterial', 'Embalagem', 'CategoriaMaterial', 'TipoMaterial')->where('documento_origem', $id)->orderBy('id', 'asc')->paginate(10);
 
         return view("cadastroInicial.doacao-cadastro-inicial-item", compact('result', 'resultDocumento', 'buscaSetor', 'buscaEmpresa', 'buscaCategoria', 'buscaTipoMaterial', 'idDocumento', 'buscaUnidadeMedida', 'buscaSexo'));
     }
@@ -299,7 +299,7 @@ class CadastroInicialController extends Controller
             $numerosPlacas = $request->input('numerosPlacas', []);
             $numerosRenavam = $request->input('numerosRenavam', []);
             $numerosChassis = $request->input('numerosChassis', []);
-            
+
             for ($i = 0; $i < $quantidade; $i++) {
                 $dados = array_merge($dadosComuns, [
                     'quantidade' => 1,
@@ -342,35 +342,38 @@ class CadastroInicialController extends Controller
     {
         $idDocumento = $id;
 
-        // Verifica se um arquivo foi enviado
-        if ($request->hasFile('arquivoDocDoacao') && $request->file('arquivoDocDoacao')->isValid()) {
-            // Salva o arquivo no disco 'public' dentro da pasta 'termos-doacao'
-            $caminhoArquivo = $request->file('arquivoDocDoacao')->store('termos-doacao', 'public');
-        } else {
-            // Se nenhum novo arquivo foi enviado, mantém o caminho atual (se necessário)
-            $caminhoArquivo = null;
+        $dadosAtualizados = [];
+
+        // Atualiza id_empresa se veio no request e não está vazio
+        if ($request->filled('empresaDocDoacao')) {
+            $dadosAtualizados['id_empresa'] = $request->input('empresaDocDoacao');
         }
 
-        // Atualiza os dados no banco
-        $dadosAtualizados = [
-            'id_empresa' => $request->input('empresaDocDoacao'),
-            'id_setor' => $request->input('setorDocDoacao'),
-        ];
+        // Atualiza id_setor se veio no request e não está vazio
+        if ($request->filled('setorDocDoacao')) {
+            $dadosAtualizados['id_setor'] = $request->input('setorDocDoacao');
+        }
 
-        // Só atualiza o número se houver valor preenchido
+        // Atualiza número se veio no request e não está vazio
         if ($request->filled('numeroDocDoacao')) {
             $dadosAtualizados['numero'] = $request->input('numeroDocDoacao');
         }
 
-        // Só adiciona o arquivo se ele foi enviado
-        if ($caminhoArquivo) {
+        // Verifica se um arquivo foi enviado e é válido
+        if ($request->hasFile('arquivoDocDoacao') && $request->file('arquivoDocDoacao')->isValid()) {
+            // Salva o arquivo no disco 'public' dentro da pasta 'termos-doacao'
+            $caminhoArquivo = $request->file('arquivoDocDoacao')->store('termos-doacao', 'public');
             $dadosAtualizados['end_arquivo'] = $caminhoArquivo;
         }
 
-        ModelDocumento::where('id', $idDocumento)->update($dadosAtualizados);
+        // Só atualiza se houver dados para atualizar
+        if (!empty($dadosAtualizados)) {
+            ModelDocumento::where('id', $idDocumento)->update($dadosAtualizados);
+        }
 
         return redirect()->route('doacao', ['id' => $idDocumento]);
     }
+
     public function gerarPDFDoacao($id)
     {
         $documento = ModelDocumento::with('empresa')->where('id', $id)->firstOrFail();

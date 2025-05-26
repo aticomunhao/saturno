@@ -43,6 +43,8 @@ class ModelCadastroInicial extends Model
         'chassi',
         'placa',
         'renavam',
+        'dt_fab',
+        'dt_fab_modelo',
     ];
 
     public function Status()

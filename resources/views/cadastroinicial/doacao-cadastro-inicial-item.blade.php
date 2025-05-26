@@ -109,9 +109,11 @@
                                                 </td>
                                                 <td>{{ $results->observacao }}</td>
                                                 <td>
+
                                                     <a href="/gerenciar-embalagem/alterar/{{ $results->id }}"
                                                         class="btn btn-sm btn-outline-warning" data-tt="tooltip"
                                                         style="font-size: 1rem; color:#303030" data-placement="top"
+                                                        data-bs-toggle="modal" data-bs-target="#modalEditarMaterial"
                                                         title="Editar Embalagens">
                                                         <i class="bi bi-pencil"></i>
                                                     </a>
@@ -121,9 +123,9 @@
                                     </tbody>
                                 </table>
                             </div>
-                             <div style="margin-right: 10px; margin-left: 10px">
-                            {{ $result->links('pagination::bootstrap-5') }}
-                        </div>
+                            <div style="margin-right: 10px; margin-left: 10px">
+                                {{ $result->links('pagination::bootstrap-5') }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -279,7 +281,14 @@
                     <div id="inputsVeiculo"></div>
                 </div>
             </div>
-
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Data de Fabricação</label>
+                <input type="date" class="form-control" name="dataFabricacaoMaterial">
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Data de Fab. Modelo</label>
+                <input type="date" class="form-control" name="dataFabricacaoModeloMaterial">
+            </div>
             <div class="col-md-12" style="margin-top: 10px">
                 <label>Observação</label>
                 <textarea type="text" class="form-control" name="observacaoMaterial" rows="2"></textarea>
@@ -330,6 +339,164 @@
             </div>
         </div>
     </x-modal-incluir>
+    <x-modal-editar id="modalEditarMaterial" labelId="modalEditarMaterialLabel" title="Editar Material"
+        action="{{ url('/cadastro-inicial/editar-material/' . $idDocumento) }}">
+        @method('PUT')
+        <div class="row">
+            <div class="col-md-6" style="margin-top: 10px">
+                <label>Categoria do Material</label>
+                <select class="form-select  select2" id="categoriaMaterial"
+                    style="border: 1px solid #999999; padding: 5px;" name="categoriaMaterial">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                    @foreach ($buscaCategoria as $buscaCategorias)
+                        <option value="{{ $buscaCategorias->id }}">
+                            {{ $buscaCategorias->nome }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-6" style="margin-top: 10px">
+                <label>Nome do Material</label>
+                <select class="form-select js-nome-material select2" id="nomeMaterial"
+                    style="border: 1px solid #999999; padding: 5px;" name="nomeMaterial">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-4" style="margin-top: 10px">
+                <label>Tipo do Material</label>
+                <!-- Campo visível: apenas para mostrar o nome -->
+                <input type="text" id="tipoMaterialNome" class="form-control" disabled>
+                <!-- Campo oculto: envia o ID no form -->
+                <input type="hidden" id="tipoMaterial" name="tipoMaterial">
+            </div>
+            <div class="col-md-2" style="margin-top: 10px">
+                <label>Aplicação</label>
+                <br>
+                <input type="checkbox" id="checkAplicacao" name="checkAplicacao" disabled>
+            </div>
+            <div class="col-md-4" style="margin-top: 10px">
+                <label>Embalagem</label>
+                <select class="form-select js-nome-material select2" id="embalagemMaterial"
+                    style="border: 1px solid #999999; padding: 5px;" name="embalagemMaterial">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-2" style="margin-top: 10px">
+                <label>Quantidade</label>
+                <input type="number" class="form-control" id="quantidadeMaterial" name="quantidadeMaterial" required>
+            </div>
+            <div class="col-md-4" style="margin-top: 10px">
+                <label>Modelo</label>
+                <input type="text" class="form-control" name="modeloMaterial">
+            </div>
+            <div class="col-md-2" style="margin-top: 10px">
+                <label>Avariado</label>
+                <br>
+                <input type="checkbox" id="checkAvariado" name="checkAvariado">
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Valor de Aquisição</label>
+                <select class="form-select js-marca-material select2" id="valorAquisicaoMaterial"
+                    style="border: 1px solid #999999; padding: 5px;" name="valorAquisicaoMaterial">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Valor de Venda</label>
+                <select class="form-select js-marca-material select2" id="valorVendaMaterial"
+                    style="border: 1px solid #999999; padding: 5px;" name="valorVendaMaterial">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Data de Validade</label>
+                <input type="date" class="form-control" name="dataValidadeMaterial">
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Marca</label>
+                <select class="form-select js-marca-material select2" id="marcaMaterial"
+                    style="border: 1px solid #999999; padding: 5px;" name="marcaMaterial">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Tamanho</label>
+                <select class="form-select js-tamanho-material select2" id="tamanhoMaterial"
+                    style="border: 1px solid #999999; padding: 5px;" name="tamanhoMaterial">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Cor</label>
+                <select class="form-select js-cor-material select2" id="corMaterial"
+                    style="border: 1px solid #999999; padding: 5px;" name="corMaterial">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Fase Etária</label>
+                <select class="form-select js-fase-material select2" id="faseEtariaMaterial"
+                    style="border: 1px solid #999999; padding: 5px;" name="faseEtariaMaterial">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Sexo</label>
+                <select class="form-select js-sexo-material select2" id="sexoMaterial"
+                    style="border: 1px solid #999999; padding: 5px;" name="sexoMaterial">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                    @foreach ($buscaSexo as $buscaSexos)
+                        <option value="{{ $buscaSexos->id }}">
+                            {{ $buscaSexos->nome }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Veículo</label>
+                <br>
+                <input type="checkbox" id="checkVeiculo" name="checkVeiculo" disabled>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Número de Série</label>
+                <br>
+                <input type="checkbox" id="checkNumSerie" name="checkNumSerie" disabled>
+            </div>
+            <div>
+                <div id="containerNumerosSerie" class="col-md" style="display: none; margin-top: 10px;">
+                    <label>Números de Série:</label>
+                    <div id="inputsNumerosSerie"></div>
+                </div>
+            </div>
+            <div>
+                <div id="containerVeiculo" class="col-md" style="display: none; margin-top: 10px;">
+                    <div id="inputsVeiculo"></div>
+                </div>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Data de Fabricação</label>
+                <input type="date" class="form-control" name="dataFabricacaoMaterial">
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Data de Fab. Modelo</label>
+                <input type="date" class="form-control" name="dataFabricacaoModeloMaterial">
+            </div>
+            <div class="col-md-12" style="margin-top: 10px">
+                <label>Observação</label>
+                <textarea type="text" class="form-control" name="observacaoMaterial" rows="2"></textarea>
+            </div>
+        </div>
+    </x-modal-editar>
     {{-- Botão de SACOLA --}}
     <script>
         document.getElementById('sacolaBtn').addEventListener('click', function() {

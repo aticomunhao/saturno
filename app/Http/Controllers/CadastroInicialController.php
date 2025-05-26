@@ -71,8 +71,13 @@ class CadastroInicialController extends Controller
         if ($request->pesquisaNomeMaterial) {
             $query->where('id_nome_mat', $request->pesquisaNomeMaterial);
         }
+        if ($request->pesquisaNumeroDocumento) {
+            $query->whereHas('DocOrigem', function ($q) use ($request) {
+                $q->where('numero', $request->pesquisaNumeroDocumento);
+            });
+        }
         if ($request->pesquisaDocumento) {
-            $query->whereHas('documento_origem', function ($q) use ($request) {
+            $query->whereHas('DocOrigem', function ($q) use ($request) {
                 $q->where('id_tp_doc', $request->pesquisaDocumento);
             });
         }
@@ -279,6 +284,8 @@ class CadastroInicialController extends Controller
             'id_deposito' => '1',
             'id_tp_status' => '1',
             'documento_origem' => $id,
+            'dt_fab' => $request->input('dataFabricacaoMaterial'),
+            'dt_fab_modelo' => $request->input('dataFabricacaoModeloMaterial'),
         ];
 
         $quantidade = (int) $request->input('quantidadeMaterial');

@@ -64,7 +64,7 @@
                                         @if ($request->pesquisaDestinacao)
                                             <th>DESTINAÇÃO</th>
                                         @endif
-
+                                        <th>NR. DOC.</th>
                                         <th>CATEGORIA</th>
 
                                         @if ($request->pesquisaEmpresa)
@@ -108,6 +108,7 @@
                                                 <td>{{ $CadastroInicials->destinacao->descricao ?? 'N/A' }}</td>
                                             @endif
 
+                                            <td>{{ $CadastroInicials->DocOrigem->numero ?? 'N/A' }}</td>
                                             <td>{{ $CadastroInicials->CategoriaMaterial->nome ?? 'N/A' }}</td>
 
                                             @if ($request->pesquisaEmpresa)
@@ -286,6 +287,11 @@
                                             </option>
                                         @endforeach
                                     </select>
+                                </div>
+                                <div class="col-md-6 col-sm-12 mb-2">Por Número de Documento
+                                    <input type="text" class="form-control" name="pesquisaNumeroDocumento"
+                                        id="idPesquisaNumeroDocumento" value="{{ old('pesquisaNumeroDocumento') }}"
+                                        style="border: 1px solid #999999; background-color: #ffffff;">
                                 </div>
                                 <div class="col-md-6 col-sm-12 mb-2">Por Tipo de Material
                                     <select class="form-select select2" style="border: 1px solid #999999;"

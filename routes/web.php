@@ -223,6 +223,7 @@ Route::get('/gerenciar-cadastro-inicial/compra-direta/{id}', [CadastroInicialCon
 Route::post('/cad-inicial-material/doacao/{id}', [CadastroInicialController::class, 'storeDoacao']);
 Route::post('/cad-inicial-material/compra-direta', [CadastroInicialController::class, 'storeCompraDireta']);
 Route::post('/cadastro-inicial/incluir-material/{id}', [CadastroInicialController::class, 'storeMaterial']);
+Route::put('/cadastro-inicial/editar-material/{id}', [CadastroInicialController::class, 'storeMaterial']);
 Route::post('/cadastro-inicial/incluir-termo/{id}', [CadastroInicialController::class, 'storeTermoMaterial']);
 Route::get('/recibo-doacao/pdf/{id}', [CadastroInicialController::class, 'gerarPDFDoacao']);
 

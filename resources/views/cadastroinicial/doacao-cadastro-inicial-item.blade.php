@@ -109,8 +109,7 @@
                                                 </td>
                                                 <td>{{ $results->observacao }}</td>
                                                 <td>
-
-                                                    <a href="/gerenciar-embalagem/alterar/{{ $results->id }}"
+                                                    <a href="#" data-id="{{ $results->id }}"
                                                         class="btn btn-sm btn-outline-warning" data-tt="tooltip"
                                                         style="font-size: 1rem; color:#303030" data-placement="top"
                                                         data-bs-toggle="modal" data-bs-target="#modalEditarMaterial"
@@ -340,7 +339,7 @@
         </div>
     </x-modal-incluir>
     <x-modal-editar id="modalEditarMaterial" labelId="modalEditarMaterialLabel" title="Editar Material"
-        action="{{ url('/cadastro-inicial/editar-material/' . $idDocumento) }}">
+        action="{{ url('/cadastro-inicial/editar-material/') }}">
         @method('PUT')
         <div class="row">
             <div class="col-md-6" style="margin-top: 10px">
@@ -504,6 +503,13 @@
             const isActive = btn.classList.toggle('ativo');
             btn.style.backgroundColor = isActive ? 'rgb(3, 109, 3)' : 'rgb(199, 7, 7)';
             document.getElementById('sacola').value = isActive ? '1' : '0';
+        });
+        document.querySelectorAll('.btn-editar-material').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                const form = document.getElementById('formEditarMaterial');
+                form.action = `/cadastro-inicial/editar-material/${id}`;
+            });
         });
     </script>
 @endsection

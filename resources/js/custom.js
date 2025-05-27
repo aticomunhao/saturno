@@ -40,7 +40,7 @@ $(document).ready(function () {
     });
 
     // Recarrega a página ao clicar em qualquer botão .btn-danger com data-bs-dismiss="modal"
-    $(document).on('click', '.btn-danger[data-bs-dismiss="modal"]', function () {
+    $(document).on('click', '[data-bs-dismiss="modal"]', function () {
         location.reload();
     });
 });
@@ -205,10 +205,6 @@ $(document).ready(function () {
 
     // Reage a mudanças no checkbox também
     $('#checkNumSerie').on('change', function () {
-        $('#quantidadeMaterial').trigger('input');
-    });
-
-    $('#checkVeiculo').on('change', function () {
         $('#quantidadeMaterial').trigger('input');
     });
 });

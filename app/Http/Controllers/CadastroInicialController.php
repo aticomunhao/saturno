@@ -401,4 +401,106 @@ class CadastroInicialController extends Controller
 
         return $pdf->stream($fileName);
     }
+    public function editMaterial(Request $request, $id)
+    {
+        $idDocumento = $id;
+        $checkAvariado = isset($request->checkAvariado) ? 1 : 0;
+        $checkAplicacao = isset($request->checkAplicacao) ? 1 : 0;
+        $checkNumSerie = isset($request->checkNumSerie) ? 1 : 0;
+        $checkVeiculo = isset($request->checkVeiculo) ? 1 : 0;
+        $valorAquisicao = $request->input('valorAquisicaoMaterial');
+        $valorVenda = $request->input('valorVendaMaterial');
+
+        if (is_array($valorAquisicao)) {
+            $valorAquisicao = $valorAquisicao[0] ?? null;
+        }
+        if (is_array($valorVenda)) {
+            $valorVenda = $valorVenda[0] ?? null;
+        }
+
+        $dadosComuns = [
+            'id_cat_material' => $request->input('categoriaMaterial'),
+            'id_item_catalogo' => $request->input('nomeMaterial'),
+            'id_tipo_material' => $request->input('tipoMaterial'),
+            'id_embalagem' => $request->input('embalagemMaterial'),
+            'modelo' => $request->input('modeloMaterial'),
+            'observacao' => $request->input('observacaoMaterial'),
+            'avariado' => $checkAvariado,
+            'aplicacao' => $checkAplicacao,
+            'data_validade' => $request->input('dataValidadeMaterial'),
+            'id_marca' => $request->input('marcaMaterial'),
+            'id_tamanho' => $request->input('tamanhoMaterial'),
+            'id_cor' => $request->input('corMaterial'),
+            'id_fase_etaria' => $request->input('faseEtariaMaterial'),
+            'id_tp_sexo' => $request->input('sexoMaterial'),
+            'placa' => $request->input('placaMaterial'),
+            'renavam' => $request->input('renavamMaterial'),
+            'chassi' => $request->input('chassiMaterial'),
+            'valor_aquisicao' => $valorAquisicao,
+            'valor_venda' => $valorVenda,
+            'data_cadastro' => Carbon::now(),
+            'adquirido' => false,
+            'id_deposito' => '1',
+            'id_tp_status' => '1',
+            'documento_origem' => $id,
+            'dt_fab' => $request->input('dataFabricacaoMaterial'),
+            'dt_fab_modelo' => $request->input('dataFabricacaoModeloMaterial'),
+        ];
+
+        $quantidade = (int) $request->input('quantidadeMaterial');
+        $tipoMaterial = (int) $request->input('tipoMaterial');
+
+        if ($tipoMaterial === 1 && $checkNumSerie == 1) {
+            $numerosSerie = $request->input('numerosSerie', []);
+
+            for ($i = 0; $i < $quantidade; $i++) {
+                $dados = array_merge($dadosComuns, [
+                    'quantidade' => 1,
+                    'num_serie' => $numerosSerie[$i] ?? null,
+                ]);
+
+                ModelCadastroInicial::create($dados);
+            }
+        } else if ($tipoMaterial === 1 && $checkVeiculo == 1) {
+            $numerosPlacas = $request->input('numerosPlacas', []);
+            $numerosRenavam = $request->input('numerosRenavam', []);
+            $numerosChassis = $request->input('numerosChassis', []);
+
+            for ($i = 0; $i < $quantidade; $i++) {
+                $dados = array_merge($dadosComuns, [
+                    'quantidade' => 1,
+                    'placa' => $numerosPlacas[$i] ?? null,
+                    'renavam' => $numerosRenavam[$i] ?? null,
+                    'chassi' => $numerosChassis[$i] ?? null,
+                ]);
+
+                ModelCadastroInicial::create($dados);
+            }
+        } else if ($tipoMaterial === 1) {
+
+            for ($i = 0; $i < $quantidade; $i++) {
+                $dados = array_merge($dadosComuns, [
+                    'quantidade' => 1,
+                    'num_serie' => null,
+                    'placa' => null,
+                    'renavam' => null,
+                    'chassi' => null,
+                ]);
+
+                ModelCadastroInicial::create($dados);
+            }
+        } else {
+            ModelCadastroInicial::create(array_merge($dadosComuns, [
+                'quantidade' => $quantidade,
+                'num_serie' => null,
+                'placa' => null,
+                'renavam' => null,
+                'chassi' => null,
+            ]));
+        }
+
+
+        app('flasher')->addSuccess('Material adicionado com sucesso!');
+        return redirect()->route('doacao', ['id' => $idDocumento]);
+    }
 }

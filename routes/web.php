@@ -418,6 +418,7 @@ Route::put('/movimentacao-fisica/update/{id}', [GerenciarMovimentacaoFisicaContr
 Route::any('/movimentacao-fisica/solicitar-teste', [GerenciarMovimentacaoFisicaController::class, 'solicitar_teste'])->name('movimentacao-fisica.solicitar-teste');
 Route::any('/movimentacao-fisica/solicitar-teste/confere', [GerenciarMovimentacaoFisicaController::class, 'solicitar_teste_confere'])->name('movimentacao-fisica.solicitar-teste.confere');
 Route::any('/movimentacao-fisica/solicitar-teste/store', [GerenciarMovimentacaoFisicaController::class, 'solicitar_teste_store'])->name('movimentacao-fisica.solicitar-teste.create');
+Route::get('/retorna-cadastro-inicial', [GerenciarMovimentacaoFisicaController::class, 'show'])->name('movimentacao-fisica.show');
 // Route::get('/movimentacao-fisica/excluir/{id}', [GerenciarMovimentacaoFisica::class, 'destroy'])->name('movimentacao.delete');
 Route::any('/movimentacao-fisica/homologar', [GerenciarMovimentacaoFisicaController::class, 'homologar'])->name('movimentacao-fisica.homologar');
 

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ModelCadastroInicial;
+use App\Models\ModelDocumento;
+use App\Models\ModelEmpresa;
 use App\Models\ModelMovimentacaoFisica;
 use App\Models\ModelSetor;
 use App\Models\ModelTipoDeposito;
@@ -85,8 +87,9 @@ class GerenciarMovimentacaoFisicaController extends Controller
     public function solicitar_teste(){
 
      $cadastro_inicial = ModelCadastroInicial::with('Status', 'SolOrigem', 'DocOrigem', 'Deposito', 'Destinacao', 'CategoriaMaterial', 'TipoMaterial')->get();
+     $documentos = ModelDocumento::all();
     //   dd($cadastro_inicial);
-        return view('movimentacao-fisica.solicitar-teste', compact('cadastro_inicial'));
+        return view('movimentacao-fisica.novo-solicitar-teste', compact('cadastro_inicial'));
 
     }
     public function solicitar_teste_confere(Request $request){

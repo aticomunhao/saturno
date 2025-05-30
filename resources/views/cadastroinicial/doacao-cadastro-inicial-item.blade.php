@@ -109,13 +109,36 @@
                                                 </td>
                                                 <td>{{ $results->observacao }}</td>
                                                 <td>
-                                                    <a href="#" data-id="{{ $results->id }}"
-                                                        class="btn btn-sm btn-outline-warning" data-tt="tooltip"
-                                                        style="font-size: 1rem; color:#303030" data-placement="top"
-                                                        data-bs-toggle="modal" data-bs-target="#modalEditarMaterial"
-                                                        title="Editar Embalagens">
+                                                    <a type="button"
+                                                        class="btn btn-sm btn-outline-warning btn-editar-material"
+                                                        data-id="{{ $results->id }}"
+                                                        data-categoria="{{ $results->id_cat_material }}"
+                                                        data-nome="{{ $results->id_item_catalogo }}"
+                                                        data-tipoId="{{ $results->id_tipo_material }}"
+                                                        data-tipo="{{ $results->tipoMaterial->nome }}"
+                                                        data-aplicacao="{{ $results->aplicacao }}"
+                                                        data-embalagem="{{ $results->id_embalagem }}"
+                                                        data-quantidade="{{ $results->quantidade }}"
+                                                        data-modelo="{{ $results->modelo }}"
+                                                        data-avariado="{{ $results->avariado }}"
+                                                        data-valor_aquisicao="{{ $results->valor_aquisicao }}"
+                                                        data-valor_venda="{{ $results->valor_venda }}"
+                                                        data-data_validade="{{ $results->data_validade }}"
+                                                        data-marca="{{ $results->id_marca }}"
+                                                        data-tamanho="{{ $results->id_tamanho }}"
+                                                        data-cor="{{ $results->id_cor }}"
+                                                        data-fase_etaria="{{ $results->id_fase_etaria }}"
+                                                        data-sexo="{{ $results->id_tp_sexo }}"
+                                                        data-veiculo="{{ $results->placa }}"
+                                                        data-num_serie="{{ $results->num_serie }}"
+                                                        data-data_fabricacao="{{ $results->dt_fab }}"
+                                                        data-data_fabricacao_modelo="{{ $results->dt_fab_modelo }}"
+                                                        data-observacao="{{ $results->observacao }}" data-bs-toggle="modal"
+                                                        data-bs-target="#modalEditarMaterial" title="Editar Material"
+                                                        style="font-size: 1rem; color:#303030">
                                                         <i class="bi bi-pencil"></i>
                                                     </a>
+
                                                 </td>
                                             </tr>
                                         @endForeach
@@ -137,13 +160,14 @@
             </button>
         </div>
     </form>
+
     <x-modal-incluir id="modalIncluirMaterial" labelId="modalIncluirMaterialLabel"
         action="{{ url('/cadastro-inicial/incluir-material/' . $idDocumento) }}" title="Inclusão de Material">
         <div class="row material-item">
             <div class="col-md-6" style="margin-top: 10px">
                 <label>Categoria do Material</label>
-                <select class="form-select  select2" id="categoriaMaterial" style="border: 1px solid #999999; padding: 5px;"
-                    name="categoriaMaterial">
+                <select class="form-select  select2" id="categoriaMaterial"
+                    style="border: 1px solid #999999; padding: 5px;" name="categoriaMaterial">
                     <option value="" disabled selected>Selecione...
                     </option>
                     @foreach ($buscaCategoria as $buscaCategorias)
@@ -344,8 +368,8 @@
         <div class="row">
             <div class="col-md-6" style="margin-top: 10px">
                 <label>Categoria do Material</label>
-                <select class="form-select  select2" id="categoriaMaterial"
-                    style="border: 1px solid #999999; padding: 5px;" name="categoriaMaterial">
+                <select class="form-select  select2" id="categoriaMaterialEditar"
+                    style="border: 1px solid #999999; padding: 5px;" name="categoriaMaterialEditar">
                     <option value="" disabled selected>Selecione...
                     </option>
                     @foreach ($buscaCategoria as $buscaCategorias)
@@ -357,8 +381,8 @@
             </div>
             <div class="col-md-6" style="margin-top: 10px">
                 <label>Nome do Material</label>
-                <select class="form-select js-nome-material select2" id="nomeMaterial"
-                    style="border: 1px solid #999999; padding: 5px;" name="nomeMaterial">
+                <select class="form-select select2" id="nomeMaterialEditar"
+                    style="border: 1px solid #999999; padding: 5px;" name="nomeMaterialEditar">
                     <option value="" disabled selected>Selecione...
                     </option>
                 </select>
@@ -366,92 +390,92 @@
             <div class="col-md-4" style="margin-top: 10px">
                 <label>Tipo do Material</label>
                 <!-- Campo visível: apenas para mostrar o nome -->
-                <input type="text" id="tipoMaterialNome" class="form-control" disabled>
+                <input type="text" id="tipoMaterialNomeEditar" name="tipoMaterialNomeEditar" class="form-control" disabled>
                 <!-- Campo oculto: envia o ID no form -->
-                <input type="hidden" id="tipoMaterial" name="tipoMaterial">
+                <input type="hidden" id="tipoMaterialEditar" name="tipoMaterialEditar">
             </div>
             <div class="col-md-2" style="margin-top: 10px">
                 <label>Aplicação</label>
                 <br>
-                <input type="checkbox" id="checkAplicacao" name="checkAplicacao" disabled>
+                <input type="checkbox" id="checkAplicacaoEditar" name="checkAplicacaoEditar" disabled>
             </div>
             <div class="col-md-4" style="margin-top: 10px">
                 <label>Embalagem</label>
-                <select class="form-select js-nome-material select2" id="embalagemMaterial"
-                    style="border: 1px solid #999999; padding: 5px;" name="embalagemMaterial">
+                <select class="form-select select2" id="embalagemMaterialEditar"
+                    style="border: 1px solid #999999; padding: 5px;" name="embalagemMaterialEditar">
                     <option value="" disabled selected>Selecione...
                     </option>
                 </select>
             </div>
             <div class="col-md-2" style="margin-top: 10px">
                 <label>Quantidade</label>
-                <input type="number" class="form-control" id="quantidadeMaterial" name="quantidadeMaterial" required>
+                <input type="number" class="form-control" id="quantidadeMaterialEditar" name="quantidadeMaterialEditar" required>
             </div>
             <div class="col-md-4" style="margin-top: 10px">
                 <label>Modelo</label>
-                <input type="text" class="form-control" name="modeloMaterial">
+                <input type="text" class="form-control" id="modeloMaterialEditar" name="modeloMaterialEditar">
             </div>
             <div class="col-md-2" style="margin-top: 10px">
                 <label>Avariado</label>
                 <br>
-                <input type="checkbox" id="checkAvariado" name="checkAvariado">
+                <input type="checkbox" id="checkAvariadoEditar" name="checkAvariadoEditar">
             </div>
             <div class="col-md-3" style="margin-top: 10px">
                 <label>Valor de Aquisição</label>
-                <select class="form-select js-marca-material select2" id="valorAquisicaoMaterial"
-                    style="border: 1px solid #999999; padding: 5px;" name="valorAquisicaoMaterial">
+                <select class="form-select select2" id="valorAquisicaoMaterialEditar"
+                    style="border: 1px solid #999999; padding: 5px;" name="valorAquisicaoMaterialEditar">
                     <option value="" disabled selected>Selecione...
                     </option>
                 </select>
             </div>
             <div class="col-md-3" style="margin-top: 10px">
                 <label>Valor de Venda</label>
-                <select class="form-select js-marca-material select2" id="valorVendaMaterial"
-                    style="border: 1px solid #999999; padding: 5px;" name="valorVendaMaterial">
+                <select class="form-select select2" id="valorVendaMaterialEditar"
+                    style="border: 1px solid #999999; padding: 5px;" name="valorVendaMaterialEditar">
                     <option value="" disabled selected>Selecione...
                     </option>
                 </select>
             </div>
             <div class="col-md-3" style="margin-top: 10px">
                 <label>Data de Validade</label>
-                <input type="date" class="form-control" name="dataValidadeMaterial">
+                <input type="date" class="form-control" name="dataValidadeMaterialEditar">
             </div>
             <div class="col-md-3" style="margin-top: 10px">
                 <label>Marca</label>
-                <select class="form-select js-marca-material select2" id="marcaMaterial"
-                    style="border: 1px solid #999999; padding: 5px;" name="marcaMaterial">
+                <select class="form-select select2" id="marcaMaterialEditar"
+                    style="border: 1px solid #999999; padding: 5px;" name="marcaMaterialEditar">
                     <option value="" disabled selected>Selecione...
                     </option>
                 </select>
             </div>
             <div class="col-md-3" style="margin-top: 10px">
                 <label>Tamanho</label>
-                <select class="form-select js-tamanho-material select2" id="tamanhoMaterial"
-                    style="border: 1px solid #999999; padding: 5px;" name="tamanhoMaterial">
+                <select class="form-select select2" id="tamanhoMaterialEditar"
+                    style="border: 1px solid #999999; padding: 5px;" name="tamanhoMaterialEditar">
                     <option value="" disabled selected>Selecione...
                     </option>
                 </select>
             </div>
             <div class="col-md-3" style="margin-top: 10px">
                 <label>Cor</label>
-                <select class="form-select js-cor-material select2" id="corMaterial"
-                    style="border: 1px solid #999999; padding: 5px;" name="corMaterial">
+                <select class="form-select select2" id="corMaterialEditar"
+                    style="border: 1px solid #999999; padding: 5px;" name="corMaterialEditar">
                     <option value="" disabled selected>Selecione...
                     </option>
                 </select>
             </div>
             <div class="col-md-3" style="margin-top: 10px">
                 <label>Fase Etária</label>
-                <select class="form-select js-fase-material select2" id="faseEtariaMaterial"
-                    style="border: 1px solid #999999; padding: 5px;" name="faseEtariaMaterial">
+                <select class="form-select select2" id="faseEtariaMaterialEditar"
+                    style="border: 1px solid #999999; padding: 5px;" name="faseEtariaMaterialEditar">
                     <option value="" disabled selected>Selecione...
                     </option>
                 </select>
             </div>
             <div class="col-md-3" style="margin-top: 10px">
                 <label>Sexo</label>
-                <select class="form-select js-sexo-material select2" id="sexoMaterial"
-                    style="border: 1px solid #999999; padding: 5px;" name="sexoMaterial">
+                <select class="form-select select2" id="sexoMaterialEditar"
+                    style="border: 1px solid #999999; padding: 5px;" name="sexoMaterialEditar">
                     <option value="" disabled selected>Selecione...
                     </option>
                     @foreach ($buscaSexo as $buscaSexos)
@@ -464,35 +488,35 @@
             <div class="col-md-3" style="margin-top: 10px">
                 <label>Veículo</label>
                 <br>
-                <input type="checkbox" id="checkVeiculo" name="checkVeiculo" disabled>
+                <input type="checkbox" id="checkVeiculoEditar" name="checkVeiculoEditar" disabled>
             </div>
             <div class="col-md-3" style="margin-top: 10px">
                 <label>Número de Série</label>
                 <br>
-                <input type="checkbox" id="checkNumSerie" name="checkNumSerie" disabled>
+                <input type="checkbox" id="checkNumSerieEditar" name="checkNumSerieEditar" disabled>
             </div>
             <div>
-                <div id="containerNumerosSerie" class="col-md" style="display: none; margin-top: 10px;">
+                <div id="containerNumerosSerieEditar" class="col-md" style="display: none; margin-top: 10px;">
                     <label>Números de Série:</label>
-                    <div id="inputsNumerosSerie"></div>
+                    <div id="inputsNumerosSerieEditar"></div>
                 </div>
             </div>
             <div>
-                <div id="containerVeiculo" class="col-md" style="display: none; margin-top: 10px;">
-                    <div id="inputsVeiculo"></div>
+                <div id="containerVeiculoEditar" class="col-md" style="display: none; margin-top: 10px;">
+                    <div id="inputsVeiculoEditar"></div>
                 </div>
             </div>
             <div class="col-md-3" style="margin-top: 10px">
                 <label>Data de Fabricação</label>
-                <input type="date" class="form-control" name="dataFabricacaoMaterial">
+                <input type="date" class="form-control" id="dataFabricacaoMaterialEditar" name="dataFabricacaoMaterialEditar">
             </div>
             <div class="col-md-3" style="margin-top: 10px">
                 <label>Data de Fab. Modelo</label>
-                <input type="date" class="form-control" name="dataFabricacaoModeloMaterial">
+                <input type="date" class="form-control" id="dataFabricacaoModeloMaterialEditar" name="dataFabricacaoModeloMaterialEditar">
             </div>
             <div class="col-md-12" style="margin-top: 10px">
                 <label>Observação</label>
-                <textarea type="text" class="form-control" name="observacaoMaterial" rows="2"></textarea>
+                <textarea type="text" class="form-control" id="observacaoMaterialEditar" name="observacaoMaterialEditar" rows="2"></textarea>
             </div>
         </div>
     </x-modal-editar>

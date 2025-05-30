@@ -67,7 +67,6 @@ class ModelCadastroInicial extends Model
     {
         return $this->belongsTo(ModelDestinacao::class, 'id_destinacao');
     }
-
     public function TipoMaterial()
     {
         return $this->belongsTo(ModelTipoMaterial::class, 'id_tipo_material');

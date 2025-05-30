@@ -45,7 +45,7 @@ $(document).ready(function () {
     });
 });
 
-//preencher select da modal Itens Material
+//preencher select da modal incluir Itens Material
 $(document).ready(function () {
     // Função genérica para carregar opções via AJAX com async/await
     async function carregarOpcoes(url, targetSelect, placeholder = "Selecione...") {
@@ -208,6 +208,109 @@ $(document).ready(function () {
         $('#quantidadeMaterial').trigger('input');
     });
 });
+
+//preencher select da modal editar Itens Material
+$(document).ready(function () {
+    function carregarOpcoes(url, selector, valorSelecionado = null, callback = null) {
+        $.get(url, function (data) {
+            const select = $(selector);
+            select.empty();
+            select.append('<option value="">Selecione</option>');
+
+            data.forEach(item => {
+                const selected = item.id == valorSelecionado ? 'selected' : '';
+                select.append(`<option value="${item.id}" ${selected}>${item.nome}</option>`);
+            });
+
+            if (valorSelecionado) {
+                select.val(valorSelecionado).trigger('change');
+            }
+
+            if (typeof callback === 'function') {
+                callback();
+            }
+        });
+    }
+
+    let valoresSelecionados = {};
+    let valoresNomeSelecionados = {}; // Variável de apoio
+
+
+    $('#categoriaMaterialEditar').on('change', function () {
+        const categoriaId = this.value;
+        if (!categoriaId) return;
+
+        const filtrosCategoria = {
+            [`/nome/${categoriaId}`]: { selector: '#nomeMaterialEditar', valor: valoresSelecionados.nome },
+            [`/marcas/${categoriaId}`]: { selector: '#marcaMaterialEditar', valor: valoresSelecionados.marca },
+            [`/tamanhos/${categoriaId}`]: { selector: '#tamanhoMaterialEditar', valor: valoresSelecionados.tamanho },
+            [`/cores/${categoriaId}`]: { selector: '#corMaterialEditar', valor: valoresSelecionados.cor },
+            [`/fases/${categoriaId}`]: { selector: '#faseEtariaMaterialEditar', valor: valoresSelecionados.fase_etaria },
+        };
+
+        for (const [url, obj] of Object.entries(filtrosCategoria)) {
+            carregarOpcoes(url, obj.selector, obj.valor);
+        }
+    });
+
+    $('#nomeMaterialEditar').on('change', function () {
+        const nomeId = this.value;
+        if (!nomeId) return;
+
+        const filtrosNome = {
+            [`/embalagem/${nomeId}`]: { selector: '#embalagemMaterialEditar', valor: valoresNomeSelecionados.embalagem },
+            [`/valorAquisicao/${nomeId}`]: { selector: '#valorAquisicaoMaterialEditar', valor: valoresNomeSelecionados.valor_aquisicao },
+            [`/tipo/${nomeId}`]: { selector: '#tipoMaterialEditar', valor: valoresNomeSelecionados.tipoId },
+            [`/tipo/${nomeId}`]: { selector: '#tipoMaterialNomeEditar', valor: valoresNomeSelecionados.tipo },
+        };
+
+        for (const [url, obj] of Object.entries(filtrosNome)) {
+            carregarOpcoes(url, obj.selector, obj.valor);
+        }
+    });
+
+    $('.btn-editar-material').on('click', function () {
+        const btn = $(this);
+
+        // Guarda os valores selecionados antes de carregar os filtros
+        valoresSelecionados = {
+            nome: btn.data('nome'),
+            marca: btn.data('marca'),
+            tamanho: btn.data('tamanho'),
+            cor: btn.data('cor'),
+            fase_etaria: btn.data('fase_etaria')
+        };
+
+        valoresNomeSelecionados = {
+            embalagem: btn.data('embalagem'),
+            valor_aquisicao: btn.data('valor_aquisicao'),
+            tipoId: btn.data('tipoId'),
+            tipo: btn.data('tipo')
+        };
+
+        // Carrega a categoria e dispara o carregamento dos outros selects
+        $('#categoriaMaterialEditar').val(btn.data('categoria')).trigger('change');
+
+        // Preenche os outros campos do formulário
+        $('#tipoMaterialEditar').val(btn.data('tipoId'));
+        $('#tipoMaterialNomeEditar').val(btn.data('tipo'));
+        $('#checkAplicacaoEditar').prop('checked', btn.data('aplicacao') == 1);
+        $('#embalagemMaterialEditar').val(btn.data('embalagem')).trigger('change');
+        $('#quantidadeMaterialEditar').val(btn.data('quantidade'));
+        $('input[name="modeloMaterialEditar"]').val(btn.data('modelo'));
+        $('#checkAvariadoEditar').prop('checked', btn.data('avariado') == 1);
+        $('#valorAquisicaoMaterialEditar').val(btn.data('valor_aquisicao'));
+        $('#valorVendaMaterialEditar').val(btn.data('valor_venda'));
+        $('#dataValidadeMaterialEditar').val(btn.data('data_validade'));
+        $('#sexoMaterialEditar').val(btn.data('sexo')).trigger('change');
+        $('#checkVeiculoEditar').prop('checked', btn.data('veiculo') == 1);
+        $('#checkNumSerieEditar').prop('checked', btn.data('num_serie') == 1);
+        $('#dataFabricacaoMaterialEditar').val(btn.data('data_fabricacao'));
+        $('#dataFabricacaoModeloMaterialEditar').val(btn.data('data_fabricacao_modelo'));
+        $('#observacaoMaterialEditar').val(btn.data('observacao'));
+    });
+});
+
 
 
 // Selecione todos os campos com a classe 'proposta'

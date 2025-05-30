@@ -131,7 +131,7 @@ class CadastroInicialController extends Controller
         $resultDocumento = ModelDocumento::where('id', $id)->first();
         $result = ModelCadastroInicial::with('ItemCatalogoMaterial', 'Embalagem', 'CategoriaMaterial', 'TipoMaterial')->where('documento_origem', $id)->orderBy('id', 'asc')->paginate(10);
 
-        return view("cadastroInicial.doacao-cadastro-inicial-item", compact('result', 'resultDocumento', 'buscaSetor', 'buscaEmpresa', 'buscaCategoria', 'buscaTipoMaterial', 'idDocumento', 'buscaUnidadeMedida', 'buscaSexo'));
+        return view("cadastroInicial.doacao-cadastro-inicial-item", compact('result', 'bucaItemCatalogo', 'resultDocumento', 'buscaSetor', 'buscaEmpresa', 'buscaCategoria', 'buscaTipoMaterial', 'idDocumento', 'buscaUnidadeMedida', 'buscaSexo'));
     }
 
     public function storeDoacao(Request $request, $id)

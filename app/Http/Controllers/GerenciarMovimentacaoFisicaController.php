@@ -22,19 +22,19 @@ class GerenciarMovimentacaoFisicaController extends Controller
     public function index()
     {
 
-      $movimentacoes_fisicas = ModelMovimentacaoFisica::with([
-        'cadastro_inicial',
-        'remetente',
-        'destinatario',
-        'deposito_origem',
-        'deposito_destino',
-        'tipo_movimento'
+        $movimentacoes_fisicas = ModelMovimentacaoFisica::with([
+            'cadastro_inicial',
+            'remetente',
+            'destinatario',
+            'deposito_origem',
+            'deposito_destino',
+            'tipo_movimento'
         ])->get();
 
         $tipos_deposito = ModelTipoDeposito::all();
         // dd($movimentacoes_fisicas);
 
-    return view('movimentacao-fisica.index', compact('movimentacoes_fisicas', 'tipos_deposito'));
+        return view('movimentacao-fisica.index', compact('movimentacoes_fisicas', 'tipos_deposito'));
     }
 
     /**
@@ -84,43 +84,63 @@ class GerenciarMovimentacaoFisicaController extends Controller
     {
         //
     }
-    public function solicitar_teste(){
+    public function solicitar_teste()
+    {
 
-     $cadastro_inicial = ModelCadastroInicial::with('Status', 'SolOrigem', 'DocOrigem', 'Deposito', 'Destinacao', 'CategoriaMaterial', 'TipoMaterial')->get();
-     $documentos = ModelDocumento::all();
-    //   dd($cadastro_inicial);
+        $cadastro_inicial = ModelCadastroInicial::with('Status', 'SolOrigem', 'DocOrigem', 'Deposito', 'Destinacao', 'CategoriaMaterial', 'TipoMaterial')->get();
+        $documentos = ModelDocumento::all();
+        //   dd($cadastro_inicial);
         return view('movimentacao-fisica.novo-solicitar-teste', compact('cadastro_inicial'));
-
     }
-    public function solicitar_teste_confere(Request $request){
-    //  $ids = $request->input('materiais1');
-//   dd($request->input('materiais1'));
+    public  function solicitar_teste_ajax_para_material($data)
+    {
+        // dd($request->all());
+        $materiais = ModelCadastroInicial::with([
+            'Status',
+            'SolOrigem',
+            'DocOrigem',
+            'Deposito',
+            'Destinacao',
+            'CategoriaMaterial',
+            'TipoMaterial'
+        ])
+            ->where('data_cadastro', $data)
+            ->get();
+
+        // dd($materiais);
+        return response()->json($materiais);
+    }
+
+    public function solicitar_teste_confere(Request $request)
+    {
+        //  $ids = $request->input('materiais1');
+        //   dd($request->input('materiais1'));
         $ids = $request->all()['materiais1'];
-        if(!$ids){
+        if (!$ids) {
             app('flasher')->addError('Selecione pelo menos um material para continuar.');
             return redirect()->back();
         }
 
-    $materiais_enviados = ModelCadastroInicial::with([
-        'Status',
-        'SolOrigem',
-        'DocOrigem',
-        'Deposito',
-        'Destinacao',
-        'CategoriaMaterial',
-        'TipoMaterial'
+        $materiais_enviados = ModelCadastroInicial::with([
+            'Status',
+            'SolOrigem',
+            'DocOrigem',
+            'Deposito',
+            'Destinacao',
+            'CategoriaMaterial',
+            'TipoMaterial'
         ])->whereIn('id', $request->input('materiais1'))->get();
         // dd($materiais_enviados);
-       $setores = ModelSetor::orderBy('sigla')->get();
+        $setores = ModelSetor::orderBy('sigla')->get();
 
         $usuarios = ModelUsuario::with('pessoa')->get();
 
         // dd($usuarios);
 
         return view('movimentacao-fisica.solicitar-teste-confere', compact('materiais_enviados', 'setores', 'usuarios'));
-
     }
-    public function homologar(Request $request){
+    public function homologar(Request $request)
+    {
 
         $materiais_enviados = $request->input('materiais');
 
@@ -128,13 +148,12 @@ class GerenciarMovimentacaoFisicaController extends Controller
 
 
         return view('movimentacao-fisica.homologar', compact('materiais_enviados', 'setor'));
-
-
     }
-    public function solicitar_teste_store(Request $request){
-        dd($request->all());
+    public function solicitar_teste_store(Request $request)
+    {
+        // dd($request->all());
 
-            $cpf = $request->input('cpf');
+        $cpf = $request->input('cpf');
         $senha = $request->input('senha');
 
         $result = DB::connection('pgsql2')->select("
@@ -159,7 +178,7 @@ class GerenciarMovimentacaoFisicaController extends Controller
                         group by u.id, p.id, a.id
                         ");
 
-                        //dd($result);
+        //dd($result);
 
         if (count($result) > 0) {
             $perfis = explode(',', $result[0]->perfis);
@@ -188,5 +207,4 @@ class GerenciarMovimentacaoFisicaController extends Controller
             }
         }
     }
-
 }

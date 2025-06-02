@@ -30,35 +30,52 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div id="pormaterial">
-                        <div class="col-md-6">
-                            <label for="material" class="form-label">Selecione o Material</label>
-                            <select class="form-select" id="material" name="material">
-                                @foreach ($cadastro_inicial as $material)
-                                    <option value="{{ $material->id }}">
-                                        {{ implode(
-                                            ' - ',
-                                            array_filter([
-                                                $material->CategoriaMaterial?->nome,
-                                                $material->ItemCatalogoMaterial?->nome,
-                                                $material->Marca?->nome,
-                                                $material->Cor?->nome,
-                                                $material->Tamanho?->nome,
-                                                $material->FaseEtaria?->nome,
-                                                $material->TipoSexo?->nome,
-                                            ]),
-                                        ) }}
-                                    </option>
-                                @endforeach
+                <div id="id_filtra_por_data" class="row justify-content-around" >
+                    <input type="checkbox"  id="afirma_por_data" name="afirma_por_data"
+                        class="form-check-input inputradio" >
 
-                                <!-- Opções de materiais serão carregadas aqui -->
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <button class="btn btn-success" id="botao_por_material"> Adicionar</button>
+                </div>
+                <div id="id_deseja_por_data">
+                    <hr>
+                    <div class="row justify-content-around">
+                        <div class="col-md-6">
+                            <label for="data" class="form-label">Selecione a Data</label>
+                            <input type="date" class="form-control" id="data" name="data">
                         </div>
                     </div>
+                </div>
+
+                <div class="row" id="pormaterial" class="justify-content-around" hidden>
+                    <div class="col-md-6">
+                        <label for="material" class="form-label">Selecione o Material</label>
+                        <select class="form-select" id="material" name="material">
+                            @foreach ($cadastro_inicial as $material)
+                                <option value="{{ $material->id }}">
+                                    {{ implode(
+                                        ' - ',
+                                        array_filter([
+                                            $material->CategoriaMaterial?->nome,
+                                            $material->ItemCatalogoMaterial?->nome,
+                                            $material->Marca?->nome,
+                                            $material->Cor?->nome,
+                                            $material->Tamanho?->nome,
+                                            $material->FaseEtaria?->nome,
+                                            $material->TipoSexo?->nome,
+                                        ]),
+                                    ) }}
+                                </option>
+                            @endforeach
+                            <!-- Opções de materiais serão carregadas aqui -->
+                        </select>
+                    </div>
+                    <div class="col-md-3" style="margin-top: 30px">
+                        <button class="btn btn-success" id="botao_por_material"> Adicionar</button>
+                    </div>
+                </div>
+
+
+                <div id="pordocumento">
+
                 </div>
             </div>
         </div>
@@ -70,8 +87,18 @@
             });
 
             $('#botao_por_material').click(function(e) {
-                e.preventDefault();
-                console.log('Botão Adicionar clicado');
+                var = $('#material').val();
+
+
+                // $.ajax({
+
+                //     url: "//",
+                //     data: "data",
+                //     dataType: "JSON",
+                //     success: function(response) {
+
+                //     }
+                // });
             });
         });
     </script>

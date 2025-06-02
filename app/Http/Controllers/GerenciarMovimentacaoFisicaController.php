@@ -107,7 +107,7 @@ class GerenciarMovimentacaoFisicaController extends Controller
             ->where('data_cadastro', $data)
             ->get();
 
-        // dd($materiais);
+        dd($materiais);
         return response()->json($materiais);
     }
 

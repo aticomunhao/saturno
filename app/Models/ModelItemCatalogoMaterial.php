@@ -38,4 +38,8 @@ class ModelItemCatalogoMaterial extends Model
     {
         return $this->belongsTo(ModelUnidadeMedida::class, 'tp_unidade_medida');
     }
+    public function CadastroInicial()
+    {
+        return $this->hasMany(ModelCadastroInicial::class, 'id_item_catalogo');
+    }
 }

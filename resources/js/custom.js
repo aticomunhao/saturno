@@ -212,29 +212,36 @@ $(document).ready(function () {
 //preencher select da modal editar Itens Material
 $(document).ready(function () {
     function carregarOpcoes(url, selector, valorSelecionado = null, callback = null) {
-        $.get(url, function (data) {
-            const select = $(selector);
-            select.empty();
-            select.append('<option value="">Selecione</option>');
+        return new Promise((resolve, reject) => {
+            $.get(url, function (data) {
+                const select = $(selector);
+                select.empty();
+                select.append('<option value="">Selecione...</option>');
 
-            data.forEach(item => {
-                const selected = item.id == valorSelecionado ? 'selected' : '';
-                select.append(`<option value="${item.id}" ${selected}>${item.nome}</option>`);
+                data.forEach(item => {
+                    const selected = item.id == valorSelecionado ? 'selected' : '';
+                    select.append(`<option value="${item.id}" ${selected}>${item.nome}</option>`);
+                });
+
+                if (valorSelecionado) {
+                    select.val(valorSelecionado).trigger('change');
+                }
+
+                if (typeof callback === 'function') {
+                    callback();
+                }
+
+                resolve(); // finaliza a promise
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.error(`Erro ao carregar ${url}:`, textStatus, errorThrown);
+                reject(errorThrown);
             });
-
-            if (valorSelecionado) {
-                select.val(valorSelecionado).trigger('change');
-            }
-
-            if (typeof callback === 'function') {
-                callback();
-            }
         });
     }
 
     let valoresSelecionados = {};
-    let valoresNomeSelecionados = {}; // Variável de apoio
-
+    let valoresNomeSelecionados = {};
+    let btnEditarAtual = null;
 
     $('#categoriaMaterialEditar').on('change', function () {
         const categoriaId = this.value;
@@ -248,68 +255,191 @@ $(document).ready(function () {
             [`/fases/${categoriaId}`]: { selector: '#faseEtariaMaterialEditar', valor: valoresSelecionados.fase_etaria },
         };
 
-        for (const [url, obj] of Object.entries(filtrosCategoria)) {
-            carregarOpcoes(url, obj.selector, obj.valor);
-        }
+        Promise.all(
+            Object.entries(filtrosCategoria).map(([url, obj]) =>
+                carregarOpcoes(url, obj.selector, obj.valor)
+            )
+        );
     });
 
-    $('#nomeMaterialEditar').on('change', function () {
+    $('#nomeMaterialEditar').on('change', async function () {
         const nomeId = this.value;
         if (!nomeId) return;
 
         const filtrosNome = {
             [`/embalagem/${nomeId}`]: { selector: '#embalagemMaterialEditar', valor: valoresNomeSelecionados.embalagem },
             [`/valorAquisicao/${nomeId}`]: { selector: '#valorAquisicaoMaterialEditar', valor: valoresNomeSelecionados.valor_aquisicao },
-            [`/tipo/${nomeId}`]: { selector: '#tipoMaterialEditar', valor: valoresNomeSelecionados.tipoId },
-            [`/tipo/${nomeId}`]: { selector: '#tipoMaterialNomeEditar', valor: valoresNomeSelecionados.tipo },
         };
 
-        for (const [url, obj] of Object.entries(filtrosNome)) {
-            carregarOpcoes(url, obj.selector, obj.valor);
+        const isAvariado = $('#checkAvariadoEditar').is(':checked');
+        const urlVenda = isAvariado ? `/valorVendaAvariado/${nomeId}` : `/valorVenda/${nomeId}`;
+
+        filtrosNome[urlVenda] = {
+            selector: '#valorVendaMaterialEditar',
+            valor: valoresNomeSelecionados.valor_venda
+        };
+
+        try {
+            const response = await fetch(`/tipo/${nomeId}`);
+            const data = await response.json();
+
+            $('#tipoMaterialNomeEditar').val(data.nome || '');
+            $('#tipoMaterialEditar').val(data.id || '');
+
+            if (data.id == 2) {
+                $('#checkAplicacaoEditar').prop('disabled', false);
+                $('#checkNumSerieEditar').prop('disabled', true).prop('checked', false);
+                $('#checkVeiculoEditar').prop('disabled', true).prop('checked', false);
+
+                $('#placaEditar').val(btnEditarAtual?.data('veiculo_placas'));
+                $('#renavamEditar').val(btnEditarAtual?.data('veiculo_renavam'));
+                $('#chassiEditar').val(btnEditarAtual?.data('veiculo_chassis'));
+            } else {
+                $('#checkAplicacaoEditar').prop('disabled', true).prop('checked', false);
+                $('#checkNumSerieEditar').prop('disabled', false);
+                $('#checkVeiculoEditar').prop('disabled', false);
+            }
+        } catch (error) {
+            console.error('Erro ao buscar tipo do material (editar):', error);
+            $('#tipoMaterialNomeEditar').val('');
+            $('#tipoMaterialEditar').val('');
         }
+
+        await Promise.all(
+            Object.entries(filtrosNome).map(([url, obj]) =>
+                carregarOpcoes(url, obj.selector, obj.valor)
+            )
+        );
+
+        $('#quantidadeMaterialEditar').trigger('input');
+    });
+
+    $('#checkAvariadoEditar').on('change', function () {
+        const nomeId = $('#nomeMaterialEditar').val();
+        if (!nomeId) return;
+
+        const isAvariado = $(this).is(':checked');
+        const urlVenda = isAvariado ? `/valorVendaAvariado/${nomeId}` : `/valorVenda/${nomeId}`;
+        const valorVendaSelecionado = valoresNomeSelecionados.valor_venda;
+
+        carregarOpcoes(urlVenda, '#valorVendaMaterialEditar', valorVendaSelecionado);
+    });
+
+    $('#quantidadeMaterialEditar').on('input', function () {
+        const quantidade = parseInt($(this).val());
+        const tipoMaterial = parseInt($('#tipoMaterialEditar').val());
+        const checkNumSerie = $('#checkNumSerieEditar').is(':checked');
+        const checkVeiculo = $('#checkVeiculoEditar').is(':checked');
+
+        const container = $('#containerNumerosSerieEditar');
+        const inputs = $('#inputsNumerosSerieEditar');
+        const container2 = $('#containerVeiculoEditar');
+        const inputs2 = $('#inputsVeiculoEditar');
+
+        inputs.empty();
+        inputs2.empty();
+
+        container.hide();
+        container2.hide();
+
+        if (tipoMaterial === 1 && checkNumSerie && quantidade > 0) {
+            container.show();
+            const num_serie = String(btnEditarAtual?.data('num_serie') || '').split(',');
+
+            for (let i = 0; i < quantidade; i++) {
+                inputs.append(`
+                    <label>Dados do ${i + 1}º Número de Série:</label>
+                    <input type="text" name="numerosSerie[]" class="form-control mt-2 mb-2" placeholder="Número de série ${i + 1}" value="${num_serie[i] || ''}" required />
+                `);
+            }
+        } else if (tipoMaterial === 1 && checkVeiculo && quantidade > 0) {
+            container2.show();
+
+            const placas = String(btnEditarAtual?.data('veiculo_placas') || '').split(',');
+            const renavams = String(btnEditarAtual?.data('veiculo_renavam') || '').split(',');
+            const chassises = String(btnEditarAtual?.data('veiculo_chassis') || '').split(',');
+
+            console.log('Placas:', placas);
+            console.log('Renavams:', renavams);
+            console.log('Chassis:', chassises);
+
+            for (let i = 0; i < quantidade; i++) {
+                inputs2.append(`
+                    <div class="form-group">
+                        <label>Dados do ${i + 1}º Veículo:</label>
+                        <input type="text" name="numerosPlacasEditar[]" class="form-control mb-2" placeholder="Placa ${i + 1}" value="${placas[i] || ''}" required />
+                        <input type="text" name="numerosRenavamEditar[]" class="form-control mb-2" placeholder="Renavam ${i + 1}" value="${renavams[i] || ''}" required />
+                        <input type="text" name="numerosChassisEditar[]" class="form-control mb-2" placeholder="Chassi ${i + 1}" value="${chassises[i] || ''}" required />
+                    </div>
+                `);
+            }
+        }
+    });
+
+    $('#checkVeiculoEditar').on('change', function () {
+        const checkVeiculo = $(this).is(':checked');
+        const tipoMaterial = parseInt($('#tipoMaterialEditar').val());
+
+        if (checkVeiculo) {
+            $('#checkNumSerieEditar').prop('disabled', true).prop('checked', false);
+        } else if (tipoMaterial !== 2) {
+            $('#checkNumSerieEditar').prop('disabled', false);
+        }
+
+        $('#quantidadeMaterialEditar').trigger('input');
+    });
+
+    $('#checkNumSerieEditar').on('change', function () {
+        const checkNumSerie = $(this).is(':checked');
+        const tipoMaterial = parseInt($('#tipoMaterialEditar').val());
+
+        if (checkNumSerie) {
+            $('#checkVeiculoEditar').prop('disabled', true).prop('checked', false);
+        } else if (tipoMaterial !== 2) {
+            $('#checkVeiculoEditar').prop('disabled', false);
+        }
+
+        $('#quantidadeMaterialEditar').trigger('input');
     });
 
     $('.btn-editar-material').on('click', function () {
         const btn = $(this);
+        btnEditarAtual = btn;
 
-        // Guarda os valores selecionados antes de carregar os filtros
         valoresSelecionados = {
-            nome: btn.data('nome'),
-            marca: btn.data('marca'),
-            tamanho: btn.data('tamanho'),
-            cor: btn.data('cor'),
-            fase_etaria: btn.data('fase_etaria')
+            nome: btn.data('nome') || '',
+            marca: btn.data('marca') || '',
+            tamanho: btn.data('tamanho') || '',
+            cor: btn.data('cor') || '',
+            fase_etaria: btn.data('fase_etaria') || ''
         };
 
         valoresNomeSelecionados = {
-            embalagem: btn.data('embalagem'),
-            valor_aquisicao: btn.data('valor_aquisicao'),
-            tipoId: btn.data('tipoId'),
-            tipo: btn.data('tipo')
+            embalagem: btn.data('embalagem') || '',
+            valor_aquisicao: btn.data('valor_aquisicao') || '',
+            tipoId: btn.data('tipoid') || '',
+            tipo: btn.data('tipo') || '',
+            valor_venda: btn.data('valor_venda') || ''
         };
 
-        // Carrega a categoria e dispara o carregamento dos outros selects
+        $('#checkVeiculoEditar').prop('checked', !!btn.data('veiculo_placas')).trigger('change');
+        $('#checkNumSerieEditar').prop('checked', !!btn.data('num_serie')).trigger('change');
         $('#categoriaMaterialEditar').val(btn.data('categoria')).trigger('change');
-
-        // Preenche os outros campos do formulário
-        $('#tipoMaterialEditar').val(btn.data('tipoId'));
-        $('#tipoMaterialNomeEditar').val(btn.data('tipo'));
         $('#checkAplicacaoEditar').prop('checked', btn.data('aplicacao') == 1);
-        $('#embalagemMaterialEditar').val(btn.data('embalagem')).trigger('change');
-        $('#quantidadeMaterialEditar').val(btn.data('quantidade'));
-        $('input[name="modeloMaterialEditar"]').val(btn.data('modelo'));
+        $('#quantidadeMaterialEditar').val(btn.data('quantidade') || '');
+        $('#modeloMaterialEditar').val(btn.data('modelo') || '');
         $('#checkAvariadoEditar').prop('checked', btn.data('avariado') == 1);
-        $('#valorAquisicaoMaterialEditar').val(btn.data('valor_aquisicao'));
-        $('#valorVendaMaterialEditar').val(btn.data('valor_venda'));
-        $('#dataValidadeMaterialEditar').val(btn.data('data_validade'));
+        $('#dataValidadeMaterialEditar').val(btn.data('data_validade') || '');
+        $('#dataFabricacaoMaterialEditar').val(btn.data('data_fabricacao') || '');
+        $('#dataFabricacaoModeloMaterialEditar').val(btn.data('data_fabricacao_modelo') || '');
+        $('#observacaoMaterialEditar').val(btn.data('observacao') || '');
         $('#sexoMaterialEditar').val(btn.data('sexo')).trigger('change');
-        $('#checkVeiculoEditar').prop('checked', btn.data('veiculo') == 1);
-        $('#checkNumSerieEditar').prop('checked', btn.data('num_serie') == 1);
-        $('#dataFabricacaoMaterialEditar').val(btn.data('data_fabricacao'));
-        $('#dataFabricacaoModeloMaterialEditar').val(btn.data('data_fabricacao_modelo'));
-        $('#observacaoMaterialEditar').val(btn.data('observacao'));
+
+        $('#quantidadeMaterialEditar').trigger('input');
     });
 });
+
+
 
 
 

@@ -129,8 +129,10 @@
                                                         data-cor="{{ $results->id_cor }}"
                                                         data-fase_etaria="{{ $results->id_fase_etaria }}"
                                                         data-sexo="{{ $results->id_tp_sexo }}"
-                                                        data-veiculo="{{ $results->placa }}"
-                                                        data-num_serie="{{ $results->num_serie }}"
+                                                        data-veiculo_placas="{{ is_array($results->placa) ? implode(',', $results->placa) : $results->placa }}"
+                                                        data-veiculo_renavam="{{ is_array($results->renavam) ? implode(',', $results->renavam) : $results->renavam }}"
+                                                        data-veiculo_chassis="{{ is_array($results->chassi) ? implode(',', $results->chassi) : $results->chassi }}"
+                                                        data-num_serie="{{ is_array($results->num_serie) ? implode(',', $results->num_serie) : $results->num_serie }}"
                                                         data-data_fabricacao="{{ $results->dt_fab }}"
                                                         data-data_fabricacao_modelo="{{ $results->dt_fab_modelo }}"
                                                         data-observacao="{{ $results->observacao }}" data-bs-toggle="modal"
@@ -390,7 +392,8 @@
             <div class="col-md-4" style="margin-top: 10px">
                 <label>Tipo do Material</label>
                 <!-- Campo visível: apenas para mostrar o nome -->
-                <input type="text" id="tipoMaterialNomeEditar" name="tipoMaterialNomeEditar" class="form-control" disabled>
+                <input type="text" id="tipoMaterialNomeEditar" name="tipoMaterialNomeEditar" class="form-control"
+                    disabled>
                 <!-- Campo oculto: envia o ID no form -->
                 <input type="hidden" id="tipoMaterialEditar" name="tipoMaterialEditar">
             </div>
@@ -409,7 +412,8 @@
             </div>
             <div class="col-md-2" style="margin-top: 10px">
                 <label>Quantidade</label>
-                <input type="number" class="form-control" id="quantidadeMaterialEditar" name="quantidadeMaterialEditar" required>
+                <input type="number" class="form-control" id="quantidadeMaterialEditar" name="quantidadeMaterialEditar"
+                    required>
             </div>
             <div class="col-md-4" style="margin-top: 10px">
                 <label>Modelo</label>
@@ -438,7 +442,7 @@
             </div>
             <div class="col-md-3" style="margin-top: 10px">
                 <label>Data de Validade</label>
-                <input type="date" class="form-control" name="dataValidadeMaterialEditar">
+                <input type="date" class="form-control" id="dataValidadeMaterialEditar" name="dataValidadeMaterialEditar">
             </div>
             <div class="col-md-3" style="margin-top: 10px">
                 <label>Marca</label>
@@ -497,7 +501,6 @@
             </div>
             <div>
                 <div id="containerNumerosSerieEditar" class="col-md" style="display: none; margin-top: 10px;">
-                    <label>Números de Série:</label>
                     <div id="inputsNumerosSerieEditar"></div>
                 </div>
             </div>
@@ -508,15 +511,18 @@
             </div>
             <div class="col-md-3" style="margin-top: 10px">
                 <label>Data de Fabricação</label>
-                <input type="date" class="form-control" id="dataFabricacaoMaterialEditar" name="dataFabricacaoMaterialEditar">
+                <input type="date" class="form-control" id="dataFabricacaoMaterialEditar"
+                    name="dataFabricacaoMaterialEditar">
             </div>
             <div class="col-md-3" style="margin-top: 10px">
                 <label>Data de Fab. Modelo</label>
-                <input type="date" class="form-control" id="dataFabricacaoModeloMaterialEditar" name="dataFabricacaoModeloMaterialEditar">
+                <input type="date" class="form-control" id="dataFabricacaoModeloMaterialEditar"
+                    name="dataFabricacaoModeloMaterialEditar">
             </div>
             <div class="col-md-12" style="margin-top: 10px">
                 <label>Observação</label>
-                <textarea type="text" class="form-control" id="observacaoMaterialEditar" name="observacaoMaterialEditar" rows="2"></textarea>
+                <textarea type="text" class="form-control" id="observacaoMaterialEditar" name="observacaoMaterialEditar"
+                    rows="2"></textarea>
             </div>
         </div>
     </x-modal-editar>

@@ -217,15 +217,16 @@ Route::name('deposito')->group(function () {
 
 
 Route::get('/gerenciar-cadastro-inicial', [CadastroInicialController::class, 'index'])->name('CadastroInicial');
-Route::any('/salvar-termo-doacao', [CadastroInicialController::class, 'storeTermoDoacao']);
 Route::get('/gerenciar-cadastro-inicial/doacao/{id}', [CadastroInicialController::class, 'createDoacao'])->name('doacao');
+Route::any('/salvar-termo-doacao', [CadastroInicialController::class, 'storeTermoDoacao']);
 Route::get('/gerenciar-cadastro-inicial/compra-direta/{id}', [CadastroInicialController::class, 'createCompraDireta']);
-Route::post('/cad-inicial-material/doacao/{id}', [CadastroInicialController::class, 'storeDoacao']);
-Route::post('/cad-inicial-material/compra-direta', [CadastroInicialController::class, 'storeCompraDireta']);
-Route::post('/cadastro-inicial/incluir-material/{id}', [CadastroInicialController::class, 'storeMaterial']);
-Route::put('/cadastro-inicial/editar-material/{id}', [CadastroInicialController::class, 'editMaterial']);
-Route::post('/cadastro-inicial/incluir-termo/{id}', [CadastroInicialController::class, 'storeTermoMaterial']);
+Route::post('/cadastro-inicial-material/doacao/{id}', [CadastroInicialController::class, 'storeDoacao']);
+Route::post('/cadastro-inicial-material/compra-direta', [CadastroInicialController::class, 'storeCompraDireta']);
+Route::post('/cadastro-inicial-material/incluir-material/{id}', [CadastroInicialController::class, 'storeMaterial']);
+Route::put('/cadastro-inicial-material/editar-material', [CadastroInicialController::class, 'editMaterial']);
+Route::post('/cadastro-inicial-material/incluir-termo/{id}', [CadastroInicialController::class, 'storeTermoMaterial']);
 Route::get('/recibo-doacao/pdf/{id}', [CadastroInicialController::class, 'gerarPDFDoacao']);
+Route::post('/cadastro-inicial-material/deletar', [CadastroInicialController::class, 'deleteMaterial']);
 
 
 

@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <form class="form-horizontal mt-4" method="POST" action="/cad-inicial-material/doacao/{{ $idDocumento }}">
+    <form class="form-horizontal mt-4" method="POST" action="/cadastro-inicial-material/doacao/{{ $idDocumento }}">
         @csrf
         <div class="container-fluid"> {{-- Container completo da página  --}}
             <div class="justify-content-center">
@@ -140,7 +140,15 @@
                                                         style="font-size: 1rem; color:#303030">
                                                         <i class="bi bi-pencil"></i>
                                                     </a>
-
+                                                    <a href="#"
+                                                        class="btn btn-sm btn-outline-danger excluirSolicitacao"
+                                                        data-tt="tooltip" style="font-size: 1rem; color:#303030"
+                                                        data-placement="top" title="Excluir" data-bs-toggle="modal"
+                                                        data-bs-target="#modalExcluirMaterial"
+                                                        data-id="{{ $results->id }}"
+                                                        data-nome='{{ $results->ItemCatalogoMaterial->nome ?? 'N/A' }}'>
+                                                        <i class="bi bi-trash"></i>
+                                                    </a>
                                                 </td>
                                             </tr>
                                         @endForeach
@@ -164,7 +172,7 @@
     </form>
 
     <x-modal-incluir id="modalIncluirMaterial" labelId="modalIncluirMaterialLabel"
-        action="{{ url('/cadastro-inicial/incluir-material/' . $idDocumento) }}" title="Inclusão de Material">
+        action="{{ url('/cadastro-inicial-material/incluir-material/' . $idDocumento) }}" title="Inclusão de Material">
         <div class="row material-item">
             <div class="col-md-6" style="margin-top: 10px">
                 <label>Categoria do Material</label>
@@ -321,7 +329,7 @@
         </div>
     </x-modal-incluir>
     <x-modal-incluir id="modalIncluirTermo" labelId="modalIncluirTermoLabel"
-        action="{{ url('/cadastro-inicial/incluir-termo/' . $idDocumento) }}" title="Inclusão de Termo">
+        action="{{ url('/cadastro-inicial-material/incluir-termo/' . $idDocumento) }}" title="Inclusão de Termo">
         <div class="row termo">
             <div class="col-md-6">
                 <label>Empresa/Entidade</label>
@@ -365,8 +373,9 @@
         </div>
     </x-modal-incluir>
     <x-modal-editar id="modalEditarMaterial" labelId="modalEditarMaterialLabel" title="Editar Material"
-        action="{{ url('/cadastro-inicial/editar-material/') }}">
+        action="{{ url('/cadastro-inicial-material/editar-material') }}">
         @method('PUT')
+        <input type="hidden" name="edit-id" id="edit-id">
         <div class="row">
             <div class="col-md-6" style="margin-top: 10px">
                 <label>Categoria do Material</label>
@@ -442,7 +451,8 @@
             </div>
             <div class="col-md-3" style="margin-top: 10px">
                 <label>Data de Validade</label>
-                <input type="date" class="form-control" id="dataValidadeMaterialEditar" name="dataValidadeMaterialEditar">
+                <input type="date" class="form-control" id="dataValidadeMaterialEditar"
+                    name="dataValidadeMaterialEditar">
             </div>
             <div class="col-md-3" style="margin-top: 10px">
                 <label>Marca</label>
@@ -526,6 +536,14 @@
             </div>
         </div>
     </x-modal-editar>
+    <x-modal-excluir id="modalExcluirMaterial" labelId="modalExcluirMaterialLabel"
+        action="{{ url('/cadastro-inicial-material/deletar') }}" title="Excluir Material">
+        <input type="hidden" name="delete-id" id="delete-id">
+        <div class="row">
+            <label>Deseja realmente <strong style="color: red">excluir</strong> o material <span
+                    id="nome-material"></span>?</label>
+        </div>
+    </x-modal-excluir>
     {{-- Botão de SACOLA --}}
     <script>
         document.getElementById('sacolaBtn').addEventListener('click', function() {
@@ -538,7 +556,7 @@
             btn.addEventListener('click', function() {
                 const id = this.getAttribute('data-id');
                 const form = document.getElementById('formEditarMaterial');
-                form.action = `/cadastro-inicial/editar-material/${id}`;
+                form.action = `/cadastro-inicial-material/editar-material/${id}`;
             });
         });
     </script>

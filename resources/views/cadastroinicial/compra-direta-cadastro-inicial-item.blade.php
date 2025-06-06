@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <form class="form-horizontal mt-4" method="POST" action="/cad-inicial-material/compra-direta">
+    <form class="form-horizontal mt-4" method="POST" action="/cadastro-inicial-material/compra-direta">
         @csrf
         <div class="container-fluid"> {{-- Container completo da página  --}}
             <div class="justify-content-center">

@@ -422,6 +422,7 @@ $(document).ready(function () {
             valor_venda: btn.data('valor_venda') || ''
         };
 
+        $('#edit-id').val(btn.data('id') || '');
         $('#checkVeiculoEditar').prop('checked', !!btn.data('veiculo_placas')).trigger('change');
         $('#checkNumSerieEditar').prop('checked', !!btn.data('num_serie')).trigger('change');
         $('#categoriaMaterialEditar').val(btn.data('categoria')).trigger('change');
@@ -439,9 +440,20 @@ $(document).ready(function () {
     });
 });
 
+ //Modal Excluir Material
+        document.addEventListener('DOMContentLoaded', function() {
+            const excluirLinks = document.querySelectorAll('.excluirSolicitacao');
 
+            excluirLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    const nome = this.getAttribute('data-nome');
 
-
+                    document.getElementById('delete-id').value = id;
+                    document.getElementById('nome-material').textContent = nome;
+                });
+            });
+        });
 
 // Selecione todos os campos com a classe 'proposta'
 document.querySelectorAll('.valor-monetario').forEach(function (input) {

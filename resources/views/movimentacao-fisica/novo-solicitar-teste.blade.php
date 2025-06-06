@@ -40,7 +40,11 @@
                     <div class="row">
                         <div class="col-md-6">
                             <label for="data" class="form-label">Selecione a Data</label>
-                            <input type="date" class="form-control" id="data" name="data">
+                            <input type="date" class="form-control" id="id_data_inicio" name="data_inicio">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="data" class="form-label">Selecione a Data</label>
+                            <input type="date" class="form-control" id="id_data_fim" name="data_fim">
                         </div>
                     </div>
                 </div>

@@ -28,32 +28,33 @@
                 </div>
 
                 <!-- Checkbox: Filtrar por Data -->
-                <div class="row mb-3">
-                    <div class="col-md-12 d-flex align-items-center">
-                        <input type="checkbox" id="afirma_por_data" name="afirma_por_data" class="form-check-input me-2">
-                        <label class="form-check-label" for="afirma_por_data">Filtrar por data</label>
-                    </div>
-                </div>
-
-                <!-- Campo Data -->
-                <div id="id_deseja_por_data" class="mb-4" style="display: none;">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label for="data" class="form-label">Selecione a Data</label>
-                            <input type="date" class="form-control" id="id_data_inicio" name="data_inicio">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="data" class="form-label">Selecione a Data</label>
-                            <input type="date" class="form-control" id="id_data_fim" name="data_fim">
-                        </div>
-                    </div>
-                </div>
 
                 <!-- Por Material -->
                 <div class="row align-items-end mb-3" id="pormaterial">
+                    <div class="row mb-3">
+                        <div class="col-md-12 d-flex align-items-center">
+                            <input type="checkbox" id="afirma_por_data_material" name="afirma_por_data_material"
+                                class="form-check-input me-2">
+                            <label class="form-check-label" for="afirma_por_data">Filtrar por data</label>
+                        </div>
+                    </div>
+
+                    <!-- Campo Data -->
+                    <div id="id_deseja_por_data_cadastro_material" class="mb-4" style="display: none;">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="data" class="form-label">Selecione a Data</label>
+                                <input type="date" class="form-control" id="id_data_inicio_por_material">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="data" class="form-label">Selecione a Data</label>
+                                <input type="date" class="form-control" id="id_data_fim_por_material">
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-md-8">
                         <label for="material" class="form-label">Selecione o Material</label>
-                        <select class="form-select" id="material" name="material">
+                        <select class="form-select" id="id_material" name="material">
                             @foreach ($cadastro_inicial as $material)
                                 <option value="{{ $material->id }}">
                                     {{ implode(
@@ -79,9 +80,10 @@
 
                 <!-- Por Documento -->
                 <div id="pordocumento" style="display: none;">
-                    <div class="col-md-8">
+                    <p>Por documento</p>
+                    {{-- <div class="col-md-8">
                         <label for="material" class="form-label">Selecione o Material</label>
-                        <select class="form-select" id="material" name="material">
+                        <select class="form-select" id="id_documento" name="documento">
                             @foreach ($cadastro_inicial as $material)
                                 <option value="{{ $material->id }}">
                                     {{ implode(
@@ -99,14 +101,25 @@
                                 </option>
                             @endforeach
                         </select>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        function verificarCampos() {
+            if ($('#id_data_inicio_por_material').val() && $('#id_data_fim_por_material').val()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+
         $(document).ready(function() {
+            verificarCampos();
+            // Alternância entre "Por Material" e "Por Documento"
             $('.inputradio').change(function() {
                 if ($(this).val() == "1") {
                     $('#pormaterial').show();
@@ -114,28 +127,27 @@
                 } else {
                     $('#pormaterial').hide();
                     $('#pordocumento').show();
+                    // Aplica desabilitação se checkbox estiver marcado
                 }
             });
-
-            $('#afirma_por_data').change(function() {
-                $('#id_deseja_por_data').slideToggle(this.checked);
+            $('#afirma_por_data_material').change(function(e) {
+                e.preventDefault();
+                console.log('Checkbox alterado');
+                if ($(this).is(':checked')) {
+                    $('#id_deseja_por_data_cadastro_material').show();
+                    $('#id_material').attr('disabled', true);
+                } else {
+                    $('#id_deseja_por_data_cadastro_material').hide();
+                    $('#id_material').attr('disabled', false);
+                }
             });
+            $('#id_data_fim_por_material, #id_data_inicio_por_material').on('input change', function() {
+                if (verificarCampos()) {
+                    console.log('Campos de data preenchidos corretamente');
 
-            $('#data').change(function(e) {
-                var data = $(this).val();
-
-                $.ajax({
-                    type: "GET",
-                    url: "/retorna-materiais-por-data-cadastro/" + encodeURIComponent(data),
-                    dataType: "json",
-                    success: function(response) {
-                        console.log(response);
-                        // Aqui vai o que você deseja fazer com o resultado
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Erro ao buscar materiais:", error);
-                    }
-                }); // ← Essa chave fecha o objeto $.ajax
+                } else {
+                    console.log('Campos de data não preenchidos corretamente');
+                }
             });
         });
     </script>

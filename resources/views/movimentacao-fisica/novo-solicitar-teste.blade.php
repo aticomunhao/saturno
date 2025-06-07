@@ -79,7 +79,27 @@
 
                 <!-- Por Documento -->
                 <div id="pordocumento" style="display: none;">
-                    <!-- Conteúdo a implementar -->
+                    <div class="col-md-8">
+                        <label for="material" class="form-label">Selecione o Material</label>
+                        <select class="form-select" id="material" name="material">
+                            @foreach ($cadastro_inicial as $material)
+                                <option value="{{ $material->id }}">
+                                    {{ implode(
+                                        ' - ',
+                                        array_filter([
+                                            $material->CategoriaMaterial?->nome,
+                                            $material->ItemCatalogoMaterial?->nome,
+                                            $material->Marca?->nome,
+                                            $material->Cor?->nome,
+                                            $material->Tamanho?->nome,
+                                            $material->FaseEtaria?->nome,
+                                            $material->TipoSexo?->nome,
+                                        ]),
+                                    ) }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>

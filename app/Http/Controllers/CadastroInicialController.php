@@ -403,6 +403,7 @@ class CadastroInicialController extends Controller
     }
     public function editMaterial(Request $request)
     {
+        $idDocumento = $request->input('documento-id-editar');
         $idCadastro = $request->input('edit-id');
         $checkAvariado = isset($request->checkAvariadoEditar) ? 1 : 0;
         $checkAplicacao = isset($request->checkAplicacaoEditar) ? 1 : 0;
@@ -433,10 +434,12 @@ class CadastroInicialController extends Controller
 
         if ($tipoMaterial === 1 && $checkNumSerie == 1) {
             $numerosSerie = $request->input('numerosSerieEditar', []);
-
             $dados = array_merge($dadosAtualizados, [
                 'quantidade' => 1,
                 'num_serie' => $numerosSerie[0] ?? null,
+                'placa' => null,
+                'renavam' => null,
+                'chassi' => null,
             ]);
 
             // Supondo que você tenha o ID do item a ser atualizado
@@ -446,6 +449,9 @@ class CadastroInicialController extends Controller
                 $dados = array_merge($dadosAtualizados, [
                     'quantidade' => 1,
                     'num_serie' => $numerosSerie[$i] ?? null,
+                    'placa' => null,
+                    'renavam' => null,
+                    'chassi' => null,
                 ]);
 
                 ModelCadastroInicial::create($dados);
@@ -460,6 +466,7 @@ class CadastroInicialController extends Controller
                 'placa' => $numerosPlacas[0] ?? null,
                 'renavam' => $numerosRenavam[0] ?? null,
                 'chassi' => $numerosChassis[0] ?? null,
+                'num_serie' => null,
             ]);
 
             // Supondo que você tenha o ID do item a ser atualizado
@@ -471,6 +478,7 @@ class CadastroInicialController extends Controller
                     'placa' => $numerosPlacas[$i] ?? null,
                     'renavam' => $numerosRenavam[$i] ?? null,
                     'chassi' => $numerosChassis[$i] ?? null,
+                    'num_serie' => null,
                 ]);
 
                 ModelCadastroInicial::create($dados);
@@ -508,11 +516,12 @@ class CadastroInicialController extends Controller
             ]));
         }
         app('flasher')->addSuccess('Material editado com sucesso!');
-        return redirect()->route('doacao');
+        return redirect()->route('doacao', ['id' => $idDocumento]);
     }
 
     public function deleteMaterial(Request $request)
     {
+        $idDocumento = $request->input('documento-id-excluir');
         $idMaterial = $request->input('delete-id');
         $material = ModelCadastroInicial::find($idMaterial);
         if ($material) {
@@ -521,8 +530,6 @@ class CadastroInicialController extends Controller
         } else {
             app('flasher')->addError('Material não encontrado!');
         }
-
-        app('flasher')->addSuccess('Material deletado com sucesso!');
-        return redirect()->route('doacao');
+        return redirect()->route('doacao', ['id' => $idDocumento]);
     }
 }

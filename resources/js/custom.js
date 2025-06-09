@@ -18,7 +18,7 @@ $(document).ready(function () {
         });
 
         // Para o select2 específico com tags: true
-        const $valorSelect = $('#valorAquisicaoMaterial, #valorVendaMaterial', this);
+        const $valorSelect = $('#valorAquisicaoMaterial, #valorVendaMaterial, #valorAquisicaoMaterialEditar, #valorVendaMaterialEditar', this);
         $valorSelect.select2({
             theme: "bootstrap-5",
             dropdownParent: $(this),
@@ -349,7 +349,7 @@ $(document).ready(function () {
             for (let i = 0; i < quantidade; i++) {
                 inputs.append(`
                     <label>Dados do ${i + 1}º Número de Série:</label>
-                    <input type="text" name="numerosSerie[]" class="form-control mt-2 mb-2" placeholder="Número de série ${i + 1}" value="${num_serie[i] || ''}" required />
+                    <input type="text" name="numerosSerieEditar[]" class="form-control mt-2 mb-2" placeholder="Número de série ${i + 1}" value="${num_serie[i] || ''}" required />
                 `);
             }
         } else if (tipoMaterial === 1 && checkVeiculo && quantidade > 0) {
@@ -423,6 +423,7 @@ $(document).ready(function () {
         };
 
         $('#edit-id').val(btn.data('id') || '');
+        $('#documento-id-editar').val(btn.data('documento-id') || '');
         $('#checkVeiculoEditar').prop('checked', !!btn.data('veiculo_placas')).trigger('change');
         $('#checkNumSerieEditar').prop('checked', !!btn.data('num_serie')).trigger('change');
         $('#categoriaMaterialEditar').val(btn.data('categoria')).trigger('change');
@@ -440,20 +441,23 @@ $(document).ready(function () {
     });
 });
 
- //Modal Excluir Material
-        document.addEventListener('DOMContentLoaded', function() {
-            const excluirLinks = document.querySelectorAll('.excluirSolicitacao');
+//Modal Excluir Material
+document.addEventListener('DOMContentLoaded', function () {
+    const excluirLinks = document.querySelectorAll('.excluirSolicitacao');
 
-            excluirLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    const id = this.getAttribute('data-id');
-                    const nome = this.getAttribute('data-nome');
+    excluirLinks.forEach(link => {
+        link.addEventListener('click', function () {
 
-                    document.getElementById('delete-id').value = id;
-                    document.getElementById('nome-material').textContent = nome;
-                });
-            });
+            const id = this.getAttribute('data-id');
+            const nome = this.getAttribute('data-nome');
+            const documentoId = this.getAttribute('data-documento-id');
+
+            document.getElementById('delete-id').value = id;
+            document.getElementById('nome-material').textContent = nome;
+            document.getElementById('documento-id-excluir').value = documentoId;
         });
+    });
+});
 
 // Selecione todos os campos com a classe 'proposta'
 document.querySelectorAll('.valor-monetario').forEach(function (input) {

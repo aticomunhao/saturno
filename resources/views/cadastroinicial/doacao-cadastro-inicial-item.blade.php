@@ -134,18 +134,19 @@
                                                         data-veiculo_chassis="{{ is_array($results->chassi) ? implode(',', $results->chassi) : $results->chassi }}"
                                                         data-num_serie="{{ is_array($results->num_serie) ? implode(',', $results->num_serie) : $results->num_serie }}"
                                                         data-data_fabricacao="{{ $results->dt_fab }}"
+                                                        data-documento-id="{{ $results->documento_origem }}"
                                                         data-data_fabricacao_modelo="{{ $results->dt_fab_modelo }}"
                                                         data-observacao="{{ $results->observacao }}" data-bs-toggle="modal"
                                                         data-bs-target="#modalEditarMaterial" title="Editar Material"
                                                         style="font-size: 1rem; color:#303030">
                                                         <i class="bi bi-pencil"></i>
                                                     </a>
-                                                    <a href="#"
-                                                        class="btn btn-sm btn-outline-danger excluirSolicitacao"
+                                                    <a class="btn btn-sm btn-outline-danger excluirSolicitacao"
                                                         data-tt="tooltip" style="font-size: 1rem; color:#303030"
                                                         data-placement="top" title="Excluir" data-bs-toggle="modal"
                                                         data-bs-target="#modalExcluirMaterial"
                                                         data-id="{{ $results->id }}"
+                                                        data-documento-id="{{ $results->documento_origem }}"
                                                         data-nome='{{ $results->ItemCatalogoMaterial->nome ?? 'N/A' }}'>
                                                         <i class="bi bi-trash"></i>
                                                     </a>
@@ -376,6 +377,7 @@
         action="{{ url('/cadastro-inicial-material/editar-material') }}">
         @method('PUT')
         <input type="hidden" name="edit-id" id="edit-id">
+        <input type="hidden" name="documento-id-editar" id="documento-id-editar">
         <div class="row">
             <div class="col-md-6" style="margin-top: 10px">
                 <label>Categoria do Material</label>
@@ -532,13 +534,14 @@
             <div class="col-md-12" style="margin-top: 10px">
                 <label>Observação</label>
                 <textarea type="text" class="form-control" id="observacaoMaterialEditar" name="observacaoMaterialEditar"
-                    rows="2"></textarea>
+                    rows="2" maxlength="300"></textarea>
             </div>
         </div>
     </x-modal-editar>
     <x-modal-excluir id="modalExcluirMaterial" labelId="modalExcluirMaterialLabel"
         action="{{ url('/cadastro-inicial-material/deletar') }}" title="Excluir Material">
         <input type="hidden" name="delete-id" id="delete-id">
+        <input type="hidden" name="documento-id-excluir" id="documento-id-excluir">
         <div class="row">
             <label>Deseja realmente <strong style="color: red">excluir</strong> o material <span
                     id="nome-material"></span>?</label>
@@ -551,13 +554,6 @@
             const isActive = btn.classList.toggle('ativo');
             btn.style.backgroundColor = isActive ? 'rgb(3, 109, 3)' : 'rgb(199, 7, 7)';
             document.getElementById('sacola').value = isActive ? '1' : '0';
-        });
-        document.querySelectorAll('.btn-editar-material').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const id = this.getAttribute('data-id');
-                const form = document.getElementById('formEditarMaterial');
-                form.action = `/cadastro-inicial-material/editar-material/${id}`;
-            });
         });
     </script>
 @endsection

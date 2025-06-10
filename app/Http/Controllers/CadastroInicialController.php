@@ -96,7 +96,6 @@ class CadastroInicialController extends Controller
         return view('cadastroInicial.gerenciar-cadastro-inicial', compact('request', 'CadastroInicial', 'status', 'solMat', 'tipoMaterial', 'tipoDocumento', 'nomeMaterial', 'deposito', 'destinacao', 'categoriaMaterial', 'empresa'))
             ->with('i', (request()->input('page', 1) - 1) * 20);
     }
-
     public function storeTermoDoacao()
     {
 
@@ -106,10 +105,9 @@ class CadastroInicialController extends Controller
 
         ]);
 
-        app('flasher')->addSuccess('Termo de Doação Criado com Sucesso, Adicione os materiais Necessários');
+        app('flasher')->addSuccess('Adicione os materiais referentes a essa doação');
         return redirect("/gerenciar-cadastro-inicial/doacao/{$CadastroInicialDoacao->id}");
     }
-
     public function createDoacao($id)
     {
         $idDocumento = $id;
@@ -133,7 +131,6 @@ class CadastroInicialController extends Controller
 
         return view("cadastroInicial.doacao-cadastro-inicial-item", compact('result', 'bucaItemCatalogo', 'resultDocumento', 'buscaSetor', 'buscaEmpresa', 'buscaCategoria', 'buscaTipoMaterial', 'idDocumento', 'buscaUnidadeMedida', 'buscaSexo'));
     }
-
     public function storeDoacao(Request $request, $id)
     {
         $sacola = $request->input('sacola', 0); // vai pegar o valor 0 ou 1
@@ -188,63 +185,68 @@ class CadastroInicialController extends Controller
 
         return redirect()->route('CadastroInicial');
     }
-
-    public function createCompraDireta()
+    public function storeTermoCompra()
     {
-        $sql = "Select
-                    it.id,
-                    it.nome,
-                    c.nome categoria
-                    from item_catalogo_material it
-                    join tipo_categoria_material c on it.id_categoria_material = c.id
-                ";
 
-        $resultItem = DB::select($sql);
+        $CadastroInicialCompra = ModelDocumento::create([
+            'id_tp_doc' => '1',
+            'dt_doc' => Carbon::now(),
 
-        return view('cadastroInicial/compra-direta-cadastro-inicial-item', compact('resultItem'));
+        ]);
+
+        app('flasher')->addSuccess('Adicione os materiais referentes a essa compra');
+        return redirect("/gerenciar-cadastro-inicial/compra-direta/{$CadastroInicialCompra->id}");
     }
-
-    public function storeCompraDireta(Request $request)
+    public function createCompraDireta(Request $request, $id)
     {
+        $idDocumento = $id;
+        $setor = session('usuario.setor');
 
-        $Adquirido = isset($request->checkAdq) ? 1 : 0;
-        $Avariado = isset($request->checkAvariado) ? 1 : 0;
+        $buscaCategoria = ModelTipoCategoriaMt::all();
+        $buscaEmpresa = ModelEmpresa::all();
+        $buscaMarca = ModelMarca::all();
+        $buscaTamanho = ModelTamanho::all();
+        $buscaCor = ModelCor::all();
+        $buscaFaseEtaria = ModelFaseEtaria::all();
+        $buscaSexo = ModelSexo::all();
+        $bucaItemCatalogo = ModelItemCatalogoMaterial::all();
+        $buscaUnidadeMedida = ModelUnidadeMedida::where('tipo', '2')->get();
+        $buscaSetor = ModelSetor::whereIn('id', $setor)->get();
+        $materiais = ModelMatProposta::with('documentoMaterial', 'tipoUnidadeMedida', 'tipoItemCatalogoMaterial', 'tipoCategoria', 'tipoMarca', 'tipoTamanho', 'tipoCor', 'tipoFaseEtaria', 'tipoSexo')->where('id_sol_mat', $id)->get();
+        $buscaTipoMaterial = ModelTipoMaterial::all();
 
-        for ($i = 0; $i < $request->input('qtdItens'); $i++) {
+        $resultDocumento = ModelDocumento::where('id', $id)->first();
+        $result = ModelCadastroInicial::with('ItemCatalogoMaterial', 'Embalagem', 'CategoriaMaterial', 'TipoMaterial')->where('documento_origem', $id)->orderBy('id', 'asc')->paginate(10);
 
-            DB::table('item_material')->insert([
-                'id_item_catalogo_material' => $request->input('item_material'),
-                'observacao' => $request->input('observacao'),
-                'data_cadastro' => date("m-d-Y"),
-                'id_usuario_cadastro' => session()->get('usuario.id_usuario'),
-                'id_tipo_embalagem' => $request->input('embalagem'),
-                'id_tipo_unidade_medida' => $request->input('und_med'),
-                'quantidade_embalagem' => $request->input('qtdEmb'),
-                'adquirido' => $Adquirido,
-                'valor_venda' => $request->input('valor_venda'),
-                'id_marca' => $request->input('marca'),
-                'id_tamanho' => $request->input('tamanho'),
-                'id_cor' => $request->input('cor'),
-                'id_tipo_material' => $request->input('tp_mat'),
-                'id_fase_etaria' => $request->input('fase_etaria'),
-                'id_tp_sexo' => $request->input('sexo'),
-                'id_deposito' => $request->input('deposito'),
-                'valor_aquisicao' => $request->input('vlr_aqs'),
-                'ref_fabricante' => $request->input('ref_fab'),
-                'avariado' => $Avariado,
-                'data_validade' => $request->input('dt_validade'),
-                'liberacao_venda' => 0,
-                'id_tipo_situacao' => '1',
-            ]);
+        return view("cadastroInicial/compra-direta-cadastro-inicial-item", compact('result', 'bucaItemCatalogo', 'resultDocumento', 'buscaSetor', 'buscaEmpresa', 'buscaCategoria', 'buscaTipoMaterial', 'idDocumento', 'buscaUnidadeMedida', 'buscaSexo'));
+    }
+    public function storeCompraDireta(Request $request, $id)
+    {
+        $materiais = ModelCadastroInicial::with(['ItemCatalogoMaterial', 'Embalagem', 'CategoriaMaterial', 'TipoMaterial'])
+            ->where('documento_origem', $id)
+            ->get();
+
+        foreach ($materiais as $material) {
+            // Verifica se já existe uma movimentação para esse material
+            $jaExiste = ModelMovimentacaoFisica::where('id_cadastro_inicial', $material->id)->exists();
+
+            if (!$jaExiste) {
+                ModelMovimentacaoFisica::create([
+                    'id_destinatario' => session('usuario.id_usuario'),
+                    'data' => Carbon::now(),
+                    'id_deposito_destino' => 1,
+                    'id_tp_movimento' => 1,
+                    'id_cadastro_inicial' => $material->id
+                ]);
+            }
         }
 
-        //dd($request);
-
-        return redirect()->action('cadastroInicialController@index');
+        return redirect()->route('CadastroInicial');
     }
     public function storeMaterial(Request $request, $id)
     {
         $idDocumento = $id;
+        $tipoDocumento = ModelDocumento::find($id)->id_tp_doc;
         $checkAvariado = isset($request->checkAvariado) ? 1 : 0;
         $checkAplicacao = isset($request->checkAplicacao) ? 1 : 0;
         $checkNumSerie = isset($request->checkNumSerie) ? 1 : 0;
@@ -300,7 +302,9 @@ class CadastroInicialController extends Controller
                     'num_serie' => $numerosSerie[$i] ?? null,
                 ]);
 
-                ModelCadastroInicial::create($dados);
+                $material = ModelCadastroInicial::create($dados);
+
+                $this->criarMovimentacaoFisica($material->id);
             }
         } else if ($tipoMaterial === 1 && $checkVeiculo == 1) {
             $numerosPlacas = $request->input('numerosPlacas', []);
@@ -315,7 +319,9 @@ class CadastroInicialController extends Controller
                     'chassi' => $numerosChassis[$i] ?? null,
                 ]);
 
-                ModelCadastroInicial::create($dados);
+                $material = ModelCadastroInicial::create($dados);
+
+                $this->criarMovimentacaoFisica($material->id);
             }
         } else if ($tipoMaterial === 1) {
 
@@ -328,23 +334,32 @@ class CadastroInicialController extends Controller
                     'chassi' => null,
                 ]);
 
-                ModelCadastroInicial::create($dados);
+                $material = ModelCadastroInicial::create($dados);
+
+                $this->criarMovimentacaoFisica($material->id);
             }
         } else {
-            ModelCadastroInicial::create(array_merge($dadosComuns, [
+            $material = ModelCadastroInicial::create(array_merge($dadosComuns, [
                 'quantidade' => $quantidade,
                 'num_serie' => null,
                 'placa' => null,
                 'renavam' => null,
                 'chassi' => null,
             ]));
+
+            $this->criarMovimentacaoFisica($material->id);
         }
 
+        $rotas = [
+            16 => 'doacao',
+            1 => 'compraDireta',
+        ];
+
+        $rota = $rotas[$tipoDocumento] ?? 'CadastroInicial';
 
         app('flasher')->addSuccess('Material adicionado com sucesso!');
-        return redirect()->route('doacao', ['id' => $idDocumento]);
+        return redirect()->route($rota, ['id' => $idDocumento]);
     }
-
     public function storeTermoMaterial(Request $request, $id)
     {
         $idDocumento = $id;
@@ -380,7 +395,6 @@ class CadastroInicialController extends Controller
 
         return redirect()->route('doacao', ['id' => $idDocumento]);
     }
-
     public function gerarPDFDoacao($id)
     {
         $documento = ModelDocumento::with('empresa')->where('id', $id)->firstOrFail();
@@ -518,18 +532,37 @@ class CadastroInicialController extends Controller
         app('flasher')->addSuccess('Material editado com sucesso!');
         return redirect()->route('doacao', ['id' => $idDocumento]);
     }
-
     public function deleteMaterial(Request $request)
     {
         $idDocumento = $request->input('documento-id-excluir');
+        $tipoDocumento = ModelDocumento::find($idDocumento)->id_tp_doc;
         $idMaterial = $request->input('delete-id');
         $material = ModelCadastroInicial::find($idMaterial);
         if ($material) {
+            ModelMovimentacaoFisica::where('id_cadastro_inicial', $idMaterial)->delete();
             $material->delete();
+
             app('flasher')->addSuccess('Material deletado com sucesso!');
         } else {
             app('flasher')->addError('Material não encontrado!');
         }
-        return redirect()->route('doacao', ['id' => $idDocumento]);
+        $rotas = [
+            16 => 'doacao',
+            1 => 'compraDireta',
+        ];
+
+        $rota = $rotas[$tipoDocumento] ?? 'CadastroInicial';
+
+        return redirect()->route($rota, ['id' => $idDocumento]);
+    }
+    private function criarMovimentacaoFisica($materialId)
+    {
+        ModelMovimentacaoFisica::create([
+            'id_destinatario' => session('usuario.id_usuario'),
+            'data' => Carbon::now(),
+            'id_deposito_destino' => 1,
+            'id_tp_movimento' => 1,
+            'id_cadastro_inicial' => $materialId
+        ]);
     }
 }

@@ -30,7 +30,7 @@
                                 </div>
 
                                 <div class="col-md d-flex justify-content-end">
-                                    <a href="gerenciar-cadastro-inicial/compra-direta" class="btn btn-success"
+                                    <a href="/salvar-termo-compra" class="btn btn-success"
                                         style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; ">
                                         COMPRA DIRETA
                                     </a>
@@ -136,12 +136,24 @@
                                                     title="Visualizar">
                                                     <i class="bi bi-search"></i>
                                                 </a>
-                                                <a href="/gerenciar-cadastro-inicial/doacao/{{ $CadastroInicials->documento_origem }}"
-                                                    class="btn btn-sm btn-outline-warning" data-tt="tooltip"
-                                                    style="font-size: 1rem; color:#303030" data-placement="top"
-                                                    title="Editar">
-                                                    <i class="bi bi-pencil"></i>
-                                                </a>
+                                                @php
+                                                    $idTpDoc = $CadastroInicials->docOrigem->id_tp_doc ?? null;
+                                                    $documentoOrigem = $CadastroInicials->documento_origem;
+
+                                                    $rota = match ($idTpDoc) {
+                                                        16 => "/gerenciar-cadastro-inicial/doacao/{$documentoOrigem}",
+                                                        1
+                                                            => "/gerenciar-cadastro-inicial/compra-direta/{$documentoOrigem}",
+                                                        default => null,
+                                                    };
+                                                @endphp
+                                                @if ($rota)
+                                                    <a href="{{ $rota }}" class="btn btn-sm btn-outline-warning"
+                                                        data-tt="tooltip" style="font-size: 1rem; color:#303030"
+                                                        data-placement="top" title="Editar">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </a>
+                                                @endif
                                                 {{-- @if (in_array($aquisicaos->tipoStatus->id, ['3', '2'])) --}}
                                                 <a href="" class="btn btn-sm btn-outline-primary" data-tt="tooltip"
                                                     style="font-size: 1rem; color:#303030" data-placement="top"

@@ -116,7 +116,7 @@
                                 </div>
                             </div>
                             <br>
-                            {{-- <div class="card" style="border-color: #355089;">
+                             <div class="card" style="border-color: #355089;">
                                 <div class="card-header">
                                     <div class="ROW">
                                         <h5 class="col-12" style="color: #355089">
@@ -425,7 +425,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div> --}}
+                            </div>
                             <br>
                             <div class="botões">
                                 <a href="javascript:history.back()"

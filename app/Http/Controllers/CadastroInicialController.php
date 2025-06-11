@@ -202,6 +202,7 @@ class CadastroInicialController extends Controller
         $idDocumento = $id;
         $setor = session('usuario.setor');
 
+        $tiposDocumento = ModelTipoDocumento::all();
         $buscaCategoria = ModelTipoCategoriaMt::all();
         $buscaEmpresa = ModelEmpresa::all();
         $buscaMarca = ModelMarca::all();
@@ -215,10 +216,10 @@ class CadastroInicialController extends Controller
         $materiais = ModelMatProposta::with('documentoMaterial', 'tipoUnidadeMedida', 'tipoItemCatalogoMaterial', 'tipoCategoria', 'tipoMarca', 'tipoTamanho', 'tipoCor', 'tipoFaseEtaria', 'tipoSexo')->where('id_sol_mat', $id)->get();
         $buscaTipoMaterial = ModelTipoMaterial::all();
 
-        $resultDocumento = ModelDocumento::where('id', $id)->first();
+        $resultDocumento = ModelDocumento::with('tipoDocumento')->where('id', $id)->first();
         $result = ModelCadastroInicial::with('ItemCatalogoMaterial', 'Embalagem', 'CategoriaMaterial', 'TipoMaterial')->where('documento_origem', $id)->orderBy('id', 'asc')->paginate(10);
 
-        return view("cadastroInicial/compra-direta-cadastro-inicial-item", compact('result', 'bucaItemCatalogo', 'resultDocumento', 'buscaSetor', 'buscaEmpresa', 'buscaCategoria', 'buscaTipoMaterial', 'idDocumento', 'buscaUnidadeMedida', 'buscaSexo'));
+        return view("cadastroInicial/compra-direta-cadastro-inicial-item", compact('result', 'tiposDocumento', 'bucaItemCatalogo', 'resultDocumento', 'buscaSetor', 'buscaEmpresa', 'buscaCategoria', 'buscaTipoMaterial', 'idDocumento', 'buscaUnidadeMedida', 'buscaSexo'));
     }
     public function storeCompraDireta(Request $request, $id)
     {
@@ -350,12 +351,7 @@ class CadastroInicialController extends Controller
             $this->criarMovimentacaoFisica($material->id);
         }
 
-        $rotas = [
-            16 => 'doacao',
-            1 => 'compraDireta',
-        ];
-
-        $rota = $rotas[$tipoDocumento] ?? 'CadastroInicial';
+        $rota = $this->definirRotaPorTipoDocumento($tipoDocumento);
 
         app('flasher')->addSuccess('Material adicionado com sucesso!');
         return redirect()->route($rota, ['id' => $idDocumento]);
@@ -363,6 +359,7 @@ class CadastroInicialController extends Controller
     public function storeTermoMaterial(Request $request, $id)
     {
         $idDocumento = $id;
+        $tipoDocumento = ModelDocumento::find($id)->id_tp_doc;
 
         $dadosAtualizados = [];
 
@@ -371,14 +368,19 @@ class CadastroInicialController extends Controller
             $dadosAtualizados['id_empresa'] = $request->input('empresaDocDoacao');
         }
 
-        // Atualiza id_setor se veio no request e não está vazio
-        if ($request->filled('setorDocDoacao')) {
-            $dadosAtualizados['id_setor'] = $request->input('setorDocDoacao');
+        // Atualiza id_tp_doc se veio no request e não está vazio
+        if ($request->filled('tipoDocCompra')) {
+            $dadosAtualizados['id_tp_doc'] = $request->input('tipoDocCompra');
         }
 
         // Atualiza número se veio no request e não está vazio
         if ($request->filled('numeroDocDoacao')) {
             $dadosAtualizados['numero'] = $request->input('numeroDocDoacao');
+        }
+
+        // Atualiza valor se veio no request e não está vazio
+        if ($request->filled('valorDocCompra')) {
+            $dadosAtualizados['valor'] = $request->input('valorDocCompra');
         }
 
         // Verifica se um arquivo foi enviado e é válido
@@ -393,7 +395,10 @@ class CadastroInicialController extends Controller
             ModelDocumento::where('id', $idDocumento)->update($dadosAtualizados);
         }
 
-        return redirect()->route('doacao', ['id' => $idDocumento]);
+        $rota = $this->definirRotaPorTipoDocumento($tipoDocumento);
+
+        app('flasher')->addSuccess('Material adicionado com sucesso!');
+        return redirect()->route($rota, ['id' => $idDocumento]);
     }
     public function gerarPDFDoacao($id)
     {
@@ -418,6 +423,7 @@ class CadastroInicialController extends Controller
     public function editMaterial(Request $request)
     {
         $idDocumento = $request->input('documento-id-editar');
+        $tipoDocumento = ModelDocumento::find($idDocumento)->id_tp_doc;
         $idCadastro = $request->input('edit-id');
         $checkAvariado = isset($request->checkAvariadoEditar) ? 1 : 0;
         $checkAplicacao = isset($request->checkAplicacaoEditar) ? 1 : 0;
@@ -529,8 +535,11 @@ class CadastroInicialController extends Controller
                 'chassi' => null,
             ]));
         }
+
+        $rota = $this->definirRotaPorTipoDocumento($tipoDocumento);
+
         app('flasher')->addSuccess('Material editado com sucesso!');
-        return redirect()->route('doacao', ['id' => $idDocumento]);
+        return redirect()->route($rota, ['id' => $idDocumento]);
     }
     public function deleteMaterial(Request $request)
     {
@@ -546,12 +555,8 @@ class CadastroInicialController extends Controller
         } else {
             app('flasher')->addError('Material não encontrado!');
         }
-        $rotas = [
-            16 => 'doacao',
-            1 => 'compraDireta',
-        ];
 
-        $rota = $rotas[$tipoDocumento] ?? 'CadastroInicial';
+        $rota = $this->definirRotaPorTipoDocumento($tipoDocumento);
 
         return redirect()->route($rota, ['id' => $idDocumento]);
     }
@@ -564,5 +569,13 @@ class CadastroInicialController extends Controller
             'id_tp_movimento' => 1,
             'id_cadastro_inicial' => $materialId
         ]);
+    }
+    private function definirRotaPorTipoDocumento($tipoDocumento)
+    {
+        return match ($tipoDocumento) {
+            16 => 'doacao',
+            1, 4, 6, 7, 8 => 'compraDireta',
+            default => 'CadastroInicial',
+        };
     }
 }

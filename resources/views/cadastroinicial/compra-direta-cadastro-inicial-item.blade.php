@@ -165,8 +165,8 @@
         <div class="row material-item">
             <div class="col-md-6" style="margin-top: 10px">
                 <label>Categoria do Material</label>
-                <select class="form-select  select2" id="categoriaMaterial"
-                    style="border: 1px solid #999999; padding: 5px;" name="categoriaMaterial">
+                <select class="form-select  select2" id="categoriaMaterial" style="border: 1px solid #999999; padding: 5px;"
+                    name="categoriaMaterial">
                     <option value="" disabled selected>Selecione...
                     </option>
                     @foreach ($buscaCategoria as $buscaCategorias)
@@ -318,12 +318,12 @@
         </div>
     </x-modal-incluir>
     <x-modal-incluir id="modalIncluirTermo" labelId="modalIncluirTermoLabel"
-        action="{{ url('/cadastro-inicial-material/incluir-termo/' . $idDocumento) }}" title="Inclusão de Termo">
+        action="{{ url('/cadastro-inicial-material/incluir-termo/' . $idDocumento) }}" title="Inclusão de Nota Fiscal">
         <div class="row termo">
             <div class="col-md-6">
                 <label>Empresa/Entidade</label>
-                <select class="form-select  select2" id="empresaDocDoacao"
-                    style="border: 1px solid #999999; padding: 5px;" name="empresaDocDoacao">
+                <select class="form-select  select2" id="empresaDocCompra"
+                    style="border: 1px solid #999999; padding: 5px;" name="empresaDocCompra">
                     <option value="" disabled selected>Selecione...
                     </option>
                     @foreach ($buscaEmpresa as $buscaEmpresas)
@@ -333,31 +333,37 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-6">
-                <label>Selecione seu Setor</label>
-                <br>
-                <select class="form-select  select2" id="setorDocDoacao" style="border: 1px solid #999999; padding: 5px;"
-                    name="setorDocDoacao">
-                    <option value="" disabled selected>Selecione...
-                    </option>
-                    @foreach ($buscaSetor as $buscaSetors)
-                        <option value="{{ $buscaSetors->id }}">
-                            {{ $buscaSetors->sigla }} - {{ $buscaSetors->nome }}
+            <div class="col-md-6 mt-1">
+                <label>Tipo da Nota Fiscal</label>
+                <select class="form-control select2" id="tipoDocCompra"
+                    name="tipoDocCompra">
+                    <option value="">Selecione o tipo</option>
+                    @foreach ($tiposDocumento as $tipo)
+                        <option value="{{ $tipo->id }}"
+                            {{ old('tipoDocCompra', $resultDocumento->tipoDocumento->id ?? '') == $tipo->id ? 'selected' : '' }}>
+                            {{ $tipo->sigla }} - {{ $tipo->descricao }}
                         </option>
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-6">
-                <label>Alterar Número da Proposta</label>
+            <div class="col-md-6 mt-1">
+                <label>Número da Nota Fiscal</label>
                 <input type="text" class="form-control" style="background-color: white; border-color: gray;"
-                    value="{{ old('numeroDocDoacao', $resultDocumento->numero ?? '') }}" id="numeroDocDoacao"
-                    name="numeroDocDoacao">
+                    value="{{ old('numeroDocCompra', $resultDocumento->numero ?? '') }}" id="numeroDocCompra"
+                    name="numeroDocCompra">
+            </div>
+            <div class="col-md-6 mt-1">
+                <label>Valor Total</label>
+                <input type="text" class="form-control valor-monetario"
+                    style="background-color: white; border-color: gray;"
+                    value="{{ old('valorDocCompra', $resultDocumento->valor ?? '') }}" id="valorDocCompra"
+                    name="valorDocCompra">
             </div>
             <!-- Arquivo da Proposta -->
-            <div class="col-md-6">
+            <div class="col-md-12 mt-1">
                 <label>Arquivo do Termo de Doação</label>
                 <input type="file" class="form-control" style="background-color: white; border-color: gray;"
-                    id="arquivoDocDoacao" name="arquivoDocDoacao" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
+                    id="arquivoDocCompra" name="arquivoDocCompra" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
             </div>
         </div>
     </x-modal-incluir>

@@ -346,27 +346,13 @@
                 </select>
             </div>
             <div class="col-md-6">
-                <label>Selecione seu Setor</label>
-                <br>
-                <select class="form-select  select2" id="setorDocDoacao" style="border: 1px solid #999999; padding: 5px;"
-                    name="setorDocDoacao">
-                    <option value="" disabled selected>Selecione...
-                    </option>
-                    @foreach ($buscaSetor as $buscaSetors)
-                        <option value="{{ $buscaSetors->id }}">
-                            {{ $buscaSetors->sigla }} - {{ $buscaSetors->nome }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-md-6">
                 <label>Alterar Número da Proposta</label>
                 <input type="text" class="form-control" style="background-color: white; border-color: gray;"
                     value="{{ old('numeroDocDoacao', $resultDocumento->numero ?? '') }}" id="numeroDocDoacao"
                     name="numeroDocDoacao">
             </div>
             <!-- Arquivo da Proposta -->
-            <div class="col-md-6">
+            <div class="col-md-12 mt-2">
                 <label>Arquivo do Termo de Doação</label>
                 <input type="file" class="form-control" style="background-color: white; border-color: gray;"
                     id="arquivoDocDoacao" name="arquivoDocDoacao" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">

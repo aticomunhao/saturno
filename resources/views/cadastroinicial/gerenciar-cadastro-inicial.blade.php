@@ -140,13 +140,15 @@
                                                     $idTpDoc = $CadastroInicials->docOrigem->id_tp_doc ?? null;
                                                     $documentoOrigem = $CadastroInicials->documento_origem;
 
-                                                    $rota = match ($idTpDoc) {
-                                                        16 => "/gerenciar-cadastro-inicial/doacao/{$documentoOrigem}",
-                                                        1
+                                                    $rota = match (true) {
+                                                        $idTpDoc === 16
+                                                            => "/gerenciar-cadastro-inicial/doacao/{$documentoOrigem}",
+                                                        in_array($idTpDoc, [1, 4, 6, 7, 8])
                                                             => "/gerenciar-cadastro-inicial/compra-direta/{$documentoOrigem}",
                                                         default => null,
                                                     };
                                                 @endphp
+
                                                 @if ($rota)
                                                     <a href="{{ $rota }}" class="btn btn-sm btn-outline-warning"
                                                         data-tt="tooltip" style="font-size: 1rem; color:#303030"
@@ -155,40 +157,43 @@
                                                     </a>
                                                 @endif
                                                 {{-- @if (in_array($aquisicaos->tipoStatus->id, ['3', '2'])) --}}
-                                                <a href="" class="btn btn-sm btn-outline-primary" data-tt="tooltip"
+                                                {{-- <a href="" class="btn btn-sm btn-outline-primary" data-tt="tooltip"
                                                     style="font-size: 1rem; color:#303030" data-placement="top"
                                                     title="Completar Cadastro">
                                                     <i class="bi bi-check-lg"></i>
-                                                </a>
+                                                </a> --}}
                                                 {{-- @endif --}}
                                                 {{-- @if ($aquisicaos->tipoStatus->id == '3') --}}
-                                                <a href="" class="btn btn-sm btn-outline-success" data-tt="tooltip"
+                                                {{-- <a href="" class="btn btn-sm btn-outline-success" data-tt="tooltip"
                                                     style="font-size: 1rem; color:#303030" data-placement="top"
                                                     title="Material Devolvido">
                                                     <i class="bi bi-clipboard-check"></i>
-                                                </a>
+                                                </a> --}}
                                                 {{-- @endif --}}
                                                 {{-- @if ($aquisicaos->tipoStatus->id == '1') --}}
-                                                <a href="" class="btn btn-sm btn-outline-primary" data-tt="tooltip"
+                                                {{-- <a href="" class="btn btn-sm btn-outline-primary" data-tt="tooltip"
                                                     style="font-size: 1rem; color:#303030" data-placement="top"
                                                     title="Enviar Material">
                                                     <i class="bi bi-cart-check"></i>
-                                                </a>
+                                                </a> --}}
                                                 {{-- @endif --}}
                                                 {{-- @if (isset($aquisicaos->aut_usu_pres, $aquisicaos->aut_usu_adm, $aquisicaos->aut_usu_daf)) --}}
-                                                <a href="" class="btn btn-sm btn-outline-info" data-tt="tooltip"
+                                                {{-- <a href="" class="btn btn-sm btn-outline-info" data-tt="tooltip"
                                                     style="font-size: 1rem; color:#303030" data-placement="top"
                                                     title="Solicitar Teste">
                                                     <i class="bi bi-hand-thumbs-up"></i>
-                                                </a>
+                                                </a> --}}
                                                 {{-- @endif --}}
                                                 {{-- @if ($aquisicaos->tipoStatus->id == '1') --}}
-                                                <a href="#" class="btn btn-sm btn-outline-danger excluirSolicitacao"
-                                                    data-tt="tooltip" style="font-size: 1rem; color:#303030"
-                                                    data-placement="top" title="Excluir" data-bs-toggle="modal"
-                                                    data-bs-target="#modalExcluirMaterial">
-                                                    <i class="bi bi-trash"></i>
-                                                </a>
+                                                <a class="btn btn-sm btn-outline-danger excluirSolicitacao"
+                                                        data-tt="tooltip" style="font-size: 1rem; color:#303030"
+                                                        data-placement="top" title="Excluir" data-bs-toggle="modal"
+                                                        data-bs-target="#modalExcluirMaterial"
+                                                        data-id="{{ $CadastroInicials->id }}"
+                                                        data-documento-id="{{ $CadastroInicials->documento_origem }}"
+                                                        data-nome='{{ $CadastroInicials->ItemCatalogoMaterial->nome ?? 'N/A' }}'>
+                                                        <i class="bi bi-trash"></i>
+                                                    </a>
                                                 {{-- @endif --}}
                                             </td>
                                         </tr>
@@ -353,7 +358,15 @@
             </div>
         </div>
     </form>{{-- Final Formulario de pesquisa --}}
-
+    <x-modal-excluir id="modalExcluirMaterial" labelId="modalExcluirMaterialLabel"
+        action="{{ url('/cadastro-inicial-material/deletar') }}" title="Excluir Material">
+        <input type="hidden" name="delete-id" id="delete-id">
+        <input type="hidden" name="documento-id-excluir" id="documento-id-excluir">
+        <div class="row">
+            <label>Deseja realmente <strong style="color: red">excluir</strong> o material <span
+                    id="nome-material"></span>?</label>
+        </div>
+    </x-modal-excluir>
     @if (session('pdf_base64'))
         <iframe id="pdfFrame" style="display:none;"></iframe>
 

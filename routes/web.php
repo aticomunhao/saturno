@@ -269,7 +269,7 @@ Route::get('/substituicao/buscaritem', [GerenciarDevolucoesController::class, 'b
 
 
 
-Route::name('pagamentos')->group(function () { });
+Route::name('pagamentos')->group(function () {});
 
 
 Route::get('/gerenciar-pagamentos/{id}', [GerenciarpagamentoController::class, 'show'])->name('pagamento.show');
@@ -422,7 +422,7 @@ Route::any('/movimentacao-fisica/solicitar-teste/confere', [GerenciarMovimentaca
 Route::any('/movimentacao-fisica/solicitar-teste/store', [GerenciarMovimentacaoFisicaController::class, 'solicitar_teste_store'])->name('movimentacao-fisica.solicitar-teste.create');
 Route::get('/retorna-cadastro-inicial', [GerenciarMovimentacaoFisicaController::class, 'show'])->name('movimentacao-fisica.show');
 // Route::get('/movimentacao-fisica/excluir/{id}', [GerenciarMovimentacaoFisica::class, 'destroy'])->name('movimentacao.delete');
-Route::any('/retorna-materiais-por-data-cadastro/{data}', [GerenciarMovimentacaoFisicaController::class, 'retornaMateriaisPorDataCadastro'])->name('movimentacao-fisica.retorna-materiais-por-data-cadastro');
+Route::any('/retorna-materiais-por-data-cadastro/{data_inicio}/{data_fim}', [GerenciarMovimentacaoFisicaController::class, 'retornaMateriaisPorDataCadastro'])->name('movimentacao-fisica.retorna-materiais-por-data-cadastro');
 Route::any('/movimentacao-fisica/homologar', [GerenciarMovimentacaoFisicaController::class, 'homologar'])->name('movimentacao-fisica.homologar');
 
 Route::get('/marcas/{categoriaId}', [PesquisaController::class, 'getMarcas']);

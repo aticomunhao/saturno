@@ -93,9 +93,9 @@ class GerenciarMovimentacaoFisicaController extends Controller
         //   dd($cadastro_inicial);
         return view('movimentacao-fisica.novo-solicitar-teste', compact('cadastro_inicial', 'documentos'));
     }
-    public  function solicitar_teste_ajax_para_material($data)
+    public  function solicitar_teste_ajax_para_material($data_inicio, $data_fim)
     {
-        // dd($request->all());
+        // dd($data_inicio, $data_fim);
         $materiais = ModelCadastroInicial::with([
             'Status',
             'SolOrigem',
@@ -105,9 +105,8 @@ class GerenciarMovimentacaoFisicaController extends Controller
             'CategoriaMaterial',
             'TipoMaterial'
         ])
-            ->where('data_cadastro', $data)
+            ->whereBetween('data_cadastro', [$data_inicio, $data_fim])
             ->get();
-
 
         return response()->json($materiais);
     }

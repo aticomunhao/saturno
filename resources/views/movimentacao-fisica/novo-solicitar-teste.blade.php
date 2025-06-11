@@ -143,8 +143,21 @@
             });
             $('#id_data_fim_por_material, #id_data_inicio_por_material').on('input change', function() {
                 if (verificarCampos()) {
-                    console.log('Campos de data preenchidos corretamente');
+                    var dataInicio = $('#id_data_inicio_por_material').val();
+                    var dataFim = $('#id_data_fim_por_material').val();
+                    console.log('Data Início:', dataInicio);
+                    console.log('Data Fim:', dataFim);
+                    $.ajax({
+                        type: "method",
+                        url: "/retorna-materiais-por-data-cadastro/" + dataInicio + '/' + dataFim,
+                        data: "data",
+                        dataType: "dataType",
+                        success: function(response) {
+                        }
+                    });
 
+                    console.log('Campos de data preenchidos corretamente');
+                    $('#id_material').attr('disabled', false);
                 } else {
                     console.log('Campos de data não preenchidos corretamente');
                 }

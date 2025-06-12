@@ -77,8 +77,8 @@
                                 </div>
                                 <!-- Botão Adicionar Material à direita -->
                                 <div>
-                                    <button type="button" class="btn btn-success" id="addMaterial" data-bs-toggle="modal"
-                                        data-bs-target="#modalIncluirMaterial">
+                                    <button type="button" class="btn btn-success me-2" id="addMaterial"
+                                        data-bs-toggle="modal" data-bs-target="#modalIncluirMaterial">
                                         Adicionar Material
                                     </button>
                                 </div>
@@ -1146,117 +1146,337 @@
             </button>
         </div>
     </form>
-    <!-- Modal Incluir Material -->
-    <div class="modal fade" id="modalIncluirMaterial" tabindex="-1" aria-labelledby="modalIncluirMaterialLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <form class="form-horizontal" method="POST"
-                action="{{ url('/incluir-material-solicitacao/' . $idSolicitacao) }}">
-                @csrf
-                <div class="modal-content">
-                    <div class="modal-header" style="background-color:lightblue;">
-                        <h5 class="modal-title" id="modalIncluirMaterialLabel">
-                            Inclusão de Material
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body" id="modal-body-content-incluir-material">
-                        <div class="row material-item">
-                            <div class="col-md">
-                                <label>Categoria do Material</label>
-                                <select class="form-select  select2" id="categoriaMaterial"
-                                    style="border: 1px solid #999999; padding: 5px;" name="categoriaMaterial">
-                                    <option value="" disabled selected>Selecione...
-                                    </option>
-                                    @foreach ($buscaCategoria as $buscaCategorias)
-                                        <option value="{{ $buscaCategorias->id }}">
-                                            {{ $buscaCategorias->nome }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md">
-                                <label>Nome do Material</label>
-                                <select class="form-select js-nome-material select2" id="nomeMaterial"
-                                    style="border: 1px solid #999999; padding: 5px;" name="nomeMaterial">
-                                    <option value="" disabled selected>Selecione...
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <label>Unid. Medida</label>
-                                <select class="form-select  select2" style="border: 1px solid #999999; padding: 5px;"
-                                    name="UnidadeMedidaMaterial">
-                                    <option value="" disabled selected>Selecione...
-                                    </option>
-                                    @foreach ($buscaUnidadeMedida as $buscaUnidadeMedidas)
-                                        <option value="{{ $buscaUnidadeMedidas->id }}">
-                                            {{ $buscaUnidadeMedidas->nome }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <label>Quantidade</label>
-                                <input type="number" class="form-control" name="quantidadeMaterial">
-                            </div>
-                        </div>
-                        <div class="row material-item" style="margin-top: 20px">
-                            <div class="col-md">
-                                <label>Marca</label>
-                                <select class="form-select js-marca-material select2" id="marcaMaterial"
-                                    style="border: 1px solid #999999; padding: 5px;" name="marcaMaterial">
-                                    <option value="" disabled selected>Selecione...
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="col-md">
-                                <label>Tamanho</label>
-                                <select class="form-select js-tamanho-material select2" id="tamanhoMaterial"
-                                    style="border: 1px solid #999999; padding: 5px;" name="tamanhoMaterial">
-                                    <option value="" disabled selected>Selecione...
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="col-md">
-                                <label>Cor</label>
-                                <select class="form-select js-cor-material select2" id="corMaterial"
-                                    style="border: 1px solid #999999; padding: 5px;" name="corMaterial">
-                                    <option value="" disabled selected>Selecione...
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="col-md">
-                                <label>Fase Etária</label>
-                                <select class="form-select js-fase-material select2" id="faseEtariaMaterial"
-                                    style="border: 1px solid #999999; padding: 5px;" name="faseEtariaMaterial">
-                                    <option value="" disabled selected>Selecione...
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="col-md">
-                                <label>Sexo</label>
-                                <select class="form-select js-sexo-material select2" id="sexoMaterial"
-                                    style="border: 1px solid #999999; padding: 5px;" name="sexoMaterial">
-                                    <option value="" disabled selected>Selecione...
-                                    </option>
-                                    @foreach ($buscaSexo as $buscaSexos)
-                                        <option value="{{ $buscaSexos->id }}">
-                                            {{ $buscaSexos->nome }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer mt-2">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Confirmar</button>
-                    </div>
+   <x-modal-incluir id="modalIncluirMaterial" labelId="modalIncluirMaterialLabel"
+        action="{{ url('/incluir-material-solicitacao/' . $idSolicitacao) }}" title="Inclusão de Material">
+        <div class="row material-item">
+            <div class="col-md-6" style="margin-top: 10px">
+                <label>Categoria do Material</label>
+                <select class="form-select  select2" id="categoriaMaterial"
+                    style="border: 1px solid #999999; padding: 5px;" name="categoriaMaterial">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                    @foreach ($buscaCategoria as $buscaCategorias)
+                        <option value="{{ $buscaCategorias->id }}">
+                            {{ $buscaCategorias->nome }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-6" style="margin-top: 10px">
+                <label>Nome do Material</label>
+                <select class="form-select js-nome-material select2" id="nomeMaterial"
+                    style="border: 1px solid #999999; padding: 5px;" name="nomeMaterial">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-4" style="margin-top: 10px">
+                <label>Tipo do Material</label>
+                <!-- Campo visível: apenas para mostrar o nome -->
+                <input type="text" id="tipoMaterialNome" class="form-control" disabled>
+                <!-- Campo oculto: envia o ID no form -->
+                <input type="hidden" id="tipoMaterial" name="tipoMaterial">
+            </div>
+            <div class="col-md-2" style="margin-top: 10px">
+                <label>Aplicação</label>
+                <br>
+                <input type="checkbox" id="checkAplicacao" name="checkAplicacao" disabled>
+            </div>
+            <div class="col-md-4" style="margin-top: 10px">
+                <label>Embalagem</label>
+                <select class="form-select js-nome-material select2" id="embalagemMaterial"
+                    style="border: 1px solid #999999; padding: 5px;" name="embalagemMaterial">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-2" style="margin-top: 10px">
+                <label>Quantidade</label>
+                <input type="number" class="form-control" id="quantidadeMaterial" name="quantidadeMaterial" required>
+            </div>
+            <div class="col-md-4" style="margin-top: 10px">
+                <label>Modelo</label>
+                <input type="text" class="form-control" name="modeloMaterial">
+            </div>
+            <div class="col-md-2" style="margin-top: 10px">
+                <label>Avariado</label>
+                <br>
+                <input type="checkbox" id="checkAvariado" name="checkAvariado">
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Valor de Aquisição</label>
+                <select class="form-select js-marca-material select2" id="valorAquisicaoMaterial"
+                    style="border: 1px solid #999999; padding: 5px;" name="valorAquisicaoMaterial">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Valor de Venda</label>
+                <select class="form-select js-marca-material select2" id="valorVendaMaterial"
+                    style="border: 1px solid #999999; padding: 5px;" name="valorVendaMaterial">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Data de Validade</label>
+                <input type="date" class="form-control" name="dataValidadeMaterial">
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Marca</label>
+                <select class="form-select js-marca-material select2" id="marcaMaterial"
+                    style="border: 1px solid #999999; padding: 5px;" name="marcaMaterial">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Tamanho</label>
+                <select class="form-select js-tamanho-material select2" id="tamanhoMaterial"
+                    style="border: 1px solid #999999; padding: 5px;" name="tamanhoMaterial">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Cor</label>
+                <select class="form-select js-cor-material select2" id="corMaterial"
+                    style="border: 1px solid #999999; padding: 5px;" name="corMaterial">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Fase Etária</label>
+                <select class="form-select js-fase-material select2" id="faseEtariaMaterial"
+                    style="border: 1px solid #999999; padding: 5px;" name="faseEtariaMaterial">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Sexo</label>
+                <select class="form-select js-sexo-material select2" id="sexoMaterial"
+                    style="border: 1px solid #999999; padding: 5px;" name="sexoMaterial">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                    @foreach ($buscaSexo as $buscaSexos)
+                        <option value="{{ $buscaSexos->id }}">
+                            {{ $buscaSexos->nome }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Veículo</label>
+                <br>
+                <input type="checkbox" id="checkVeiculo" name="checkVeiculo" disabled>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Número de Série</label>
+                <br>
+                <input type="checkbox" id="checkNumSerie" name="checkNumSerie" disabled>
+            </div>
+            <div>
+                <div id="containerNumerosSerie" class="col-md" style="display: none; margin-top: 10px;">
+                    <label>Números de Série:</label>
+                    <div id="inputsNumerosSerie"></div>
                 </div>
-            </form>
+            </div>
+            <div>
+                <div id="containerVeiculo" class="col-md" style="display: none; margin-top: 10px;">
+                    <div id="inputsVeiculo"></div>
+                </div>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Data de Fabricação</label>
+                <input type="date" class="form-control" name="dataFabricacaoMaterial">
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Data de Fab. Modelo</label>
+                <input type="date" class="form-control" name="dataFabricacaoModeloMaterial">
+            </div>
+            <div class="col-md-12" style="margin-top: 10px">
+                <label>Observação</label>
+                <textarea type="text" class="form-control" name="observacaoMaterial" rows="2"></textarea>
+            </div>
         </div>
-    </div>
+    </x-modal-incluir>
+    <x-modal-editar id="modalEditarMaterial" labelId="modalEditarMaterialLabel" title="Editar Material"
+        action="{{ url('/cadastro-inicial-material/editar-material') }}">
+        @method('PUT')
+        <input type="hidden" name="edit-id" id="edit-id">
+        <input type="hidden" name="documento-id-editar" id="documento-id-editar">
+        <div class="row">
+            <div class="col-md-6" style="margin-top: 10px">
+                <label>Categoria do Material</label>
+                <select class="form-select  select2" id="categoriaMaterialEditar"
+                    style="border: 1px solid #999999; padding: 5px;" name="categoriaMaterialEditar">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                    @foreach ($buscaCategoria as $buscaCategorias)
+                        <option value="{{ $buscaCategorias->id }}">
+                            {{ $buscaCategorias->nome }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-6" style="margin-top: 10px">
+                <label>Nome do Material</label>
+                <select class="form-select select2" id="nomeMaterialEditar"
+                    style="border: 1px solid #999999; padding: 5px;" name="nomeMaterialEditar">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-4" style="margin-top: 10px">
+                <label>Tipo do Material</label>
+                <!-- Campo visível: apenas para mostrar o nome -->
+                <input type="text" id="tipoMaterialNomeEditar" name="tipoMaterialNomeEditar" class="form-control"
+                    disabled>
+                <!-- Campo oculto: envia o ID no form -->
+                <input type="hidden" id="tipoMaterialEditar" name="tipoMaterialEditar">
+            </div>
+            <div class="col-md-2" style="margin-top: 10px">
+                <label>Aplicação</label>
+                <br>
+                <input type="checkbox" id="checkAplicacaoEditar" name="checkAplicacaoEditar" disabled>
+            </div>
+            <div class="col-md-4" style="margin-top: 10px">
+                <label>Embalagem</label>
+                <select class="form-select select2" id="embalagemMaterialEditar"
+                    style="border: 1px solid #999999; padding: 5px;" name="embalagemMaterialEditar">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-2" style="margin-top: 10px">
+                <label>Quantidade</label>
+                <input type="number" class="form-control" id="quantidadeMaterialEditar" name="quantidadeMaterialEditar"
+                    required>
+            </div>
+            <div class="col-md-4" style="margin-top: 10px">
+                <label>Modelo</label>
+                <input type="text" class="form-control" id="modeloMaterialEditar" name="modeloMaterialEditar">
+            </div>
+            <div class="col-md-2" style="margin-top: 10px">
+                <label>Avariado</label>
+                <br>
+                <input type="checkbox" id="checkAvariadoEditar" name="checkAvariadoEditar">
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Valor de Aquisição</label>
+                <select class="form-select select2" id="valorAquisicaoMaterialEditar"
+                    style="border: 1px solid #999999; padding: 5px;" name="valorAquisicaoMaterialEditar">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Valor de Venda</label>
+                <select class="form-select select2" id="valorVendaMaterialEditar"
+                    style="border: 1px solid #999999; padding: 5px;" name="valorVendaMaterialEditar">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Data de Validade</label>
+                <input type="date" class="form-control" id="dataValidadeMaterialEditar"
+                    name="dataValidadeMaterialEditar">
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Marca</label>
+                <select class="form-select select2" id="marcaMaterialEditar"
+                    style="border: 1px solid #999999; padding: 5px;" name="marcaMaterialEditar">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Tamanho</label>
+                <select class="form-select select2" id="tamanhoMaterialEditar"
+                    style="border: 1px solid #999999; padding: 5px;" name="tamanhoMaterialEditar">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Cor</label>
+                <select class="form-select select2" id="corMaterialEditar"
+                    style="border: 1px solid #999999; padding: 5px;" name="corMaterialEditar">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Fase Etária</label>
+                <select class="form-select select2" id="faseEtariaMaterialEditar"
+                    style="border: 1px solid #999999; padding: 5px;" name="faseEtariaMaterialEditar">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Sexo</label>
+                <select class="form-select select2" id="sexoMaterialEditar"
+                    style="border: 1px solid #999999; padding: 5px;" name="sexoMaterialEditar">
+                    <option value="" disabled selected>Selecione...
+                    </option>
+                    @foreach ($buscaSexo as $buscaSexos)
+                        <option value="{{ $buscaSexos->id }}">
+                            {{ $buscaSexos->nome }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Veículo</label>
+                <br>
+                <input type="checkbox" id="checkVeiculoEditar" name="checkVeiculoEditar" disabled>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Número de Série</label>
+                <br>
+                <input type="checkbox" id="checkNumSerieEditar" name="checkNumSerieEditar" disabled>
+            </div>
+            <div>
+                <div id="containerNumerosSerieEditar" class="col-md" style="display: none; margin-top: 10px;">
+                    <div id="inputsNumerosSerieEditar"></div>
+                </div>
+            </div>
+            <div>
+                <div id="containerVeiculoEditar" class="col-md" style="display: none; margin-top: 10px;">
+                    <div id="inputsVeiculoEditar"></div>
+                </div>
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Data de Fabricação</label>
+                <input type="date" class="form-control" id="dataFabricacaoMaterialEditar"
+                    name="dataFabricacaoMaterialEditar">
+            </div>
+            <div class="col-md-3" style="margin-top: 10px">
+                <label>Data de Fab. Modelo</label>
+                <input type="date" class="form-control" id="dataFabricacaoModeloMaterialEditar"
+                    name="dataFabricacaoModeloMaterialEditar">
+            </div>
+            <div class="col-md-12" style="margin-top: 10px">
+                <label>Observação</label>
+                <textarea type="text" class="form-control" id="observacaoMaterialEditar" name="observacaoMaterialEditar"
+                    rows="2" maxlength="300"></textarea>
+            </div>
+        </div>
+    </x-modal-editar>
+    <x-modal-excluir id="modalExcluirMaterial" labelId="modalExcluirMaterialLabel"
+        action="{{ url('/cadastro-inicial-material/deletar') }}" title="Excluir Material">
+        <input type="hidden" name="delete-id" id="delete-id">
+        <input type="hidden" name="documento-id-excluir" id="documento-id-excluir">
+        <div class="row">
+            <label>Deseja realmente <strong style="color: red">excluir</strong> o material <span
+                    id="nome-material"></span>?</label>
+        </div>
+    </x-modal-excluir>
     <!-- Modal Excluir Material -->
     <div class="modal fade" id="modalExcluirMaterial" tabindex="-1" aria-labelledby="modalExcluirMaterialLabel"
         aria-hidden="true">

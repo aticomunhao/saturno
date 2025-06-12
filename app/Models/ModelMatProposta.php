@@ -18,8 +18,7 @@ class ModelMatProposta extends Model
         'id_fase_etaria',
         'id_sexo',
         'dt_cadastro',
-        'id_tipo_embalagem',
-        'id_tipo_unidade_medida',
+        'id_embalagem',
         'id_tipo_situacao',
         'id_tipo_item_catalogo',
         'id_sol_mat',
@@ -57,7 +56,7 @@ class ModelMatProposta extends Model
     }
     public function tipoUnidadeMedida()
     {
-        return $this->belongsTo(ModelUnidadeMedida::class, 'id_tipo_unidade_medida');
+        return $this->belongsTo(ModelUnidadeMedida::class, 'id_embalagem');
     }
     public function tipoItemCatalogoMaterial()
     {

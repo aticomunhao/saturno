@@ -80,7 +80,6 @@ class AquisicaoMaterialController extends Controller
 
         return view('solMaterial.gerenciar-aquisicao-material', compact('sol', 'aquisicao', 'categoriaAquisicao', 'status', 'todosSetor', 'numeros', 'usuario', 'setor'));
     }
-
     public function retornaNomeMateriais($idClasse)
     {
         $materiais = DB::table('catalogo_materiais')
@@ -126,7 +125,6 @@ class AquisicaoMaterialController extends Controller
         app('flasher')->addSuccess('Solicitações aprovadas com sucesso');
         return redirect('/gerenciar-aquisicao-material');
     }
-
     public function homologarEmLote(Request $request)
     {
         $usuario = session('usuario.id_usuario');
@@ -142,7 +140,6 @@ class AquisicaoMaterialController extends Controller
         app('flasher')->addSuccess('Solicitações homologadas com sucesso');
         return redirect('/gerenciar-aquisicao-material');
     }
-
     private function processarLote($prioridades, $materiais, array $camposAdicionais)
     {
         foreach ($prioridades as $id => $novaPrioridade) {
@@ -229,25 +226,24 @@ class AquisicaoMaterialController extends Controller
         $idSolicitacao = $id;
 
         ModelMatProposta::create([
+            'id_cat_material' => $request->categoriaMaterial,
             'id_marca' => $request->marcaMaterial,
             'id_tamanho' => $request->tamanhoMaterial,
             'id_cor' => $request->corMaterial,
             'id_fase_etaria' => $request->faseEtariaMaterial,
             'id_sexo' => $request->sexoMaterial,
-            'dt_cadastro' => Carbon::now(),
-            'id_sol_mat' => $idSolicitacao,
-            'id_tipo_item_catalogo' => $request->nomeMaterial,
-            'id_cat_material' => $request->categoriaMaterial,
-            'id_tipo_unidade_medida' => $request->UnidadeMedidaMaterial,
-            'quantidade' => $request->quantidadeMaterial,
+            'id_embalagem' => $request->UnidadeMedidaMaterial,
             'id_tipo_situacao' => '0',
+            'id_tipo_item_catalogo' => $request->nomeMaterial,
+            'id_sol_mat' => $idSolicitacao,
             'nome' => $request->nomeMaterial,
+            'quantidade' => $request->quantidadeMaterial,
+            'dt_cadastro' => Carbon::now(),
         ]);
 
         app('flasher')->addSuccess('Material Adicionado com Sucesso');
         return redirect("/incluir-aquisicao-material-2/{$idSolicitacao}");
     }
-   
     public function destroyMaterial(Request $request)
     {
         // Busca e exclusão do material
@@ -297,7 +293,7 @@ class AquisicaoMaterialController extends Controller
                 $data = [
                     'id_cat_material' => $request->categoriaPorMaterial[$index],
                     'nome' => $request->nomePorMaterial[$index],
-                    'id_tipo_unidade_medida' => $request->UnidadeMedidaPorMaterial[$index],
+                    'id_embalagem' => $request->UnidadeMedidaPorMaterial[$index],
                     'quantidade' => $request->quantidadePorMaterial1[$index],
                     'id_marca' => $request->marcaPorMaterial[$index],
                     'id_tamanho' => $request->tamanhoPorMaterial[$index],
@@ -396,7 +392,7 @@ class AquisicaoMaterialController extends Controller
                 $data = [
                     'id_cat_material' => $request->categoriaPorEmpresa[$index],
                     'nome' => $request->nomePorEmpresa[$index],
-                    'id_tipo_unidade_medida' => $request->UnidadeMedidaPorEmpresa[$index],
+                    'id_embalagem' => $request->UnidadeMedidaPorEmpresa[$index],
                     'quantidade' => $request->quantidadePorEmpresa[$index],
                     'valor1' => limparValor($request->valorUnitarioEmpresa1[$index]),
                     'valor2' => limparValor($request->valorUnitarioEmpresa2[$index]),

@@ -86,7 +86,7 @@
                                                 <td>{{ $results->TipoMaterial->nome ?? 'N/A' }}</td>
                                                 <td>
                                                     @php
-                                                        $emb = $results->Embalagem;
+                                                        $emb = $results->Embalagem ?? null;
                                                         $partes = [];
 
                                                         if ($emb && $emb->qtde_n4 && $emb->unidadeMedida4) {
@@ -111,32 +111,32 @@
                                                 <td>
                                                     <a type="button"
                                                         class="btn btn-sm btn-outline-warning btn-editar-material"
-                                                        data-id="{{ $results->id }}"
-                                                        data-categoria="{{ $results->id_cat_material }}"
-                                                        data-nome="{{ $results->id_item_catalogo }}"
-                                                        data-tipoId="{{ $results->id_tipo_material }}"
-                                                        data-tipo="{{ $results->tipoMaterial->nome }}"
-                                                        data-aplicacao="{{ $results->aplicacao }}"
-                                                        data-embalagem="{{ $results->id_embalagem }}"
-                                                        data-quantidade="{{ $results->quantidade }}"
-                                                        data-modelo="{{ $results->modelo }}"
-                                                        data-avariado="{{ $results->avariado }}"
-                                                        data-valor_aquisicao="{{ $results->valor_aquisicao }}"
-                                                        data-valor_venda="{{ $results->valor_venda }}"
-                                                        data-data_validade="{{ $results->data_validade }}"
-                                                        data-marca="{{ $results->id_marca }}"
-                                                        data-tamanho="{{ $results->id_tamanho }}"
-                                                        data-cor="{{ $results->id_cor }}"
-                                                        data-fase_etaria="{{ $results->id_fase_etaria }}"
-                                                        data-sexo="{{ $results->id_tp_sexo }}"
+                                                        data-id="{{ $results->id ?? null }}"
+                                                        data-categoria="{{ $results->id_cat_material ?? null }}"
+                                                        data-nome="{{ $results->id_item_catalogo ?? null }}"
+                                                        data-tipoId="{{ $results->id_tipo_material ?? null }}"
+                                                        data-tipo="{{ $results->tipoMaterial->nome ?? null }}"
+                                                        data-aplicacao="{{ $results->aplicacao ?? null }}"
+                                                        data-embalagem="{{ $results->id_embalagem ?? null }}"
+                                                        data-quantidade="{{ $results->quantidade ?? null }}"
+                                                        data-modelo="{{ $results->modelo ?? null }}"
+                                                        data-avariado="{{ $results->avariado ?? null }}"
+                                                        data-valor_aquisicao="{{ $results->valor_aquisicao ?? null }}"
+                                                        data-valor_venda="{{ $results->valor_venda ?? null }}"
+                                                        data-data_validade="{{ $results->data_validade ?? null }}"
+                                                        data-marca="{{ $results->id_marca ?? null }}"
+                                                        data-tamanho="{{ $results->id_tamanho ?? null }}"
+                                                        data-cor="{{ $results->id_cor ?? null }}"
+                                                        data-fase_etaria="{{ $results->id_fase_etaria ?? null }}"
+                                                        data-sexo="{{ $results->id_tp_sexo ?? null }}"
                                                         data-veiculo_placas="{{ is_array($results->placa) ? implode(',', $results->placa) : $results->placa }}"
                                                         data-veiculo_renavam="{{ is_array($results->renavam) ? implode(',', $results->renavam) : $results->renavam }}"
                                                         data-veiculo_chassis="{{ is_array($results->chassi) ? implode(',', $results->chassi) : $results->chassi }}"
                                                         data-num_serie="{{ is_array($results->num_serie) ? implode(',', $results->num_serie) : $results->num_serie }}"
-                                                        data-data_fabricacao="{{ $results->dt_fab }}"
-                                                        data-documento-id="{{ $results->documento_origem }}"
-                                                        data-data_fabricacao_modelo="{{ $results->dt_fab_modelo }}"
-                                                        data-observacao="{{ $results->observacao }}" data-bs-toggle="modal"
+                                                        data-data_fabricacao="{{ $results->dt_fab ?? null }}"
+                                                        data-documento-id="{{ $results->documento_origem ?? null }}"
+                                                        data-data_fabricacao_modelo="{{ $results->dt_fab_modelo ?? null }}"
+                                                        data-observacao="{{ $results->observacao ?? null }}" data-bs-toggle="modal"
                                                         data-bs-target="#modalEditarMaterial" title="Editar Material"
                                                         style="font-size: 1rem; color:#303030">
                                                         <i class="bi bi-pencil"></i>

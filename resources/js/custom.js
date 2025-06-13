@@ -213,9 +213,13 @@ $(document).ready(function () {
 $(document).ready(function () {
     function carregarOpcoes(url, selector, valorSelecionado = null, callback = null) {
         return new Promise((resolve, reject) => {
+            const select = $(selector);
+            select.prop('disabled', true);
+            select.empty();
+            select.append('<option value="">Carregando...</option>'); // Mostra "Carregando..."
+
             $.get(url, function (data) {
-                const select = $(selector);
-                select.empty();
+                select.empty(); // Limpa o "Carregando..."
                 select.append('<option value="">Selecione...</option>');
 
                 data.forEach(item => {
@@ -227,13 +231,17 @@ $(document).ready(function () {
                     select.val(valorSelecionado).trigger('change');
                 }
 
+                select.prop('disabled', false);
+
                 if (typeof callback === 'function') {
                     callback();
                 }
 
-                resolve(); // finaliza a promise
+                resolve(); // Finaliza a promise
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 console.error(`Erro ao carregar ${url}:`, textStatus, errorThrown);
+                select.empty();
+                select.append('<option value="">Erro ao carregar</option>'); // Opcional: mensagem de erro visível
                 reject(errorThrown);
             });
         });

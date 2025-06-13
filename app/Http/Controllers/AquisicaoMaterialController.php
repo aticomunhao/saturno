@@ -214,7 +214,7 @@ class AquisicaoMaterialController extends Controller
         $bucaItemCatalogo = ModelItemCatalogoMaterial::all();
         $buscaUnidadeMedida = ModelUnidadeMedida::all();
         $buscaSetor = ModelSetor::whereIn('id', $setor)->get();
-        $materiais = ModelMatProposta::with('documentoMaterial', 'tipoUnidadeMedida', 'tipoItemCatalogoMaterial', 'tipoCategoria', 'tipoMarca', 'tipoTamanho', 'tipoCor', 'tipoFaseEtaria', 'tipoSexo')->where('id_sol_mat', $id)->get();
+        $materiais = ModelMatProposta::with('documentoMaterial', 'TipoMaterial', 'tipoUnidadeMedida', 'Embalagem', 'tipoItemCatalogoMaterial', 'tipoCategoria', 'tipoMarca', 'tipoTamanho', 'tipoCor', 'tipoFaseEtaria', 'tipoSexo')->where('id_sol_mat', $id)->get();
         //dd($materiais);
 
         //dd($documentoMaterial);
@@ -231,10 +231,9 @@ class AquisicaoMaterialController extends Controller
             'id_tamanho' => $request->tamanhoMaterial,
             'id_cor' => $request->corMaterial,
             'id_fase_etaria' => $request->faseEtariaMaterial,
-            'id_sexo' => $request->sexoMaterial,
+            'id_tp_sexo' => $request->sexoMaterial,
             'id_embalagem' => $request->UnidadeMedidaMaterial,
-            'id_tipo_situacao' => '0',
-            'id_tipo_item_catalogo' => $request->nomeMaterial,
+            'id_item_catalogo' => $request->nomeMaterial,
             'id_sol_mat' => $idSolicitacao,
             'nome' => $request->nomeMaterial,
             'quantidade' => $request->quantidadeMaterial,
@@ -299,7 +298,7 @@ class AquisicaoMaterialController extends Controller
                     'id_tamanho' => $request->tamanhoPorMaterial[$index],
                     'id_cor' => $request->corPorMaterial[$index],
                     'id_fase_etaria' => $request->faseEtariaPorMaterial[$index],
-                    'id_sexo' => $request->sexoPorMaterial[$index]
+                    'id_tp_sexo' => $request->sexoPorMaterial[$index]
                 ];
 
                 // Atualiza apenas se houver dados a modificar
@@ -392,7 +391,7 @@ class AquisicaoMaterialController extends Controller
                 $data = [
                     'id_cat_material' => $request->categoriaPorEmpresa[$index],
                     'nome' => $request->nomePorEmpresa[$index],
-                    'id_embalagem' => $request->UnidadeMedidaPorEmpresa[$index],
+                    'id_embalagem' => $request->embalagemPorEmpresa[$index],
                     'quantidade' => $request->quantidadePorEmpresa[$index],
                     'valor1' => limparValor($request->valorUnitarioEmpresa1[$index]),
                     'valor2' => limparValor($request->valorUnitarioEmpresa2[$index]),
@@ -401,7 +400,7 @@ class AquisicaoMaterialController extends Controller
                     'id_tamanho' => $request->tamanhoPorEmpresa[$index],
                     'id_cor' => $request->corPorEmpresa[$index],
                     'id_fase_etaria' => $request->faseEtariaPorEmpresa[$index],
-                    'id_sexo' => $request->sexoPorEmpresa[$index]
+                    'id_tp_sexo' => $request->sexoPorEmpresa[$index]
                 ];
 
                 // Atualiza apenas se houver dados a modificar

@@ -121,7 +121,6 @@ class CadastroInicialController extends Controller
         $buscaFaseEtaria = ModelFaseEtaria::all();
         $buscaSexo = ModelSexo::all();
         $bucaItemCatalogo = ModelItemCatalogoMaterial::all();
-        $buscaUnidadeMedida = ModelUnidadeMedida::where('tipo', '2')->get();
         $buscaSetor = ModelSetor::whereIn('id', $setor)->get();
         $materiais = ModelMatProposta::with('documentoMaterial', 'tipoUnidadeMedida', 'tipoItemCatalogoMaterial', 'tipoCategoria', 'tipoMarca', 'tipoTamanho', 'tipoCor', 'tipoFaseEtaria', 'tipoSexo')->where('id_sol_mat', $id)->get();
         $buscaTipoMaterial = ModelTipoMaterial::all();
@@ -129,7 +128,7 @@ class CadastroInicialController extends Controller
         $resultDocumento = ModelDocumento::where('id', $id)->first();
         $result = ModelCadastroInicial::with('ItemCatalogoMaterial', 'Embalagem', 'CategoriaMaterial', 'TipoMaterial')->where('documento_origem', $id)->orderBy('id', 'asc')->paginate(10);
 
-        return view("cadastroInicial.doacao-cadastro-inicial-item", compact('result', 'bucaItemCatalogo', 'resultDocumento', 'buscaSetor', 'buscaEmpresa', 'buscaCategoria', 'buscaTipoMaterial', 'idDocumento', 'buscaUnidadeMedida', 'buscaSexo'));
+        return view("cadastroInicial.doacao-cadastro-inicial-item", compact('result', 'bucaItemCatalogo', 'resultDocumento', 'buscaSetor', 'buscaEmpresa', 'buscaCategoria', 'buscaTipoMaterial', 'idDocumento', 'buscaSexo'));
     }
     public function storeDoacao(Request $request, $id)
     {

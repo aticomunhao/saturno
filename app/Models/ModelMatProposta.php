@@ -16,18 +16,30 @@ class ModelMatProposta extends Model
         'id_tamanho',
         'id_cor',
         'id_fase_etaria',
-        'id_sexo',
-        'dt_cadastro',
+        'id_tp_sexo',
         'id_embalagem',
-        'id_tipo_situacao',
-        'id_tipo_item_catalogo',
+        'id_item_catalogo',
         'id_sol_mat',
-        'nome',
         'quantidade',
         'dt_cadastro',
         'valor1',
         'valor2',
         'valor3',
+        'observacao',
+        'adquirido',
+        'dt_validade',
+        'componente',
+        'modelo',
+        'num_serie',
+        'chassi',
+        'placa',
+        'renavam',
+        'dt_fab',
+        'dt_fab_modelo',
+        'id_tipo_material',
+        'avariado',
+        'aplicacao',
+        'componente',
     ];
 
     public function tipoCategoria()
@@ -52,7 +64,7 @@ class ModelMatProposta extends Model
     }
     public function tipoSexo()
     {
-        return $this->belongsTo(ModelSexo::class, 'id_sexo');
+        return $this->belongsTo(ModelSexo::class, 'id_tp_sexo');
     }
     public function tipoUnidadeMedida()
     {
@@ -60,14 +72,22 @@ class ModelMatProposta extends Model
     }
     public function tipoItemCatalogoMaterial()
     {
-        return $this->belongsTo(ModelItemCatalogoMaterial::class, 'id_tipo_item_catalogo');
+        return $this->belongsTo(ModelItemCatalogoMaterial::class, 'id_item_catalogo');
     }
     public function solMaterial()
     {
-        return $this->belongsTo( ModelSolMaterial::class,'id_sol_mat');
+        return $this->belongsTo(ModelSolMaterial::class, 'id_sol_mat');
     }
     public function documentoMaterial()
-{
-    return $this->hasMany(ModelDocumento::class, 'mat_proposta');
-}
+    {
+        return $this->hasMany(ModelDocumento::class, 'mat_proposta');
+    }
+    public function TipoMaterial()
+    {
+        return $this->belongsTo(ModelTipoMaterial::class, 'id_tipo_material');
+    }
+    public function Embalagem()
+    {
+        return $this->belongsTo(ModelEmbalagem::class, 'id_embalagem');
+    }
 }

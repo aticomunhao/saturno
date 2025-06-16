@@ -53,6 +53,8 @@ use App\Http\Controllers\GerenciarDepositoController;
 use App\Http\Controllers\ValorCompraController;
 use App\Http\Controllers\PesquisaController;
 use App\Http\Controllers\GerenciarMovimentacaoFisicaController;
+use App\Http\Controllers\PagamentoController;
+
 
 
 /*
@@ -425,6 +427,7 @@ Route::get('/retorna-cadastro-inicial', [GerenciarMovimentacaoFisicaController::
 Route::any('/retorna-materiais-por-data-cadastro/{data_inicio}/{data_fim}', [GerenciarMovimentacaoFisicaController::class, 'retornaMateriaisPorDataCadastro'])->name('movimentacao-fisica.retorna-materiais-por-data-cadastro');
 Route::any('/movimentacao-fisica/homologar', [GerenciarMovimentacaoFisicaController::class, 'homologar'])->name('movimentacao-fisica.homologar');
 
+//Pesquisa de Materiais
 Route::get('/marcas/{categoriaId}', [PesquisaController::class, 'getMarcas']);
 Route::get('/tamanhos/{categoriaId}', [PesquisaController::class, 'getTamanhos']);
 Route::get('/cores/{categoriaId}', [PesquisaController::class, 'getCores']);
@@ -435,3 +438,6 @@ Route::get('/tipo/{nomeId}', [PesquisaController::class, 'getTipo']);
 Route::get('/valorAquisicao/{nomeId}', [PesquisaController::class, 'getValorAquisicao']);
 Route::get('/valorVenda/{nomeId}', [PesquisaController::class, 'getValorVenda']);
 Route::get('/valorVendaAvariado/{nomeId}', [PesquisaController::class, 'getValorVendaAvariado']);
+
+//pagamentos
+Route::get('/gerenciar-pagamento', [PagamentoController::class, 'index'])->name('pagamento.index');

@@ -77,9 +77,9 @@ $setor = session()->get('usuario.setor');
                         </ul>
                     </li>
                 </ul>
-                <ul class="navbar-nav" id="catalogo">
+                <ul class="navbar-nav">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="2" role="button"
+                        <a class="nav-link dropdown-toggle" href="#" id="3" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">Movimentação</a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
                             {{-- @if (in_array(13, $acesso) or in_array(14, $acesso)) --}}
@@ -89,10 +89,22 @@ $setor = session()->get('usuario.setor');
                         </ul>
                     </li>
                 </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="4" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">Pagamento</a>
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                            <li><a class="dropdown-item" href="{{ route('pagamento.index') }}">Gerenciar Pagamentos</a>
+                            </li>
+                            <li><a class="dropdown-item" href="{{ route('movimentacao-fisica.index') }}">Gerenciar Contratos</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
                 {{-- @endif --}}
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="3" role="button"
+                        <a class="nav-link dropdown-toggle" href="#" id="5" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">Administrar sistema</a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
                             <li><a class="dropdown-item" href="/valor-compra">Valor de Compra</a></li>
@@ -114,7 +126,7 @@ $setor = session()->get('usuario.setor');
                 <div class="col">
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="4" role="button"
+                            <a class="nav-link dropdown-toggle" href="#" id="6" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">Logout</a>
                             <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
                                 <li><a class="dropdown-item" href="/usuario/alterar-senha"><i

@@ -92,7 +92,7 @@
                                             data-bs-toggle="modal" data-bs-target="#modalHomologarLote">
                                             Homologar em Lote
                                         </a>
-                                        <a href="" class="btn btn-warning "
+                                        <a href="{{ route('pagamento.index') }}" class="btn btn-warning "
                                             style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-right:5px">
                                             Pagamento
                                         </a>

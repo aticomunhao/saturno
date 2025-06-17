@@ -224,23 +224,105 @@ class AquisicaoMaterialController extends Controller
     public function store2(Request $request, $id)
     {
         $idSolicitacao = $id;
+        $checkAvariado = isset($request->checkAvariado) ? 1 : 0;
+        $checkAplicacao = isset($request->checkAplicacao) ? 1 : 0;
+        $checkNumSerie = isset($request->checkNumSerie) ? 1 : 0;
+        $checkVeiculo = isset($request->checkVeiculo) ? 1 : 0;
+        $valorAquisicao = $request->input('valorAquisicaoMaterial');
+        $valorVenda = $request->input('valorVendaMaterial');
 
-        ModelMatProposta::create([
-            'id_cat_material' => $request->categoriaMaterial,
-            'id_marca' => $request->marcaMaterial,
-            'id_tamanho' => $request->tamanhoMaterial,
-            'id_cor' => $request->corMaterial,
-            'id_fase_etaria' => $request->faseEtariaMaterial,
-            'id_tp_sexo' => $request->sexoMaterial,
-            'id_embalagem' => $request->UnidadeMedidaMaterial,
-            'id_item_catalogo' => $request->nomeMaterial,
+        if (is_array($valorAquisicao)) {
+            $valorAquisicao = $valorAquisicao[0] ?? null;
+        }
+        if (is_array($valorVenda)) {
+            $valorVenda = $valorVenda[0] ?? null;
+        }
+
+        $dadosComuns = [
+            'id_cat_material' => $request->input('categoriaMaterial'),
+            'id_marca' => $request->input('marcaMaterial'),
+            'id_tamanho' => $request->input('tamanhoMaterial'),
+            'id_cor' => $request->input('corMaterial'),
+            'id_fase_etaria' => $request->input('faseEtariaMaterial'),
+            'id_tp_sexo' => $request->input('sexoMaterial'),
+            'id_embalagem' => $request->input('embalagemMaterial'),
+            'id_item_catalogo' => $request->input('nomeMaterial'),
             'id_sol_mat' => $idSolicitacao,
-            'nome' => $request->nomeMaterial,
-            'quantidade' => $request->quantidadeMaterial,
             'dt_cadastro' => Carbon::now(),
-        ]);
+            'observacao' => $request->input('observacaoMaterial'),
+            'adquirido' => true,
+            'dt_validade' => $request->input('dataValidadeMaterial'),
+            'componente' => $request->input('componenteMaterial'),
+            'dt_fab' => $request->input('dataFabricacaoMaterial'),
+            'dt_fab_modelo' => $request->input('dataFabricacaoModeloMaterial'),
+            'id_tipo_material' => $request->input('tipoMaterial'),
+            'avariado' => $checkAvariado,
+            'aplicacao' => $checkAplicacao,
+        ];
 
-        app('flasher')->addSuccess('Material Adicionado com Sucesso');
+        $quantidade = (int) $request->input('quantidadeMaterial');
+        $tipoMaterial = (int) $request->input('tipoMaterial');
+
+        if ($tipoMaterial === 1 && $checkNumSerie == 1) {
+            $numerosSerie = $request->input('numerosSerie', []);
+
+            for ($i = 0; $i < $quantidade; $i++) {
+                $dados = array_merge($dadosComuns, [
+                    'quantidade' => 1,
+                    'num_serie' => $numerosSerie[$i] ?? null,
+                ]);
+
+                $material = ModelMatProposta::create($dados);
+
+                $this->criarMovimentacaoFisica($material->id);
+            }
+        } else if ($tipoMaterial === 1 && $checkVeiculo == 1) {
+            $numerosPlacas = $request->input('numerosPlacas', []);
+            $numerosRenavam = $request->input('numerosRenavam', []);
+            $numerosChassis = $request->input('numerosChassis', []);
+
+            for ($i = 0; $i < $quantidade; $i++) {
+                $dados = array_merge($dadosComuns, [
+                    'quantidade' => 1,
+                    'placa' => $numerosPlacas[$i] ?? null,
+                    'renavam' => $numerosRenavam[$i] ?? null,
+                    'chassi' => $numerosChassis[$i] ?? null,
+                ]);
+
+                $material = ModelMatProposta::create($dados);
+
+                $this->criarMovimentacaoFisica($material->id);
+            }
+        } else if ($tipoMaterial === 1) {
+
+            for ($i = 0; $i < $quantidade; $i++) {
+                $dados = array_merge($dadosComuns, [
+                    'quantidade' => 1,
+                    'num_serie' => null,
+                    'placa' => null,
+                    'renavam' => null,
+                    'chassi' => null,
+                ]);
+
+                $material = ModelMatProposta::create($dados);
+
+                $this->criarMovimentacaoFisica($material->id);
+            }
+        } else {
+            $material = ModelMatProposta::create(array_merge($dadosComuns, [
+                'quantidade' => $quantidade,
+                'num_serie' => null,
+                'placa' => null,
+                'renavam' => null,
+                'chassi' => null,
+            ]));
+
+            $this->criarMovimentacaoFisica($material->id);
+        }
+
+
+
+        app('flasher')->addSuccess('Material adicionado com sucesso!');
         return redirect("/incluir-aquisicao-material-2/{$idSolicitacao}");
     }
     public function destroyMaterial(Request $request)

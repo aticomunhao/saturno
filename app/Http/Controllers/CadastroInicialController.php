@@ -282,7 +282,7 @@ class CadastroInicialController extends Controller
             'valor_aquisicao' => $valorAquisicao,
             'valor_venda' => $valorVenda,
             'data_cadastro' => Carbon::now(),
-            'adquirido' => false,
+            'adquirido' => in_array($tipoDocumento, [1, 4, 6, 7, 8]),
             'id_deposito' => '1',
             'id_tp_status' => '1',
             'documento_origem' => $id,

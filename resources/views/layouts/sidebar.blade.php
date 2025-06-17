@@ -96,7 +96,7 @@ $setor = session()->get('usuario.setor');
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
                             <li><a class="dropdown-item" href="{{ route('pagamento.index') }}">Gerenciar Pagamentos</a>
                             </li>
-                            <li><a class="dropdown-item" href="{{ route('movimentacao-fisica.index') }}">Gerenciar Contratos</a>
+                            <li><a class="dropdown-item" href="{{ route('contrato.index') }}">Gerenciar Contratos</a>
                             </li>
                         </ul>
                     </li>

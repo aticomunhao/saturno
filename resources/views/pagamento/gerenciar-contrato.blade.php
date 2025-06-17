@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    Gerenciar Pagamentos
+    Gerenciar Contratos
 @endsection
 @section('content')
     <form method="GET" action="">{{-- Formulario de pesquisa --}}
@@ -14,15 +14,15 @@
                         <div class="card-header">
                             <div class="row">
                                 <h5 class="col-12" style="color: #355089">
-                                    Gerenciar Compras/Pagamentos
+                                    Gerenciar Contratos
                                 </h5>
                             </div>
                         </div>
                         <br>
                         <div class="card-body">
-                            <div class="row" style="margin-left:5px">
+                            <div class="row">
                                 <div style="display: flex; gap: 20px; align-items: flex-end;">
-                                    <div class="col-md-2 col-sm-12">Tipo Dívida
+                                    <div class="col-md-2 col-sm-12">Número Contrato
                                         <br>
                                         <select class="form-select select2" style="border: 1px solid #999999; padding: 5px;"
                                             id="categoriaServico" name="categoria">
@@ -31,7 +31,7 @@
                                             <option value="">Serviço</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-2 col-sm-12">Forma Pagamento
+                                    <div class="col-md-2 col-sm-12">Objeto
                                         <br>
                                         <select class="form-select select2" style="border: 1px solid #999999;"
                                             id="materiais" name="materiais">
@@ -41,7 +41,17 @@
                                             <option value="">A Prazo</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-2 col-sm-12">Data Final
+                                    <div class="col-md-2 col-sm-12">Setor Responsável
+                                        <br>
+                                        <select class="form-select select2" style="border: 1px solid #999999;"
+                                            id="materiais" name="materiais">
+                                            <option value="">Selecione...</option>
+                                            <option value="">A Vista</option>
+                                            <option value="">Parcelado</option>
+                                            <option value="">A Prazo</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2 col-sm-12">Tempo de Duração
                                         <input type="date" class="form-control"
                                             style="border: 1px solid #999999; padding: 5px;" name="data_final"
                                             id="dataFinal">
@@ -68,18 +78,20 @@
                             <hr>
                             <table {{-- Inicio da tabela de informacoes --}}
                                 class= "table table-sm table-striped table-bordered border-secondary table-hover align-middle"
-                                id="tabela-materiais" class="display" style="width: 100%">
+                                id="tabela-materiais" style="width: 100%">
                                 <thead style="text-align: center;">{{-- inicio header tabela --}}
                                     <tr style="background-color: #d6e3ff; font-size:15px; color:#000;" class="align-middle">
+                                        <th>></th>
                                         <th>ID</th>
-                                        <th>TIPO DÍVIDA</th>
-                                        <th>FORMA PAGAMENTO</th>
-                                        <th>QTD. PARCELAS</th>
-                                        <th>CREDOR</th>
-                                        <th>DATA FINAL</th>
-                                        <th>PERENE</th>
+                                        <th>TIPO CONTRATO</th>
+                                        <th>NÚMERO</th>
+                                        <th>OBJETO</th>
+                                        <th>SETOR RESPONSÁVEL</th>
+                                        <th>EMPRESA</th>
+                                        <th>TEMPO DURAÇÃO</th>
+                                        <th>LOCAL</th>
                                         <th>PRIORIDADE</th>
-                                        <th>DOCUMENTO</th>
+                                        <th>REF. PATRIMÔNIAL</th>
                                         <th>STATUS</th>
                                         <th>AÇÕES</th>
                                     </tr>
@@ -88,12 +100,14 @@
                                     {{-- Inicio body tabela --}}
                                     @foreach ($result as $results)
                                         <tr>
+                                            <td>></td>
                                             <td> {{ $results->id }} </td>
-                                            <td>Material/Serviço</td>
-                                            <td>A Vista</td>
-                                            <td>03/07</td>
+                                             <td>Material/Serviço</td>
+                                            <td>00{{ $results->id }}</td>
+                                            <td>-</td>
+                                            <td>-</td>
                                             <td>SIM</td>
-                                            <td>01/01/2019</td>
+                                            <td>01/12/2018 - 01/01/2019</td>
                                             <td>NÃO</td>
                                             <td>-</td>
                                             <td>NÃO POSSUI</td>
@@ -120,21 +134,6 @@
                                                     title="Aditivo">
                                                     <i class="bi bi-bookmark-plus"></i>
                                                 </a>
-                                                <a href="" class="btn btn-sm btn-outline-primary" data-tt="tooltip"
-                                                    style="font-size: 1rem; color:#303030" data-placement="top"
-                                                    title="Contrato">
-                                                    <i class="bi bi-hammer"></i>
-                                                </a>
-                                                <a href="" class="btn btn-sm btn-outline-warning" data-tt="tooltip"
-                                                    style="font-size: 1rem; color:#303030" data-placement="top"
-                                                    title="Protelar">
-                                                    <i class="bi bi-alarm"></i>
-                                                </a>
-                                                <a href="" class="btn btn-sm btn-outline-danger" data-tt="tooltip"
-                                                    style="font-size: 1rem; color:#303030" data-placement="top"
-                                                    title="Devolver">
-                                                    <i class="bi bi-arrow-counterclockwise"></i>
-                                                </a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -148,6 +147,7 @@
                     </div>
                 </div>
             </div>
+        </div>
         </div>
         </div>
     </form>

@@ -440,4 +440,7 @@ Route::get('/valorVenda/{nomeId}', [PesquisaController::class, 'getValorVenda'])
 Route::get('/valorVendaAvariado/{nomeId}', [PesquisaController::class, 'getValorVendaAvariado']);
 
 //pagamentos
-Route::get('/gerenciar-pagamento', [PagamentoController::class, 'index'])->name('pagamento.index');
+Route::get('/gerenciar-pagamento', [PagamentoController::class, 'indexPagamento'])->name('pagamento.index');
+Route::get('/gerenciar-pagamento/pagar/{id}', [PagamentoController::class, 'createPagamento']);
+
+Route::get('/gerenciar-contrato', [PagamentoController::class, 'indexContrato'])->name('contrato.index');

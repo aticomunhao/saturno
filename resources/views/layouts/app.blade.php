@@ -19,6 +19,7 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/js/app.js', 'resources/css/app.css'])
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">

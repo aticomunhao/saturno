@@ -64,7 +64,7 @@
                                         </a>
                                         <a href="{{ route('contrato.index') }}" class="btn btn-primary"
                                             style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-right:5px">
-                                            Contrato
+                                            Contratos
                                         </a>
                                     </div>
                                 </div>

@@ -56,7 +56,7 @@
                                             style="border: 1px solid #999999; padding: 5px;" name="data_final"
                                             id="dataFinal">
                                     </div>
-                                    <div class="col-md-2 col-sm-12">Status
+                                    <div class="col-md-1 col-sm-12">Status
                                         <select class="form-select" style="border: 1px solid #999999;"
                                             name="status_material" value="" id="statusMaterial">
                                             <option value="">Todos</option>
@@ -69,8 +69,13 @@
                                             type="submit">Pesquisar
                                         </button>
                                         <a href="" type="button" class="btn btn-light btn-sm"
-                                            style="box-shadow: 1px 2px 5px #000000; font-size: 1rem; padding: 5px;"
-                                            value="">Limpar</a>
+                                            style="box-shadow: 1px 2px 5px #000000; font-size: 1rem; padding: 5px; margin-right: 5px;"
+                                            value="">Limpar
+                                        </a>
+                                        <a href="{{ route('pagamento.index') }}" class="btn btn-warning"
+                                            style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-right:5px">
+                                            Pagamento
+                                        </a>
                                     </div>
                                 </div>
                             </div>

@@ -59,8 +59,13 @@
                                             type="submit">Pesquisar
                                         </button>
                                         <a href="" type="button" class="btn btn-light btn-sm"
-                                            style="box-shadow: 1px 2px 5px #000000; font-size: 1rem; padding: 5px;"
-                                            value="">Limpar</a>
+                                            style="box-shadow: 1px 2px 5px #000000; font-size: 1rem; padding: 5px; margin-right: 5px;"
+                                            value="">Limpar
+                                        </a>
+                                        <a href="{{ route('contrato.index') }}" class="btn btn-primary"
+                                            style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; margin-right:5px">
+                                            Contratos
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -125,9 +130,9 @@
                                                     title="Contrato">
                                                     <i class="bi bi-hammer"></i>
                                                 </a>
-                                                <a href="" class="btn btn-sm btn-outline-warning" data-tt="tooltip"
-                                                    style="font-size: 1rem; color:#303030" data-placement="top"
-                                                    title="Protelar">
+                                                <a href="" class="btn btn-sm btn-outline-warning"
+                                                    data-tt="tooltip" style="font-size: 1rem; color:#303030"
+                                                    data-placement="top" title="Protelar">
                                                     <i class="bi bi-alarm"></i>
                                                 </a>
                                                 <a href="" class="btn btn-sm btn-outline-danger" data-tt="tooltip"

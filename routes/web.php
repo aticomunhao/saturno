@@ -424,7 +424,7 @@ Route::any('/movimentacao-fisica/solicitar-teste/confere', [GerenciarMovimentaca
 Route::any('/movimentacao-fisica/solicitar-teste/store', [GerenciarMovimentacaoFisicaController::class, 'solicitar_teste_store'])->name('movimentacao-fisica.solicitar-teste.create');
 Route::get('/retorna-cadastro-inicial', [GerenciarMovimentacaoFisicaController::class, 'show'])->name('movimentacao-fisica.show');
 // Route::get('/movimentacao-fisica/excluir/{id}', [GerenciarMovimentacaoFisica::class, 'destroy'])->name('movimentacao.delete');
-Route::any('/retorna-materiais-por-data-cadastro/{data_inicio}/{data_fim}', [GerenciarMovimentacaoFisicaController::class, 'retornaMateriaisPorDataCadastro'])->name('movimentacao-fisica.retorna-materiais-por-data-cadastro');
+Route::get('/retorna-materiais-por-data-cadastro/{data_inicio}/{data_fim}', [GerenciarMovimentacaoFisicaController::class, 'solicitar_teste_ajax_para_material'])->name('movimentacao-fisica.retorna-materiais-por-data-cadastro');
 Route::any('/movimentacao-fisica/homologar', [GerenciarMovimentacaoFisicaController::class, 'homologar'])->name('movimentacao-fisica.homologar');
 
 //Pesquisa de Materiais

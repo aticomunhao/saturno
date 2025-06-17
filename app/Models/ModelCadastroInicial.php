@@ -79,8 +79,8 @@ class ModelCadastroInicial extends Model
     {
         return $this->belongsTo(ModelEmbalagem::class, 'id_embalagem');
     }
-//Relacoes para movimentacao
-      public function CategoriaMaterial()
+    //Relacoes para movimentacao
+    public function CategoriaMaterial()
     {
         return $this->belongsTo(ModelTipoCategoriaMt::class, 'id_cat_material');
     }
@@ -107,5 +107,9 @@ class ModelCadastroInicial extends Model
     public function TipoSexo()
     {
         return $this->belongsTo(ModelSexo::class, 'id_tp_sexo');
+    }
+    public function movimentacaoFisica()
+    {
+        return $this->hasMany(ModelMovimentacaoFisica::class, 'id_cadastro_inicial');
     }
 }

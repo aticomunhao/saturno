@@ -87,7 +87,21 @@ class GerenciarMovimentacaoFisicaController extends Controller
     public function solicitar_teste()
     {
 
-        $cadastro_inicial = ModelCadastroInicial::with('Status', 'SolOrigem', 'DocOrigem', 'Deposito', 'Destinacao', 'CategoriaMaterial', 'TipoMaterial')->get();
+        $cadastro_inicial = ModelCadastroInicial::with(
+            'Status',
+            'SolOrigem',
+            'DocOrigem',
+            'Deposito',
+            'Destinacao',
+            'CategoriaMaterial',
+            'TipoMaterial',
+            'movimentacaoFisica'
+        )
+            ->whereHas('movimentacaoFisica', function ($query) {
+                $query->where('id_tp_movimento', 1);
+            })
+            ->get();
+
         $documentos = ModelDocumento::all()->whereIn('id_tp_doc', [16, 17]);
         // dd($documentos);
         //   dd($cadastro_inicial);
@@ -103,9 +117,13 @@ class GerenciarMovimentacaoFisicaController extends Controller
             'Deposito',
             'Destinacao',
             'CategoriaMaterial',
-            'TipoMaterial'
+            'TipoMaterial',
+            'movimentacaoFisica'
         ])
             ->whereBetween('data_cadastro', [$data_inicio, $data_fim])
+            ->whereHas('movimentacaoFisica', function ($query) {
+                $query->where('id_tp_movimento', 1);
+            })
             ->get();
 
         return response()->json($materiais);

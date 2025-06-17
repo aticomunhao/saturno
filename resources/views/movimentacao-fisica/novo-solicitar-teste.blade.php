@@ -141,21 +141,45 @@
                     $('#id_material').attr('disabled', false);
                 }
             });
-            $('#id_data_fim_por_material, #id_data_inicio_por_material').on('input change', function() {
+            $('#id_data_fim_por_material, #id_data_inicio_por_material').on('change', function() {
                 if (verificarCampos()) {
                     var dataInicio = $('#id_data_inicio_por_material').val();
                     var dataFim = $('#id_data_fim_por_material').val();
-                    console.log('Data Início:', dataInicio);
-                    console.log('Data Fim:', dataFim);
+                    // console.log('Data Início:', dataInicio);
+                    // console.log('Data Fim:', dataFim);
                     $.ajax({
-                        type: "method",
+                        type: "GET",
                         url: "/retorna-materiais-por-data-cadastro/" + dataInicio + '/' + dataFim,
-                        data: "data",
-                        dataType: "dataType",
+                        // data: "data",
+                        dataType: "json",
                         success: function(response) {
+                            // console.log('Materiais recebidos:', response);
+                            $.each(response, function(index, material) {
+                                //    $material->CategoriaMaterial?->nome,
+                                //             $material->ItemCatalogoMaterial?->nome,
+                                //             $material->Marca?->nome,
+                                //             $material->Cor?->nome,
+                                //             $material->Tamanho?->nome,
+                                //             $material->FaseEtaria?->nome,
+                                //             $material->TipoSexo?->nome,
+
+                                let nomeMaterial = '';
+                                console.log('Material:', material);
+                                if (material.categoria_material.nome) {
+                                    nomeMaterial += material.categoria_material.nome;
+                                };
+                            
+
+
+
+
+                            });
+
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Erro ao buscar materiais:', error);
                         }
                     });
-
                     console.log('Campos de data preenchidos corretamente');
                     $('#id_material').attr('disabled', false);
                 } else {

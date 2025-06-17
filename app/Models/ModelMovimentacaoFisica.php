@@ -10,14 +10,14 @@ class ModelMovimentacaoFisica extends Model
     public $timestamps = false;
     protected $table = 'movimentacao_fisica';
     protected $fillable = [
-    'id_item_material',
-    'id_cadastro_inicial',
-    'id_remetente',
-    'id_destinatario',
-    'data',
-    'id_deposito_origem',
-    'id_deposito_destino',
-    'id_tp_movimento',
+        'id_item_material',
+        'id_cadastro_inicial',
+        'id_remetente',
+        'id_destinatario',
+        'data',
+        'id_deposito_origem',
+        'id_deposito_destino',
+        'id_tp_movimento',
 
     ];
 
@@ -25,11 +25,12 @@ class ModelMovimentacaoFisica extends Model
     {
         return $this->belongsTo(ModelCadastroInicial::class, 'id_cadastro_inicial');
     }
+
     public function remetente()
     {
         return $this->belongsTo(ModelUsuario::class, 'id_remetente');
     }
-     public function destinatario()
+    public function destinatario()
     {
         return $this->belongsTo(ModelUsuario::class, 'id_destinatario');
     }

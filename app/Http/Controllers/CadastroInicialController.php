@@ -69,7 +69,7 @@ class CadastroInicialController extends Controller
             });
         }
         if ($request->pesquisaNomeMaterial) {
-            $query->where('id_nome_mat', $request->pesquisaNomeMaterial);
+            $query->where('id_item_catalogo', $request->pesquisaNomeMaterial);
         }
         if ($request->pesquisaNumeroDocumento) {
             $query->whereHas('DocOrigem', function ($q) use ($request) {

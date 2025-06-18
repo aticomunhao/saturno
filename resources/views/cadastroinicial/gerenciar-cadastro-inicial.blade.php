@@ -20,15 +20,15 @@
                         </div>
                         <br>
                         <div class="card-body">
-                            <div class="row" style="margin-left:5px">
+                            <div class="row">
                                 <div class="col-md d-flex">
                                     <button type="button" class="btn  btn-sm" data-bs-toggle="modal"
                                         data-bs-target="#filtros"
-                                        style="box-shadow: 3px 5px 6px #000000; background-color: rgb(231, 231, 69); ">
+                                        style="box-shadow: 1px 2px 5px #000000; background-color: rgb(231, 231, 69); margin-right: 2%">
                                         FILTRAR <i class="bi bi-funnel"></i>
                                     </button>
+                                    <a class="btn btn-secondary" style="box-shadow: 1px 2px 5px #000000; margin-right: 2%" href="/gerenciar-cadastro-inicial">Limpar</a>
                                 </div>
-
                                 <div class="col-md d-flex justify-content-end">
                                     <a href="/salvar-termo-compra" class="btn btn-success"
                                         style="font-size: 1rem; box-shadow: 1px 2px 5px #000000; ">
@@ -57,7 +57,6 @@
                                         </th>
                                         <th>ID</th>
                                         <th>DATA</th>
-
                                         @if ($request->pesquisaDeposito)
                                             <th>DEPÓSITO</th>
                                         @endif
@@ -66,13 +65,10 @@
                                         @endif
                                         <th>NR. DOC.</th>
                                         <th>CATEGORIA</th>
-
                                         @if ($request->pesquisaEmpresa)
                                             <th>EMPRESA</th>
                                         @endif
-
                                         <th>NOME</th>
-
                                         @if ($request->pesquisaDocumento)
                                             <th>TIPO DE DOCUMENTO</th>
                                         @endif
@@ -82,7 +78,6 @@
                                         @if ($request->pesquisaSolicitacao)
                                             <th>SOLICITAÇÃO</th>
                                         @endif
-
                                         <th>STATUS</th>
                                         <th>AÇÕES</th>
                                     </tr>
@@ -186,14 +181,14 @@
                                                 {{-- @endif --}}
                                                 {{-- @if ($aquisicaos->tipoStatus->id == '1') --}}
                                                 <a class="btn btn-sm btn-outline-danger excluirSolicitacao"
-                                                        data-tt="tooltip" style="font-size: 1rem; color:#303030"
-                                                        data-placement="top" title="Excluir" data-bs-toggle="modal"
-                                                        data-bs-target="#modalExcluirMaterial"
-                                                        data-id="{{ $CadastroInicials->id }}"
-                                                        data-documento-id="{{ $CadastroInicials->documento_origem }}"
-                                                        data-nome='{{ $CadastroInicials->ItemCatalogoMaterial->nome ?? 'N/A' }}'>
-                                                        <i class="bi bi-trash"></i>
-                                                    </a>
+                                                    data-tt="tooltip" style="font-size: 1rem; color:#303030"
+                                                    data-placement="top" title="Excluir" data-bs-toggle="modal"
+                                                    data-bs-target="#modalExcluirMaterial"
+                                                    data-id="{{ $CadastroInicials->id }}"
+                                                    data-documento-id="{{ $CadastroInicials->documento_origem }}"
+                                                    data-nome='{{ $CadastroInicials->ItemCatalogoMaterial->nome ?? 'N/A' }}'>
+                                                    <i class="bi bi-trash"></i>
+                                                </a>
                                                 {{-- @endif --}}
                                             </td>
                                         </tr>

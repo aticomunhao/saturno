@@ -154,6 +154,7 @@
                         dataType: "json",
                         success: function(response) {
                             // console.log('Materiais recebidos:', response);
+                            console.log('Dados recebidos:', response);
                             $.each(response, function(index, material) {
                                 //    $material->CategoriaMaterial?->nome,
                                 //             $material->ItemCatalogoMaterial?->nome,
@@ -165,10 +166,13 @@
 
                                 let nomeMaterial = '';
                                 console.log('Material:', material);
+                                console.log('Categoria:', material.marca);
                                 if (material.categoria_material.nome) {
-                                    nomeMaterial += material.categoria_material.nome;
+                                    nomeMaterial += material.categoria_material.nome +
+                                        ' - ';
+
                                 };
-                            
+
 
 
 

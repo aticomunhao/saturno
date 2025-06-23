@@ -110,22 +110,37 @@ class GerenciarMovimentacaoFisicaController extends Controller
     public  function solicitar_teste_ajax_para_material($data_inicio, $data_fim)
     {
         // dd($data_inicio, $data_fim);
-        $materiais = ModelCadastroInicial::with([
-            'Status',
-            'SolOrigem',
-            'DocOrigem',
-            'Deposito',
-            'Destinacao',
-            'CategoriaMaterial',
-            'TipoMaterial',
-            'movimentacaoFisica'
-        ])
-            ->whereBetween('data_cadastro', [$data_inicio, $data_fim])
-            ->whereHas('movimentacaoFisica', function ($query) {
-                $query->where('id_tp_movimento', 1);
-            })
-            ->get();
+        // ->join('status_cadastro_inicial', 'cadastro_inicial.id_tp_status', '=', 'status_cadastro_inicial.id')
+        //    $material->CategoriaMaterial?->nome,
+        //             $material->ItemCatalogoMaterial?->nome,
+        //             $material->Marca?->nome,
+        //             $material->Cor?->nome,
+        //             $material->Tamanho?->nome,
+        //             $material->FaseEtaria?->nome,
+        //             $material->TipoSexo?->nome,
 
+        $materiais = DB::table('cadastro_inicial as ci')
+            ->join('tipo_categoria_material as tcm', 'ci.id_cat_material', '=', 'tcm.id')
+            ->join('item_catalogo_material as icm', 'ci.id_item_catalogo', '=', 'icm.id')
+            ->select(
+                'tcm.nome as categoria_material',
+                'icm.nome as item_catalogo_material',
+
+            )
+            // WHERE DATA
+            ->whereBetween('ci.data_cadastro', [$data_inicio, $data_fim])
+
+            // WHERE EXISTE MOVIMENTAÇÃO FÍSICA COM id_tp_movimento = 1
+            ->whereExists(function ($query) {
+                $query->select(DB::raw(1))
+                    ->from('movimentacao_fisica as mf')
+                    ->whereColumn('mf.id_cadastro_inicial', 'ci.id')
+                    ->where('mf.id_tp_movimento', 1);
+            })
+            ->get()
+            ->toArray();
+        // dd($materiais);
+        dd($materiais);
         return response()->json($materiais);
     }
 

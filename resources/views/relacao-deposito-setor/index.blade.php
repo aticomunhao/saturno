@@ -26,11 +26,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">ATI</th>
-                            <td>Deposito 01</td>
-                            <td>Otto</td>
-                        </tr>
+                        @foreach ($relacoes_deposito_setor as $relacao)
+                            <tr>
+                                <td>{{ $relacao->Deposito->nome }}</td>
+                                <td>{{ $relacao->Setor->nome }}</td>
+                                <td>
+                                    <a href="{{ route('relacao-deposito-setor.edit', $relacao->id) }}"
+                                        class="btn btn-warning btn-sm">Editar</a>
+                                    {{-- <form action="{{ route('relacao-deposito-setor.destroy', $relacao->id) }}"
+                                        method="POST" style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                                    </form> --}}
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
                 </p>

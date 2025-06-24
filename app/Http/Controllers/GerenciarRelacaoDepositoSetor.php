@@ -15,6 +15,7 @@ class GerenciarRelacaoDepositoSetor extends Controller
     public function index()
     {
         $relacoes_deposito_setor = ModelRelDepositoSetor::with(['Deposito', 'Setor'])->get();
+        // dd($relacoes_deposito_setor);
         $setores = ModelSetor::all();
         $depositos = ModelDeposito::all();
         return view('relacao-deposito-setor.index', compact('relacoes_deposito_setor', 'setores', 'depositos'));

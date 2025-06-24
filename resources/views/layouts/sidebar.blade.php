@@ -68,11 +68,14 @@ $setor = session()->get('usuario.setor');
                             </li>
                             <li><a class="dropdown-item" href="/catalogo-servico">Serviços</a>
                             </li>
-                            <li><a class="dropdown-item" href="{{ route('conta-contabil.index') }}">Contas Contabeis</a>
+                            <li><a class="dropdown-item" href="{{ route('conta-contabil.index') }}">Contas Contábeis</a>
                             </li>
                             <li><a class="dropdown-item" href="{{ route('deposito.index') }}">Depósitos</a>
                             </li>
                             <li><a class="dropdown-item" href="/gerenciar-embalagem">Embalagens</a>
+                            </li>
+                            <li><a class="dropdown-item" href="{{ route('relacao-deposito-setor.index') }}">Relação
+                                    Depósito Setor</a>
                             </li>
                         </ul>
                     </li>
@@ -94,7 +97,8 @@ $setor = session()->get('usuario.setor');
                         <a class="nav-link dropdown-toggle" href="#" id="4" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">Pagamento</a>
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                            <li><a class="dropdown-item" href="{{ route('pagamento.index') }}">Gerenciar Pagamentos</a>
+                            <li><a class="dropdown-item" href="{{ route('pagamento.index') }}">Gerenciar
+                                    Pagamentos</a>
                             </li>
                             <li><a class="dropdown-item" href="{{ route('contrato.index') }}">Gerenciar Contratos</a>
                             </li>

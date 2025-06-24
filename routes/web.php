@@ -53,6 +53,7 @@ use App\Http\Controllers\GerenciarDepositoController;
 use App\Http\Controllers\ValorCompraController;
 use App\Http\Controllers\PesquisaController;
 use App\Http\Controllers\GerenciarMovimentacaoFisicaController;
+use App\Http\Controllers\GerenciarRelacaoDepositoSetor;
 use App\Http\Controllers\PagamentoController;
 
 
@@ -426,6 +427,14 @@ Route::get('/retorna-cadastro-inicial', [GerenciarMovimentacaoFisicaController::
 // Route::get('/movimentacao-fisica/excluir/{id}', [GerenciarMovimentacaoFisica::class, 'destroy'])->name('movimentacao.delete');
 Route::get('/retorna-materiais-por-data-cadastro/{data_inicio}/{data_fim}', [GerenciarMovimentacaoFisicaController::class, 'solicitar_teste_ajax_para_material'])->name('movimentacao-fisica.retorna-materiais-por-data-cadastro');
 Route::any('/movimentacao-fisica/homologar', [GerenciarMovimentacaoFisicaController::class, 'homologar'])->name('movimentacao-fisica.homologar');
+
+//Catalogo Relacacional Setor por Deposito
+Route::get('/catalogo-relacional-setor-deposito', [GerenciarRelacaoDepositoSetor::class, 'index'])->name('relacao-deposito-setor.index');
+Route::get('/catalogo-relacional-setor-deposito/incluir', [GerenciarRelacaoDepositoSetor::class, 'create'])->name('relacao-deposito-setor.create');
+Route::post('/catalogo-relacional-setor-deposito/store', [GerenciarRelacaoDepositoSetor::class, 'store'])->name('relacao-deposito-setor.store');
+Route::get('/catalogo-relacional-setor-deposito/editar/{id}', [GerenciarRelacaoDepositoSetor::class, 'edit'])->name('relacao-deposito-setor.edit');
+Route::put('/catalogo-relacional-setor-deposito/update/{id}', [GerenciarRelacaoDepositoSetor::class, 'update'])->name('relacao-deposito-setor.update');
+Route::delete('/catalogo-relacional-setor-deposito/delete/{id}', [GerenciarRelacaoDepositoSetor::class, 'destroy'])->name('relacao-deposito-setor.delete');
 
 //Pesquisa de Materiais
 Route::get('/marcas/{categoriaId}', [PesquisaController::class, 'getMarcas']);

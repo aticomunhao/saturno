@@ -36,7 +36,6 @@
                     <tr style="background-color: #d6e3ff; font-size:14px; color:#000000">
                         <th class="col-3 ">ID</th>
                         <th class="col"> NOME</th>
-
                         <th class="col">AÇÕES</th>
                     </tr>
                 </thead>

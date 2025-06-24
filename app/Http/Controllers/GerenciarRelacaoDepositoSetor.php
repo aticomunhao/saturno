@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ModelDeposito;
 use Illuminate\Http\Request;
 use App\Models\ModelRelDepositoSetor;
 use App\Models\ModelSetor;
@@ -15,7 +16,8 @@ class GerenciarRelacaoDepositoSetor extends Controller
     {
         $relacoes_deposito_setor = ModelRelDepositoSetor::with(['Deposito', 'Setor'])->get();
         $setores = ModelSetor::all();
-        return view('relacao-deposito-setor.index', compact('relacoes_deposito_setor', 'setores'));
+        $depositos = ModelDeposito::all();
+        return view('relacao-deposito-setor.index', compact('relacoes_deposito_setor', 'setores', 'depositos'));
     }
 
     /**
@@ -23,7 +25,10 @@ class GerenciarRelacaoDepositoSetor extends Controller
      */
     public function create()
     {
-        //
+        $setores = ModelSetor::all();
+        $depositos = ModelDeposito::whith();
+        // dd($setores, $depositos);
+        return view('relacao-deposito-setor.create', compact('setores', 'depositos'));
     }
 
     /**
@@ -31,7 +36,17 @@ class GerenciarRelacaoDepositoSetor extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $request->validate([
+            // 'setor_id' => 'required|exists:setores,id',
+            // 'deposito_id' => 'required|exists:depositos,id',
+        ]);
+        $relacao = new ModelRelDepositoSetor();
+        $relacao->id_setor = $request->input('setor_id');
+        $relacao->id_deposito = $request->input('deposito_id');
+        $relacao->save();
+
+        return redirect()->route('relacao-deposito-setor.index')->with('success', 'Relação Depósito/Setor criada com sucesso!');
     }
 
     /**

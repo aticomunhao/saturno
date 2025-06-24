@@ -11,7 +11,8 @@
                     <div class="col-sm-12 col-md-3"></div>
                     <div class="col-sm-12 col-md-3"></div>
                     <div class="col-sm-12 col-md-3">
-                        <a href="{{r}}"><button class="btn btn-success" style="width: 100%">Novo</button></a> 
+                        <a href="{{ route('relacao-deposito-setor.create') }}"><button class="btn btn-success"
+                                style="width: 100%">Novo</button></a>
                     </div>
                 </div>
                 <hr>

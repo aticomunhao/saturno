@@ -37,4 +37,18 @@ class ModelDeposito extends Model
     public function depositoDestinoLocalizacaoCadastroInicial(){
         return $this->hasMany(ModelLocalizacaoCadastroInicial::class, 'id_deposito_destino');
     }
+    public function relacaoDepositoSetor()
+    {
+        return $this->hasMany(ModelRelDepositoSetor::class, 'id_deposito');
+    }
+    public function relacaoDepositoSetorSetor()
+    {
+        return $this->hasManyThrough(ModelSetor::class, ModelRelDepositoSetor::class, 'id_deposito', 'id_setor');
+    }
+    // public function relacaoDepositoSetorSetorAtivo()
+    // {
+    //     return $this->hasManyThrough(ModelSetor::class, ModelRelDepositoSetor::class, 'id_deposito', 'id_setor')
+    //         ->where('ativo', true);
+    // }
+
 }

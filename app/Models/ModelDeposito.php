@@ -41,10 +41,10 @@ class ModelDeposito extends Model
     {
         return $this->hasMany(ModelRelDepositoSetor::class, 'id_deposito');
     }
-    public function relacaoDepositoSetorSetor()
-    {
-        return $this->hasManyThrough(ModelSetor::class, ModelRelDepositoSetor::class, 'id_deposito', 'id_setor');
-    }
+    // public function relacaoDepositoSetorSetor()
+    // {
+    //     return $this->hasManyThrough(ModelSetor::class, ModelRelDepositoSetor::class, 'id_deposito', 'id_setor');
+    // }
     // public function relacaoDepositoSetorSetorAtivo()
     // {
     //     return $this->hasManyThrough(ModelSetor::class, ModelRelDepositoSetor::class, 'id_deposito', 'id_setor')

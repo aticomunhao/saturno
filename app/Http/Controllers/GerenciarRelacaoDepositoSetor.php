@@ -27,8 +27,10 @@ class GerenciarRelacaoDepositoSetor extends Controller
     public function create()
     {
         $setores = ModelSetor::all();
-        $depositos = ModelDeposito::whith();
-        // dd($setores, $depositos);
+        // $depositos = ModelDeposito::with('relacaoDepositoSetor')->get();
+        $depositos = ModelDeposito::doesntHave('relacaoDepositoSetor')
+            ->get();
+
         return view('relacao-deposito-setor.create', compact('setores', 'depositos'));
     }
 
@@ -63,7 +65,14 @@ class GerenciarRelacaoDepositoSetor extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $relacao = ModelRelDepositoSetor::findOrFail($id);
+        $deposito = $relacao->Deposito;
+        // dd($deposito);
+        $setores = ModelSetor::all();
+        // $depositos = ModelDeposito::doesntHave('relacaoDepositoSetor')
+        //     ->get();
+
+        return view('relacao-deposito-setor.edit', compact('relacao', 'setores', 'depositos'));
     }
 
     /**

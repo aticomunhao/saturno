@@ -20,7 +20,8 @@
                     <thead>
                         <tr style="background-color: #d6e3ff; font-size:14px; color:#000000">
                             <th scope="col">Deposito</th>
-                            <th scope="col">Setor</th>
+                            <th scope="col">Setor Responsavel</th>
+
                             <th scope="col">Ações</th>
 
                         </tr>
@@ -32,13 +33,9 @@
                                 <td>{{ $relacao->Setor->nome }}</td>
                                 <td>
                                     <a href="{{ route('relacao-deposito-setor.edit', $relacao->id) }}"
-                                        class="btn btn-warning btn-sm">Editar</a>
-                                    {{-- <form action="{{ route('relacao-deposito-setor.destroy', $relacao->id) }}"
-                                        method="POST" style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
-                                    </form> --}}
+                                        class="btn btn-outline-warning btn-sm" style="font-size: 1rem; color: #303030"
+                                        data-placement="top" title="Editar"><i class="bi bi-pencil"></i></a>
+
                                 </td>
                             </tr>
                         @endforeach

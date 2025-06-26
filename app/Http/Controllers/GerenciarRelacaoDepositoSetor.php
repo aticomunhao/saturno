@@ -6,6 +6,7 @@ use App\Models\ModelDeposito;
 use Illuminate\Http\Request;
 use App\Models\ModelRelDepositoSetor;
 use App\Models\ModelSetor;
+use Carbon\Carbon;
 
 class GerenciarRelacaoDepositoSetor extends Controller
 {
@@ -47,6 +48,7 @@ class GerenciarRelacaoDepositoSetor extends Controller
         $relacao = new ModelRelDepositoSetor();
         $relacao->id_setor = $request->input('setor_id');
         $relacao->id_deposito = $request->input('deposito_id');
+        $relacao->dt_inicio = Carbon::now();
         $relacao->save();
 
         return redirect()->route('relacao-deposito-setor.index')->with('success', 'Relação Depósito/Setor criada com sucesso!');
@@ -66,13 +68,14 @@ class GerenciarRelacaoDepositoSetor extends Controller
     public function edit(string $id)
     {
         $relacao = ModelRelDepositoSetor::findOrFail($id);
-        $deposito = $relacao->Deposito;
+        $deposito_banco = $relacao->Deposito;
         // dd($deposito);
         $setores = ModelSetor::all();
+        $setor_banco =  $relacao->Setor;
         // $depositos = ModelDeposito::doesntHave('relacaoDepositoSetor')
         //     ->get();
 
-        return view('relacao-deposito-setor.edit', compact('relacao', 'setores', 'depositos'));
+        return view('relacao-deposito-setor.edit', compact('relacao', 'setores', 'deposito_banco', 'setor_banco'));
     }
 
     /**

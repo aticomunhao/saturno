@@ -11,6 +11,8 @@ class ModelRelDepositoSetor extends Model
     protected $fillable = [
         'id_deposito',
         'id_setor',
+        'dt_inicio',
+        'dt_fim',
     ];
     public function Deposito()
     {

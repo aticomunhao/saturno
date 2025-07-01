@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\ModelRelDepositoSetor;
 use App\Models\ModelSetor;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 
 class GerenciarRelacaoDepositoSetor extends Controller
 {
@@ -15,7 +16,9 @@ class GerenciarRelacaoDepositoSetor extends Controller
      */
     public function index()
     {
-        $relacoes_deposito_setor = ModelRelDepositoSetor::with(['Deposito', 'Setor'])->get();
+
+        $relacoes_deposito_setor = null;
+        $relacoes_deposito_setor = ModelRelDepositoSetor::with(['Deposito', 'Setor'])->where('dt_fim', null)->get();
         // dd($relacoes_deposito_setor);
         $setores = ModelSetor::all();
         $depositos = ModelDeposito::all();
@@ -59,7 +62,26 @@ class GerenciarRelacaoDepositoSetor extends Controller
      */
     public function show(string $id)
     {
-        //
+        $relacao = ModelRelDepositoSetor::findOrFail($id);
+        if (!$relacao) {
+            return redirect()->route('relacao-deposito-setor.index')->with('error', 'Relação não encontrada.');
+        }
+        // Carrega as relações de depósito e setor
+        $relacao_atual = ModelRelDepositoSetor::with(['Deposito', 'Setor'])
+            ->where('id', $id)
+            ->first();
+
+        $relacoes = ModelRelDepositoSetor::where('id_setor',  $relacao_atual->Setor->id)
+            ->orderBy('dt_inicio', 'desc')
+            ->with(['Deposito', 'Setor'])
+            // ->where('dt_fim', null)
+            // ->where('id', '!=', $id)
+            // ->where('id_setor', $relacao_atual->Setor->id)
+            ->get();
+        //    dd($relacao_atual, $relacoes);
+
+
+        return view('relacao-deposito-setor.show', compact('relacao_atual', 'relacoes'));
     }
 
     /**
@@ -72,10 +94,11 @@ class GerenciarRelacaoDepositoSetor extends Controller
         // dd($deposito);
         $setores = ModelSetor::all();
         $setor_banco =  $relacao->Setor;
-        // $depositos = ModelDeposito::doesntHave('relacaoDepositoSetor')
-        //     ->get();
+        $depositos = ModelDeposito::all();
+        // dd($relacao);
 
-        return view('relacao-deposito-setor.edit', compact('relacao', 'setores', 'deposito_banco', 'setor_banco'));
+
+        return view('relacao-deposito-setor.edit', compact('relacao', 'setores', 'depositos', 'deposito_banco', 'setor_banco'));
     }
 
     /**
@@ -83,7 +106,17 @@ class GerenciarRelacaoDepositoSetor extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // dd($request->all(), $id);
+
+        $relacao = ModelRelDepositoSetor::findOrFail($id);
+        $relacao->dt_fim = Carbon::now();
+        $relacao->save();
+        $relacao = new ModelRelDepositoSetor();
+        $relacao->id_setor = $request->input('setor_id');
+        $relacao->id_deposito = $request->input('deposito_id');
+        $relacao->dt_inicio = Carbon::now()->subDays(1); // Ajuste para o dia anterior
+        $relacao->save();
+        return redirect()->route('relacao-deposito-setor.index')->with('success', 'Relação Depósito/Setor atualizada com sucesso!');
     }
 
     /**

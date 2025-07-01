@@ -26,8 +26,6 @@
                             <th scope="col">Deposito</th>
                             <th scope="col">Setor Responsavel</th>
                             <th scope="col">Data Inicio Responsabilidade</th>
-                            <th scope="col">Data Fim Responsabilidade</th>
-
                             <th scope="col">Ações</th>
 
                         </tr>
@@ -40,13 +38,13 @@
                                 <th scope="col">
                                     {{ $relacao->dt_inicio ? Carbon::parse($relacao->dt_inicio)->format('d/m/Y') : '--' }}
                                 </th>
-                                <th scope="col">
-                                    {{ $relacao->dt_fim ? Carbon::parse($relacao->dt_fim)->format('d/m/Y') : '--' }}</th>
-                                <td>
-                                    <a href="{{ route('relacao-deposito-setor.edit', $relacao->id) }}"
-                                        class="btn btn-outline-warning btn-sm" style="font-size: 1rem; color: #303030"
-                                        data-placement="top" title="Editar"><i class="bi bi-pencil"></i></a>
 
+                                <a href="{{ route('relacao-deposito-setor.show', $relacao->id) }}"
+                                    class="btn btn-outline-primary btn-sm" style="font-size: 1rem; color: #303030"
+                                    data-placement="top" title="Editar"><i class="bi bi-search"></i></a>
+                                <a href="{{ route('relacao-deposito-setor.edit', $relacao->id) }}"
+                                    class="btn btn-outline-warning btn-sm" style="font-size: 1rem; color: #303030"
+                                    data-placement="top" title="Editar"><i class="bi bi-pencil"></i></a>
                                 </td>
                             </tr>
                         @endforeach

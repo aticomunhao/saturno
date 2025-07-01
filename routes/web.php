@@ -435,6 +435,7 @@ Route::post('/catalogo-relacional-setor-deposito/store', [GerenciarRelacaoDeposi
 Route::get('/catalogo-relacional-setor-deposito/editar/{id}', [GerenciarRelacaoDepositoSetor::class, 'edit'])->name('relacao-deposito-setor.edit');
 Route::put('/catalogo-relacional-setor-deposito/update/{id}', [GerenciarRelacaoDepositoSetor::class, 'update'])->name('relacao-deposito-setor.update');
 Route::delete('/catalogo-relacional-setor-deposito/delete/{id}', [GerenciarRelacaoDepositoSetor::class, 'destroy'])->name('relacao-deposito-setor.delete');
+Route::get('/catalogo-relacional-setor-deposito/visualizar/{id}', [GerenciarRelacaoDepositoSetor::class, 'show'])->name('relacao-deposito-setor.show');
 
 //Pesquisa de Materiais
 Route::get('/marcas/{categoriaId}', [PesquisaController::class, 'getMarcas']);

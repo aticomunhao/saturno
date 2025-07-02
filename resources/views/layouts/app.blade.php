@@ -19,7 +19,6 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/css/app.css', 'resources/js/app.js'])
-    @vite(['resources/js/app.js', 'resources/css/app.css'])
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
@@ -28,12 +27,6 @@
 
     <!-- Link ke jQuery dari CDN -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-    <!-- Link ke DataTables dari CDN -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
-
-
 
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet"
@@ -46,15 +39,12 @@
     <!-- Font Awesome manualmente -->
     <link rel="stylesheet" href="{{ asset('fontsawesome/css/all.min.css') }}">
 
-
     <!-- Estilo para o dropdown-->
     <style>
         .dropdown:hover .dropdown-menu {
             display: block;
         }
     </style>
-
-
 </head>
 
 <body>

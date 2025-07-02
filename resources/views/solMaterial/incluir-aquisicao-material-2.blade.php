@@ -48,6 +48,21 @@
                                             @endforeach
                                         </select>
                                     </div>
+                                    <div class="col-md-3 col-sm-12">
+                                        <label>Selecione o Depósito de Entrada</label>
+                                        <br>
+                                        <select class="form-select select2" style="border: 1px solid #999999; padding: 5px;"
+                                            id="idDeposito" name="idDepositoSolicitacao" required>
+                                            <option value="{{ $solicitacao->setor->id ?? '' }}" selected>
+                                                {{ $solicitacao->setor->sigla ?? 'Não especificado' }} -
+                                                {{ $solicitacao->setor->nome ?? 'Não especificado' }}</option>
+                                            @foreach ($buscaSetor as $buscaSetors)
+                                                <option value="{{ $buscaSetors->id }}">
+                                                    {{ $buscaSetors->sigla }} - {{ $buscaSetors->nome }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="col-12 mt-3">
                                     <label>Motivo</label>
@@ -1310,7 +1325,7 @@
         </div>
     </x-modal-incluir>
     <x-modal-editar id="modalEditarMaterial" labelId="modalEditarMaterialLabel" title="Editar Material"
-        action="{{ url('/cadastro-inicial-material/editar-material') }}">
+        action="{{ url('/incluir-material-solicitacao/' . $idSolicitacao) }}">
         @method('PUT')
         <input type="hidden" name="edit-id" id="edit-id">
         {{-- <input type="hidden" name="documento-id-editar" id="documento-id-editar"> --}}
@@ -1474,15 +1489,6 @@
             </div>
         </div>
     </x-modal-editar>
-    <x-modal-excluir id="modalExcluirMaterial" labelId="modalExcluirMaterialLabel"
-        action="{{ url('/cadastro-inicial-material/deletar') }}" title="Excluir Material">
-        <input type="hidden" name="delete-id" id="delete-id">
-        {{-- <input type="hidden" name="documento-id-excluir" id="documento-id-excluir"> --}}
-        <div class="row">
-            <label>Deseja realmente <strong style="color: red">excluir</strong> o material <span
-                    id="nome-material"></span>?</label>
-        </div>
-    </x-modal-excluir>
     <!-- Modal Excluir Material -->
     <div class="modal fade" id="modalExcluirMaterial" tabindex="-1" aria-labelledby="modalExcluirMaterialLabel"
         aria-hidden="true">

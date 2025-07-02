@@ -6,8 +6,6 @@ window.$ = window.jQuery = $;
 import 'select2';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import 'bootstrap5-toggle/js/bootstrap5-toggle.ecmas.min.js';
-import 'datatables.net-bs5';
-import 'datatables.net-bs5/css/dataTables.bootstrap5.css';
 
 import '../css/app.css';
 import '../sass/app.scss';

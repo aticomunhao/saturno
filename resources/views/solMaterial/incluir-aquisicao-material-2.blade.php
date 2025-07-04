@@ -52,13 +52,11 @@
                                         <label>Selecione o Depósito de Entrada</label>
                                         <br>
                                         <select class="form-select select2" style="border: 1px solid #999999; padding: 5px;"
-                                            id="idDeposito" name="idDepositoSolicitacao" required>
-                                            <option value="{{ $solicitacao->setor->id ?? '' }}" selected>
-                                                {{ $solicitacao->setor->sigla ?? 'Não especificado' }} -
-                                                {{ $solicitacao->setor->nome ?? 'Não especificado' }}</option>
-                                            @foreach ($buscaSetor as $buscaSetors)
-                                                <option value="{{ $buscaSetors->id }}">
-                                                    {{ $buscaSetors->sigla }} - {{ $buscaSetors->nome }}
+                                            id="idDeposito" name="idDepositoSolicitacao" required data-placeholder="Selecione um depósito">
+                                            <option value="" selected></option>
+                                            @foreach ($buscaDeposito as $buscaDepositos)
+                                                <option value="{{ $buscaDepositos->id }}">
+                                                    {{ $buscaDepositos->sigla }} - {{ $buscaDepositos->nome }}
                                                 </option>
                                             @endforeach
                                         </select>

@@ -23,6 +23,7 @@ use App\Models\ModelItemCatalogoMaterial;
 use App\Models\ModelMatProposta;
 use App\Models\ModelUnidadeMedida;
 use App\Models\ModelPessoa;
+use App\Models\ModelDeposito;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Validator;
@@ -202,6 +203,7 @@ class AquisicaoMaterialController extends Controller
         $documentos = ModelDocumento::where('id_sol_mat', $idSolicitacao)->with('empresa')->get();
         //dd($documentos);
         $solicitacao = ModelSolMaterial::with('modelPessoa', 'modelPessoaResponsavel', 'setor')->find($idSolicitacao);
+        $buscaDeposito = ModelDeposito::all();
         //dd($solicitacao->modelPessoa->nome_completo);
         $setor = session('usuario.setor');
         $buscaCategoria = ModelTipoCategoriaMt::all();
@@ -219,7 +221,7 @@ class AquisicaoMaterialController extends Controller
 
         //dd($documentoMaterial);
 
-        return view('solMaterial.incluir-aquisicao-material-2', compact('documentos', 'solicitacao', 'bucaItemCatalogo', 'materiais', 'idSolicitacao', 'buscaSetor', 'buscaUnidadeMedida', 'buscaCategoria', 'buscaMarca', 'buscaTamanho', 'buscaCor', 'buscaFaseEtaria', 'buscaSexo', 'buscaEmpresa'));
+        return view('solMaterial.incluir-aquisicao-material-2', compact('documentos', 'buscaDeposito', 'solicitacao', 'bucaItemCatalogo', 'materiais', 'idSolicitacao', 'buscaSetor', 'buscaUnidadeMedida', 'buscaCategoria', 'buscaMarca', 'buscaTamanho', 'buscaCor', 'buscaFaseEtaria', 'buscaSexo', 'buscaEmpresa'));
     }
     public function store2(Request $request, $id)
     {

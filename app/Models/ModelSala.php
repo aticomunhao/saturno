@@ -12,4 +12,8 @@ class ModelSala extends Model
         'nome',
         'numero'
     ];
+    public function depositos()
+    {
+        return $this->hasMany(ModelDeposito::class, 'id_sala');
+    }
 }

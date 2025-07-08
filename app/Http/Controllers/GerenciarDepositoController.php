@@ -48,7 +48,7 @@ class GerenciarDepositoController extends Controller
     public function create()
     {
         $tipo_deposito = ModelTipoDeposito::all();
-        $sala = ModelSala::all();
+        $sala = ModelSala::with('depositos')->whereDoesntHave('depositos')->get();
         // dd($tipo_deposito);
         return view('depositos.create', compact('tipo_deposito', 'sala'));
 

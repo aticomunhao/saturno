@@ -116,9 +116,27 @@
             }
         }
 
+        function materiais() {
+            $.ajax({
+                type: "GET",
+                url: "/retorna-materiais",
+                dataType: "JSON",
+                success: function(response) {
+                    console.log(response);
+                    $.each(response, function(indexInArray, material) {
+                        var nomeMaterial = '';
+
+                        if
+
+
+
+                    });
+                }
+            });
+        }
+
 
         $(document).ready(function() {
-            verificarCampos();
             // Alternância entre "Por Material" e "Por Documento"
             $('.inputradio').change(function() {
                 if ($(this).val() == "1") {
@@ -145,6 +163,8 @@
                 if (verificarCampos()) {
                     var dataInicio = $('#id_data_inicio_por_material').val();
                     var dataFim = $('#id_data_fim_por_material').val();
+                    materiais();
+
                     // console.log('Data Início:', dataInicio);
                     // console.log('Data Fim:', dataFim);
                     $.ajax({
@@ -153,32 +173,18 @@
                         // data: "data",
                         dataType: "json",
                         success: function(response) {
-                            // console.log('Materiais recebidos:', response);
+                            console.log('Materiais recebidos:', response);
                             console.log('Dados recebidos:', response);
+                            $('#id_material').empty();
                             $.each(response, function(index, material) {
-                                //    $material->CategoriaMaterial?->nome,
-                                //             $material->ItemCatalogoMaterial?->nome,
-                                //             $material->Marca?->nome,
-                                //             $material->Cor?->nome,
-                                //             $material->Tamanho?->nome,
-                                //             $material->FaseEtaria?->nome,
-                                //             $material->TipoSexo?->nome,
-
                                 let nomeMaterial = '';
                                 console.log('Material:', material);
                                 console.log('Categoria:', material.marca);
                                 if (material.categoria_material.nome) {
                                     nomeMaterial += material.categoria_material.nome +
                                         ' - ';
-
                                 };
-
-
-
-
-
                             });
-
                         },
                         error: function(xhr, status, error) {
                             console.error('Erro ao buscar materiais:', error);

@@ -107,17 +107,9 @@ class GerenciarMovimentacaoFisicaController extends Controller
         //   dd($cadastro_inicial);
         return view('movimentacao-fisica.novo-solicitar-teste', compact('cadastro_inicial', 'documentos'));
     }
-    public  function solicitar_teste_ajax_para_material($data_inicio, $data_fim)
+    public  function solicitar_teste_ajax_para_material_por_data($data_inicio, $data_fim)
     {
-        // dd($data_inicio, $data_fim);
-        // ->join('status_cadastro_inicial', 'cadastro_inicial.id_tp_status', '=', 'status_cadastro_inicial.id')
-        //    $material->CategoriaMaterial?->nome,
-        //             $material->ItemCatalogoMaterial?->nome,
-        //             $material->Marca?->nome,
-        //             $material->Cor?->nome,
-        //             $material->Tamanho?->nome,
-        //             $material->FaseEtaria?->nome,
-        //             $material->TipoSexo?->nome,
+
 
         $materiais = DB::table('cadastro_inicial as ci')
             ->join('tipo_categoria_material as tcm', 'ci.id_cat_material', '=', 'tcm.id')
@@ -140,8 +132,28 @@ class GerenciarMovimentacaoFisicaController extends Controller
             ->get()
             ->toArray();
         // dd($materiais);
-        dd($materiais);
+
         return response()->json($materiais);
+    }
+
+    public function retorna_materiais()
+    {
+        $cadastro_inicial = ModelCadastroInicial::with(
+            'Status',
+            'SolOrigem',
+            'DocOrigem',
+            'Deposito',
+            'Destinacao',
+            'CategoriaMaterial',
+            'TipoMaterial',
+            'movimentacaoFisica'
+        )
+            ->whereHas('movimentacaoFisica', function ($query) {
+                $query->where('id_tp_movimento', 1);
+            })
+            ->get()
+            ->toArray();
+        return response()->json($cadastro_inicial);
     }
 
     public function solicitar_teste_confere(Request $request)

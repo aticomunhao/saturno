@@ -27,15 +27,13 @@
                     </div>
                 </div>
 
-                <!-- Checkbox: Filtrar por Data -->
-
                 <!-- Por Material -->
                 <div class="row align-items-end mb-3" id="pormaterial">
                     <div class="row mb-3">
                         <div class="col-md-12 d-flex align-items-center">
                             <input type="checkbox" id="afirma_por_data_material" name="afirma_por_data_material"
                                 class="form-check-input me-2">
-                            <label class="form-check-label" for="afirma_por_data">Filtrar por data</label>
+                            <label class="form-check-label" for="afirma_por_data_material">Filtrar por data</label>
                         </div>
                     </div>
 
@@ -43,15 +41,17 @@
                     <div id="id_deseja_por_data_cadastro_material" class="mb-4" style="display: none;">
                         <div class="row">
                             <div class="col-md-6">
-                                <label for="data" class="form-label">Selecione a Data</label>
+                                <label for="data" class="form-label">Data Início</label>
                                 <input type="date" class="form-control" id="id_data_inicio_por_material">
                             </div>
                             <div class="col-md-6">
-                                <label for="data" class="form-label">Selecione a Data</label>
+                                <label for="data" class="form-label">Data Fim</label>
                                 <input type="date" class="form-control" id="id_data_fim_por_material">
                             </div>
                         </div>
                     </div>
+
+                    <!-- Select Material -->
                     <div class="col-md-8">
                         <label for="material" class="form-label">Selecione o Material</label>
                         <select class="form-select" id="id_material" name="material">
@@ -80,40 +80,39 @@
 
                 <!-- Por Documento -->
                 <div id="pordocumento" style="display: none;">
-                    <p>Por documento</p>
-                    {{-- <div class="col-md-8">
-                        <label for="material" class="form-label">Selecione o Material</label>
-                        <select class="form-select" id="id_documento" name="documento">
-                            @foreach ($cadastro_inicial as $material)
-                                <option value="{{ $material->id }}">
-                                    {{ implode(
-                                        ' - ',
-                                        array_filter([
-                                            $material->CategoriaMaterial?->nome,
-                                            $material->ItemCatalogoMaterial?->nome,
-                                            $material->Marca?->nome,
-                                            $material->Cor?->nome,
-                                            $material->Tamanho?->nome,
-                                            $material->FaseEtaria?->nome,
-                                            $material->TipoSexo?->nome,
-                                        ]),
-                                    ) }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div> --}}
+                    <div class="row">
+                        <div class="col-md-8">
+                            <p>Por Documento</p>
+                            {{-- <label for="documento" class="form-label">Selecione o Documento</label>
+                            <select class="form-select" id="id_documento" name="documento">
+                              @foreach ($cadastro_inicial as $material)
+                                    <option value="{{ $material->id }}">
+                                        {{ implode(
+                                            ' - ',
+                                            array_filter([
+                                                $material->CategoriaMaterial?->nome,
+                                                $material->ItemCatalogoMaterial?->nome,
+                                                $material->Marca?->nome,
+                                                $material->Cor?->nome,
+                                                $material->Tamanho?->nome,
+                                                $material->FaseEtaria?->nome,
+                                                $material->TipoSexo?->nome,
+                                            ]),
+                                        ) }}
+                                    </option>
+                                @endforeach
+                            </select> --}}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Scripts -->
     <script>
         function verificarCampos() {
-            if ($('#id_data_inicio_por_material').val() && $('#id_data_fim_por_material').val()) {
-                return true;
-            } else {
-                return false;
-            }
+            return $('#id_data_inicio_por_material').val() && $('#id_data_fim_por_material').val();
         }
 
         function materiais() {
@@ -123,21 +122,16 @@
                 dataType: "JSON",
                 success: function(response) {
                     console.log(response);
-                    $.each(response, function(indexInArray, material) {
-                        var nomeMaterial = '';
-
-                        if
-
-
-
-                    });
+                    // Aqui você pode processar os materiais conforme necessário
+                },
+                error: function() {
+                    console.error('Erro ao carregar materiais.');
                 }
             });
         }
 
-
         $(document).ready(function() {
-            // Alternância entre "Por Material" e "Por Documento"
+            // Alternância entre os tipos de inclusão
             $('.inputradio').change(function() {
                 if ($(this).val() == "1") {
                     $('#pormaterial').show();
@@ -145,12 +139,11 @@
                 } else {
                     $('#pormaterial').hide();
                     $('#pordocumento').show();
-                    // Aplica desabilitação se checkbox estiver marcado
                 }
             });
-            $('#afirma_por_data_material').change(function(e) {
-                e.preventDefault();
-                console.log('Checkbox alterado');
+
+            // Checkbox: Filtrar por data
+            $('#afirma_por_data_material').change(function() {
                 if ($(this).is(':checked')) {
                     $('#id_deseja_por_data_cadastro_material').show();
                     $('#id_material').attr('disabled', true);
@@ -159,42 +152,69 @@
                     $('#id_material').attr('disabled', false);
                 }
             });
+
+            // Alterações nos campos de data
             $('#id_data_fim_por_material, #id_data_inicio_por_material').on('change', function() {
                 if (verificarCampos()) {
-                    var dataInicio = $('#id_data_inicio_por_material').val();
-                    var dataFim = $('#id_data_fim_por_material').val();
-                    materiais();
+                    const dataInicio = $('#id_data_inicio_por_material').val();
+                    const dataFim = $('#id_data_fim_por_material').val();
 
-                    // console.log('Data Início:', dataInicio);
-                    // console.log('Data Fim:', dataFim);
                     $.ajax({
                         type: "GET",
-                        url: "/retorna-materiais-por-data-cadastro/" + dataInicio + '/' + dataFim,
-                        // data: "data",
+                        url: `/retorna-materiais-por-data-cadastro/${dataInicio}/${dataFim}`,
                         dataType: "json",
                         success: function(response) {
-                            console.log('Materiais recebidos:', response);
-                            console.log('Dados recebidos:', response);
+                            console.log(response);
                             $('#id_material').empty();
-                            $.each(response, function(index, material) {
-                                let nomeMaterial = '';
-                                console.log('Material:', material);
-                                console.log('Categoria:', material.marca);
-                                if (material.categoria_material.nome) {
-                                    nomeMaterial += material.categoria_material.nome +
+                            $.each(response, function(indexInArray, material) {
+                                //    $material->CategoriaMaterial?->nome,
+                                //         $material->ItemCatalogoMaterial?->nome,
+                                //         $material->Marca?->nome,
+                                //         $material->Cor?->nome,
+                                //         $material->Tamanho?->nome,
+                                //         $material->FaseEtaria?->nome,
+                                //         $material->TipoSexo?->nome,
+                                var nome = '';
+                                if (material.categoria_material) {
+                                    nome += material.categoria_material.nome + ' - ';
+                                    console.log(nome);
+
+                                }
+                                if (material.item_catalogo_material) {
+                                    nome += material.item_catalogo_material.nome +
                                         ' - ';
-                                };
+                                }
+                                if (material.marca) {
+                                    nome += material.marca.nome +
+                                        ' - ';
+                                }
+                                if (material.cor) {
+                                    nome += material.cor.nome +
+                                        ' - ';
+                                }
+                                if (material.tamanho) {
+                                    nome += material.tamanho.nome +
+                                        ' - ';
+                                }
+
                             });
+
+                            $('#id_material').attr('disabled', false);
                         },
                         error: function(xhr, status, error) {
-                            console.error('Erro ao buscar materiais:', error);
+                            console.error('Erro ao buscar materiais por data:', error);
                         }
                     });
-                    console.log('Campos de data preenchidos corretamente');
-                    $('#id_material').attr('disabled', false);
                 } else {
-                    console.log('Campos de data não preenchidos corretamente');
+                    console.log('Campos de data não preenchidos corretamente.');
                 }
+            });
+
+            // Botão "Adicionar"
+            $('#botao_por_material').click(function() {
+                const materialId = $('#id_material').val();
+                alert(`Material ID ${materialId} selecionado para adicionar.`);
+                // Aqui você pode acionar a lógica desejada
             });
         });
     </script>

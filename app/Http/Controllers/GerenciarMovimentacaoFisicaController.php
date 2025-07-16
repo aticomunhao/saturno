@@ -95,7 +95,11 @@ class GerenciarMovimentacaoFisicaController extends Controller
             'Destinacao',
             'CategoriaMaterial',
             'TipoMaterial',
-            'movimentacaoFisica'
+            'movimentacaoFisica',
+            'ItemCatalogoMaterial',
+            'Marca',
+            'Cor',
+            'Tamanho'
         )
             ->whereHas('movimentacaoFisica', function ($query) {
                 $query->where('id_tp_movimento', 1);
@@ -109,31 +113,27 @@ class GerenciarMovimentacaoFisicaController extends Controller
     }
     public  function solicitar_teste_ajax_para_material_por_data($data_inicio, $data_fim)
     {
-
-
-        $materiais = DB::table('cadastro_inicial as ci')
-            ->join('tipo_categoria_material as tcm', 'ci.id_cat_material', '=', 'tcm.id')
-            ->join('item_catalogo_material as icm', 'ci.id_item_catalogo', '=', 'icm.id')
-            ->select(
-                'tcm.nome as categoria_material',
-                'icm.nome as item_catalogo_material',
-
-            )
-            // WHERE DATA
-            ->whereBetween('ci.data_cadastro', [$data_inicio, $data_fim])
-
-            // WHERE EXISTE MOVIMENTAÇÃO FÍSICA COM id_tp_movimento = 1
-            ->whereExists(function ($query) {
-                $query->select(DB::raw(1))
-                    ->from('movimentacao_fisica as mf')
-                    ->whereColumn('mf.id_cadastro_inicial', 'ci.id')
-                    ->where('mf.id_tp_movimento', 1);
+        $cadastro_inicial = ModelCadastroInicial::with(
+            'Status',
+            'SolOrigem',
+            'DocOrigem',
+            'Deposito',
+            'Destinacao',
+            'CategoriaMaterial',
+            'TipoMaterial',
+            'movimentacaoFisica',
+            'ItemCatalogoMaterial',
+            'Marca',
+            'Cor',
+            'Tamanho'
+        )
+            ->whereBetween('data_cadastro', [$data_inicio, $data_fim])
+            ->whereHas('movimentacaoFisica', function ($query) {
+                $query->where('id_tp_movimento', 1);
             })
-            ->get()
-            ->toArray();
-        // dd($materiais);
+            ->get();
 
-        return response()->json($materiais);
+        return response()->json($cadastro_inicial);
     }
 
     public function retorna_materiais()
@@ -146,20 +146,23 @@ class GerenciarMovimentacaoFisicaController extends Controller
             'Destinacao',
             'CategoriaMaterial',
             'TipoMaterial',
-            'movimentacaoFisica'
+            'movimentacaoFisica',
+            'Cor',
+            'Marca',
+            'Tamanho'
         )
+            // ->whereBetween('data_cadastro', [$data_inicio, $data_fim])
             ->whereHas('movimentacaoFisica', function ($query) {
                 $query->where('id_tp_movimento', 1);
             })
-            ->get()
-            ->toArray();
+            ->get();
+
         return response()->json($cadastro_inicial);
     }
 
     public function solicitar_teste_confere(Request $request)
     {
-        //  $ids = $request->input('materiais1');
-        //   dd($request->input('materiais1'));
+
         $ids = $request->all()['materiais1'];
         if (!$ids) {
             app('flasher')->addError('Selecione pelo menos um material para continuar.');
@@ -181,8 +184,6 @@ class GerenciarMovimentacaoFisicaController extends Controller
         $setores = ModelSetor::orderBy('sigla')->get();
 
         $usuarios = ModelUsuario::with('pessoa')->get();
-
-        // dd($usuarios);
 
         return view('movimentacao-fisica.solicitar-teste-confere', compact('materiais_enviados', 'setores', 'usuarios'));
     }

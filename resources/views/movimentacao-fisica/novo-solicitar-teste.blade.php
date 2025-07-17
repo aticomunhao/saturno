@@ -105,6 +105,21 @@
                         </div>
                     </div>
                 </div>
+                <hr>
+                <h5 class="text-primary">Materiais Selecionados:</h5>
+                <div class="table-responsive mb-4">
+                    <table class="table table-bordered table-hover align-middle shadow-sm" id="tabela_materiais">
+                        <thead class="table-primary text-center text-dark">
+                            <tr>
+                                <th scope="col" style="width: 80%;">Material</th>
+                                <th scope="col" style="width: 20%;">Remover</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            {{-- Linhas adicionadas via JS --}}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -121,7 +136,7 @@
                 url: "/retorna-materiais",
                 dataType: "JSON",
                 success: function(response) {
-                    console.log(response);
+                    // console.log(response);
                     // Aqui você pode processar os materiais conforme necessário
                 },
                 error: function() {
@@ -155,7 +170,9 @@
 
             // Alterações nos campos de data
             $('#id_data_fim_por_material, #id_data_inicio_por_material').on('change', function() {
+                event.preventDefault();
                 if (verificarCampos()) {
+
                     const dataInicio = $('#id_data_inicio_por_material').val();
                     const dataFim = $('#id_data_fim_por_material').val();
 
@@ -164,7 +181,8 @@
                         url: `/retorna-materiais-por-data-cadastro/${dataInicio}/${dataFim}`,
                         dataType: "json",
                         success: function(response) {
-                            console.log(response);
+
+
                             $('#id_material').empty();
                             $.each(response, function(indexInArray, material) {
                                 //    $material->CategoriaMaterial?->nome,
@@ -177,7 +195,7 @@
                                 var nome = '';
                                 if (material.categoria_material) {
                                     nome += material.categoria_material.nome + ' - ';
-                                    console.log(nome);
+                                    // console.log(nome);
 
                                 }
                                 if (material.item_catalogo_material) {
@@ -196,10 +214,20 @@
                                     nome += material.tamanho.nome +
                                         ' - ';
                                 }
-
+                                if (material.fase_etaria) {
+                                    nome += material.fase_etaria.nome +
+                                        ' - ';
+                                }
+                                if (material.tipo_sexo) {
+                                    nome += material.tipo_sexo.nome + '-';
+                                }
+                                console.log(nome);
+                                $('#id_material').append("<option>banana</option>");
                             });
 
+
                             $('#id_material').attr('disabled', false);
+
                         },
                         error: function(xhr, status, error) {
                             console.error('Erro ao buscar materiais por data:', error);

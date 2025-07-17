@@ -99,7 +99,9 @@ class GerenciarMovimentacaoFisicaController extends Controller
             'ItemCatalogoMaterial',
             'Marca',
             'Cor',
-            'Tamanho'
+            'Tamanho',
+            'FaseEtaria',
+            'TipoSexo'
         )
             ->whereHas('movimentacaoFisica', function ($query) {
                 $query->where('id_tp_movimento', 1);
@@ -125,7 +127,9 @@ class GerenciarMovimentacaoFisicaController extends Controller
             'ItemCatalogoMaterial',
             'Marca',
             'Cor',
-            'Tamanho'
+            'Tamanho',
+            'FaseEtaria',
+            'TipoSexo'
         )
             ->whereBetween('data_cadastro', [$data_inicio, $data_fim])
             ->whereHas('movimentacaoFisica', function ($query) {
@@ -149,7 +153,8 @@ class GerenciarMovimentacaoFisicaController extends Controller
             'movimentacaoFisica',
             'Cor',
             'Marca',
-            'Tamanho'
+            'Tamanho',
+            'TipoSexo'
         )
             // ->whereBetween('data_cadastro', [$data_inicio, $data_fim])
             ->whereHas('movimentacaoFisica', function ($query) {
@@ -176,7 +181,12 @@ class GerenciarMovimentacaoFisicaController extends Controller
             'Deposito',
             'Destinacao',
             'CategoriaMaterial',
-            'TipoMaterial'
+            'TipoMaterial',
+            'movimentacaoFisica',
+            'Cor',
+            'Marca',
+            'Tamanho',
+            'TipoSexo'
         ])->whereIn('id', $request->input('materiais1'))->get();
 
 

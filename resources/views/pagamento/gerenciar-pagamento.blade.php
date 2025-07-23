@@ -78,11 +78,13 @@
                                     <tr style="background-color: #d6e3ff; font-size:15px; color:#000;" class="align-middle">
                                         <th>ID</th>
                                         <th>TIPO DÍVIDA</th>
+                                        {{-- VAI VIRAR HINT
                                         <th>FORMA PAGAMENTO</th>
-                                        <th>QTD. PARCELAS</th>
+                                        <th>QTD. PARCELAS</th> --}}
                                         <th>CREDOR</th>
                                         <th>DATA FINAL</th>
                                         <th>PERENE</th>
+                                        <th>VALOR</th>
                                         <th>PRIORIDADE</th>
                                         <th>DOCUMENTO</th>
                                         <th>STATUS</th>
@@ -95,11 +97,13 @@
                                         <tr>
                                             <td> {{ $results->id }} </td>
                                             <td>Material/Serviço</td>
+                                            {{-- VAI VIRAR HINT
                                             <td>A Vista</td>
-                                            <td>03/07</td>
+                                            <td>03/07</td> --}}
                                             <td>SIM</td>
                                             <td>01/01/2019</td>
                                             <td>NÃO</td>
+                                            <td>R$100,00</td>
                                             <td>-</td>
                                             <td>NÃO POSSUI</td>
                                             <td>-</td>
@@ -128,7 +132,7 @@
                                                 <a href="" class="btn btn-sm btn-outline-primary" data-tt="tooltip"
                                                     style="font-size: 1rem; color:#303030" data-placement="top"
                                                     title="Contrato">
-                                                    <i class="bi bi-hammer"></i>
+                                                    <i class="bi bi-paperclip"></i>
                                                 </a>
                                                 <a href="" class="btn btn-sm btn-outline-warning"
                                                     data-tt="tooltip" style="font-size: 1rem; color:#303030"

@@ -428,6 +428,8 @@ Route::get('/retorna-cadastro-inicial', [GerenciarMovimentacaoFisicaController::
 Route::get('/retorna-materiais-por-data-cadastro/{data_inicio}/{data_fim}', [GerenciarMovimentacaoFisicaController::class, 'solicitar_teste_ajax_para_material_por_data'])->name('movimentacao-fisica.retorna-materiais-por-data-cadastro');
 Route::get('/retorna-materiais', [GerenciarMovimentacaoFisicaController::class, 'retorna_materiais'])->name('movimentacao-fisica.retorna-materiais');
 Route::any('/movimentacao-fisica/homologar', [GerenciarMovimentacaoFisicaController::class, 'homologar'])->name('movimentacao-fisica.homologar');
+Route::any('/ajax-por-material/{id}',[GerenciarMovimentacaoFisicaController::class, 'ajax_por_material'])->name('ajax_por_material');
+
 
 //Catalogo Relacacional Setor por Deposito
 Route::get('/catalogo-relacional-setor-deposito', [GerenciarRelacaoDepositoSetor::class, 'index'])->name('relacao-deposito-setor.index');

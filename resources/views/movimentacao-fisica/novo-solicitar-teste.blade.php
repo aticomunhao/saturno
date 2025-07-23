@@ -54,7 +54,7 @@
                     <!-- Select Material -->
                     <div class="col-md-8">
                         <label for="material" class="form-label">Selecione o Material</label>
-                        <select class="form-select" id="id_material" name="material">
+                        <select class="form-select select2" id="id_material" name="material">
                             @foreach ($cadastro_inicial as $material)
                                 <option value="{{ $material->id }}">
                                     {{ implode(
@@ -115,7 +115,7 @@
                                 <th scope="col" style="width: 20%;">Remover</th>
                             </tr>
                         </thead>
-                        <tbody class="table-group-divider">
+                        <tbody class="table-group-divider" id="body-table">
                             {{-- Linhas adicionadas via JS --}}
                         </tbody>
                     </table>
@@ -185,13 +185,7 @@
 
                             $('#id_material').empty();
                             $.each(response, function(indexInArray, material) {
-                                //    $material->CategoriaMaterial?->nome,
-                                //         $material->ItemCatalogoMaterial?->nome,
-                                //         $material->Marca?->nome,
-                                //         $material->Cor?->nome,
-                                //         $material->Tamanho?->nome,
-                                //         $material->FaseEtaria?->nome,
-                                //         $material->TipoSexo?->nome,
+                        
                                 var nome = '';
                                 if (material.categoria_material) {
                                     nome += material.categoria_material.nome + ' - ';
@@ -222,10 +216,11 @@
                                     nome += material.tipo_sexo.nome + '-';
                                 }
                                 console.log(nome);
-                                $('#id_material').append("<option>banana</option>");
+                                $('#id_material').append(
+                                    `<option value="${material.id}">${nome}</option>`
+                                );
+
                             });
-
-
                             $('#id_material').attr('disabled', false);
 
                         },
@@ -241,9 +236,60 @@
             // Botão "Adicionar"
             $('#botao_por_material').click(function() {
                 const materialId = $('#id_material').val();
-                alert(`Material ID ${materialId} selecionado para adicionar.`);
-                // Aqui você pode acionar a lógica desejada
+
+                // Verifica se já foi adicionado
+                if ($(`#linha-material-${materialId}`).length > 0) {
+                    alert('Este material já foi adicionado.');
+                    return;
+                }
+
+                $.ajax({
+                    type: "GET",
+                    url: "/ajax-por-material/" + materialId,
+                    dataType: "JSON",
+                    success: function(material) {
+                        let partesNome = [];
+
+                        if (material.categoria_material) partesNome.push(material
+                            .categoria_material.nome);
+                        if (material.item_catalogo_material) partesNome.push(material
+                            .item_catalogo_material.nome);
+                        if (material.marca) partesNome.push(material.marca.nome);
+                        if (material.cor) partesNome.push(material.cor.nome);
+                        if (material.tamanho) partesNome.push(material.tamanho.nome);
+                        if (material.fase_etaria) partesNome.push(material.fase_etaria.nome);
+                        if (material.tipo_sexo) partesNome.push(material.tipo_sexo.nome);
+
+                        const nome = partesNome.join(' - ');
+
+                        // Cria linha na tabela com input hidden
+                        const linha = `
+                <tr id="linha-material-${materialId}">
+                    <td>
+                        ${nome}
+                        <input type="hidden" name="materiais[]" value="${materialId}">
+                    </td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-danger btn-sm btn-remover-material" data-id="${materialId}">
+                            Remover
+                        </button>
+                    </td>
+                </tr>
+            `;
+
+                        $('#body-table').append(linha);
+                    },
+                    error: function() {
+                        alert('Erro ao buscar informações do material.');
+                    }
+                });
             });
+            // Remover material da tabela
+            $(document).on('click', '.btn-remover-material', function() {
+                const id = $(this).data('id');
+                $(`#linha-material-${id}`).remove();
+            });
+
         });
     </script>
 @endsection

@@ -185,7 +185,7 @@
 
                             $('#id_material').empty();
                             $.each(response, function(indexInArray, material) {
-                        
+
                                 var nome = '';
                                 if (material.categoria_material) {
                                     nome += material.categoria_material.nome + ' - ';
